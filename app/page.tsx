@@ -5,7 +5,20 @@ import curriculumData from "./curriculum.json";
 
 type Tab = "today" | "library" | "settings";
 type PushState = "idle" | "enabling" | "enabled" | "unsupported" | "error";
-type StudyLine = { speaker: string; english: string; chinese: string; pinyin: string; vietnamese: string };
+type LookupState = "idle" | "loading" | "success" | "error";
+type StudyLine = { speaker: string; english: string; chinese: string; pinyin: string; vietnameseReading: string; vietnamese: string };
+type LookupExample = { english: string; chinese: string; pinyin: string; vietnameseReading: string; vietnamese: string };
+type LookupResult = {
+  sourceLanguage: "English" | "Chinese" | "Mixed";
+  term: string;
+  pinyin: string;
+  vietnameseReading: string;
+  partOfSpeech: string;
+  meaning: string;
+  note: string;
+  examples: LookupExample[];
+};
+type LookupCacheEntry = { key: string; result: LookupResult };
 type StudyModule = {
   id: string;
   stage: string;
@@ -23,6 +36,7 @@ type StudyModule = {
 
 const curriculum = curriculumData as StudyModule[];
 const PUSH_API_URL = (process.env.NEXT_PUBLIC_PUSH_API_URL || "").replace(/\/$/, "");
+const LOOKUP_CACHE_KEY = "tamngu6h.lookup-cache.v1";
 const STORAGE = {
   routine: "tamngu6h.routine",
   routineStart: "tamngu6h.routineStart",
@@ -80,15 +94,6 @@ function formatRemaining(milliseconds: number) {
   return `${String(hours).padStart(2, "0")}:${String(minutes).padStart(2, "0")}:${String(rest).padStart(2, "0")}`;
 }
 
-function localIcsDate(value: Date) {
-  const pad = (part: number) => String(part).padStart(2, "0");
-  return `${value.getFullYear()}${pad(value.getMonth() + 1)}${pad(value.getDate())}T${pad(value.getHours())}${pad(value.getMinutes())}00`;
-}
-
-function escapeIcs(value: string) {
-  return value.replace(/\\/g, "\\\\").replace(/,/g, "\\,").replace(/;/g, "\\;").replace(/\n/g, "\\n");
-}
-
 function hashText(value: string) {
   return [...value].reduce((total, character) => ((total << 5) - total + character.charCodeAt(0)) | 0, 0);
 }
@@ -98,6 +103,22 @@ function urlBase64ToUint8Array(value: string) {
   const base64 = (value + padding).replace(/-/g, "+").replace(/_/g, "/");
   const raw = window.atob(base64);
   return Uint8Array.from([...raw].map((character) => character.charCodeAt(0)));
+}
+
+function containsChinese(value: string) {
+  return /\p{Script=Han}/u.test(value);
+}
+
+function validLookupResult(value: unknown): value is LookupResult {
+  if (!value || typeof value !== "object") return false;
+  const result = value as Partial<LookupResult>;
+  return Boolean(
+    result.term
+    && result.meaning
+    && result.partOfSpeech
+    && Array.isArray(result.examples)
+    && result.examples.length > 0,
+  );
 }
 
 function scheduleAt(timestamp: number) {
@@ -140,58 +161,6 @@ function scheduleAt(timestamp: number) {
   return { sequence, phase, wish, label: labels[phase], nextAt: nextAt.getTime() };
 }
 
-function createDailyCalendar() {
-  const now = new Date();
-  const pageUrl = window.location.href;
-  const slots = [
-    { hour: 6, uid: "morning", title: "Có một lời chào buổi sáng mới ✦" },
-    { hour: 12, uid: "noon", title: "Một lời nhắn buổi trưa đang chờ ✦" },
-    { hour: 18, uid: "evening", title: "Bài học buổi tối đã mở ✦" },
-    { hour: 22, uid: "night", title: "Có một điều nhỏ đang chờ cậu ✦" },
-  ];
-  const events = slots.flatMap((slot) => {
-    const start = new Date(now.getFullYear(), now.getMonth(), now.getDate(), slot.hour);
-    if (start <= now) start.setDate(start.getDate() + 1);
-    const end = new Date(start.getTime() + 10 * 60 * 1000);
-    return [
-      "BEGIN:VEVENT",
-      `UID:tamngu6h-${slot.uid}@tamngu6h.local`,
-      `DTSTAMP:${now.toISOString().replace(/[-:]/g, "").replace(/\.\d{3}Z$/, "Z")}`,
-      `DTSTART:${localIcsDate(start)}`,
-      `DTEND:${localIcsDate(end)}`,
-      "RRULE:FREQ=DAILY",
-      `SUMMARY:${escapeIcs(slot.title)}`,
-      `DESCRIPTION:${escapeIcs("Mở Tâm Ngữ 6H từ Màn hình chính để xem bài và lời chúc mới. Nội dung được giữ bí mật đến khi mở.")}`,
-      `URL:${pageUrl}`,
-      "BEGIN:VALARM",
-      "ACTION:DISPLAY",
-      `DESCRIPTION:${escapeIcs(slot.title)}`,
-      "TRIGGER:-PT0M",
-      "END:VALARM",
-      "END:VEVENT",
-    ];
-  });
-  const calendar = [
-    "BEGIN:VCALENDAR",
-    "VERSION:2.0",
-    "PRODID:-//Tam Ngu 6H//VI",
-    "CALSCALE:GREGORIAN",
-    "METHOD:PUBLISH",
-    ...events,
-    "END:VCALENDAR",
-  ].join("\r\n");
-
-  const blob = new Blob([calendar], { type: "text/calendar;charset=utf-8" });
-  const url = URL.createObjectURL(blob);
-  const anchor = document.createElement("a");
-  anchor.href = url;
-  anchor.download = "tam-ngu-6h-lich-hang-ngay.ics";
-  document.body.appendChild(anchor);
-  anchor.click();
-  anchor.remove();
-  window.setTimeout(() => URL.revokeObjectURL(url), 1000);
-}
-
 function speak(text: string, language: string) {
   if (!("speechSynthesis" in window)) return;
   window.speechSynthesis.cancel();
@@ -222,12 +191,16 @@ export default function Home() {
   const [query, setQuery] = useState("");
   const [ready, setReady] = useState(false);
   const [showInstall, setShowInstall] = useState(false);
-  const [calendarAdded, setCalendarAdded] = useState(false);
   const [pushState, setPushState] = useState<PushState>("idle");
   const [pushMessage, setPushMessage] = useState("");
   const [inviteReady, setInviteReady] = useState(false);
   const [inviteDraft, setInviteDraft] = useState("");
   const [savingInvite, setSavingInvite] = useState(false);
+  const [lookupQuery, setLookupQuery] = useState("");
+  const [lookupState, setLookupState] = useState<LookupState>("idle");
+  const [lookupMessage, setLookupMessage] = useState("");
+  const [lookupResult, setLookupResult] = useState<LookupResult | null>(null);
+  const [lookupCache, setLookupCache] = useState<LookupCacheEntry[]>([]);
 
   const schedule = scheduleAt(now);
   const unlockedIndex = routineStartSequence === null ? 0 : Math.max(0, schedule.sequence - routineStartSequence);
@@ -243,7 +216,7 @@ export default function Home() {
     const keyword = query.trim().toLocaleLowerCase("vi");
     if (!keyword) return unlockedModules;
     return unlockedModules.filter((item) =>
-      [item.title, item.context, item.stage, item.note, ...item.lines.flatMap((line) => [line.english, line.chinese, line.pinyin, line.vietnamese])]
+        [item.title, item.context, item.stage, item.note, ...item.lines.flatMap((line) => [line.english, line.chinese, line.pinyin, line.vietnameseReading, line.vietnamese])]
         .join(" ")
         .toLocaleLowerCase("vi")
         .includes(keyword),
@@ -291,7 +264,13 @@ export default function Home() {
     const hasInvite = Boolean(invite || localStorage.getItem(STORAGE.invite));
     queueMicrotask(() => {
       setInviteReady(hasInvite);
-      if (invite) setPushMessage("Đã nhận liên kết ghép đôi riêng. Sau khi cài app, chỉ cần bật thông báo Màn hình khóa.");
+      if (invite) setPushMessage("Đã nhận liên kết riêng. Cài app lên Màn hình chính, rồi bật thẻ bài học trên Màn hình khóa.");
+      try {
+        const cached = JSON.parse(localStorage.getItem(LOOKUP_CACHE_KEY) || "[]");
+        if (Array.isArray(cached)) setLookupCache(cached.filter((entry): entry is LookupCacheEntry => Boolean(entry?.key && validLookupResult(entry?.result))).slice(0, 30));
+      } catch {
+        localStorage.removeItem(LOOKUP_CACHE_KEY);
+      }
     });
 
     if (!("serviceWorker" in navigator) || !("PushManager" in window) || !("Notification" in window)) {
@@ -322,15 +301,11 @@ export default function Home() {
     setRoutineEnabled(true);
     setRoutineStartSequence((current) => current ?? scheduleAt(Date.now()).sequence);
     setViewingScheduled(true);
-    setCalendarAdded(false);
-    if ("setAppBadge" in navigator) navigator.setAppBadge(1).catch(() => undefined);
   }
 
   function stopRoutine() {
     setRoutineEnabled(false);
-    setCalendarAdded(false);
     void disableLockScreen();
-    if ("clearAppBadge" in navigator) navigator.clearAppBadge().catch(() => undefined);
   }
 
   async function enableLockScreen() {
@@ -342,13 +317,13 @@ export default function Home() {
     const standalone = window.matchMedia("(display-mode: standalone)").matches || (navigator as Navigator & { standalone?: boolean }).standalone === true;
     if (!standalone) {
       setShowInstall(true);
-      setPushMessage("Hãy cài app lên Màn hình chính trước khi bật thông báo.");
+      setPushMessage("Hãy cài app lên Màn hình chính trước khi bật thẻ Màn hình khóa.");
       return;
     }
     const inviteCode = localStorage.getItem(STORAGE.invite) || "";
     if (!inviteCode) {
       setPushState("error");
-      setPushMessage("Thiếu mã mời riêng. Hãy mở lại đúng liên kết được gửi cho cậu.");
+      setPushMessage("Thiếu liên kết riêng. Hãy mở lại đúng đường link đã được gửi trước khi bật.");
       return;
     }
 
@@ -383,7 +358,7 @@ export default function Home() {
       setRoutineEnabled(true);
       setRoutineStartSequence(startSequence);
       setPushState("enabled");
-      setPushMessage("Đã bật thông báo Màn hình khóa lúc 06:00, 12:00 và 18:00.");
+      setPushMessage("Đã bật thẻ bài học trên Màn hình khóa lúc 06:00, 12:00 và 18:00. Âm lượng theo cài đặt iPhone.");
     } catch (error) {
       setPushState("error");
       setPushMessage(error instanceof Error ? error.message : "Không bật được thông báo.");
@@ -394,7 +369,7 @@ export default function Home() {
     const code = inviteDraft.trim();
     if (code.length < 8) {
       setPushState("error");
-      setPushMessage("Mã ghép đôi chưa đúng. Hãy sao chép nguyên mã được gửi kèm.");
+      setPushMessage("Mã ghép đôi chưa đúng. Hãy sao chép nguyên mã đi kèm liên kết.");
       return;
     }
     setSavingInvite(true);
@@ -410,7 +385,7 @@ export default function Home() {
       setInviteDraft("");
       setInviteReady(true);
       setPushState("idle");
-      setPushMessage("Đã kiểm tra và lưu mã ghép đôi. Bây giờ có thể bật Màn hình khóa.");
+      setPushMessage("Đã kiểm tra liên kết riêng. Bây giờ có thể bật Màn hình khóa.");
     } catch (error) {
       setPushState("error");
       setPushMessage(error instanceof Error ? error.message : "Chưa kiểm tra được mã ghép đôi.");
@@ -434,16 +409,62 @@ export default function Home() {
       }
       if (subscription) await subscription.unsubscribe();
       setPushState("idle");
-      setPushMessage("Đã tắt thông báo Màn hình khóa trên thiết bị này.");
+      setPushMessage("Đã tắt thẻ bài học trên Màn hình khóa ở thiết bị này.");
     } catch {
       setPushState("error");
       setPushMessage("Chưa tắt được thông báo. Hãy thử lại khi có mạng.");
     }
   }
 
+  async function runLookup() {
+    const query = lookupQuery.replace(/\s+/g, " ").trim();
+    if (!query) {
+      setLookupState("error");
+      setLookupMessage("Hãy nhập một từ hoặc một cụm ngắn trước nhé.");
+      return;
+    }
+    const cacheKey = query.toLocaleLowerCase("vi");
+    const cached = lookupCache.find((entry) => entry.key === cacheKey);
+    if (cached) {
+      setLookupResult(cached.result);
+      setLookupMessage("Kết quả này đã được lưu trên máy để tiết kiệm lượt tra.");
+      setLookupState("success");
+      return;
+    }
+    const inviteCode = localStorage.getItem(STORAGE.invite) || "";
+    if (!PUSH_API_URL || !inviteCode) {
+      setLookupResult(null);
+      setLookupState("error");
+      setLookupMessage("Tra nhanh chỉ mở trong liên kết riêng của app. Hãy mở lại đúng link được gửi cho cậu.");
+      return;
+    }
+
+    setLookupState("loading");
+    setLookupMessage("Đang tra nghĩa và ví dụ…");
+    setLookupResult(null);
+    try {
+      const response = await fetch(`${PUSH_API_URL}/lookup`, {
+        method: "POST",
+        headers: { "content-type": "application/json", "x-invite-code": inviteCode },
+        body: JSON.stringify({ query }),
+      });
+      const body = await response.json().catch(() => ({})) as { error?: string; result?: unknown };
+      if (!response.ok || !validLookupResult(body.result)) throw new Error(body.error || "Chưa tra được lúc này.");
+      const nextCache = [{ key: cacheKey, result: body.result }, ...lookupCache.filter((entry) => entry.key !== cacheKey)].slice(0, 30);
+      setLookupCache(nextCache);
+      localStorage.setItem(LOOKUP_CACHE_KEY, JSON.stringify(nextCache));
+      setLookupResult(body.result);
+      setLookupMessage("Kết quả thô · Gemini xử lý ở máy chủ, không có API key trong iPhone.");
+      setLookupState("success");
+    } catch (error) {
+      setLookupState("error");
+      setLookupMessage(error instanceof Error ? error.message : "Chưa tra được lúc này.");
+    }
+  }
+
   function resetLearningProgress() {
     if (pushState === "enabled") {
-      setPushMessage("Hãy tắt Màn hình khóa trước nếu muốn dừng hẳn. Sau đó mới đặt lại tiến độ học.");
+      setPushMessage("Hãy tắt Màn hình khóa trước nếu muốn dừng hẳn, rồi mới đặt lại tiến độ.");
       return;
     }
     localStorage.removeItem(STORAGE.routine);
@@ -452,7 +473,6 @@ export default function Home() {
     setRoutineStartSequence(null);
     setRoutineEnabled(false);
     setViewingScheduled(true);
-    setCalendarAdded(false);
     setPushMessage("Đã đặt lại tiến độ học trên máy này.");
   }
 
@@ -483,7 +503,7 @@ export default function Home() {
             <div className="session-copy">
               <p className="eyebrow">{routineEnabled ? schedule.label : "MỘT BÀI · MỘT LỜI NHẮN"}</p>
               <h2>{routineEnabled ? currentWish : "Hẹn nhau mỗi 6 giờ"}</h2>
-              <p>{routineEnabled ? `Điều bất ngờ tiếp theo sau ${formatRemaining(remaining)}.` : "Bài mới lúc 06:00, 12:00 và 18:00."}</p>
+              <p>{routineEnabled ? `Điều bất ngờ tiếp theo sau ${formatRemaining(remaining)}.` : "Một thẻ bài học mới sẽ đến lúc 06:00, 12:00 và 18:00."}</p>
             </div>
             <div className="session-orbit" aria-hidden="true"><span>♥</span></div>
             {routineEnabled ? (
@@ -494,29 +514,69 @@ export default function Home() {
                   <span className={schedule.phase === "evening" || schedule.phase === "night" ? "current" : ""}>18:00</span>
                 </div>
                 <div className="session-actions">
-                  {PUSH_API_URL ? (
-                    <button className="primary-button" disabled={pushState === "enabling" || pushState === "enabled"} onClick={enableLockScreen}>
-                      {pushState === "enabled" ? "Màn hình khóa đã bật ✓" : pushState === "enabling" ? "Đang bật…" : "Bật trên Màn hình khóa"}
-                    </button>
-                  ) : (
-                    <button
-                      className="primary-button"
-                      onClick={() => {
-                        createDailyCalendar();
-                        setCalendarAdded(true);
-                      }}
-                    >
-                      {calendarAdded ? "Đã tải lịch hằng ngày ✓" : "Thêm lịch nhắc hằng ngày"}
-                    </button>
-                  )}
+                  <button className="primary-button" disabled={pushState === "enabling" || pushState === "enabled"} onClick={enableLockScreen}>
+                    {pushState === "enabled" ? "Màn hình khóa đã bật ✓" : pushState === "enabling" ? "Đang bật…" : "Hiện bài trên Màn hình khóa"}
+                  </button>
                   <button className="text-button danger" onClick={stopRoutine}>Tắt nhịp</button>
                 </div>
-                <p className={`honest-note ${pushState === "error" ? "error-note" : ""}`}>{pushMessage || (PUSH_API_URL ? "iPhone sẽ báo bài mới kể cả khi app đã đóng. Có thể tắt lại ngay tại đây." : "Mở tệp vừa tải và chọn Thêm tất cả. Lịch chỉ báo có lời mới, không tiết lộ nội dung trước.")}</p>
+                <p className={`honest-note ${pushState === "error" ? "error-note" : ""}`}>{pushMessage || "Bài mới sẽ hiện cả khi app đã đóng. iPhone quyết định âm lượng; vuốt thẻ để xóa khi đã đọc."}</p>
               </>
             ) : (
               <button className="primary-button wide" onClick={startRoutine}>Bật nhịp hằng ngày</button>
             )}
           </article>
+
+          <section className="lookup-card" aria-labelledby="lookup-title">
+            <div className="lookup-heading">
+              <div>
+                <p className="eyebrow">TRA NHANH · ANH / TRUNG</p>
+                <h2 id="lookup-title">Gặp từ lạ thì hỏi ngay</h2>
+              </div>
+              <span aria-hidden="true">⌕</span>
+            </div>
+            <form className="lookup-form" onSubmit={(event) => { event.preventDefault(); void runLookup(); }}>
+              <input
+                value={lookupQuery}
+                onChange={(event) => setLookupQuery(event.target.value)}
+                placeholder="Một từ hoặc cụm Anh / Trung…"
+                aria-label="Từ hoặc cụm cần tra"
+                maxLength={100}
+              />
+              <button disabled={lookupState === "loading"} type="submit">{lookupState === "loading" ? "Đang tra…" : "Tra"}</button>
+            </form>
+            {lookupMessage && <p className={`lookup-message ${lookupState === "error" ? "error-note" : ""}`}>{lookupMessage}</p>}
+            {lookupResult && (
+              <article className="lookup-result" aria-live="polite">
+                <div className="lookup-term-row">
+                  <div>
+                    <strong>{lookupResult.term}</strong>
+                    <small>{lookupResult.sourceLanguage} · {lookupResult.partOfSpeech}</small>
+                  </div>
+                  <button
+                    type="button"
+                    className="lookup-speak"
+                    aria-label="Nghe cách đọc"
+                    onClick={() => speak(lookupResult.term, containsChinese(lookupResult.term) ? "zh-CN" : "en-US")}
+                  >
+                    ◖))
+                  </button>
+                </div>
+                {lookupResult.pinyin && <p className="lookup-pinyin">{lookupResult.pinyin}</p>}
+                {lookupResult.vietnameseReading && <p className="lookup-reading"><span>Đọc gần Việt</span>{lookupResult.vietnameseReading}</p>}
+                <p className="lookup-meaning">{lookupResult.meaning}</p>
+                {lookupResult.note && <p className="lookup-note">{lookupResult.note}</p>}
+                <div className="lookup-examples">
+                  {lookupResult.examples.map((example, index) => (
+                    <div key={`${lookupResult.term}-${index}`} className="lookup-example">
+                      <button type="button" onClick={() => speak(example.english, "en-US")}><strong>{example.english}</strong><small>EN · chạm để nghe</small></button>
+                      <button type="button" onClick={() => speak(example.chinese, "zh-CN")}><strong>{example.chinese}</strong><small>{example.pinyin}</small>{example.vietnameseReading && <small className="vietnamese-reading"><span>Đọc gần Việt</span>{example.vietnameseReading}</small>}</button>
+                      <p>{example.vietnamese}</p>
+                    </div>
+                  ))}
+                </div>
+              </article>
+            )}
+          </section>
 
           <div className="section-heading">
             <div>
@@ -538,12 +598,15 @@ export default function Home() {
                     <strong>{line.english}</strong><small>EN · chạm để nghe</small>
                   </button>
                   <button onClick={() => speak(line.chinese, "zh-CN")} className="study-language chinese-line">
-                    <strong>{line.chinese}</strong><small>{line.pinyin}</small>
+                    <strong>{line.chinese}</strong>
+                    <small>{line.pinyin}</small>
+                    <small className="vietnamese-reading"><span>Đọc gần Việt</span>{line.vietnameseReading}</small>
                   </button>
                   <p>{line.vietnamese}</p>
                 </div>
               ))}
             </div>
+            <p className="pronunciation-note">“Đọc gần Việt” là cầu nối để bắt đầu; số 1–4 là thanh tiếng Trung. Chạm câu Trung để nghe giọng chuẩn.</p>
             <div className="learning-note"><span>Ghi nhớ</span><p>{studyModule.note}</p></div>
             {studyModule.grammarFocus && <div className="grammar-focus"><span>Trọng tâm hôm nay</span><p>{studyModule.grammarFocus}</p></div>}
             {studyModule.vocabulary && studyModule.vocabulary.length > 0 && (
@@ -585,18 +648,18 @@ export default function Home() {
           <article className="settings-card">
             <div className="setting-row"><span className="setting-icon">⌂</span><div><strong>Cài lên Màn hình chính</strong><small>Mở toàn màn hình với icon như một app.</small></div><button onClick={() => setShowInstall(true)}>Xem</button></div>
             <div className="setting-row"><span className="setting-icon">✓</span><div><strong>Tự động lưu</strong><small>Tiến độ và nhịp hằng ngày được lưu trên máy.</small></div><span className="status-pill">Đang bật</span></div>
-            <div className="setting-row"><span className="setting-icon">◷</span><div><strong>06:00 · 12:00 · 18:00</strong><small>Mỗi mốc mở một bài và lời nhắn mới.</small></div><span className="status-pill">Tự động</span></div>
+            <div className="setting-row"><span className="setting-icon">◷</span><div><strong>06:00 · 12:00 · 18:00</strong><small>Mỗi mốc có một bài mới và một lời nhắn riêng.</small></div><span className="status-pill">Mỗi ngày</span></div>
             <div className="setting-row"><span className="setting-icon">∞</span><div><strong>Kho bài tự mở rộng</strong><small>{curriculum.length} bài hiện có; Gemini tạo thêm theo lộ trình, kiểm tra trùng lặp rồi mới phát hành.</small></div><span className="status-pill">Liên tục</span></div>
-            <div className="setting-row"><span className="setting-icon">▣</span><div><strong>Thông báo Màn hình khóa</strong><small>Hoạt động khi app đã đóng; cần cài app và cấp quyền một lần.</small></div>{pushState === "unsupported" ? <span className="status-pill">Safari iPhone</span> : pushState === "enabled" ? <button onClick={disableLockScreen}>Tắt</button> : <button onClick={enableLockScreen}>Bật</button>}</div>
+            <div className="setting-row"><span className="setting-icon">▣</span><div><strong>Thẻ bài học Màn hình khóa</strong><small>Hiện cả khi app đã đóng. Thẻ mới thay thẻ cũ; vuốt để xóa sau khi đọc.</small></div>{pushState === "unsupported" ? <span className="status-pill">Safari iPhone</span> : pushState === "enabled" ? <button onClick={disableLockScreen}>Tắt</button> : <button onClick={enableLockScreen}>Bật</button>}</div>
           </article>
           {PUSH_API_URL && !inviteReady && (
             <div className="pairing-box">
-              <label htmlFor="pairing-code"><strong>Ghép đôi ứng dụng riêng</strong><small>Dán mã đi kèm liên kết. Chỉ cần làm một lần trên iPhone.</small></label>
+              <label htmlFor="pairing-code"><strong>Ghép đôi ứng dụng riêng</strong><small>Dán mã đi kèm đường link riêng. Chỉ cần làm một lần trên iPhone.</small></label>
               <div><input id="pairing-code" value={inviteDraft} onChange={(event) => setInviteDraft(event.target.value)} placeholder="Mã ghép đôi" autoCapitalize="none" autoCorrect="off" /><button disabled={savingInvite} onClick={saveInviteCode}>{savingInvite ? "Đang kiểm tra…" : "Lưu"}</button></div>
             </div>
           )}
           {pushMessage && <p className={`settings-message ${pushState === "error" ? "error-note" : ""}`}>{pushMessage}</p>}
-          <article className="truth-card"><strong>Giới hạn thật của iPhone</strong><p>PWA có thể gửi thông báo lên Màn hình khóa sau khi đã cài và cấp quyền, kể cả khi app đóng. PWA không thể tạo Live Activity cố định; iOS luôn cho phép người dùng vuốt bỏ hoặc tắt thông báo.</p></article>
+          <article className="truth-card"><strong>Cách thẻ bài học hoạt động</strong><p>Đây là thông báo hệ thống của iPhone, không phải lớp phủ lên ảnh nền. iPhone cho người dùng vuốt thẻ để xóa và tự quyết âm thanh/âm lượng. App chỉ giữ một thẻ mới nhất để Màn hình khóa luôn gọn.</p></article>
           <button className="secondary-button" onClick={resetLearningProgress}>Đặt lại tiến độ học</button>
         </section>
       )}
@@ -618,7 +681,7 @@ export default function Home() {
               <li><span>1</span><p>Mở đường link bằng <strong>Safari</strong>.</p></li>
               <li><span>2</span><p>Chạm nút <strong>Chia sẻ</strong> ở thanh công cụ.</p></li>
               <li><span>3</span><p>Chọn <strong>Thêm vào Màn hình chính</strong> và bật “Mở dưới dạng ứng dụng”.</p></li>
-              <li><span>4</span><p>Mở icon vừa tạo, vào <strong>Cài đặt</strong> trong app rồi bật thông báo Màn hình khóa.</p></li>
+              <li><span>4</span><p>Mở icon vừa tạo, vào <strong>Cài đặt</strong> trong app rồi bật thẻ bài học Màn hình khóa.</p></li>
             </ol>
             <button className="primary-button wide" onClick={() => setShowInstall(false)}>Mình hiểu rồi</button>
           </section>

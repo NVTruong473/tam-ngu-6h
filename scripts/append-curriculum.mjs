@@ -53,9 +53,10 @@ const lineSchema = {
     english: { type: "STRING" },
     chinese: { type: "STRING" },
     pinyin: { type: "STRING" },
+    vietnameseReading: { type: "STRING" },
     vietnamese: { type: "STRING" },
   },
-  required: ["speaker", "english", "chinese", "pinyin", "vietnamese"],
+  required: ["speaker", "english", "chinese", "pinyin", "vietnameseReading", "vietnamese"],
 };
 
 const itemSchema = {
@@ -123,6 +124,7 @@ Tiêu chuẩn bắt buộc:
 - sentence và message có đúng 1 line. dialogue có 3 hoặc 4 lượt nói tự nhiên, speaker luân phiên A/B.
 - English và Simplified Chinese phải tự nhiên như người bản ngữ, tương đương dụng ý nhưng không dịch máy từng chữ.
 - Pinyin có dấu thanh chuẩn và tách từ dễ đọc. Bản Việt tự nhiên, không cứng.
+- Mỗi line phải có vietnameseReading: cách đọc gần tiếng Việt của đúng câu Trung, không phải âm Hán-Việt; tách từng âm tiết và ghi thanh Quan thoại bằng (1), (2), (3), (4), ví dụ “wǒ” gần là “uô(3)”. Không dùng markdown.
 - Mỗi bài có một grammarFocus mới hoặc phát triển sâu hơn; không quay về từ đơn, chào hỏi, số đếm hay mẫu nhập môn.
 - vocabulary gồm 3–7 cụm từ thật sự hữu ích lấy từ bài, ghi dạng “English · 中文 · nghĩa Việt”.
 - Khoảng 20% kiến thức được ôn có chủ ý trong ngữ cảnh mới; 80% phải mới. Không lặp tiêu đề, câu, hội thoại hay ghi chú trong danh sách gần nhất.
@@ -188,13 +190,14 @@ function validateAndNormalize(items) {
 
     for (const [lineIndex, line] of item.lines.entries()) {
       if (!line || typeof line !== "object") throw new Error(`Dòng ${lineIndex + 1} không hợp lệ tại ${plan.id}.`);
-      for (const field of ["speaker", "english", "chinese", "pinyin", "vietnamese"]) {
+      for (const field of ["speaker", "english", "chinese", "pinyin", "vietnameseReading", "vietnamese"]) {
         if (typeof line[field] !== "string" || line[field].trim().length < 1) throw new Error(`Thiếu ${field} tại ${plan.id}.`);
         assertPlainText(line[field], `${field} tại ${plan.id}`);
       }
       if (!/\p{Script=Latin}/u.test(line.english)) throw new Error(`Câu tiếng Anh không hợp lệ tại ${plan.id}.`);
       if (!/\p{Script=Han}/u.test(line.chinese)) throw new Error(`Câu tiếng Trung không hợp lệ tại ${plan.id}.`);
       if (!/\p{Script=Latin}/u.test(line.pinyin) || /\p{Script=Han}/u.test(line.pinyin)) throw new Error(`Pinyin không hợp lệ tại ${plan.id}.`);
+      if (!/\([1-4]\)/.test(line.vietnameseReading)) throw new Error(`Phiên âm Việt thiếu thanh điệu tại ${plan.id}.`);
       if (plan.kind === "dialogue" && line.speaker.trim().toUpperCase() !== (lineIndex % 2 === 0 ? "A" : "B")) {
         throw new Error(`Speaker không luân phiên A/B tại ${plan.id}.`);
       }
@@ -227,7 +230,7 @@ function validateAndNormalize(items) {
 async function generateValidatedLessons() {
   let lastValidationError;
   for (let attempt = 1; attempt <= 3; attempt += 1) {
-    const candidate = await callGemini(attempt === 1 ? "" : "\nLô trước không qua kiểm tra kỹ thuật. Hãy tạo lại toàn bộ bài thật sạch, đặc biệt không có HTML/Markdown, pinyin không chứa chữ Hán và dialogue phải xen kẽ A/B.");
+    const candidate = await callGemini(attempt === 1 ? "" : "\nLô trước không qua kiểm tra kỹ thuật. Hãy tạo lại toàn bộ bài thật sạch, đặc biệt không có HTML/Markdown, pinyin không chứa chữ Hán, vietnameseReading phải có các thanh (1)–(4), và dialogue phải xen kẽ A/B.");
     try {
       return validateAndNormalize(candidate);
     } catch (error) {

@@ -8,9 +8,47 @@ const allowedOrigins = new Set([
 ]);
 
 const curriculumUrl = "https://raw.githubusercontent.com/NVTruong473/tam-ngu-6h/main/app/curriculum.json";
+const publicAppUrl = "https://nvtruong473.github.io/tam-ngu-6h/";
+const geminiModel = "gemini-3.5-flash-lite";
 const slotByPhase = { morning: 0, noon: 1, evening: 2 } as const;
 
 type Phase = keyof typeof slotByPhase;
+type WebPushSubscription = {
+  endpoint: string;
+  expirationTime?: number | null;
+  keys: { p256dh: string; auth: string };
+};
+type PushSubscriptionRow = {
+  endpoint: string;
+  subscription: WebPushSubscription;
+  timezone: string;
+  routine_start_sequence: number;
+};
+type StudyModule = {
+  id: string;
+  title: string;
+  wish?: string;
+  nightWish?: string;
+  lines: Array<{ english: string; chinese: string; pinyin?: string; vietnamese?: string }>;
+};
+type LookupExample = {
+  english: string;
+  chinese: string;
+  pinyin: string;
+  vietnameseReading: string;
+  vietnamese: string;
+};
+type LookupResult = {
+  sourceLanguage: "English" | "Chinese" | "Mixed";
+  term: string;
+  pinyin: string;
+  vietnameseReading: string;
+  partOfSpeech: string;
+  meaning: string;
+  note: string;
+  examples: LookupExample[];
+};
+
 const phaseWishes: Record<Phase, string[]> = {
   morning: [
     "Chào buổi sáng. Mong hôm nay đối xử với cậu thật dịu dàng.",
@@ -37,23 +75,33 @@ const phaseWishes: Record<Phase, string[]> = {
     "Có một chút bình yên gửi cậu vào cuối ngày. Nhận lấy nhé.",
   ],
 };
-type WebPushSubscription = {
-  endpoint: string;
-  expirationTime?: number | null;
-  keys: { p256dh: string; auth: string };
-};
-type PushSubscriptionRow = {
-  endpoint: string;
-  subscription: WebPushSubscription;
-  timezone: string;
-  routine_start_sequence: number;
-};
-type StudyModule = {
-  id: string;
-  title: string;
-  wish?: string;
-  nightWish?: string;
-  lines: Array<{ english: string; chinese: string }>;
+
+const lookupSchema = {
+  type: "OBJECT",
+  properties: {
+    sourceLanguage: { type: "STRING", enum: ["English", "Chinese", "Mixed"] },
+    term: { type: "STRING" },
+    pinyin: { type: "STRING" },
+    vietnameseReading: { type: "STRING" },
+    partOfSpeech: { type: "STRING" },
+    meaning: { type: "STRING" },
+    note: { type: "STRING" },
+    examples: {
+      type: "ARRAY",
+      items: {
+        type: "OBJECT",
+        properties: {
+          english: { type: "STRING" },
+          chinese: { type: "STRING" },
+          pinyin: { type: "STRING" },
+          vietnameseReading: { type: "STRING" },
+          vietnamese: { type: "STRING" },
+        },
+        required: ["english", "chinese", "pinyin", "vietnameseReading", "vietnamese"],
+      },
+    },
+  },
+  required: ["sourceLanguage", "term", "pinyin", "vietnameseReading", "partOfSpeech", "meaning", "note", "examples"],
 };
 
 function cors(origin: string | null) {
@@ -112,6 +160,13 @@ function supabaseAdmin() {
   return createClient(url, serviceRole, { auth: { persistSession: false } });
 }
 
+function geminiKeys() {
+  return [...new Set((Deno.env.get("GEMINI_API_KEYS") || "")
+    .split(/[\n,]+/)
+    .map((value) => value.trim())
+    .filter(Boolean))];
+}
+
 async function subscribe(request: Request, origin: string | null) {
   if (!authorized(request, "x-invite-code", Deno.env.get("TAM_NGU_INVITE_CODE"))) {
     return json({ error: "Liên kết mời không hợp lệ." }, 401, origin);
@@ -122,7 +177,7 @@ async function subscribe(request: Request, origin: string | null) {
     routineStartSequence?: number;
   };
   const endpoint = body?.subscription?.endpoint || "";
-  if (!isApplePushEndpoint(endpoint)) return json({ error: "Chỉ chấp nhận đăng ký Web Push từ iPhone/iPad." }, 400, origin);
+  if (!isApplePushEndpoint(endpoint)) return json({ error: "Chỉ chấp nhận đăng ký Web Push từ app Safari trên iPhone/iPad." }, 400, origin);
   if (!Number.isFinite(body?.routineStartSequence)) return json({ error: "Thiếu mốc bắt đầu lộ trình." }, 400, origin);
 
   const { error } = await supabaseAdmin().from("tam_ngu_push_subscriptions").upsert({
@@ -164,7 +219,7 @@ async function dispatch(request: Request, origin: string | null) {
   if (!body?.phase || !(body.phase in slotByPhase)) return json({ error: "Phase không hợp lệ." }, 400, origin);
 
   const [curriculumResponse, subscriptionsResult] = await Promise.all([
-    fetch(curriculumUrl, { headers: { accept: "application/json" } }),
+    fetch(curriculumUrl, { cache: "no-store", headers: { accept: "application/json" } }),
     supabaseAdmin().from("tam_ngu_push_subscriptions").select("endpoint, subscription, timezone, routine_start_sequence").eq("enabled", true),
   ]);
   if (!curriculumResponse.ok) throw new Error(`Không tải được kho bài: ${curriculumResponse.status}`);
@@ -173,7 +228,6 @@ async function dispatch(request: Request, origin: string | null) {
   const curriculum = await curriculumResponse.json() as StudyModule[];
   const subscriptions = (subscriptionsResult.data || []) as PushSubscriptionRow[];
   const currentSequence = sequenceAt(new Date(), body.phase);
-
   const publicKey = Deno.env.get("VAPID_PUBLIC_KEY");
   const privateKey = Deno.env.get("VAPID_PRIVATE_KEY");
   const subject = Deno.env.get("VAPID_SUBJECT") || "mailto:owner@example.com";
@@ -185,16 +239,19 @@ async function dispatch(request: Request, origin: string | null) {
   for (const row of subscriptions) {
     const lessonIndex = Math.max(0, Math.min(curriculum.length - 1, currentSequence - Number(row.routine_start_sequence)));
     const lesson = curriculum[lessonIndex];
-    const phaseLabel = body.phase === "morning" ? "Buổi sáng" : body.phase === "noon" ? "Buổi trưa" : "Buổi tối";
+    const firstLine = lesson?.lines?.[0];
+    const phaseLabel = body.phase === "morning" ? "06:00 · Buổi sáng" : body.phase === "noon" ? "12:00 · Buổi trưa" : "18:00 · Buổi tối";
     const payload = JSON.stringify({
-      title: `${phaseLabel} có một bài mới ✦`,
-      body: lesson?.wish || fallbackWish(body.phase, currentSequence),
-      tag: `tam-ngu-${body.phase}`,
-      url: "https://nvtruong473.github.io/tam-ngu-6h/",
+      title: `${phaseLabel} · ${lesson?.title || "Một bài mới"}`,
+      body: firstLine?.english || lesson?.wish || fallbackWish(body.phase, currentSequence),
+      tag: "tam-ngu-current-lesson",
+      url: publicAppUrl,
       timestamp: Date.now(),
     });
     try {
-      await webpush.sendNotification(row.subscription, payload, { TTL: 21_600, urgency: "high" });
+      // iOS owns the sound and volume. "normal" asks for a timely but ordinary
+      // notification; the service worker avoids re-alerting when replacing it.
+      await webpush.sendNotification(row.subscription, payload, { TTL: 21_600, urgency: "normal" });
       sent += 1;
       await supabaseAdmin().from("tam_ngu_push_subscriptions").update({
         last_sent_at: new Date().toISOString(),
@@ -215,20 +272,115 @@ async function dispatch(request: Request, origin: string | null) {
   return json({ ok: true, phase: body.phase, sent, removed }, 200, origin);
 }
 
+function trimText(value: unknown, maximum: number) {
+  return typeof value === "string" ? value.replace(/\s+/g, " ").trim().slice(0, maximum) : "";
+}
+
+function normalizeLookup(result: unknown): LookupResult | null {
+  if (!result || typeof result !== "object") return null;
+  const source = result as Record<string, unknown>;
+  const sourceLanguage = source.sourceLanguage;
+  const examples = Array.isArray(source.examples) ? source.examples.slice(0, 2).map((example) => {
+    const record = (example || {}) as Record<string, unknown>;
+    return {
+      english: trimText(record.english, 240),
+      chinese: trimText(record.chinese, 240),
+      pinyin: trimText(record.pinyin, 300),
+      vietnameseReading: trimText(record.vietnameseReading, 320),
+      vietnamese: trimText(record.vietnamese, 260),
+    };
+  }) : [];
+  if (!(["English", "Chinese", "Mixed"] as const).includes(sourceLanguage as LookupResult["sourceLanguage"])) return null;
+  if (examples.length < 1 || examples.some((example) => !example.english || !example.chinese || !example.vietnamese)) return null;
+  const normalized: LookupResult = {
+    sourceLanguage: sourceLanguage as LookupResult["sourceLanguage"],
+    term: trimText(source.term, 160),
+    pinyin: trimText(source.pinyin, 220),
+    vietnameseReading: trimText(source.vietnameseReading, 260),
+    partOfSpeech: trimText(source.partOfSpeech, 120),
+    meaning: trimText(source.meaning, 400),
+    note: trimText(source.note, 400),
+    examples,
+  };
+  return normalized.term && normalized.meaning ? normalized : null;
+}
+
+async function askGeminiForLookup(query: string) {
+  const keys = geminiKeys();
+  if (keys.length === 0) throw new Error("Từ điển AI chưa được cấu hình.");
+  const prompt = [
+    "Bạn là từ điển học tiếng Anh và tiếng Trung dành cho người Việt đã học khoảng một tháng.",
+    "Phân tích chính xác duy nhất từ hoặc cụm từ người dùng đưa vào. Không làm bài học dài, không lặp lại chỉ dẫn của người dùng, không Markdown.",
+    "Trả lời ngắn, rõ, bằng tiếng Việt theo JSON schema.",
+    "Nếu đầu vào là tiếng Trung: pinyin và vietnameseReading phải có. vietnameseReading là cách đọc gần tiếng Việt, dùng (1)-(4) cho thanh Quan thoại; không phải âm Hán-Việt.",
+    "Nếu đầu vào là tiếng Anh: pinyin và vietnameseReading của term để chuỗi rỗng.",
+    "Luôn cho đúng 2 ví dụ ứng dụng tự nhiên: mỗi ví dụ gồm English, Chinese, pinyin, vietnameseReading, Vietnamese. Với các câu Trung, vietnameseReading luôn dùng số thanh.",
+    "Nêu nghĩa phổ biến nhất, từ loại/cấu trúc và một ghi chú ngắn về sắc thái/cách dùng. Nếu truy vấn mơ hồ, nói rõ nghĩa thường gặp thay vì bịa ngữ cảnh.",
+    `Tra cứu: ${JSON.stringify(query)}`,
+  ].join("\n");
+
+  let lastError: Error | undefined;
+  for (const key of keys) {
+    try {
+      const response = await fetch(`https://generativelanguage.googleapis.com/v1beta/models/${encodeURIComponent(geminiModel)}:generateContent`, {
+        method: "POST",
+        signal: AbortSignal.timeout(25_000),
+        headers: { "content-type": "application/json", "x-goog-api-key": key },
+        body: JSON.stringify({
+          contents: [{ role: "user", parts: [{ text: prompt }] }],
+          generationConfig: {
+            temperature: 0.15,
+            responseMimeType: "application/json",
+            responseSchema: lookupSchema,
+          },
+        }),
+      });
+      if (!response.ok) throw new Error(`Gemini HTTP ${response.status}`);
+      const data = await response.json();
+      const text = data.candidates?.[0]?.content?.parts?.[0]?.text;
+      const result = normalizeLookup(text ? JSON.parse(text) : null);
+      if (!result) throw new Error("Gemini trả về kết quả từ điển chưa hợp lệ.");
+      return result;
+    } catch (error) {
+      lastError = error instanceof Error ? error : new Error("Gemini không phản hồi.");
+    }
+  }
+  throw lastError || new Error("Từ điển AI đang bận.");
+}
+
+async function lookup(request: Request, origin: string | null) {
+  if (!authorized(request, "x-invite-code", Deno.env.get("TAM_NGU_INVITE_CODE"))) {
+    return json({ error: "Liên kết riêng không hợp lệ." }, 401, origin);
+  }
+  const body = await request.json().catch(() => null) as null | { query?: unknown };
+  const query = trimText(body?.query, 100);
+  if (query.length < 1) return json({ error: "Hãy nhập một từ hoặc cụm ngắn." }, 400, origin);
+  const result = await askGeminiForLookup(query);
+  return json({ ok: true, result }, 200, origin);
+}
+
 Deno.serve(async (request) => {
   const origin = request.headers.get("origin");
   if (request.method === "OPTIONS") return new Response(null, { status: 204, headers: cors(origin) });
   const action = new URL(request.url).pathname.split("/").filter(Boolean).at(-1) || "health";
   try {
-    if (request.method === "GET" && action === "health") return json({ ok: true, service: "tam-ngu-api" }, 200, origin);
+    if (request.method === "GET" && action === "health") {
+      return json({
+        ok: true,
+        service: "tam-ngu-api",
+        pushConfigured: Boolean(Deno.env.get("VAPID_PUBLIC_KEY") && Deno.env.get("VAPID_PRIVATE_KEY")),
+        lookupConfigured: geminiKeys().length > 0,
+      }, 200, origin);
+    }
     if (request.method === "GET" && action === "vapid-key") return json({ publicKey: Deno.env.get("VAPID_PUBLIC_KEY") || null }, 200, origin);
     if (request.method === "POST" && action === "verify-invite") return verifyInvite(request, origin);
     if (request.method === "POST" && action === "subscribe") return await subscribe(request, origin);
     if (request.method === "DELETE" && action === "subscribe") return await unsubscribe(request, origin);
     if (request.method === "POST" && action === "dispatch") return await dispatch(request, origin);
+    if (request.method === "POST" && action === "lookup") return await lookup(request, origin);
     return json({ error: "Không tìm thấy endpoint." }, 404, origin);
   } catch (error) {
-    console.error(error);
+    console.error(error instanceof Error ? error.message : "Lỗi không xác định");
     return json({ error: "Máy chủ tạm thời chưa xử lý được yêu cầu." }, 500, origin);
   }
 });

@@ -1,4 +1,4 @@
-const CACHE_VERSION = "tam-ngu-6h-v6";
+const CACHE_VERSION = "tam-ngu-6h-v8";
 
 self.addEventListener("install", (event) => {
   event.waitUntil(
@@ -75,15 +75,16 @@ self.addEventListener("fetch", (event) => {
 });
 
 self.addEventListener("push", (event) => {
-  const fallback = { title: "Tâm Ngữ 6H", body: "Một lời nhắc nhỏ: quay lại học tiếp nhé." };
+  const fallback = { title: "Tâm Ngữ 6H", body: "Một bài học nhỏ đang chờ cậu." };
   let payload = fallback;
   try { payload = { ...fallback, ...event.data.json() }; } catch {}
   event.waitUntil(self.registration.showNotification(payload.title, {
     body: payload.body,
     icon: new URL("icons/icon-192.png", self.registration.scope).href,
     badge: new URL("icons/icon-192.png", self.registration.scope).href,
-    tag: payload.tag || "tam-ngu-lesson",
-    renotify: true,
+    // The newest lesson replaces the earlier card instead of creating a stack.
+    tag: "tam-ngu-current-lesson",
+    renotify: false,
     timestamp: payload.timestamp || Date.now(),
     data: { url: payload.url || self.registration.scope },
   }));

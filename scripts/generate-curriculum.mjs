@@ -40,9 +40,10 @@ const itemSchema = {
           english: { type: "STRING" },
           chinese: { type: "STRING" },
           pinyin: { type: "STRING" },
+          vietnameseReading: { type: "STRING" },
           vietnamese: { type: "STRING" },
         },
-        required: ["speaker", "english", "chinese", "pinyin", "vietnamese"],
+        required: ["speaker", "english", "chinese", "pinyin", "vietnameseReading", "vietnamese"],
       },
     },
     note: { type: "STRING" },
@@ -94,7 +95,7 @@ function validate(items, stageIndex) {
       item.lines = item.lines.slice(0, 1);
     }
     for (const line of item.lines) {
-      for (const field of ["english", "chinese", "pinyin", "vietnamese"]) {
+      for (const field of ["english", "chinese", "pinyin", "vietnameseReading", "vietnamese"]) {
         if (typeof line[field] !== "string" || line[field].trim().length < 3) throw new Error(`Thiếu ${field} tại ${item.id}.`);
       }
     }
@@ -114,7 +115,7 @@ Yêu cầu bắt buộc:
 - Thứ tự kind lặp chính xác: sentence, message, dialogue; tổng cộng 15 bài.
 - sentence và message có đúng 1 line; dialogue có 3 hoặc 4 lines.
 - English và Simplified Chinese phải tự nhiên, tương đương ý nhưng không dịch máy từng chữ.
-- Pinyin có dấu thanh chính xác; Vietnamese tự nhiên, dễ hiểu.
+- Pinyin có dấu thanh chính xác; vietnameseReading là cách đọc gần tiếng Việt của câu Trung (không phải âm Hán-Việt), tách từng âm tiết và có thanh Quan thoại (1), (2), (3), (4); Vietnamese tự nhiên, dễ hiểu.
 - Mỗi bài dạy một cấu trúc hoặc chiến lược giao tiếp mới, khó dần nhưng không nhảy cấp đột ngột.
 - note giải thích sắc thái/cấu trúc bằng tiếng Việt; challenge là bài nói 1 phút có thể tự làm.
 - id tuần tự từ lesson-${String(globalStart).padStart(3, "0")} đến lesson-${String(globalStart + 14).padStart(3, "0")}.

@@ -1,61 +1,77 @@
-# Tâm Ngữ 6H — PWA cho iPhone
+# Tâm Ngữ 6H — PWA học Anh–Trung cho iPhone
 
-Ứng dụng học Anh–Trung dạng PWA cho iPhone, cài từ Safari lên Màn hình chính, lưu tiến độ trên thiết bị và hoạt động ngoại tuyến sau lần tải đầu.
+Tâm Ngữ 6H là một PWA cài từ Safari lên Màn hình chính. Nó có icon, chạy toàn màn hình, lưu tiến độ/tra cứu đã xem trên chính iPhone và vẫn mở được sau khi mất mạng (sau lần tải đầu).
 
-## Nhịp bài học hằng ngày
+## Trải nghiệm người dùng
 
-- Bài mới được mở theo giờ địa phương lúc 06:00, 12:00 và 18:00.
-- 90 bài đầu là bộ đệm ngoại tuyến. Sau đó GitHub Actions nối thêm 3 bài/ngày bằng Gemini, tăng dần từ A2.1 → B1 → B2 → C1 mà không quay vòng về bài đầu.
-- Mỗi đợt mới được kiểm tra cấu trúc, số lượt hội thoại và trùng lặp Anh–Trung trước khi nhập kho.
-- Mỗi khung giờ có một nhóm lời chúc đa dạng, chọn ổn định theo ngày để không đổi lung tung khi tải lại trang.
-- Bài hiện tại và mốc bắt đầu giáo trình được lưu bằng `localStorage`; người mới luôn bắt đầu từ bài 1.
-- Khi backend Push được cấu hình, nút **Bật trên Màn hình khóa** đăng ký Web Push. Tệp `.ics` chỉ là phương án dự phòng cho bản chạy không có backend.
-- Nội dung thông báo cố ý không tiết lộ bài hay lời chúc để giữ cảm giác tò mò.
-- Service worker đã có điểm nhận Web Push. iOS 16.4+ có thể nhận trên Màn hình khóa sau khi PWA được thêm vào Màn hình chính và người dùng cấp quyền; vẫn cần backend lưu subscription và gửi push.
-- Khi có bản nội dung hoặc giao diện mới, PWA kiểm tra bản cập nhật khi mở và tự nạp lại app shell mới thay vì giữ bài cũ trong cache.
-- Phát âm dùng giọng English/中文 tốt nhất mà iPhone cung cấp, ưu tiên Enhanced/Premium khi đã cài trên máy.
+- Bài mới theo nhịp 06:00, 12:00, 18:00 giờ Việt Nam; mỗi mốc dùng một bài và lời nhắn khác.
+- 96 bài đệm A2.1 → B1 có sẵn ngoại tuyến. GitHub Actions nối tiếp 3 bài đã kiểm tra bằng Gemini mỗi ngày, sau đó tiếp tục B1+ → B2 → B2+ → C1. Không có “cuốn sách 96 trang” cố định.
+- Nội dung gồm câu ứng dụng, thông điệp và hội thoại ngắn; không quay lại nhóm chào hỏi/số đếm nhập môn.
+- Mỗi câu Trung có pinyin, **Đọc gần Việt** và nút phát âm dùng giọng iPhone. “Đọc gần Việt” chỉ là cầu nối, không thay thế nghe giọng Quan thoại chuẩn.
+- Tra nhanh Anh/Trung trả nghĩa, sắc thái và hai ví dụ song ngữ. API key Gemini chỉ ở Supabase Edge Function; iPhone chỉ nhận kết quả đã lọc và tự lưu tối đa 30 lần tra gần nhất.
 
-## Kho bài Gemini tự mở rộng
+## Điều có thể và không thể làm trên iPhone
 
-API key chỉ được dùng trong môi trường build và không bao giờ được đóng gói vào trình duyệt. Tạo lại bộ đệm đầu tiên:
+Sau khi người dùng cài PWA vào Màn hình chính, mở icon và đồng ý thông báo, Web Push có thể hiện trên Lock Screen kể cả khi app đã đóng. Đây là khả năng chính thức cho Home Screen web app trên iOS/iPadOS 16.4+ và không cần Apple Developer membership. Xem [WebKit: Web Push for Web Apps on iOS and iPadOS](https://webkit.org/blog/13878/web-push-for-web-apps-on-ios-and-ipados/).
+
+- Thẻ mới nhất có cùng `tag`, nên thay thẻ cũ thay vì chất thành nhiều thông báo.
+- Người dùng có thể vuốt/xóa thẻ hệ thống sau khi đọc; việc xóa một thẻ không tắt ba lịch tiếp theo. Muốn dừng hẳn thì vào app → Cài đặt → Tắt.
+- iPhone tự quyết âm thanh, kiểu hiển thị và âm lượng. PWA không thể đặt “âm nhỏ như Notes” cho riêng một thông báo; hãy chỉnh Sounds/âm lượng cảnh báo trong iPhone nếu cần nhẹ hơn.
+- PWA **không** thể vẽ lớp giấy trong suốt lên vùng trống Lock Screen, thay hình nền, hay tự có nút `×` nằm trong thẻ hệ thống. Đó là vùng iOS kiểm soát.
+- Live Activity/Widget đúng là có giao diện hệ thống riêng, nhưng cần app native ActivityKit/WidgetKit và mô hình phân phối Apple; hơn nữa Live Activity cũng có giới hạn thời gian. Nó không phải phương án miễn phí qua GitHub Pages cho một PWA.
+
+## Vì sao không bê nguyên widget từ các dự án tham khảo
+
+- [a-new-word-every-day](https://github.com/lukefwalton/a-new-word-every-day) có ý tưởng local-first, chọn nội dung theo ngày và ôn lại rất phù hợp: Tâm Ngữ giữ tiến độ/cached lookup trên máy và mở rộng nội dung theo lộ trình.
+- [Focus-Vocab](https://github.com/VoPhatDat/Focus-Vocab) gợi ý LocalStorage và active recall; chỉ lấy phần lưu cục bộ nhẹ, không mang vào game/rank/tài khoản không cần thiết.
+- [widgetkit-daily-language](https://github.com/joshspicer/widgetkit-daily-language) là WidgetKit native; [vocaday_app](https://github.com/hbx921/vocaday_app) là Flutter/mobile store. Chúng hữu ích về UX nhưng không thể thành widget iPhone khi chỉ phát hành qua GitHub Pages.
+- [web_vocab_master](https://github.com/HoangCongLap/web_vocab_master) đi theo hướng tài khoản, khóa học và Firebase; hợp với nền tảng nhiều người dùng hơn là món quà local-first này, nên không thêm gánh nặng đăng nhập/thu thập dữ liệu.
+- Bài tổng hợp [YBox](https://ybox.vn/ky-nang/toptip-top-5-ung-dung-tao-widget-hien-thi-tu-moi-tieng-anh-moi-ngay-tren-dien-thoai-6976c184f4589005bd8e4d8b) là nguồn cảm hứng về “một nội dung nhìn thấy ngay + ôn lại”, không phải tài liệu kỹ thuật về quyền iOS. Vì vậy bản này chọn **một thẻ Lock Screen tối giản, phần học/tra sâu trong app**, thay vì hứa một widget không thể cài miễn phí.
+
+## Kiến trúc và ranh giới riêng tư
+
+- GitHub Pages: giao diện PWA và kho bài công khai, miễn phí.
+- Supabase Edge Function `tam-ngu-api`: giữ VAPID, mã mời, cron secret và Gemini keys; cung cấp đăng ký Push, gửi Push và `/lookup`.
+- Supabase Cron: 23:00, 05:00, 11:00 UTC tương ứng 06:00, 12:00, 18:00 tại Việt Nam.
+- `tam_ngu_push_subscriptions`: RLS bật; `anon`/`authenticated` không có quyền đọc/ghi, chỉ service role của Edge Function được dùng.
+
+Điểm phải nói thật: GitHub Pages là **website công khai**. Link ghép đôi/mã mời bảo vệ việc đăng ký Push và dùng Gemini, không biến bundle tĩnh thành app có đăng nhập. Không đặt thông tin riêng tư trong nội dung bài học. Nếu cần kiểm soát truy cập thật sự, cần bổ sung Supabase Auth hoặc backend có lớp phiên đăng nhập.
+
+Gemini free tier cũng không đồng nghĩa “vô hạn tuyệt đối”: quota/mô hình có thể thay đổi. Ứng dụng có 96 bài offline và cache 30 lần tra để không hỏng trải nghiệm khi Gemini hay mạng tạm thời không sẵn sàng.
+
+## Vận hành server an toàn
+
+Các API key không được đưa vào `.env` của PWA hoặc Git. Lệnh dưới đây đọc key từ file cục bộ được chỉ định, đặt chúng thành secret server-side tạm thời qua file quyền `0600`, rồi xóa file tạm:
 
 ```bash
-GEMINI_API_KEY="..." npm run generate:curriculum
+API_KEYS_FILE="/Users/vantruong/Documents/api_all" \
+SUPABASE_PROJECT_REF="fcsuldrerhbynwotcvyn" \
+npm run supabase:lookup-secrets
+
+SUPABASE_PROJECT_REF="fcsuldrerhbynwotcvyn" npm run supabase:deploy
+SUPABASE_PROJECT_REF="fcsuldrerhbynwotcvyn" npm run supabase:apply
+SUPABASE_PROJECT_REF="fcsuldrerhbynwotcvyn" node scripts/configure-supabase-cron.mjs
+SUPABASE_PROJECT_REF="fcsuldrerhbynwotcvyn" npm run supabase:verify
 ```
 
-Nối thêm 3 bài vào kho hiện tại:
+`supabase:verify` chỉ in trạng thái đạt/không đạt; nó không in API key hoặc mã mời. Nó dùng một truy vấn Gemini mẫu để kiểm tra luồng tra cứu thật.
 
-```bash
-API_KEYS_FILE=/đường/dẫn/api_all npm run append:curriculum
-```
+Trên GitHub, Secret `GEMINI_API_KEYS` chứa các key phân tách bằng xuống dòng. Workflow thêm 3 bài mỗi ngày lúc 00:23 giờ Việt Nam và phát hành lại sau khi kiểm tra dữ liệu. Variable công khai `NEXT_PUBLIC_PUSH_API_URL` chỉ chứa URL Edge Function, không chứa bí mật.
 
-Trên GitHub, lưu một hoặc nhiều key (ngăn cách bằng xuống dòng) trong Secret `GEMINI_API_KEYS`. Workflow chạy lúc 00:23 giờ Việt Nam, thêm 3 bài rồi phát hành. Nếu Gemini tạm lỗi, bản đang chạy vẫn dùng kho dự phòng và không bị gián đoạn.
-
-## Ranh giới iPhone cần nói thật
-
-- PWA không thể tạo Live Activity. Web Push và lịch iOS vẫn có thể báo khi app đã đóng.
-- Live Activity chỉ có trong app native dùng ActivityKit; iOS kết thúc sau tối đa 8 giờ hoạt động và giữ trên Màn hình khóa tối đa thêm 4 giờ.
-- Vercel Hobby chỉ chạy cron một lần/ngày và có thể lệch gần một giờ, nên không phù hợp cho ba mốc chính xác. Bản phát hành dùng Supabase Cron + Edge Function, với bảng có tiền tố `tam_ngu_` tách biệt hoàn toàn khỏi dữ liệu nghiệp vụ của Caseflow.
-
-## Backend thông báo đã dùng
-
-- Edge Function: `tam-ngu-api`; chỉ nhận đăng ký qua mã mời, còn tác vụ gửi phải có cron secret.
-- Mã ghép đôi được xác thực với backend trước khi lưu cục bộ trên iPhone; mã không nằm trong mã nguồn hay bundle phát hành.
-- Lịch Supabase Cron chạy 23:00, 05:00 và 11:00 UTC, tương ứng 06:00, 12:00 và 18:00 tại Việt Nam.
-- Subscription được lưu riêng trong `tam_ngu_push_subscriptions`; RLS bật, `anon`/`authenticated` không có quyền đọc ghi.
-- Các script cài đặt cục bộ đọc token từ macOS Keychain, không chứa hoặc in API key. Chúng chỉ dành cho máy chủ dự án, không cần chạy trên iPhone.
-
-Điểm cần thẳng thắn: GitHub Pages là website công khai. Mã mời bảo vệ việc **đăng ký nhận Push**, không biến giao diện tĩnh thành ứng dụng có đăng nhập. Chỉ gửi liên kết ghép đôi riêng cho người nhận; nếu cần kiểm soát truy cập tuyệt đối, bước tiếp theo phải là Supabase Auth hoặc một lớp truy cập riêng.
-
-## Chạy thử
+## Kiểm thử và phát hành
 
 ```bash
 npm ci
-npm run dev:static
+npm run lint
+npm test
+git push origin main
 ```
 
-## Đưa lên GitHub Pages
+Trên macOS 12, Cloudflare Workers runtime của `vinext dev` không chạy được. Vẫn xem đúng bản tĩnh bằng:
 
-Website hiện được phát hành tự động tại <https://nvtruong473.github.io/tam-ngu-6h/>. Mỗi lần đẩy nhánh `main`, workflow `.github/workflows/deploy-pages.yml` sẽ kiểm tra và cập nhật GitHub Pages.
+```bash
+npm run build:github
+npx --yes serve@14 -s dist/client -l 3002
+```
 
-Trên iPhone: mở liên kết ghép đôi riêng bằng Safari → Chia sẻ → Thêm vào Màn hình chính → bật **Mở dưới dạng ứng dụng** → mở icon vừa tạo → Cài đặt → bật **Thông báo Màn hình khóa**.
+GitHub Pages phát hành tại <https://nvtruong473.github.io/tam-ngu-6h/>. Để test thật trên iPhone: mở link ghép đôi riêng trong Safari → Chia sẻ → **Thêm vào Màn hình chính** → mở icon mới → Bật nhịp → **Hiện bài trên Màn hình khóa** → Allow. Thử Push thật cần một iPhone đã subscribe; desktop/static preview chỉ kiểm được giao diện và luồng setup.

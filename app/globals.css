@@ -53,6 +53,39 @@ button { -webkit-tap-highlight-color: transparent; }
 .honest-note { margin: 12px 0 0; color: var(--muted); font-size: 11px; line-height: 1.45; }
 .error-note { color: #a6485a !important; }
 
+.lookup-card { margin-top: 18px; padding: 18px; border: 1px solid rgba(104, 82, 145, .14); border-radius: 24px; background: linear-gradient(145deg, rgba(249,247,255,.96), rgba(255,251,249,.97)); box-shadow: 0 14px 36px rgba(76,64,107,.08); }
+.lookup-heading { display: flex; justify-content: space-between; align-items: flex-start; gap: 12px; }
+.lookup-heading h2 { margin: 3px 0 0; font-family: Georgia, serif; font-size: 20px; letter-spacing: -.25px; }
+.lookup-heading > span { display: grid; place-items: center; width: 32px; height: 32px; border-radius: 10px; color: #665691; background: #eeeafd; font-size: 20px; }
+.lookup-form { display: flex; gap: 8px; margin-top: 14px; }
+.lookup-form input { min-width: 0; flex: 1; border: 1px solid rgba(104,82,145,.18); border-radius: 12px; outline: 0; padding: 11px 12px; color: var(--ink); background: rgba(255,255,255,.9); font-size: 13px; }
+.lookup-form input:focus { border-color: #a28fca; box-shadow: 0 0 0 3px rgba(162,143,202,.16); }
+.lookup-form button { flex: 0 0 auto; border: 0; border-radius: 12px; padding: 0 15px; color: white; background: #7766a5; font-size: 12px; font-weight: 800; }
+.lookup-form button:disabled { opacity: .7; }
+.lookup-message { margin: 10px 2px 0; color: #776a83; font-size: 11px; line-height: 1.45; }
+.lookup-result { margin-top: 15px; padding-top: 15px; border-top: 1px solid rgba(104,82,145,.14); }
+.lookup-term-row { display: flex; justify-content: space-between; gap: 12px; }
+.lookup-term-row > div { min-width: 0; }
+.lookup-term-row strong, .lookup-term-row small { display: block; }
+.lookup-term-row strong { overflow-wrap: anywhere; color: #473c60; font-family: Georgia, serif; font-size: 22px; }
+.lookup-term-row small { margin-top: 3px; color: #857995; font-size: 10px; }
+.lookup-speak { flex: 0 0 auto; align-self: flex-start; border: 0; width: 36px; height: 36px; border-radius: 50%; color: #665691; background: #eeeafd; font-size: 13px; }
+.lookup-pinyin, .lookup-reading, .lookup-meaning, .lookup-note { margin: 10px 0 0; }
+.lookup-pinyin { color: #776a83; font-size: 12px; letter-spacing: .35px; }
+.lookup-reading { display: flex; align-items: baseline; flex-wrap: wrap; gap: 6px; color: #9a5264; font-size: 11px; font-weight: 720; }
+.lookup-reading span { padding: 2px 5px; border-radius: 99px; color: white; background: #c87586; font-size: 8px; font-weight: 850; letter-spacing: .06em; text-transform: uppercase; }
+.lookup-meaning { color: #443b4d; font-size: 14px; font-weight: 720; line-height: 1.5; }
+.lookup-note { color: #756875; font-size: 11px; line-height: 1.5; }
+.lookup-examples { display: grid; gap: 9px; margin-top: 14px; }
+.lookup-example { padding: 12px; border-radius: 14px; background: rgba(255,255,255,.76); }
+.lookup-example button { display: block; width: 100%; padding: 0; border: 0; text-align: left; color: var(--ink); background: none; }
+.lookup-example button + button { margin-top: 9px; padding-top: 9px; border-top: 1px solid rgba(104,82,145,.12); }
+.lookup-example button strong, .lookup-example button small { display: block; }
+.lookup-example button strong { font-family: Georgia, serif; font-size: 14px; line-height: 1.38; }
+.lookup-example button small { margin-top: 3px; color: #857995; font-size: 9px; line-height: 1.35; }
+.lookup-example .vietnamese-reading { display: flex; align-items: baseline; gap: 5px; margin-top: 5px; color: #9a5264; font-size: 10px; }
+.lookup-example p { margin: 9px 0 0; color: #745f64; font-size: 11px; font-style: italic; line-height: 1.45; }
+
 .section-heading { margin: 30px 4px 14px; display: flex; justify-content: space-between; align-items: center; }
 .section-heading h2, .page-title h2, .install-sheet h2 { margin: 0; font-family: Georgia, serif; font-size: 28px; letter-spacing: -.45px; }
 .favorite-button { border: 0; width: 44px; height: 44px; border-radius: 50%; background: #f8f1ee; color: #c4b7b9; font-size: 20px; }
@@ -86,7 +119,10 @@ button { -webkit-tap-highlight-color: transparent; }
 .study-language small { margin-top: 4px; color: var(--muted); font-size: 10px; line-height: 1.4; }
 .study-language.chinese-line { margin-top: 13px; padding-top: 12px; border-top: 1px solid var(--line); }
 .study-language.chinese-line strong { font-family: -apple-system, BlinkMacSystemFont, "PingFang SC", sans-serif; font-size: 19px; }
+.study-language .vietnamese-reading { display: flex; align-items: baseline; gap: 6px; margin-top: 6px; color: #9a5264; font-size: 11px; font-weight: 720; letter-spacing: .01em; }
+.vietnamese-reading span { flex: 0 0 auto; padding: 2px 5px; border-radius: 99px; color: #fff; background: #c87586; font-size: 8px; font-weight: 850; letter-spacing: .06em; text-transform: uppercase; }
 .dialogue-line > p { margin: 12px 0 0; color: #745f64; font-size: 12px; font-style: italic; line-height: 1.45; }
+.pronunciation-note { margin: 13px 2px 0; color: #8a7278; font-size: 10px; line-height: 1.5; }
 .learning-note, .grammar-focus, .vocabulary-card, .mini-challenge { margin-top: 15px; padding: 15px; border-radius: 16px; background: #fff3e8; }
 .grammar-focus { background: #f3f0ff; }
 .vocabulary-card { background: #f5faf1; }
