@@ -1,0 +1,28 @@
+{
+  "id": "./",
+  "name": "Tam Ngữ 6H",
+  "short_name": "Tam Ngữ 6H",
+  "description": "Học Anh – Trung – Việt nhẹ nhàng, riêng tư và dùng được offline.",
+  "lang": "vi",
+  "start_url": "./",
+  "scope": "./",
+  "display": "standalone",
+  "orientation": "portrait",
+  "background_color": "#FFE3EA",
+  "theme_color": "#FFE3EA",
+  "categories": ["education", "lifestyle"],
+  "icons": [
+    {
+      "src": "icons/icon-192.png",
+      "sizes": "192x192",
+      "type": "image/png",
+      "purpose": "any"
+    },
+    {
+      "src": "icons/icon-512.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "any maskable"
+    }
+  ]
+}
