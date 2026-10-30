@@ -84,6 +84,10 @@ function normalize(value) {
   return String(value || "").normalize("NFKC").toLocaleLowerCase("vi").replace(/[^\p{L}\p{N}]+/gu, " ").trim();
 }
 
+function assertPlainText(value, label) {
+  if (/[<>]/.test(value)) throw new Error(`Có markup hoặc ký tự không hợp lệ trong ${label}.`);
+}
+
 const recent = curriculum.slice(-36).map((item, index) => ({
   number: curriculum.length - Math.min(36, curriculum.length) + index + 1,
   title: item.title,
@@ -126,10 +130,11 @@ Tiêu chuẩn bắt buộc:
 - note giải thích cấu trúc/sắc thái và chỉ ra khác biệt Anh–Trung bằng tiếng Việt; challenge là nhiệm vụ nói/viết 1–3 phút, cụ thể và tự làm được.
 - wish là lời chúc riêng cho đúng phase của bài, 12–28 từ, ấm áp, khó đoán, không sáo rỗng.
 - nightWish là lời chúc ngủ ngon bí mật, 12–28 từ, khác hoàn toàn các lời gần đây. Với bài không phải buổi tối vẫn phải tạo một câu dự phòng khác nhau.
-- Không markdown, không nhận xét ngoài JSON.
+- Chỉ dùng văn bản thuần: tuyệt đối không chứa HTML/XML, Markdown, backtick hoặc các thẻ/ký tự dạng <...>.
+- Không nhận xét ngoài JSON.
 `;
 
-async function callGemini() {
+async function callGemini(retryGuidance = "") {
   let lastError;
   for (let attempt = 0; attempt < keys.length; attempt += 1) {
     const key = keys[attempt];
@@ -139,7 +144,7 @@ async function callGemini() {
         signal: AbortSignal.timeout(120_000),
         headers: { "content-type": "application/json", "x-goog-api-key": key },
         body: JSON.stringify({
-          contents: [{ role: "user", parts: [{ text: prompt }] }],
+          contents: [{ role: "user", parts: [{ text: `${prompt}${retryGuidance}` }] }],
           generationConfig: {
             temperature: 0.88,
             responseMimeType: "application/json",
@@ -169,25 +174,42 @@ function validateAndNormalize(items) {
 
   return items.map((item, index) => {
     const plan = requestedPlan[index];
+    if (!item || typeof item !== "object") throw new Error(`Bài ${plan.id} không hợp lệ.`);
     if (item.kind !== plan.kind) throw new Error(`Sai loại bài ở ${plan.id}: cần ${plan.kind}.`);
     const expectedLines = plan.kind === "dialogue" ? [3, 4] : [1];
     if (!Array.isArray(item.lines) || !expectedLines.includes(item.lines.length)) throw new Error(`Sai số dòng tại ${plan.id}.`);
-    if (!Array.isArray(item.vocabulary) || item.vocabulary.length < 3) throw new Error(`Thiếu từ vựng tại ${plan.id}.`);
+    if (!Array.isArray(item.vocabulary) || item.vocabulary.length < 3 || item.vocabulary.length > 7) throw new Error(`Thiếu từ vựng tại ${plan.id}.`);
 
     for (const field of ["title", "context", "note", "challenge", "grammarFocus", "wish", "nightWish"]) {
       if (typeof item[field] !== "string" || item[field].trim().length < 8) throw new Error(`Thiếu ${field} tại ${plan.id}.`);
+      assertPlainText(item[field], `${field} tại ${plan.id}`);
     }
     if (usedTitles.has(normalize(item.title))) throw new Error(`Trùng tiêu đề tại ${plan.id}.`);
 
-    for (const line of item.lines) {
+    for (const [lineIndex, line] of item.lines.entries()) {
+      if (!line || typeof line !== "object") throw new Error(`Dòng ${lineIndex + 1} không hợp lệ tại ${plan.id}.`);
       for (const field of ["speaker", "english", "chinese", "pinyin", "vietnamese"]) {
         if (typeof line[field] !== "string" || line[field].trim().length < 1) throw new Error(`Thiếu ${field} tại ${plan.id}.`);
+        assertPlainText(line[field], `${field} tại ${plan.id}`);
+      }
+      if (!/\p{Script=Latin}/u.test(line.english)) throw new Error(`Câu tiếng Anh không hợp lệ tại ${plan.id}.`);
+      if (!/\p{Script=Han}/u.test(line.chinese)) throw new Error(`Câu tiếng Trung không hợp lệ tại ${plan.id}.`);
+      if (!/\p{Script=Latin}/u.test(line.pinyin) || /\p{Script=Han}/u.test(line.pinyin)) throw new Error(`Pinyin không hợp lệ tại ${plan.id}.`);
+      if (plan.kind === "dialogue" && line.speaker.trim().toUpperCase() !== (lineIndex % 2 === 0 ? "A" : "B")) {
+        throw new Error(`Speaker không luân phiên A/B tại ${plan.id}.`);
       }
       if (usedEnglish.has(normalize(line.english))) throw new Error(`Trùng câu tiếng Anh tại ${plan.id}.`);
       if (usedChinese.has(normalize(line.chinese))) throw new Error(`Trùng câu tiếng Trung tại ${plan.id}.`);
       usedEnglish.add(normalize(line.english));
       usedChinese.add(normalize(line.chinese));
     }
+
+    item.vocabulary.forEach((entry) => {
+      if (typeof entry !== "string" || entry.trim().split("·").map((part) => part.trim()).filter(Boolean).length !== 3) {
+        throw new Error(`Từ vựng không đúng định dạng tại ${plan.id}.`);
+      }
+      assertPlainText(entry, `vocabulary tại ${plan.id}`);
+    });
 
     usedTitles.add(normalize(item.title));
     return {
@@ -202,8 +224,22 @@ function validateAndNormalize(items) {
   });
 }
 
+async function generateValidatedLessons() {
+  let lastValidationError;
+  for (let attempt = 1; attempt <= 3; attempt += 1) {
+    const candidate = await callGemini(attempt === 1 ? "" : "\nLô trước không qua kiểm tra kỹ thuật. Hãy tạo lại toàn bộ bài thật sạch, đặc biệt không có HTML/Markdown, pinyin không chứa chữ Hán và dialogue phải xen kẽ A/B.");
+    try {
+      return validateAndNormalize(candidate);
+    } catch (error) {
+      lastValidationError = error;
+      process.stderr.write(`Lô Gemini ${attempt}/3 bị chặn kiểm duyệt: ${error.message}\n`);
+    }
+  }
+  throw lastValidationError ?? new Error("Không có lô bài nào đạt kiểm tra chất lượng.");
+}
+
 process.stdout.write(`Đang tạo ${lessonCount} bài mới bằng ${model}…\n`);
-const generated = validateAndNormalize(await callGemini());
+const generated = await generateValidatedLessons();
 curriculum.push(...generated);
 writeFileSync(destination, `${JSON.stringify(curriculum, null, 2)}\n`, "utf8");
 process.stdout.write(`Đã nối thêm ${generated.length} bài; kho hiện có ${curriculum.length} bài.\n`);

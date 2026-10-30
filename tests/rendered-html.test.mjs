@@ -39,19 +39,25 @@ test("ships a growing progressive curriculum with balanced seed formats", async 
   assert.match(curriculum.at(-1).stage, /^B1/);
   assert.ok(curriculum.every((item) => item.lines.length >= 1));
   assert.ok(curriculum.every((item) => item.lines.every((line) => line.english && line.chinese && line.pinyin && line.vietnamese)));
+  assert.ok(curriculum.every((item) => item.lines.every((line) => /\p{Script=Han}/u.test(line.chinese))));
+  assert.ok(curriculum.every((item) => item.lines.every((line) => /\p{Script=Latin}/u.test(line.pinyin) && !/\p{Script=Han}/u.test(line.pinyin))));
+  assert.doesNotMatch(JSON.stringify(curriculum), /<\/?[a-z][^>]*>/i);
 });
 
 test("does not embed API credentials in the shipped application", async () => {
-  const [page, generator, workflow] = await Promise.all([
+  const [page, generator, appendGenerator, workflow] = await Promise.all([
     readFile(new URL("app/page.tsx", root), "utf8"),
     readFile(new URL("scripts/generate-curriculum.mjs", root), "utf8"),
+    readFile(new URL("scripts/append-curriculum.mjs", root), "utf8"),
     readFile(new URL(".github/workflows/deploy-pages.yml", root), "utf8"),
   ]);
-  const source = `${page}\n${generator}\n${workflow}`;
+  const source = `${page}\n${generator}\n${appendGenerator}\n${workflow}`;
 
   assert.doesNotMatch(source, /(?:AQ\.|sk-proj-|sk-or-v1-|gsk_|nvapi-)[A-Za-z0-9_-]{8,}/);
   assert.match(generator, /process\.env\.GEMINI_API_KEY/);
   assert.match(workflow, /secrets\.GEMINI_API_KEYS/);
   assert.match(page, /KHO TỰ MỞ RỘNG/);
   assert.match(page, /verify-invite/);
+  assert.match(appendGenerator, /generateValidatedLessons/);
+  assert.match(appendGenerator, /assertPlainText/);
 });

@@ -2247,15 +2247,15 @@
       {
         "speaker": "A",
         "english": "We hit a snag with the database migration; I'm afraid we need an extra two days.",
-        "chinese": "我们在数据库迁移时遇到了卡点，恐怕我们需要多</i>两天时间。",
-        "pinyin": "wǒ men zài shù jù kù qiān yí shí yù dào le qiǎ diǎn, kǒng pà wǒ men xū yào duō liǎng tiān shí jiān.",
+        "chinese": "我们在数据库迁移时遇到了卡点，恐怕还需要两天时间。",
+        "pinyin": "wǒ men zài shù jù kù qiān yí shí yù dào le kǎ diǎn, kǒng pà hái xū yào liǎng tiān shí jiān.",
         "vietnamese": "Chúng ta gặp chút vướng mắc khi di chuyển cơ sở dữ liệu; e rằng chúng ta cần thêm hai ngày nữa."
       },
       {
         "speaker": "B",
         "english": "That's a tight squeeze since the client review is scheduled for Thursday morning.",
         "chinese": "这有点赶，因为客户评审会安排在周四上午。",
-        "pinyin": "zhè yǒu diǎn gǎn, yīn wèi kè hù pǔn shěn huì ān pái zài zhōu sì shàng wǔ.",
+        "pinyin": "zhè yǒu diǎn gǎn, yīn wèi kè hù píng shěn huì ān pái zài zhōu sì shàng wǔ.",
         "vietnamese": "Hơi gấp đấy vì buổi đánh giá của khách hàng đã lên lịch vào sáng thứ Năm rồi."
       },
       {
