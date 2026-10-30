@@ -7,7 +7,8 @@ const githubBase = isGitHubPages && repositoryName ? `/${repositoryName}` : "";
 const config: NextConfig = {
   output: isGitHubPages ? "export" : undefined,
   trailingSlash: true,
-  basePath: githubBase,
+  // vinext currently skips prerendering `/` when basePath is set. Pages already
+  // mounts the artifact at /<repository>, so only static asset URLs need it.
   assetPrefix: githubBase || undefined,
 };
 

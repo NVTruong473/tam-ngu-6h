@@ -10,6 +10,10 @@ const { d1, r2 } = hostingConfig;
 
 // macOS Seatbelt blocks FSEvents, so Codex previews need polling for HMR.
 const isCodexSeatbeltSandbox = process.env.CODEX_SANDBOX === "seatbelt";
+const githubRepositoryName = process.env.GITHUB_REPOSITORY?.split("/")[1] ?? "";
+const githubPagesBase = process.env.GITHUB_PAGES === "1" && githubRepositoryName
+  ? `/${githubRepositoryName}/`
+  : "/";
 
 const localBindingConfig = {
   main: "./worker/index.ts",
@@ -49,6 +53,7 @@ export default defineConfig(async () => {
     : null;
 
   return {
+    base: githubPagesBase,
     server: isCodexSeatbeltSandbox
       ? { watch: { useFsEvents: false, usePolling: true } }
       : undefined,
