@@ -118,6 +118,13 @@ async function unsubscribe(request: Request, origin: string | null) {
   return json({ ok: true }, 200, origin);
 }
 
+function verifyInvite(request: Request, origin: string | null) {
+  if (!authorized(request, "x-invite-code", Deno.env.get("TAM_NGU_INVITE_CODE"))) {
+    return json({ error: "Liên kết mời không hợp lệ." }, 401, origin);
+  }
+  return json({ ok: true }, 200, origin);
+}
+
 async function dispatch(request: Request, origin: string | null) {
   if (!authorized(request, "x-cron-secret", Deno.env.get("TAM_NGU_CRON_SECRET"))) {
     return json({ error: "Không được phép." }, 401, origin);
@@ -184,6 +191,7 @@ Deno.serve(async (request) => {
   try {
     if (request.method === "GET" && action === "health") return json({ ok: true, service: "tam-ngu-api" }, 200, origin);
     if (request.method === "GET" && action === "vapid-key") return json({ publicKey: Deno.env.get("VAPID_PUBLIC_KEY") || null }, 200, origin);
+    if (request.method === "POST" && action === "verify-invite") return verifyInvite(request, origin);
     if (request.method === "POST" && action === "subscribe") return await subscribe(request, origin);
     if (request.method === "DELETE" && action === "subscribe") return await unsubscribe(request, origin);
     if (request.method === "POST" && action === "dispatch") return await dispatch(request, origin);

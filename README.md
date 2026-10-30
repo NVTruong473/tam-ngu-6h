@@ -12,6 +12,7 @@
 - Khi backend Push được cấu hình, nút **Bật trên Màn hình khóa** đăng ký Web Push. Tệp `.ics` chỉ là phương án dự phòng cho bản chạy không có backend.
 - Nội dung thông báo cố ý không tiết lộ bài hay lời chúc để giữ cảm giác tò mò.
 - Service worker đã có điểm nhận Web Push. iOS 16.4+ có thể nhận trên Màn hình khóa sau khi PWA được thêm vào Màn hình chính và người dùng cấp quyền; vẫn cần backend lưu subscription và gửi push.
+- Khi có bản nội dung hoặc giao diện mới, PWA kiểm tra bản cập nhật khi mở và tự nạp lại app shell mới thay vì giữ bài cũ trong cache.
 - Phát âm dùng giọng English/中文 tốt nhất mà iPhone cung cấp, ưu tiên Enhanced/Premium khi đã cài trên máy.
 
 ## Kho bài Gemini tự mở rộng
@@ -39,6 +40,7 @@ Trên GitHub, lưu một hoặc nhiều key (ngăn cách bằng xuống dòng) t
 ## Backend thông báo đã dùng
 
 - Edge Function: `tam-ngu-api`; chỉ nhận đăng ký qua mã mời, còn tác vụ gửi phải có cron secret.
+- Mã ghép đôi được xác thực với backend trước khi lưu cục bộ trên iPhone; mã không nằm trong mã nguồn hay bundle phát hành.
 - Lịch Supabase Cron chạy 23:00, 05:00 và 11:00 UTC, tương ứng 06:00, 12:00 và 18:00 tại Việt Nam.
 - Subscription được lưu riêng trong `tam_ngu_push_subscriptions`; RLS bật, `anon`/`authenticated` không có quyền đọc ghi.
 - Các script cài đặt cục bộ đọc token từ macOS Keychain, không chứa hoặc in API key. Chúng chỉ dành cho máy chủ dự án, không cần chạy trên iPhone.

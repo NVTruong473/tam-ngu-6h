@@ -18,9 +18,11 @@ test("exports an installable, private-by-default PWA", async () => {
   assert.equal(manifest.display, "standalone");
   assert.equal(manifest.orientation, "portrait");
   assert.ok(manifest.icons.some((icon) => icon.sizes === "512x512"));
-  assert.match(serviceWorker, /tam-ngu-6h-v5/);
+  assert.match(serviceWorker, /tam-ngu-6h-v6/);
   assert.match(serviceWorker, /html\.matchAll/);
   assert.match(serviceWorker, /notificationclick/);
+  assert.match(serviceWorker, /skipWaiting/);
+  assert.match(serviceWorker, /clients\.claim/);
 });
 
 test("ships a growing progressive curriculum with balanced seed formats", async () => {
@@ -50,4 +52,6 @@ test("does not embed API credentials in the shipped application", async () => {
   assert.doesNotMatch(source, /(?:AQ\.|sk-proj-|sk-or-v1-|gsk_|nvapi-)[A-Za-z0-9_-]{8,}/);
   assert.match(generator, /process\.env\.GEMINI_API_KEY/);
   assert.match(workflow, /secrets\.GEMINI_API_KEYS/);
+  assert.match(page, /KHO TỰ MỞ RỘNG/);
+  assert.match(page, /verify-invite/);
 });

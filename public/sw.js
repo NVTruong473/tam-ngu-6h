@@ -1,4 +1,4 @@
-const CACHE_VERSION = "tam-ngu-6h-v5";
+const CACHE_VERSION = "tam-ngu-6h-v6";
 
 self.addEventListener("install", (event) => {
   event.waitUntil(
@@ -25,16 +25,16 @@ self.addEventListener("install", (event) => {
       await cache.addAll([...new Set(dependencies)]);
     }),
   );
-  self.skipWaiting();
+  event.waitUntil(self.skipWaiting());
 });
 
 self.addEventListener("activate", (event) => {
   event.waitUntil(
-    caches.keys().then((keys) =>
-      Promise.all(keys.filter((key) => key !== CACHE_VERSION).map((key) => caches.delete(key))),
-    ),
+    Promise.all([
+      caches.keys().then((keys) => Promise.all(keys.filter((key) => key !== CACHE_VERSION).map((key) => caches.delete(key)))),
+      self.clients.claim(),
+    ]),
   );
-  self.clients.claim();
 });
 
 self.addEventListener("fetch", (event) => {
@@ -45,7 +45,7 @@ self.addEventListener("fetch", (event) => {
 
   if (isPageNavigation) {
     event.respondWith(
-      fetch(event.request)
+      fetch(event.request, { cache: "no-store" })
         .then((response) => {
           if (response.ok) {
             const copy = response.clone();

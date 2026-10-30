@@ -87,11 +87,18 @@ button { -webkit-tap-highlight-color: transparent; }
 .study-language.chinese-line { margin-top: 13px; padding-top: 12px; border-top: 1px solid var(--line); }
 .study-language.chinese-line strong { font-family: -apple-system, BlinkMacSystemFont, "PingFang SC", sans-serif; font-size: 19px; }
 .dialogue-line > p { margin: 12px 0 0; color: #745f64; font-size: 12px; font-style: italic; line-height: 1.45; }
-.learning-note, .mini-challenge { margin-top: 15px; padding: 15px; border-radius: 16px; background: #fff3e8; }
+.learning-note, .grammar-focus, .vocabulary-card, .mini-challenge { margin-top: 15px; padding: 15px; border-radius: 16px; background: #fff3e8; }
+.grammar-focus { background: #f3f0ff; }
+.vocabulary-card { background: #f5faf1; }
 .mini-challenge { background: #f2f7ed; }
-.learning-note span, .mini-challenge span { color: #936048; font-size: 9px; font-weight: 850; letter-spacing: .8px; text-transform: uppercase; }
+.learning-note span, .grammar-focus span, .vocabulary-card span, .mini-challenge span { color: #936048; font-size: 9px; font-weight: 850; letter-spacing: .8px; text-transform: uppercase; }
+.grammar-focus span { color: #6556a0; }
+.vocabulary-card span { color: #51744b; }
 .mini-challenge span { color: #587249; }
-.learning-note p, .mini-challenge p { margin: 6px 0 0; color: #71584c; font-size: 12px; line-height: 1.5; }
+.learning-note p, .grammar-focus p, .mini-challenge p { margin: 6px 0 0; color: #71584c; font-size: 12px; line-height: 1.5; }
+.grammar-focus p { color: #5f587f; }
+.vocabulary-card ul { display: grid; gap: 6px; margin: 8px 0 0; padding: 0; list-style: none; color: #52684c; font-size: 12px; line-height: 1.45; }
+.vocabulary-card li::before { content: "•"; margin-right: 7px; color: #78a06c; }
 .mini-challenge p { color: #596653; }
 
 .page-title { margin: 10px 4px 24px; }
@@ -130,6 +137,7 @@ button { -webkit-tap-highlight-color: transparent; }
 .pairing-box > div { display: flex; gap: 8px; margin-top: 12px; }
 .pairing-box input { min-width: 0; flex: 1; padding: 11px 12px; border: 1px solid var(--line); border-radius: 12px; outline: 0; }
 .pairing-box button { border: 0; padding: 0 15px; border-radius: 12px; color: white; background: var(--rose-dark); font-weight: 750; }
+.pairing-box button:disabled { opacity: .7; }
 .secondary-button { margin-top: 16px; color: var(--rose-dark); background: #fff0f2; box-shadow: none; }
 
 .tabbar { position: fixed; z-index: 20; left: 50%; bottom: 0; transform: translateX(-50%); display: grid; grid-template-columns: repeat(3, 1fr); width: min(560px, 100%); padding: 10px 18px max(10px, env(safe-area-inset-bottom)); border-top: 1px solid var(--line); background: rgba(255,251,248,.88); backdrop-filter: blur(22px); }

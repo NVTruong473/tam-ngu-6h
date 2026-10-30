@@ -227,6 +227,7 @@ export default function Home() {
   const [pushMessage, setPushMessage] = useState("");
   const [inviteReady, setInviteReady] = useState(false);
   const [inviteDraft, setInviteDraft] = useState("");
+  const [savingInvite, setSavingInvite] = useState(false);
 
   const schedule = scheduleAt(now);
   const unlockedIndex = routineStartSequence === null ? 0 : Math.max(0, schedule.sequence - routineStartSequence);
@@ -267,19 +268,31 @@ export default function Home() {
           registrations.forEach((registration) => registration.unregister());
         }).catch(() => undefined);
       } else {
-        navigator.serviceWorker.register("./sw.js").catch(() => undefined);
+        const hadController = Boolean(navigator.serviceWorker.controller);
+        let refreshedForUpdate = false;
+        navigator.serviceWorker.addEventListener("controllerchange", () => {
+          if (hadController && !refreshedForUpdate) {
+            refreshedForUpdate = true;
+            window.location.reload();
+          }
+        });
+        navigator.serviceWorker.register("./sw.js", { updateViaCache: "none" })
+          .then((registration) => registration.update())
+          .catch(() => undefined);
       }
     }
 
     const hashParams = new URLSearchParams(window.location.hash.replace(/^#/, ""));
-    const invite = hashParams.get("invite");
+    const invite = hashParams.get("invite")?.trim();
     if (invite) {
       localStorage.setItem(STORAGE.invite, invite);
-      queueMicrotask(() => setInviteReady(true));
       window.history.replaceState(null, "", `${window.location.pathname}${window.location.search}`);
-    } else if (localStorage.getItem(STORAGE.invite)) {
-      queueMicrotask(() => setInviteReady(true));
     }
+    const hasInvite = Boolean(invite || localStorage.getItem(STORAGE.invite));
+    queueMicrotask(() => {
+      setInviteReady(hasInvite);
+      if (invite) setPushMessage("Đã nhận liên kết ghép đôi riêng. Sau khi cài app, chỉ cần bật thông báo Màn hình khóa.");
+    });
 
     if (!("serviceWorker" in navigator) || !("PushManager" in window) || !("Notification" in window)) {
       queueMicrotask(() => setPushState("unsupported"));
@@ -377,18 +390,33 @@ export default function Home() {
     }
   }
 
-  function saveInviteCode() {
+  async function saveInviteCode() {
     const code = inviteDraft.trim();
     if (code.length < 8) {
       setPushState("error");
       setPushMessage("Mã ghép đôi chưa đúng. Hãy sao chép nguyên mã được gửi kèm.");
       return;
     }
-    localStorage.setItem(STORAGE.invite, code);
-    setInviteDraft("");
-    setInviteReady(true);
-    setPushState("idle");
-    setPushMessage("Đã lưu mã ghép đôi. Bây giờ có thể bật Màn hình khóa.");
+    setSavingInvite(true);
+    try {
+      if (PUSH_API_URL) {
+        const response = await fetch(`${PUSH_API_URL}/verify-invite`, {
+          method: "POST",
+          headers: { "x-invite-code": code },
+        });
+        if (!response.ok) throw new Error("Mã ghép đôi chưa đúng. Hãy mở lại liên kết riêng được gửi cho cậu.");
+      }
+      localStorage.setItem(STORAGE.invite, code);
+      setInviteDraft("");
+      setInviteReady(true);
+      setPushState("idle");
+      setPushMessage("Đã kiểm tra và lưu mã ghép đôi. Bây giờ có thể bật Màn hình khóa.");
+    } catch (error) {
+      setPushState("error");
+      setPushMessage(error instanceof Error ? error.message : "Chưa kiểm tra được mã ghép đôi.");
+    } finally {
+      setSavingInvite(false);
+    }
   }
 
   async function disableLockScreen() {
@@ -502,6 +530,10 @@ export default function Home() {
               ))}
             </div>
             <div className="learning-note"><span>Ghi nhớ</span><p>{studyModule.note}</p></div>
+            {studyModule.grammarFocus && <div className="grammar-focus"><span>Trọng tâm hôm nay</span><p>{studyModule.grammarFocus}</p></div>}
+            {studyModule.vocabulary && studyModule.vocabulary.length > 0 && (
+              <div className="vocabulary-card"><span>Cụm nên nhớ</span><ul>{studyModule.vocabulary.map((item) => <li key={item}>{item}</li>)}</ul></div>
+            )}
             <div className="mini-challenge"><span>Thử thách 1 phút</span><p>{studyModule.challenge}</p></div>
             {!viewingScheduled && (
               <div className="lesson-nav">
@@ -515,7 +547,7 @@ export default function Home() {
 
       {tab === "library" && (
         <section className="screen library-screen">
-          <div className="page-title"><p className="eyebrow">LỘ TRÌNH SỐNG A2 → C1</p><h2>Thư viện đã mở</h2><p>Gemini nối thêm câu, thông điệp và hội thoại mới; bài cũ chỉ quay lại khi cần ôn có chủ ý.</p></div>
+          <div className="page-title"><p className="eyebrow">LỘ TRÌNH SỐNG A2 → C1</p><h2>Thư viện đã mở</h2><p>{curriculum.length} bài sẵn sàng trên máy. Gemini nối thêm 3 bài mới mỗi ngày; bài cũ chỉ quay lại khi cần ôn có chủ ý.</p></div>
           <label className="search-box">
             <span aria-hidden="true">⌕</span>
             <input value={query} onChange={(event) => setQuery(event.target.value)} placeholder="Tìm tiếng Anh, Trung hoặc Việt…" />
@@ -539,13 +571,13 @@ export default function Home() {
             <div className="setting-row"><span className="setting-icon">⌂</span><div><strong>Cài lên Màn hình chính</strong><small>Mở toàn màn hình với icon như một app.</small></div><button onClick={() => setShowInstall(true)}>Xem</button></div>
             <div className="setting-row"><span className="setting-icon">✓</span><div><strong>Tự động lưu</strong><small>Tiến độ và nhịp hằng ngày được lưu trên máy.</small></div><span className="status-pill">Đang bật</span></div>
             <div className="setting-row"><span className="setting-icon">◷</span><div><strong>06:00 · 12:00 · 18:00</strong><small>Mỗi mốc mở một bài và lời nhắn mới.</small></div><span className="status-pill">Tự động</span></div>
-            <div className="setting-row"><span className="setting-icon">∞</span><div><strong>Kho bài tự mở rộng</strong><small>Gemini tạo thêm bài theo lộ trình, kiểm tra trùng lặp rồi mới phát hành.</small></div><span className="status-pill">Liên tục</span></div>
-            <div className="setting-row"><span className="setting-icon">▣</span><div><strong>Thông báo Màn hình khóa</strong><small>Hoạt động khi app đã đóng; cần cài app và cấp quyền một lần.</small></div>{pushState === "enabled" ? <button onClick={disableLockScreen}>Tắt</button> : <button onClick={enableLockScreen}>Bật</button>}</div>
+            <div className="setting-row"><span className="setting-icon">∞</span><div><strong>Kho bài tự mở rộng</strong><small>{curriculum.length} bài hiện có; Gemini tạo thêm theo lộ trình, kiểm tra trùng lặp rồi mới phát hành.</small></div><span className="status-pill">Liên tục</span></div>
+            <div className="setting-row"><span className="setting-icon">▣</span><div><strong>Thông báo Màn hình khóa</strong><small>Hoạt động khi app đã đóng; cần cài app và cấp quyền một lần.</small></div>{pushState === "unsupported" ? <span className="status-pill">Safari iPhone</span> : pushState === "enabled" ? <button onClick={disableLockScreen}>Tắt</button> : <button onClick={enableLockScreen}>Bật</button>}</div>
           </article>
           {PUSH_API_URL && !inviteReady && (
             <div className="pairing-box">
               <label htmlFor="pairing-code"><strong>Ghép đôi ứng dụng riêng</strong><small>Dán mã đi kèm liên kết. Chỉ cần làm một lần trên iPhone.</small></label>
-              <div><input id="pairing-code" value={inviteDraft} onChange={(event) => setInviteDraft(event.target.value)} placeholder="Mã ghép đôi" autoCapitalize="none" autoCorrect="off" /><button onClick={saveInviteCode}>Lưu</button></div>
+              <div><input id="pairing-code" value={inviteDraft} onChange={(event) => setInviteDraft(event.target.value)} placeholder="Mã ghép đôi" autoCapitalize="none" autoCorrect="off" /><button disabled={savingInvite} onClick={saveInviteCode}>{savingInvite ? "Đang kiểm tra…" : "Lưu"}</button></div>
             </div>
           )}
           {pushMessage && <p className={`settings-message ${pushState === "error" ? "error-note" : ""}`}>{pushMessage}</p>}
