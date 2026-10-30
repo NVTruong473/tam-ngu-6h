@@ -43,7 +43,11 @@ test("ships a growing progressive curriculum with balanced seed formats", async 
   assert.ok(curriculum.every((item) => item.lines.length >= 1));
   assert.ok(curriculum.every((item) => item.lines.every((line) => line.english && line.chinese && line.pinyin && line.vietnamese)));
   assert.ok(curriculum.every((item) => item.lines.every((line) => line.vietnameseReading && /\([1-4]\)/.test(line.vietnameseReading))));
+  assert.ok(curriculum.every((item) => item.lines.every((line) => /[ăâđêôơưáàảãạắằẳẵặấầẩẫậéèẻẽẹếềểễệíìỉĩịóòỏõọốồổỗộớờởỡợúùủũụứừửữựýỳỷỹỵ]/iu.test(line.vietnameseReading))));
+  assert.ok(curriculum.every((item) => item.lines.every((line) => !/[fjwz]/iu.test(line.vietnameseReading))));
+  assert.ok(curriculum.every((item) => item.lines.every((line) => !/(?:^|\s)(?:sh|zh)[a-z]+/iu.test(line.vietnameseReading))));
   assert.ok(curriculum.every((item) => item.lines.every((line) => /\p{Script=Han}/u.test(line.chinese))));
+  assert.ok(curriculum.every((item) => item.lines.every((line) => !/[A-Za-z]/.test(line.chinese))));
   assert.ok(curriculum.every((item) => item.lines.every((line) => /\p{Script=Latin}/u.test(line.pinyin) && !/\p{Script=Han}/u.test(line.pinyin))));
   assert.doesNotMatch(JSON.stringify(curriculum), /<\/?[a-z][^>]*>/i);
 });

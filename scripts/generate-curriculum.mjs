@@ -98,6 +98,15 @@ function validate(items, stageIndex) {
       for (const field of ["english", "chinese", "pinyin", "vietnameseReading", "vietnamese"]) {
         if (typeof line[field] !== "string" || line[field].trim().length < 3) throw new Error(`Thiếu ${field} tại ${item.id}.`);
       }
+      if (!/[ăâđêôơưáàảãạắằẳẵặấầẩẫậéèẻẽẹếềểễệíìỉĩịóòỏõọốồổỗộớờởỡợúùủũụứừửữựýỳỷỹỵ]/iu.test(line.vietnameseReading)
+        || /[fjwz]/iu.test(line.vietnameseReading)
+        || /(?:^|\s)(?:sh|zh)[a-z]+/iu.test(line.vietnameseReading)
+        || /\([05-9]\)/.test(line.vietnameseReading)) {
+        throw new Error(`Phiên âm Việt còn giống pinyin/Anh tại ${item.id}.`);
+      }
+      if (!/\p{Script=Han}/u.test(line.chinese) || /[A-Za-z]/.test(line.chinese)) {
+        throw new Error(`Câu Trung phải viết hoàn toàn bằng tiếng Trung giản thể tại ${item.id}.`);
+      }
     }
   });
 }
@@ -114,8 +123,8 @@ Yêu cầu bắt buộc:
 - Không dạy lại Hello, Thank you, số đếm hay từ đơn lẻ.
 - Thứ tự kind lặp chính xác: sentence, message, dialogue; tổng cộng 15 bài.
 - sentence và message có đúng 1 line; dialogue có 3 hoặc 4 lines.
-- English và Simplified Chinese phải tự nhiên, tương đương ý nhưng không dịch máy từng chữ.
-- Pinyin có dấu thanh chính xác; vietnameseReading là cách đọc gần tiếng Việt của câu Trung (không phải âm Hán-Việt), tách từng âm tiết và có thanh Quan thoại (1), (2), (3), (4); Vietnamese tự nhiên, dễ hiểu.
+- English và Simplified Chinese phải tự nhiên, tương đương ý nhưng không dịch máy từng chữ. Câu Trung chỉ dùng chữ Trung giản thể và dấu câu Trung; không chèn English/Latin; tên riêng phải phiên âm sang chữ Trung khi cần.
+- Pinyin có dấu thanh chính xác; vietnameseReading là cách đọc gần tiếng Việt của câu Trung (không phải âm Hán-Việt hay pinyin viết lại), tách từng âm tiết và có thanh Quan thoại (1), (2), (3), (4). Dùng chữ/dấu Việt khi gợi âm; không dùng f, j, w, z, cụm pinyin sh.../zh... hay (0)/(5). Vietnamese tự nhiên, dễ hiểu.
 - Mỗi bài dạy một cấu trúc hoặc chiến lược giao tiếp mới, khó dần nhưng không nhảy cấp đột ngột.
 - note giải thích sắc thái/cấu trúc bằng tiếng Việt; challenge là bài nói 1 phút có thể tự làm.
 - id tuần tự từ lesson-${String(globalStart).padStart(3, "0")} đến lesson-${String(globalStart + 14).padStart(3, "0")}.

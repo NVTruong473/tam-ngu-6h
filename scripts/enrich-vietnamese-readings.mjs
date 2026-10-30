@@ -8,6 +8,7 @@ const requestedBatchSize = Number(process.env.PRONUNCIATION_BATCH_SIZE || 12);
 const batchSize = Number.isInteger(requestedBatchSize) && requestedBatchSize > 0 && requestedBatchSize <= 15
   ? requestedBatchSize
   : 12;
+const refreshAll = process.env.REFRESH_PRONUNCIATION === "1";
 
 function keysFromLocalFile() {
   if (!localKeysFile) return [];
@@ -86,6 +87,24 @@ async function callGemini(prompt) {
 }
 
 const PINYIN_TONE_MARKS = new Set([..."āáǎàēéěèīíǐìōóǒòūúǔùǖǘǚǜĀÁǍÀĒÉĚÈĪÍǏÌŌÓǑÒŪÚǓÙǕǗǙǛ"]);
+const VIETNAMESE_SOUND_MARK = /[ăâđêôơưáàảãạắằẳẵặấầẩẫậéèẻẽẹếềểễệíìỉĩịóòỏõọốồổỗộớờởỡợúùủũụứừửữựýỳỷỹỵ]/iu;
+const NON_VIETNAMESE_LETTER = /[fjwz]/iu;
+const PINYIN_DIGRAPH = /(?:^|\s)(?:sh|zh)[a-z]+/iu;
+
+function normalizeReading(value) {
+  if (typeof value !== "string") return "";
+  return value
+    .replace(/\(\s*[05]\s*\)/g, "")
+    .replace(/(^|[\s,;:])zh/giu, "$1tr")
+    .replace(/(^|[\s,;:])sh/giu, "$1s")
+    .replace(/(^|[\s,;:])j/giu, "$1ch")
+    .replace(/(^|[\s,;:])q/giu, "$1ch")
+    .replace(/(^|[\s,;:])w/giu, "$1u")
+    .replace(/(^|[\s,;:])z/giu, "$1d")
+    .replace(/(^|[\s,;:])f/giu, "$1ph")
+    .replace(/\s+/g, " ")
+    .trim();
+}
 
 function toneCount(value) {
   return [...value].filter((character) => PINYIN_TONE_MARKS.has(character)).length;
@@ -94,6 +113,10 @@ function toneCount(value) {
 function assertReading(value, pinyin, lessonId, index) {
   if (typeof value !== "string" || value.trim().length < 3) throw new Error(`Thiếu phiên âm Việt tại ${lessonId}, dòng ${index + 1}.`);
   if (/[<>]/.test(value) || /\p{Script=Han}/u.test(value)) throw new Error(`Phiên âm Việt không sạch tại ${lessonId}, dòng ${index + 1}.`);
+  if (!VIETNAMESE_SOUND_MARK.test(value) || NON_VIETNAMESE_LETTER.test(value) || PINYIN_DIGRAPH.test(value)) {
+    throw new Error(`Phiên âm Việt còn giống pinyin/Anh tại ${lessonId}, dòng ${index + 1} (${value}).`);
+  }
+  if (/\([05-9]\)/.test(value)) throw new Error(`Phiên âm Việt dùng thanh không hợp lệ tại ${lessonId}, dòng ${index + 1}.`);
   const expectedTones = toneCount(pinyin);
   const suppliedTones = (value.match(/\([1-4]\)/g) || []).length;
   // This is intentionally a learner-friendly approximation, not an IPA
@@ -121,21 +144,21 @@ function validateBatch(output, batch) {
     const readingsByIndex = new Map(result.readings.map((reading) => [reading?.index, reading?.vietnameseReading]));
     if (readingsByIndex.size !== lesson.lines.length) throw new Error(`Trùng hoặc thiếu index ở ${lesson.id}.`);
     return lesson.lines.map((line, index) => {
-      const vietnameseReading = readingsByIndex.get(index);
+      const vietnameseReading = normalizeReading(readingsByIndex.get(index));
       assertReading(vietnameseReading, line.pinyin, lesson.id, index);
       return { line, vietnameseReading: vietnameseReading.trim() };
     });
   });
 }
 
-const missing = curriculum.filter((lesson) => lesson.lines.some((line) => !line.vietnameseReading));
-if (missing.length === 0) {
+const targets = refreshAll ? curriculum : curriculum.filter((lesson) => lesson.lines.some((line) => !line.vietnameseReading));
+if (targets.length === 0) {
   process.stdout.write("Toàn bộ bài đã có cách đọc gần tiếng Việt.\n");
   process.exit(0);
 }
 
-for (let start = 0; start < missing.length; start += batchSize) {
-  const batch = missing.slice(start, start + batchSize);
+for (let start = 0; start < targets.length; start += batchSize) {
+  const batch = targets.slice(start, start + batchSize);
   const source = batch.map((lesson) => ({
     id: lesson.id,
     lines: lesson.lines.map((line, index) => ({
@@ -153,19 +176,21 @@ for (let start = 0; start < missing.length; start += batchSize) {
     "- Giữ mỗi âm tiết Quan thoại thành một cụm dễ đọc, cách nhau bằng dấu cách.",
     "- Sau mỗi âm tiết có thanh, ghi chính xác (1), (2), (3) hoặc (4). Thanh nhẹ có thể không ghi số.",
     "- Mỗi dòng có requiredToneMarkers. Số lượng chuỗi (1), (2), (3), (4) trong vietnameseReading PHẢI bằng đúng số đó; đếm kỹ trước khi trả lời.",
-    "- Dùng các nguyên âm Việt như â, ê, ô, ơ, ư khi có ích. Dấu Việt có thể dùng để gợi âm, nhưng thanh Quan thoại vẫn phải ghi bằng số trong ngoặc.",
+    "- Đây tuyệt đối KHÔNG phải pinyin viết lại bằng chữ thường. Phải dùng lối gợi âm người Việt dễ đọc, ví dụ wǒmen gần “uổ(3) mần”, xīng gần “xỉnh(1)” tùy âm; dùng các chữ Việt như ă, â, đ, ê, ô, ơ, ư và dấu Việt khi có ích.",
+    "- Không được dùng các ký tự f, j, w, z; không dùng các cụm pinyin kiểu sh... hoặc zh.... Không được trả chuỗi toàn pinyin như “wo men neng”. Mỗi câu phải có ít nhất một chữ cái/dấu đặc trưng Việt như ô, ơ, ư, â, ê, đ hoặc dấu thanh Việt.",
+    "- Dấu Việt chỉ để gợi âm; thanh Quan thoại vẫn phải ghi bằng số (1)–(4) trong ngoặc. Không dùng (0), (5) hay số khác.",
     "- Các âm khó chỉ cần gần đúng, nhất quán và dễ hiểu; không thêm giải thích, markdown hay chữ Hán.",
     "- Tôn trọng thứ tự id và index tuyệt đối. Trả về đúng JSON theo schema.",
     "Nguồn cần xử lý:",
     JSON.stringify(source, null, 2),
   ].join("\n");
 
-  process.stdout.write(`Đang thêm cách đọc gần Việt cho ${start + 1}–${start + batch.length}/${missing.length} bài…\n`);
+  process.stdout.write(`Đang ${refreshAll ? "làm mới" : "thêm"} cách đọc gần Việt cho ${start + 1}–${start + batch.length}/${targets.length} bài…\n`);
   let validated;
   let lastError;
   for (let attempt = 1; attempt <= 3; attempt += 1) {
     try {
-      const retry = attempt === 1 ? "" : "\nLần trước không qua kiểm tra. Hãy trả đúng toàn bộ id/index, không chữ Hán, và với mỗi dòng hãy có đúng số marker (1)–(4) như requiredToneMarkers.";
+      const retry = attempt === 1 ? "" : "\nLần trước không qua kiểm tra. Hãy trả đúng toàn bộ id/index, không chữ Hán/pinyin/Anh, không có f/j/w/z hoặc sh.../zh..., mỗi câu phải có dấu/chữ Việt và có đúng số marker (1)–(4) như requiredToneMarkers.";
       validated = validateBatch(await callGemini(`${basePrompt}${retry}`), batch);
       break;
     } catch (error) {
@@ -180,4 +205,4 @@ for (let start = 0; start < missing.length; start += batchSize) {
   writeFileSync(destination, `${JSON.stringify(curriculum, null, 2)}\n`, "utf8");
 }
 
-process.stdout.write(`Đã thêm cách đọc gần tiếng Việt cho ${missing.length} bài.\n`);
+process.stdout.write(`Đã ${refreshAll ? "làm mới" : "thêm"} cách đọc gần tiếng Việt cho ${targets.length} bài.\n`);

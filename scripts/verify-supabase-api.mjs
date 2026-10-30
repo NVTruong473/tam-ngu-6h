@@ -26,7 +26,11 @@ const lookupResponse = await fetch(`${apiUrl}/lookup`, {
   body: JSON.stringify({ query: "take it easy" }),
 });
 const lookup = await lookupResponse.json().catch(() => null);
-if (!lookupResponse.ok || !lookup?.ok || !lookup?.result?.term || !Array.isArray(lookup?.result?.examples) || lookup.result.examples.length !== 2) {
+const readingsAreVietnameseFriendly = Array.isArray(lookup?.result?.examples)
+  && lookup.result.examples.every((example) => typeof example?.vietnameseReading === "string"
+    && /[ăâđêôơưáàảãạắằẳẵặấầẩẫậéèẻẽẹếềểễệíìỉĩịóòỏõọốồổỗộớờởỡợúùủũụứừửữựýỳỷỹỵ]/iu.test(example.vietnameseReading)
+    && !/[fjwz]/iu.test(example.vietnameseReading));
+if (!lookupResponse.ok || !lookup?.ok || !lookup?.result?.term || !Array.isArray(lookup?.result?.examples) || lookup.result.examples.length !== 2 || !readingsAreVietnameseFriendly) {
   throw new Error("Kiểm tra tra nhanh Gemini chưa đạt.");
 }
 

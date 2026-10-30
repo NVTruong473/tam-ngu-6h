@@ -89,6 +89,19 @@ function assertPlainText(value, label) {
   if (/[<>]/.test(value)) throw new Error(`Có markup hoặc ký tự không hợp lệ trong ${label}.`);
 }
 
+function assertVietnameseFriendlyReading(value, label) {
+  const vietnameseSoundMark = /[ăâđêôơưáàảãạắằẳẵặấầẩẫậéèẻẽẹếềểễệíìỉĩịóòỏõọốồổỗộớờởỡợúùủũụứừửữựýỳỷỹỵ]/iu;
+  if (!vietnameseSoundMark.test(value) || /[fjwz]/iu.test(value) || /(?:^|\s)(?:sh|zh)[a-z]+/iu.test(value) || /\([05-9]\)/.test(value)) {
+    throw new Error(`Phiên âm Việt còn giống pinyin/Anh tại ${label}.`);
+  }
+}
+
+function assertSimplifiedChinese(value, label) {
+  if (!/\p{Script=Han}/u.test(value) || /[A-Za-z]/.test(value)) {
+    throw new Error(`Câu Trung phải viết hoàn toàn bằng tiếng Trung giản thể tại ${label}.`);
+  }
+}
+
 const recent = curriculum.slice(-36).map((item, index) => ({
   number: curriculum.length - Math.min(36, curriculum.length) + index + 1,
   title: item.title,
@@ -122,9 +135,9 @@ ${JSON.stringify(recent, null, 2)}
 Tiêu chuẩn bắt buộc:
 - Giữ đúng id, stage và kind trong kế hoạch; không đổi thứ tự.
 - sentence và message có đúng 1 line. dialogue có 3 hoặc 4 lượt nói tự nhiên, speaker luân phiên A/B.
-- English và Simplified Chinese phải tự nhiên như người bản ngữ, tương đương dụng ý nhưng không dịch máy từng chữ.
+- English và Simplified Chinese phải tự nhiên như người bản ngữ, tương đương dụng ý nhưng không dịch máy từng chữ. Câu Trung chỉ dùng chữ Trung giản thể và dấu câu Trung; không được chèn English/Latin. Tên riêng phải chuyển sang tên phiên âm Trung khi cần.
 - Pinyin có dấu thanh chuẩn và tách từ dễ đọc. Bản Việt tự nhiên, không cứng.
-- Mỗi line phải có vietnameseReading: cách đọc gần tiếng Việt của đúng câu Trung, không phải âm Hán-Việt; tách từng âm tiết và ghi thanh Quan thoại bằng (1), (2), (3), (4), ví dụ “wǒ” gần là “uô(3)”. Không dùng markdown.
+- Mỗi line phải có vietnameseReading: cách đọc gần tiếng Việt của đúng câu Trung, không phải âm Hán-Việt hoặc pinyin viết lại. Dùng lối gợi âm Việt (có các chữ/dấu như ă, â, đ, ê, ô, ơ, ư khi hợp lý), tách từng âm tiết và ghi thanh Quan thoại bằng (1), (2), (3), (4), ví dụ “wǒ” gần là “uô(3)”. Tuyệt đối không dùng f, j, w, z, cụm pinyin sh.../zh... hay (0)/(5). Không dùng markdown.
 - Mỗi bài có một grammarFocus mới hoặc phát triển sâu hơn; không quay về từ đơn, chào hỏi, số đếm hay mẫu nhập môn.
 - vocabulary gồm 3–7 cụm từ thật sự hữu ích lấy từ bài, ghi dạng “English · 中文 · nghĩa Việt”.
 - Khoảng 20% kiến thức được ôn có chủ ý trong ngữ cảnh mới; 80% phải mới. Không lặp tiêu đề, câu, hội thoại hay ghi chú trong danh sách gần nhất.
@@ -195,9 +208,10 @@ function validateAndNormalize(items) {
         assertPlainText(line[field], `${field} tại ${plan.id}`);
       }
       if (!/\p{Script=Latin}/u.test(line.english)) throw new Error(`Câu tiếng Anh không hợp lệ tại ${plan.id}.`);
-      if (!/\p{Script=Han}/u.test(line.chinese)) throw new Error(`Câu tiếng Trung không hợp lệ tại ${plan.id}.`);
+      assertSimplifiedChinese(line.chinese, `${plan.id}, dòng ${lineIndex + 1}`);
       if (!/\p{Script=Latin}/u.test(line.pinyin) || /\p{Script=Han}/u.test(line.pinyin)) throw new Error(`Pinyin không hợp lệ tại ${plan.id}.`);
       if (!/\([1-4]\)/.test(line.vietnameseReading)) throw new Error(`Phiên âm Việt thiếu thanh điệu tại ${plan.id}.`);
+      assertVietnameseFriendlyReading(line.vietnameseReading, `${plan.id}, dòng ${lineIndex + 1}`);
       if (plan.kind === "dialogue" && line.speaker.trim().toUpperCase() !== (lineIndex % 2 === 0 ? "A" : "B")) {
         throw new Error(`Speaker không luân phiên A/B tại ${plan.id}.`);
       }

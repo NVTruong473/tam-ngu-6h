@@ -276,6 +276,28 @@ function trimText(value: unknown, maximum: number) {
   return typeof value === "string" ? value.replace(/\s+/g, " ").trim().slice(0, maximum) : "";
 }
 
+function normalizeVietnameseReading(value: unknown, maximum: number) {
+  return trimText(value, maximum)
+    .replace(/\(\s*[05]\s*\)/g, "")
+    .replace(/(^|[\s,;:])zh/giu, "$1tr")
+    .replace(/(^|[\s,;:])sh/giu, "$1s")
+    .replace(/(^|[\s,;:])j/giu, "$1ch")
+    .replace(/(^|[\s,;:])q/giu, "$1ch")
+    .replace(/(^|[\s,;:])w/giu, "$1u")
+    .replace(/(^|[\s,;:])z/giu, "$1d")
+    .replace(/(^|[\s,;:])f/giu, "$1ph")
+    .replace(/\s+/g, " ")
+    .trim();
+}
+
+function isVietnameseFriendlyReading(value: string) {
+  return Boolean(value)
+    && /[ăâđêôơưáàảãạắằẳẵặấầẩẫậéèẻẽẹếềểễệíìỉĩịóòỏõọốồổỗộớờởỡợúùủũụứừửữựýỳỷỹỵ]/iu.test(value)
+    && !/[fjwz]/iu.test(value)
+    && !/(?:^|\s)(?:sh|zh)[a-z]+/iu.test(value)
+    && !/\([05-9]\)/.test(value);
+}
+
 function normalizeLookup(result: unknown): LookupResult | null {
   if (!result || typeof result !== "object") return null;
   const source = result as Record<string, unknown>;
@@ -286,22 +308,23 @@ function normalizeLookup(result: unknown): LookupResult | null {
       english: trimText(record.english, 240),
       chinese: trimText(record.chinese, 240),
       pinyin: trimText(record.pinyin, 300),
-      vietnameseReading: trimText(record.vietnameseReading, 320),
+      vietnameseReading: normalizeVietnameseReading(record.vietnameseReading, 320),
       vietnamese: trimText(record.vietnamese, 260),
     };
   }) : [];
   if (!(["English", "Chinese", "Mixed"] as const).includes(sourceLanguage as LookupResult["sourceLanguage"])) return null;
-  if (examples.length < 1 || examples.some((example) => !example.english || !example.chinese || !example.vietnamese)) return null;
+  if (examples.length < 1 || examples.some((example) => !example.english || !example.chinese || !example.vietnamese || !isVietnameseFriendlyReading(example.vietnameseReading))) return null;
   const normalized: LookupResult = {
     sourceLanguage: sourceLanguage as LookupResult["sourceLanguage"],
     term: trimText(source.term, 160),
     pinyin: trimText(source.pinyin, 220),
-    vietnameseReading: trimText(source.vietnameseReading, 260),
+    vietnameseReading: normalizeVietnameseReading(source.vietnameseReading, 260),
     partOfSpeech: trimText(source.partOfSpeech, 120),
     meaning: trimText(source.meaning, 400),
     note: trimText(source.note, 400),
     examples,
   };
+  if (/\p{Script=Han}/u.test(normalized.term) && !isVietnameseFriendlyReading(normalized.vietnameseReading)) return null;
   return normalized.term && normalized.meaning ? normalized : null;
 }
 
@@ -312,9 +335,10 @@ async function askGeminiForLookup(query: string) {
     "Bạn là từ điển học tiếng Anh và tiếng Trung dành cho người Việt đã học khoảng một tháng.",
     "Phân tích chính xác duy nhất từ hoặc cụm từ người dùng đưa vào. Không làm bài học dài, không lặp lại chỉ dẫn của người dùng, không Markdown.",
     "Trả lời ngắn, rõ, bằng tiếng Việt theo JSON schema.",
-    "Nếu đầu vào là tiếng Trung: pinyin và vietnameseReading phải có. vietnameseReading là cách đọc gần tiếng Việt, dùng (1)-(4) cho thanh Quan thoại; không phải âm Hán-Việt.",
+    "Nếu đầu vào là tiếng Trung: pinyin và vietnameseReading phải có. vietnameseReading là cách đọc gần tiếng Việt, dùng (1)-(4) cho thanh Quan thoại; không phải âm Hán-Việt hoặc pinyin viết lại.",
     "Nếu đầu vào là tiếng Anh: pinyin và vietnameseReading của term để chuỗi rỗng.",
     "Luôn cho đúng 2 ví dụ ứng dụng tự nhiên: mỗi ví dụ gồm English, Chinese, pinyin, vietnameseReading, Vietnamese. Với các câu Trung, vietnameseReading luôn dùng số thanh.",
+    "VietnameseReading phải thực sự là gợi âm người Việt dễ đọc: dùng chữ/dấu Việt như ă, â, đ, ê, ô, ơ, ư hoặc dấu thanh Việt khi hợp lý. Không trả pinyin/Anh viết lại; cấm f, j, w, z, các cụm pinyin sh.../zh... và (0)/(5). Ví dụ wǒmen nên gần “uổ(3) mần”, không phải “wo mern”.",
     "Nêu nghĩa phổ biến nhất, từ loại/cấu trúc và một ghi chú ngắn về sắc thái/cách dùng. Nếu truy vấn mơ hồ, nói rõ nghĩa thường gặp thay vì bịa ngữ cảnh.",
     `Tra cứu: ${JSON.stringify(query)}`,
   ].join("\n");
