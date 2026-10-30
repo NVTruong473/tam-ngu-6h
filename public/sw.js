@@ -1,17 +1,28 @@
-const CACHE_VERSION = "tam-ngu-6h-v3";
+const CACHE_VERSION = "tam-ngu-6h-v4";
 
 self.addEventListener("install", (event) => {
   event.waitUntil(
-    caches.open(CACHE_VERSION).then((cache) => {
+    caches.open(CACHE_VERSION).then(async (cache) => {
       const root = new URL("./", self.registration.scope);
-      return cache.addAll([
-        root.href,
+      const shell = [
         new URL("manifest.webmanifest", root).href,
         new URL("icons/icon-192.png", root).href,
         new URL("icons/icon-512.png", root).href,
         new URL("icons/apple-touch-icon.png", root).href,
         new URL("mascot.png", root).href,
-      ]);
+      ];
+      await cache.addAll(shell);
+
+      const pageResponse = await fetch(root.href, { cache: "reload" });
+      if (!pageResponse.ok) throw new Error("Không tải được app shell.");
+      await cache.put(root.href, pageResponse.clone());
+
+      const html = await pageResponse.text();
+      const dependencies = [...html.matchAll(/(?:src|href)="([^"]+)"/g)]
+        .map((match) => new URL(match[1], root))
+        .filter((url) => url.origin === self.location.origin)
+        .map((url) => url.href);
+      await cache.addAll([...new Set(dependencies)]);
     }),
   );
   self.skipWaiting();

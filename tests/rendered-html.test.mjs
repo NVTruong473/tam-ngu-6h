@@ -18,7 +18,8 @@ test("exports an installable, private-by-default PWA", async () => {
   assert.equal(manifest.display, "standalone");
   assert.equal(manifest.orientation, "portrait");
   assert.ok(manifest.icons.some((icon) => icon.sizes === "512x512"));
-  assert.match(serviceWorker, /tam-ngu-6h-v3/);
+  assert.match(serviceWorker, /tam-ngu-6h-v4/);
+  assert.match(serviceWorker, /html\.matchAll/);
   assert.match(serviceWorker, /notificationclick/);
 });
 
