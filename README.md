@@ -9,6 +9,7 @@ Tâm Ngữ 6H là một PWA cài từ Safari lên Màn hình chính. Nó có ico
 - Nội dung gồm câu ứng dụng, thông điệp và hội thoại ngắn; không quay lại nhóm chào hỏi/số đếm nhập môn.
 - Mỗi câu Trung có pinyin, **Đọc gần Việt** và nút phát âm dùng giọng iPhone. “Đọc gần Việt” chỉ là cầu nối, không thay thế nghe giọng Quan thoại chuẩn.
 - Tra nhanh Anh/Trung trả nghĩa, sắc thái và hai ví dụ song ngữ. API key Gemini chỉ ở Supabase Edge Function; iPhone chỉ nhận kết quả đã lọc và tự lưu tối đa 30 lần tra gần nhất.
+- Trong Cài đặt có **Nhắn cho dev**, mở Google Form phản hồi công khai trong tab mới. Form chỉ hỏi lời nhắn bắt buộc, một lựa chọn quà vui tùy chọn và cách liên hệ tùy chọn; email thông báo phản hồi mới được bật ở Google Forms.
 
 ## Điều có thể và không thể làm trên iPhone
 
@@ -56,7 +57,7 @@ SUPABASE_PROJECT_REF="fcsuldrerhbynwotcvyn" npm run supabase:verify
 
 `supabase:verify` chỉ in trạng thái đạt/không đạt; nó không in API key hoặc mã mời. Nó dùng một truy vấn Gemini mẫu để kiểm tra luồng tra cứu thật.
 
-Trên GitHub, Secret `GEMINI_API_KEYS` chứa các key phân tách bằng xuống dòng. Workflow thêm 3 bài mỗi ngày lúc 00:23 giờ Việt Nam và phát hành lại sau khi kiểm tra dữ liệu. Variable công khai `NEXT_PUBLIC_PUSH_API_URL` chỉ chứa URL Edge Function, không chứa bí mật.
+Trên GitHub, Secret `GEMINI_API_KEYS` chứa các key phân tách bằng xuống dòng. Workflow thêm 3 bài mỗi ngày lúc 00:23 giờ Việt Nam và phát hành lại sau khi kiểm tra dữ liệu. Các Variable công khai `NEXT_PUBLIC_PUSH_API_URL` và `NEXT_PUBLIC_FEEDBACK_FORM_URL` lần lượt chỉ chứa URL Edge Function và URL Form người trả lời, không chứa bí mật. Không đưa link chỉnh sửa Google Form vào repo hoặc bundle.
 
 ## Kiểm thử và phát hành
 

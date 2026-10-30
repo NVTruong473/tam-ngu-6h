@@ -73,6 +73,9 @@ test("keeps Gemini credentials server-only while shipping push and quick lookup"
   assert.match(page, /Đọc gần Việt/);
   assert.match(page, /Notification\.requestPermission/);
   assert.match(page, /NEXT_PUBLIC_PUSH_API_URL/);
+  assert.match(page, /NEXT_PUBLIC_FEEDBACK_FORM_URL/);
+  assert.match(page, /Nhắn cho dev/);
+  assert.match(workflow, /vars\.NEXT_PUBLIC_FEEDBACK_FORM_URL/);
   assert.match(page, /Hiện bài trên Màn hình khóa/);
   assert.match(page, /TRA NHANH · ANH \/ TRUNG/);
   assert.match(page, /LOOKUP_CACHE_KEY/);

@@ -36,6 +36,7 @@ type StudyModule = {
 
 const curriculum = curriculumData as StudyModule[];
 const PUSH_API_URL = (process.env.NEXT_PUBLIC_PUSH_API_URL || "").replace(/\/$/, "");
+const FEEDBACK_FORM_URL = (process.env.NEXT_PUBLIC_FEEDBACK_FORM_URL || "").trim();
 const LOOKUP_CACHE_KEY = "tamngu6h.lookup-cache.v1";
 const STORAGE = {
   routine: "tamngu6h.routine",
@@ -660,6 +661,13 @@ export default function Home() {
           )}
           {pushMessage && <p className={`settings-message ${pushState === "error" ? "error-note" : ""}`}>{pushMessage}</p>}
           <article className="truth-card"><strong>Cách thẻ bài học hoạt động</strong><p>Đây là thông báo hệ thống của iPhone, không phải lớp phủ lên ảnh nền. iPhone cho người dùng vuốt thẻ để xóa và tự quyết âm thanh/âm lượng. App chỉ giữ một thẻ mới nhất để Màn hình khóa luôn gọn.</p></article>
+          {FEEDBACK_FORM_URL && (
+            <a className="feedback-card" href={FEEDBACK_FORM_URL} target="_blank" rel="noreferrer" aria-label="Mở form nhắn cho dev">
+              <span className="setting-icon" aria-hidden="true">✉</span>
+              <span className="feedback-copy"><strong>Nhắn cho dev</strong><small>Góp ý, điều muốn có thêm, hay một lời trêu vui về trà sữa đều được chào đón.</small></span>
+              <span className="feedback-arrow" aria-hidden="true">↗</span>
+            </a>
+          )}
           <button className="secondary-button" onClick={resetLearningProgress}>Đặt lại tiến độ học</button>
         </section>
       )}

@@ -165,6 +165,14 @@ button { -webkit-tap-highlight-color: transparent; }
 .truth-card { margin-top: 16px; padding: 18px; background: #fff8ec; }
 .truth-card strong { color: #75553e; font-size: 13px; }
 .truth-card p { margin: 7px 0 0; color: #826b5c; font-size: 12px; line-height: 1.55; }
+.feedback-card { display: flex; align-items: center; gap: 13px; margin-top: 16px; padding: 17px; border: 1px solid rgba(205,92,115,.18); border-radius: 24px; color: inherit; background: linear-gradient(145deg, #fff6f7, #fffaf0); box-shadow: 0 16px 40px rgba(95,68,73,.07); text-decoration: none; transition: transform .18s ease, box-shadow .18s ease; }
+.feedback-card:hover { transform: translateY(-1px); box-shadow: 0 20px 42px rgba(95,68,73,.11); }
+.feedback-card .setting-icon { flex: 0 0 38px; color: #a64e68; background: #ffe8ed; }
+.feedback-copy { min-width: 0; flex: 1; }
+.feedback-copy strong, .feedback-copy small { display: block; }
+.feedback-copy strong { font-size: 14px; }
+.feedback-copy small { margin-top: 3px; color: var(--muted); font-size: 11px; line-height: 1.4; }
+.feedback-arrow { color: var(--rose-dark); font-size: 18px; }
 .settings-message { margin: 12px 4px 0; color: #587249; font-size: 12px; line-height: 1.5; }
 .pairing-box { margin-top: 16px; padding: 16px; border: 1px solid var(--line); border-radius: 20px; background: white; }
 .pairing-box label strong, .pairing-box label small { display: block; }

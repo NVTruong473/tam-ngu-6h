@@ -56,6 +56,7 @@ jobs:
         env:
           NEXT_PUBLIC_SITE_URL: https://${{ github.repository_owner }}.github.io/${{ github.event.repository.name }}/
           NEXT_PUBLIC_PUSH_API_URL: ${{ vars.NEXT_PUBLIC_PUSH_API_URL }}
+          NEXT_PUBLIC_FEEDBACK_FORM_URL: ${{ vars.NEXT_PUBLIC_FEEDBACK_FORM_URL }}
       - uses: actions/upload-pages-artifact@v3
         with:
           path: dist/client
