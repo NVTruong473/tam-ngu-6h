@@ -4,7 +4,7 @@ import "./globals.css";
 export const metadata: Metadata = {
   metadataBase: new URL(process.env.NEXT_PUBLIC_SITE_URL ?? "http://localhost:3001"),
   title: "Tâm Ngữ 6H",
-  description: "36 câu Anh – Trung nhỏ xinh, học riêng tư và lưu trực tiếp trên iPhone.",
+  description: "Lộ trình Anh – Trung tự mở rộng, học riêng tư và lưu tiến độ trực tiếp trên iPhone.",
   applicationName: "Tâm Ngữ 6H",
   manifest: "./manifest.webmanifest",
   robots: { index: false, follow: false },

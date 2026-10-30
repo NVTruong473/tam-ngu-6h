@@ -4,6 +4,7 @@ import { useEffect, useMemo, useState } from "react";
 import curriculumData from "./curriculum.json";
 
 type Tab = "today" | "library" | "settings";
+type PushState = "idle" | "enabling" | "enabled" | "unsupported" | "error";
 type StudyLine = { speaker: string; english: string; chinese: string; pinyin: string; vietnamese: string };
 type StudyModule = {
   id: string;
@@ -14,12 +15,18 @@ type StudyModule = {
   lines: StudyLine[];
   note: string;
   challenge: string;
+  grammarFocus?: string;
+  vocabulary?: string[];
+  wish?: string;
+  nightWish?: string;
 };
 
 const curriculum = curriculumData as StudyModule[];
+const PUSH_API_URL = (process.env.NEXT_PUBLIC_PUSH_API_URL || "").replace(/\/$/, "");
 const STORAGE = {
   routine: "tamngu6h.routine",
   routineStart: "tamngu6h.routineStart",
+  invite: "tamngu6h.invite",
 };
 
 const WISHES = {
@@ -84,6 +91,13 @@ function escapeIcs(value: string) {
 
 function hashText(value: string) {
   return [...value].reduce((total, character) => ((total << 5) - total + character.charCodeAt(0)) | 0, 0);
+}
+
+function urlBase64ToUint8Array(value: string) {
+  const padding = "=".repeat((4 - (value.length % 4)) % 4);
+  const base64 = (value + padding).replace(/-/g, "+").replace(/_/g, "/");
+  const raw = window.atob(base64);
+  return Uint8Array.from([...raw].map((character) => character.charCodeAt(0)));
 }
 
 function scheduleAt(timestamp: number) {
@@ -209,11 +223,18 @@ export default function Home() {
   const [ready, setReady] = useState(false);
   const [showInstall, setShowInstall] = useState(false);
   const [calendarAdded, setCalendarAdded] = useState(false);
+  const [pushState, setPushState] = useState<PushState>("idle");
+  const [pushMessage, setPushMessage] = useState("");
+  const [inviteReady, setInviteReady] = useState(false);
+  const [inviteDraft, setInviteDraft] = useState("");
 
   const schedule = scheduleAt(now);
   const unlockedIndex = routineStartSequence === null ? 0 : Math.max(0, schedule.sequence - routineStartSequence);
-  const moduleIndex = viewingScheduled ? unlockedIndex % curriculum.length : selectedModuleIndex;
+  const moduleIndex = viewingScheduled ? Math.min(unlockedIndex, curriculum.length - 1) : selectedModuleIndex;
   const studyModule = curriculum[moduleIndex] ?? curriculum[0];
+  const currentWish = schedule.phase === "night"
+    ? studyModule.nightWish ?? schedule.wish
+    : studyModule.wish ?? schedule.wish;
   const remaining = schedule.nextAt - now;
 
   const filteredModules = useMemo(() => {
@@ -240,7 +261,33 @@ export default function Home() {
       setReady(true);
     });
     if ("serviceWorker" in navigator) {
-      navigator.serviceWorker.register("./sw.js").catch(() => undefined);
+      const isLocalPreview = ["localhost", "127.0.0.1", "::1"].includes(window.location.hostname);
+      if (isLocalPreview) {
+        navigator.serviceWorker.getRegistrations().then((registrations) => {
+          registrations.forEach((registration) => registration.unregister());
+        }).catch(() => undefined);
+      } else {
+        navigator.serviceWorker.register("./sw.js").catch(() => undefined);
+      }
+    }
+
+    const hashParams = new URLSearchParams(window.location.hash.replace(/^#/, ""));
+    const invite = hashParams.get("invite");
+    if (invite) {
+      localStorage.setItem(STORAGE.invite, invite);
+      queueMicrotask(() => setInviteReady(true));
+      window.history.replaceState(null, "", `${window.location.pathname}${window.location.search}`);
+    } else if (localStorage.getItem(STORAGE.invite)) {
+      queueMicrotask(() => setInviteReady(true));
+    }
+
+    if (!("serviceWorker" in navigator) || !("PushManager" in window) || !("Notification" in window)) {
+      queueMicrotask(() => setPushState("unsupported"));
+    } else if (PUSH_API_URL) {
+      navigator.serviceWorker.ready
+        .then((registration) => registration.pushManager.getSubscription())
+        .then((subscription) => setPushState(subscription ? "enabled" : "idle"))
+        .catch(() => setPushState("idle"));
     }
   }, []);
 
@@ -269,7 +316,101 @@ export default function Home() {
   function stopRoutine() {
     setRoutineEnabled(false);
     setCalendarAdded(false);
+    void disableLockScreen();
     if ("clearAppBadge" in navigator) navigator.clearAppBadge().catch(() => undefined);
+  }
+
+  async function enableLockScreen() {
+    if (!PUSH_API_URL) {
+      setPushState("error");
+      setPushMessage("Máy chủ thông báo chưa được kết nối.");
+      return;
+    }
+    const standalone = window.matchMedia("(display-mode: standalone)").matches || (navigator as Navigator & { standalone?: boolean }).standalone === true;
+    if (!standalone) {
+      setShowInstall(true);
+      setPushMessage("Hãy cài app lên Màn hình chính trước khi bật thông báo.");
+      return;
+    }
+    const inviteCode = localStorage.getItem(STORAGE.invite) || "";
+    if (!inviteCode) {
+      setPushState("error");
+      setPushMessage("Thiếu mã mời riêng. Hãy mở lại đúng liên kết được gửi cho cậu.");
+      return;
+    }
+
+    setPushState("enabling");
+    setPushMessage("");
+    try {
+      const permission = await Notification.requestPermission();
+      if (permission !== "granted") throw new Error("Cậu chưa cho phép thông báo trong iPhone.");
+      const registration = await navigator.serviceWorker.ready;
+      const keyResponse = await fetch(`${PUSH_API_URL}/vapid-key`);
+      if (!keyResponse.ok) throw new Error("Chưa lấy được khóa thông báo.");
+      const { publicKey } = await keyResponse.json() as { publicKey?: string };
+      if (!publicKey) throw new Error("Máy chủ thông báo chưa sẵn sàng.");
+      const subscription = await registration.pushManager.getSubscription() || await registration.pushManager.subscribe({
+        userVisibleOnly: true,
+        applicationServerKey: urlBase64ToUint8Array(publicKey),
+      });
+      const startSequence = routineStartSequence ?? scheduleAt(Date.now()).sequence;
+      const response = await fetch(`${PUSH_API_URL}/subscribe`, {
+        method: "POST",
+        headers: { "content-type": "application/json", "x-invite-code": inviteCode },
+        body: JSON.stringify({
+          subscription: subscription.toJSON(),
+          timezone: Intl.DateTimeFormat().resolvedOptions().timeZone || "Asia/Ho_Chi_Minh",
+          routineStartSequence: startSequence,
+        }),
+      });
+      if (!response.ok) {
+        const result = await response.json().catch(() => ({})) as { error?: string };
+        throw new Error(result.error || "Không đăng ký được thông báo.");
+      }
+      setRoutineEnabled(true);
+      setRoutineStartSequence(startSequence);
+      setPushState("enabled");
+      setPushMessage("Đã bật thông báo Màn hình khóa lúc 06:00, 12:00 và 18:00.");
+    } catch (error) {
+      setPushState("error");
+      setPushMessage(error instanceof Error ? error.message : "Không bật được thông báo.");
+    }
+  }
+
+  function saveInviteCode() {
+    const code = inviteDraft.trim();
+    if (code.length < 8) {
+      setPushState("error");
+      setPushMessage("Mã ghép đôi chưa đúng. Hãy sao chép nguyên mã được gửi kèm.");
+      return;
+    }
+    localStorage.setItem(STORAGE.invite, code);
+    setInviteDraft("");
+    setInviteReady(true);
+    setPushState("idle");
+    setPushMessage("Đã lưu mã ghép đôi. Bây giờ có thể bật Màn hình khóa.");
+  }
+
+  async function disableLockScreen() {
+    if (!("serviceWorker" in navigator)) return;
+    try {
+      const registration = await navigator.serviceWorker.ready;
+      const subscription = await registration.pushManager.getSubscription();
+      const inviteCode = localStorage.getItem(STORAGE.invite) || "";
+      if (subscription && PUSH_API_URL && inviteCode) {
+        await fetch(`${PUSH_API_URL}/subscribe`, {
+          method: "DELETE",
+          headers: { "content-type": "application/json", "x-invite-code": inviteCode },
+          body: JSON.stringify({ endpoint: subscription.endpoint }),
+        });
+      }
+      if (subscription) await subscription.unsubscribe();
+      setPushState("idle");
+      setPushMessage("Đã tắt thông báo Màn hình khóa trên thiết bị này.");
+    } catch {
+      setPushState("error");
+      setPushMessage("Chưa tắt được thông báo. Hãy thử lại khi có mạng.");
+    }
   }
 
   function selectModule(item: StudyModule) {
@@ -298,7 +439,7 @@ export default function Home() {
           <article className={`session-card ${routineEnabled ? "active" : ""}`}>
             <div className="session-copy">
               <p className="eyebrow">{routineEnabled ? schedule.label : "MỘT BÀI · MỘT LỜI NHẮN"}</p>
-              <h2>{routineEnabled ? schedule.wish : "Hẹn nhau mỗi 6 giờ"}</h2>
+              <h2>{routineEnabled ? currentWish : "Hẹn nhau mỗi 6 giờ"}</h2>
               <p>{routineEnabled ? `Điều bất ngờ tiếp theo sau ${formatRemaining(remaining)}.` : "Bài mới lúc 06:00, 12:00 và 18:00."}</p>
             </div>
             <div className="session-orbit" aria-hidden="true"><span>♥</span></div>
@@ -310,18 +451,24 @@ export default function Home() {
                   <span className={schedule.phase === "evening" || schedule.phase === "night" ? "current" : ""}>18:00</span>
                 </div>
                 <div className="session-actions">
-                  <button
-                    className="primary-button"
-                    onClick={() => {
-                      createDailyCalendar();
-                      setCalendarAdded(true);
-                    }}
-                  >
-                    {calendarAdded ? "Đã tải lịch hằng ngày ✓" : "Thêm lịch nhắc hằng ngày"}
-                  </button>
+                  {PUSH_API_URL ? (
+                    <button className="primary-button" disabled={pushState === "enabling" || pushState === "enabled"} onClick={enableLockScreen}>
+                      {pushState === "enabled" ? "Màn hình khóa đã bật ✓" : pushState === "enabling" ? "Đang bật…" : "Bật trên Màn hình khóa"}
+                    </button>
+                  ) : (
+                    <button
+                      className="primary-button"
+                      onClick={() => {
+                        createDailyCalendar();
+                        setCalendarAdded(true);
+                      }}
+                    >
+                      {calendarAdded ? "Đã tải lịch hằng ngày ✓" : "Thêm lịch nhắc hằng ngày"}
+                    </button>
+                  )}
                   <button className="text-button danger" onClick={stopRoutine}>Tắt nhịp</button>
                 </div>
-                <p className="honest-note">Mở tệp vừa tải và chọn Thêm tất cả. Lịch chỉ báo có lời mới, không tiết lộ nội dung trước.</p>
+                <p className={`honest-note ${pushState === "error" ? "error-note" : ""}`}>{pushMessage || (PUSH_API_URL ? "iPhone sẽ báo bài mới kể cả khi app đã đóng. Có thể tắt lại ngay tại đây." : "Mở tệp vừa tải và chọn Thêm tất cả. Lịch chỉ báo có lời mới, không tiết lộ nội dung trước.")}</p>
               </>
             ) : (
               <button className="primary-button wide" onClick={startRoutine}>Bật nhịp hằng ngày</button>
@@ -330,7 +477,7 @@ export default function Home() {
 
           <div className="section-heading">
             <div>
-              <p className="eyebrow">{studyModule.stage} · BÀI {moduleIndex + 1}/{curriculum.length}</p>
+              <p className="eyebrow">{studyModule.stage} · BÀI {moduleIndex + 1} · KHO TỰ MỞ RỘNG</p>
               <h2>{studyModule.title}</h2>
             </div>
           </div>
@@ -368,7 +515,7 @@ export default function Home() {
 
       {tab === "library" && (
         <section className="screen library-screen">
-          <div className="page-title"><p className="eyebrow">GIÁO TRÌNH A2 → B1</p><h2>Thư viện đã mở</h2><p>Câu ứng dụng, thông điệp và hội thoại được mở dần theo thời gian.</p></div>
+          <div className="page-title"><p className="eyebrow">LỘ TRÌNH SỐNG A2 → C1</p><h2>Thư viện đã mở</h2><p>Gemini nối thêm câu, thông điệp và hội thoại mới; bài cũ chỉ quay lại khi cần ôn có chủ ý.</p></div>
           <label className="search-box">
             <span aria-hidden="true">⌕</span>
             <input value={query} onChange={(event) => setQuery(event.target.value)} placeholder="Tìm tiếng Anh, Trung hoặc Việt…" />
@@ -392,8 +539,17 @@ export default function Home() {
             <div className="setting-row"><span className="setting-icon">⌂</span><div><strong>Cài lên Màn hình chính</strong><small>Mở toàn màn hình với icon như một app.</small></div><button onClick={() => setShowInstall(true)}>Xem</button></div>
             <div className="setting-row"><span className="setting-icon">✓</span><div><strong>Tự động lưu</strong><small>Tiến độ và nhịp hằng ngày được lưu trên máy.</small></div><span className="status-pill">Đang bật</span></div>
             <div className="setting-row"><span className="setting-icon">◷</span><div><strong>06:00 · 12:00 · 18:00</strong><small>Mỗi mốc mở một bài và lời nhắn mới.</small></div><span className="status-pill">Tự động</span></div>
+            <div className="setting-row"><span className="setting-icon">∞</span><div><strong>Kho bài tự mở rộng</strong><small>Gemini tạo thêm bài theo lộ trình, kiểm tra trùng lặp rồi mới phát hành.</small></div><span className="status-pill">Liên tục</span></div>
+            <div className="setting-row"><span className="setting-icon">▣</span><div><strong>Thông báo Màn hình khóa</strong><small>Hoạt động khi app đã đóng; cần cài app và cấp quyền một lần.</small></div>{pushState === "enabled" ? <button onClick={disableLockScreen}>Tắt</button> : <button onClick={enableLockScreen}>Bật</button>}</div>
           </article>
-          <article className="truth-card"><strong>Giới hạn cần biết</strong><p>Web app không thể tạo Live Activity cố định. Lịch nhắc có thể xuất hiện trên Màn hình khóa nhưng người dùng vẫn có quyền vuốt bỏ hoặc tắt thông báo.</p></article>
+          {PUSH_API_URL && !inviteReady && (
+            <div className="pairing-box">
+              <label htmlFor="pairing-code"><strong>Ghép đôi ứng dụng riêng</strong><small>Dán mã đi kèm liên kết. Chỉ cần làm một lần trên iPhone.</small></label>
+              <div><input id="pairing-code" value={inviteDraft} onChange={(event) => setInviteDraft(event.target.value)} placeholder="Mã ghép đôi" autoCapitalize="none" autoCorrect="off" /><button onClick={saveInviteCode}>Lưu</button></div>
+            </div>
+          )}
+          {pushMessage && <p className={`settings-message ${pushState === "error" ? "error-note" : ""}`}>{pushMessage}</p>}
+          <article className="truth-card"><strong>Giới hạn thật của iPhone</strong><p>PWA có thể gửi thông báo lên Màn hình khóa sau khi đã cài và cấp quyền, kể cả khi app đóng. PWA không thể tạo Live Activity cố định; iOS luôn cho phép người dùng vuốt bỏ hoặc tắt thông báo.</p></article>
           <button className="secondary-button" onClick={() => { localStorage.clear(); setSelectedModuleIndex(0); setRoutineStartSequence(null); setRoutineEnabled(false); }}>Xóa dữ liệu trên máy</button>
         </section>
       )}
@@ -415,6 +571,7 @@ export default function Home() {
               <li><span>1</span><p>Mở đường link bằng <strong>Safari</strong>.</p></li>
               <li><span>2</span><p>Chạm nút <strong>Chia sẻ</strong> ở thanh công cụ.</p></li>
               <li><span>3</span><p>Chọn <strong>Thêm vào Màn hình chính</strong> và bật “Mở dưới dạng ứng dụng”.</p></li>
+              <li><span>4</span><p>Mở icon vừa tạo, vào <strong>Cài đặt</strong> trong app rồi bật thông báo Màn hình khóa.</p></li>
             </ol>
             <button className="primary-button wide" onClick={() => setShowInstall(false)}>Mình hiểu rồi</button>
           </section>

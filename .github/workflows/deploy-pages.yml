@@ -3,10 +3,19 @@ name: Deploy Tâm Ngữ 6H to GitHub Pages
 on:
   push:
     branches: [main]
+  schedule:
+    # 00:23 Asia/Ho_Chi_Minh. Tránh đầu giờ vì GitHub có thể trì hoãn cron.
+    - cron: "23 17 * * *"
   workflow_dispatch:
+    inputs:
+      append_lessons:
+        description: "Tạo thêm 3 bài bằng Gemini trước khi phát hành"
+        required: false
+        default: false
+        type: boolean
 
 permissions:
-  contents: read
+  contents: write
   pages: write
   id-token: write
 
@@ -24,17 +33,29 @@ jobs:
           node-version: 22
           cache: npm
       - run: npm ci
-      - name: Generate progressive curriculum when Gemini secret exists
+      - name: Append three reviewed lessons from Gemini
+        id: grow
+        if: github.event_name == 'schedule' || inputs.append_lessons == true
+        continue-on-error: true
         env:
-          GEMINI_API_KEY: ${{ secrets.GEMINI_API_KEY }}
-          GEMINI_MODEL: ${{ vars.GEMINI_MODEL }}
+          GEMINI_API_KEYS: ${{ secrets.GEMINI_API_KEYS }}
+          GEMINI_MODEL: gemini-3.5-flash-lite
+          APPEND_LESSON_COUNT: 3
+        run: npm run append:curriculum
+      - name: Preserve newly generated lessons
+        if: steps.grow.outcome == 'success'
         run: |
-          if [ -n "$GEMINI_API_KEY" ]; then
-            npm run generate:curriculum
+          git config user.name "tam-ngu-bot"
+          git config user.email "actions@users.noreply.github.com"
+          git add app/curriculum.json
+          if ! git diff --cached --quiet; then
+            git commit -m "Grow daily Gemini curriculum [skip ci]"
+            git push
           fi
       - run: npm run build:github
         env:
           NEXT_PUBLIC_SITE_URL: https://${{ github.repository_owner }}.github.io/${{ github.event.repository.name }}/
+          NEXT_PUBLIC_PUSH_API_URL: ${{ vars.NEXT_PUBLIC_PUSH_API_URL }}
       - uses: actions/upload-pages-artifact@v3
         with:
           path: dist/client

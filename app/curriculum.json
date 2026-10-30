@@ -2080,5 +2080,105 @@
     ],
     "note": "Từ 考取 (thi lấy được), 扎实 (vững chắc) và 互相 (lẫn nhau) giúp diễn đạt suy nghĩ chuyên sâu hơn về sự nghiệp.",
     "challenge": "Thuyết trình 1 phút bằng ngoại ngữ về kế hoạch phát triển bản thân trong 2 năm tới."
+  },
+  {
+    "id": "lesson-0091",
+    "stage": "B1 · Phản xạ trong đời sống",
+    "kind": "sentence",
+    "title": "Nhận xét khéo léo về sự tiến bộ của người khác",
+    "context": "Bạn nhận thấy một đồng nghiệp hoặc bạn bè đã cải thiện rõ rệt kỹ năng nói hoặc làm việc so với trước kia.",
+    "lines": [
+      {
+        "speaker": "A",
+        "english": "You have come a long way since we last worked on a project together.",
+        "chinese": "自从我们上次一起合作项目以来，你真的进步神速。",
+        "pinyin": "zì cóng wǒ men shàng cì yì qǐ hé zuò xiàng mù yǐ lái, nǐ zhēn de jìn bù shén sù.",
+        "vietnamese": "Từ lần cuối chúng ta làm việc chung đến nay, bạn thực sự đã tiến bộ vượt bậc."
+      }
+    ],
+    "note": "Cụm từ 'have come a long way' trong tiếng Anh và '进步神速' (tiến bộ thần tốc) trong tiếng Trung dùng để khen ngợi sự lột xác, phát triển mạnh mẽ của ai đó sau một khoảng thời gian.",
+    "challenge": "Hãy dùng mẫu câu này để khen ngợi một người bạn đã tự tin hơn rất nhiều khi thuyết trình bằng ngoại ngữ.",
+    "grammarFocus": "Cấu trúc đánh giá sự thay đổi tích cực theo thời gian với 'since'.",
+    "vocabulary": [
+      "come a long way · 进步神速 · tiến bộ vượt bậc",
+      "work together · 一起合作 · làm việc cùng nhau",
+      "project · 项目 · dự án"
+    ],
+    "wish": "Chúc bạn buổi sáng tràn đầy năng lượng, nhìn thấy những bước tiến nhỏ nhưng kiên trì của chính mình mỗi ngày.",
+    "nightWish": "Mong rằng giấc ngủ đêm nay sẽ nạp lại đầy đủ năng lượng cho những chặng đường phát triển sắp tới của bạn.",
+    "generatedAt": "2026-10-30T21:00:02.011Z",
+    "generator": "gemini-3.5-flash-lite"
+  },
+  {
+    "id": "lesson-0092",
+    "stage": "B1 · Phản xạ trong đời sống",
+    "kind": "message",
+    "title": "Nhắn tin hỏi thăm tiến độ một cách tinh tế và không gây áp lực",
+    "context": "Bạn cần biết tình hình công việc nhưng không muốn đối phương cảm thấy bị giục giã hay soi mói.",
+    "lines": [
+      {
+        "speaker": "A",
+        "english": "No rush at all, just checking in to see how things are shaping up on your end.",
+        "chinese": "完全不着急，我只是随便问问你那边进展得怎么样了。",
+        "pinyin": "wán quán bù zháo jí, wǒ zhǐ shì suí biàn wèn wèn nǐ nà biān jìn zhǎn de zěn me yàng le.",
+        "vietnamese": "Hoàn toàn không vội đâu, tôi chỉ hỏi thăm xem bên phía bạn mọi việc đang thành hình ra sao rồi."
+      }
+    ],
+    "note": "Cụm 'no rush' kết hợp với 'how things are shaping up' giúp câu hỏi tiến độ trở nên nhẹ nhàng, giống như một sự quan tâm hơn là mệnh lệnh kiểm tra.",
+    "challenge": "Soạn một tin nhắn tương tự gửi cho đối tác khi bạn muốn cập nhật tình hình mà không làm họ khó chịu.",
+    "grammarFocus": "Cách dùng 'No rush' kết hợp 'shaping up' để giảm áp lực thời gian.",
+    "vocabulary": [
+      "no rush · 完全不着急 · không vội chút nào",
+      "check in · 随便问问 / 了解情况 · hỏi thăm tình hình",
+      "shape up · 进展 / 成形 · tiến triển / định hình"
+    ],
+    "wish": "Chúc bạn một buổi trưa thư thái, mọi việc diễn ra suôn sẻ và đúng nhịp độ bạn mong muốn.",
+    "nightWish": "Hy vọng đêm nay mọi lo âu trong công việc sẽ khép lại, nhường chỗ cho sự bình yên.",
+    "generatedAt": "2026-10-30T21:00:02.013Z",
+    "generator": "gemini-3.5-flash-lite"
+  },
+  {
+    "id": "lesson-0093",
+    "stage": "B1 · Phản xạ trong đời sống",
+    "kind": "dialogue",
+    "title": "Thảo luận chọn địa điểm ăn tối sau giờ làm",
+    "context": "Hai đồng nghiệp đang bàn xem nên đi ăn món gì để đổi gió sau một tuần làm việc căng thẳng.",
+    "lines": [
+      {
+        "speaker": "A",
+        "english": "Do you fancy trying that new hotpot place near the station tonight?",
+        "chinese": "今晚你想去试试车站附近那家新开的火锅店吗？",
+        "pinyin": "jīn wǎn nǐ xiǎng qù shì shì chē zhàn fù jìn nà jiā xīn kāi de huǒ guō diàn ma?",
+        "vietnamese": "Tối nay bạn có hứng thử quán lẩu mới mở gần nhà ga không?"
+      },
+      {
+        "speaker": "B",
+        "english": "I'd love to, but I heard the queue is always insanely long during peak hours.",
+        "chinese": "我很想去，不过听说高峰时段那里的排队队伍长得离谱。",
+        "pinyin": "wǒ hěn xiǎng qù, bù guò tīng shuō gāo fēng shí duàn nà lǐ de pái duì duì wǔ zhǎng de lí pǔ.",
+        "vietnamese": "Tôi rất muốn đi, nhưng nghe nói giờ cao điểm ở đó xếp hàng dài đến mức khó tin."
+      },
+      {
+        "speaker": "A",
+        "english": "Fair point. Let's grab some noodles around the corner instead to save time.",
+        "chinese": "说得有道理。那我们干脆去转角吃碗面吧，省得排队了。",
+        "pinyin": "shuō de yǒu dào lǐ. nà wǒ men gān cuì qù zhuǎn jiǎo chī wǎn miàn ba, shěng de pái duì le.",
+        "vietnamese": "Nói cũng có lý. Thấy vậy chúng ta cứ ra góc đường ăn mì cho nhanh, đỡ phải xếp hàng."
+      }
+    ],
+    "note": "Cụm 'Do you fancy...' là cách rủ rê rất tự nhiên của người Anh, trong khi '长得离谱' miêu tả mức độ quá đà của việc xếp hàng. Từ '干脆' thể hiện sự quyết định dứt khoát.",
+    "challenge": "Thực hành đọc diễn cảm đoạn hội thoại này với ngữ điệu rủ rê, từ chối lịch sự và chốt phương án.",
+    "grammarFocus": "Sử dụng 'Fair point' để thừa nhận ý kiến hợp lý và 'Instead' để chuyển hướng lựa chọn.",
+    "vocabulary": [
+      "fancy · 想要 / 有兴趣 · có hứng thú",
+      "insanely long · 长得离谱 · dài khủng khiếp",
+      "peak hours · 高峰时段 · giờ cao điểm",
+      "around the corner · 转角处 / 附近 · ngay góc phố / gần đây",
+      "save time · 省时间 · tiết kiệm thời gian"
+    ],
+    "wish": "Chúc bạn buổi tối ấm cúng bên những món ăn ngon và những người thân yêu nhất.",
+    "nightWish": "Chúc bạn chìm sâu vào giấc ngủ ngọt ngào, mơ thấy những hương vị tuyệt vời và những chuyến đi thú vị.",
+    "generatedAt": "2026-10-30T21:00:02.013Z",
+    "generator": "gemini-3.5-flash-lite"
   }
 ]

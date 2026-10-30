@@ -46,10 +46,12 @@ button { -webkit-tap-highlight-color: transparent; }
 .daily-times span.current { color: white; background: linear-gradient(135deg, #e47b91, #be526a); box-shadow: 0 8px 18px rgba(190,82,106,.2); }
 .session-actions { display: flex; align-items: center; gap: 14px; }
 .primary-button, .secondary-button { border: 0; border-radius: 16px; padding: 14px 18px; font-weight: 750; color: white; background: linear-gradient(135deg, #de7489, #bd536a); box-shadow: 0 10px 24px rgba(189,83,106,.22); }
+.primary-button:disabled { opacity: .7; box-shadow: none; }
 .primary-button.wide, .secondary-button { width: 100%; margin-top: 20px; }
 .text-button { border: 0; padding: 10px 4px; background: none; font-weight: 700; color: var(--muted); }
 .text-button.danger { color: #a6485a; }
 .honest-note { margin: 12px 0 0; color: var(--muted); font-size: 11px; line-height: 1.45; }
+.error-note { color: #a6485a !important; }
 
 .section-heading { margin: 30px 4px 14px; display: flex; justify-content: space-between; align-items: center; }
 .section-heading h2, .page-title h2, .install-sheet h2 { margin: 0; font-family: Georgia, serif; font-size: 28px; letter-spacing: -.45px; }
@@ -120,6 +122,14 @@ button { -webkit-tap-highlight-color: transparent; }
 .truth-card { margin-top: 16px; padding: 18px; background: #fff8ec; }
 .truth-card strong { color: #75553e; font-size: 13px; }
 .truth-card p { margin: 7px 0 0; color: #826b5c; font-size: 12px; line-height: 1.55; }
+.settings-message { margin: 12px 4px 0; color: #587249; font-size: 12px; line-height: 1.5; }
+.pairing-box { margin-top: 16px; padding: 16px; border: 1px solid var(--line); border-radius: 20px; background: white; }
+.pairing-box label strong, .pairing-box label small { display: block; }
+.pairing-box label strong { font-size: 13px; }
+.pairing-box label small { margin-top: 4px; color: var(--muted); font-size: 11px; line-height: 1.4; }
+.pairing-box > div { display: flex; gap: 8px; margin-top: 12px; }
+.pairing-box input { min-width: 0; flex: 1; padding: 11px 12px; border: 1px solid var(--line); border-radius: 12px; outline: 0; }
+.pairing-box button { border: 0; padding: 0 15px; border-radius: 12px; color: white; background: var(--rose-dark); font-weight: 750; }
 .secondary-button { margin-top: 16px; color: var(--rose-dark); background: #fff0f2; box-shadow: none; }
 
 .tabbar { position: fixed; z-index: 20; left: 50%; bottom: 0; transform: translateX(-50%); display: grid; grid-template-columns: repeat(3, 1fr); width: min(560px, 100%); padding: 10px 18px max(10px, env(safe-area-inset-bottom)); border-top: 1px solid var(--line); background: rgba(255,251,248,.88); backdrop-filter: blur(22px); }

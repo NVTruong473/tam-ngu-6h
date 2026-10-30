@@ -18,20 +18,21 @@ test("exports an installable, private-by-default PWA", async () => {
   assert.equal(manifest.display, "standalone");
   assert.equal(manifest.orientation, "portrait");
   assert.ok(manifest.icons.some((icon) => icon.sizes === "512x512"));
-  assert.match(serviceWorker, /tam-ngu-6h-v4/);
+  assert.match(serviceWorker, /tam-ngu-6h-v5/);
   assert.match(serviceWorker, /html\.matchAll/);
   assert.match(serviceWorker, /notificationclick/);
 });
 
-test("ships a progressive A2-to-B1 curriculum with balanced formats", async () => {
+test("ships a growing progressive curriculum with balanced seed formats", async () => {
   const curriculum = JSON.parse(await readFile(new URL("app/curriculum.json", root), "utf8"));
   const counts = curriculum.reduce((result, item) => {
     result[item.kind] = (result[item.kind] ?? 0) + 1;
     return result;
   }, {});
 
-  assert.equal(curriculum.length, 90);
-  assert.deepEqual(counts, { sentence: 30, message: 30, dialogue: 30 });
+  assert.ok(curriculum.length >= 90);
+  assert.ok(Math.abs((counts.sentence ?? 0) - (counts.message ?? 0)) <= 1);
+  assert.ok(Math.abs((counts.message ?? 0) - (counts.dialogue ?? 0)) <= 1);
   assert.match(curriculum[0].stage, /^A2\.1/);
   assert.match(curriculum.at(-1).stage, /^B1/);
   assert.ok(curriculum.every((item) => item.lines.length >= 1));
@@ -48,5 +49,5 @@ test("does not embed API credentials in the shipped application", async () => {
 
   assert.doesNotMatch(source, /(?:AQ\.|sk-proj-|sk-or-v1-|gsk_|nvapi-)[A-Za-z0-9_-]{8,}/);
   assert.match(generator, /process\.env\.GEMINI_API_KEY/);
-  assert.match(workflow, /secrets\.GEMINI_API_KEY/);
+  assert.match(workflow, /secrets\.GEMINI_API_KEYS/);
 });

@@ -1,4 +1,4 @@
-const CACHE_VERSION = "tam-ngu-6h-v4";
+const CACHE_VERSION = "tam-ngu-6h-v5";
 
 self.addEventListener("install", (event) => {
   event.waitUntil(
@@ -40,12 +40,30 @@ self.addEventListener("activate", (event) => {
 self.addEventListener("fetch", (event) => {
   if (event.request.method !== "GET") return;
 
+  const requestUrl = new URL(event.request.url);
+  const isPageNavigation = event.request.mode === "navigate";
+
+  if (isPageNavigation) {
+    event.respondWith(
+      fetch(event.request)
+        .then((response) => {
+          if (response.ok) {
+            const copy = response.clone();
+            caches.open(CACHE_VERSION).then((cache) => cache.put(event.request, copy));
+          }
+          return response;
+        })
+        .catch(() => caches.match(event.request).then((cached) => cached || caches.match(new URL("./", self.registration.scope).href))),
+    );
+    return;
+  }
+
   event.respondWith(
     caches.match(event.request).then((cached) => {
       if (cached) return cached;
       return fetch(event.request)
         .then((response) => {
-          if (response.ok && new URL(event.request.url).origin === self.location.origin) {
+          if (response.ok && requestUrl.origin === self.location.origin) {
             const copy = response.clone();
             caches.open(CACHE_VERSION).then((cache) => cache.put(event.request, copy));
           }
@@ -64,7 +82,10 @@ self.addEventListener("push", (event) => {
     body: payload.body,
     icon: new URL("icons/icon-192.png", self.registration.scope).href,
     badge: new URL("icons/icon-192.png", self.registration.scope).href,
-    data: { url: self.registration.scope },
+    tag: payload.tag || "tam-ngu-lesson",
+    renotify: true,
+    timestamp: payload.timestamp || Date.now(),
+    data: { url: payload.url || self.registration.scope },
   }));
 });
 

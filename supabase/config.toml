@@ -1,0 +1,5 @@
+project_id = "tam-ngu-6h"
+
+[functions.tam-ngu-api]
+verify_jwt = false
+
