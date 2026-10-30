@@ -11,6 +11,32 @@ const curriculumUrl = "https://raw.githubusercontent.com/NVTruong473/tam-ngu-6h/
 const slotByPhase = { morning: 0, noon: 1, evening: 2 } as const;
 
 type Phase = keyof typeof slotByPhase;
+const phaseWishes: Record<Phase, string[]> = {
+  morning: [
+    "Chào buổi sáng. Mong hôm nay đối xử với cậu thật dịu dàng.",
+    "Một ngày mới vừa mở cửa — nhớ mang theo nụ cười nhé.",
+    "Chúc cậu thức dậy với lòng nhẹ tênh và một ngày thật xinh.",
+    "Nắng đã lên rồi. Hy vọng điều tốt lành cũng đang tìm đến cậu.",
+    "Chào ngày mới. Mong ly nước đầu tiên ngon và mọi việc đều thuận lòng.",
+    "Một câu mới cho buổi sáng mới — cậu đang làm rất tốt rồi.",
+  ],
+  noon: [
+    "Trưa rồi, nghỉ một chút nhé. Cậu không cần vội mọi lúc đâu.",
+    "Chúc cậu một bữa trưa ngon và một khoảng thở thật dễ chịu.",
+    "Nửa ngày đã qua — cảm ơn cậu vì vẫn cố gắng đến lúc này.",
+    "Đừng quên ăn trưa nhé. Công việc quan trọng, cậu cũng quan trọng.",
+    "Nạp năng lượng thôi. Chiều nay biết đâu lại có chuyện vui bất ngờ.",
+    "Tạm đặt mọi việc xuống vài phút nhé — đây là lời nhắc phải thương mình.",
+  ],
+  evening: [
+    "Tan làm rồi thì để những mệt mỏi ở lại phía sau nhé.",
+    "Chúc cậu một buổi tối ấm áp, có đồ ngon và chuyện vui.",
+    "Hôm nay vất vả rồi. Bây giờ là lúc dịu dàng với chính mình.",
+    "Buổi tối đến rồi — mong cậu được ở nơi khiến mình thấy bình yên.",
+    "Câu cuối hôm nay đã tới. Còn cậu, nhớ nghỉ ngơi thật tử tế nhé.",
+    "Có một chút bình yên gửi cậu vào cuối ngày. Nhận lấy nhé.",
+  ],
+};
 type WebPushSubscription = {
   endpoint: string;
   expirationTime?: number | null;
@@ -63,6 +89,11 @@ function sequenceAt(date: Date, phase: Phase) {
   const vietnamTime = new Date(date.toLocaleString("en-US", { timeZone: "Asia/Ho_Chi_Minh" }));
   const day = Math.floor(Date.UTC(vietnamTime.getFullYear(), vietnamTime.getMonth(), vietnamTime.getDate()) / 86_400_000);
   return day * 3 + slotByPhase[phase];
+}
+
+function fallbackWish(phase: Phase, sequence: number) {
+  const choices = phaseWishes[phase];
+  return choices[Math.abs(sequence) % choices.length];
 }
 
 function isApplePushEndpoint(endpoint: string) {
@@ -157,7 +188,7 @@ async function dispatch(request: Request, origin: string | null) {
     const phaseLabel = body.phase === "morning" ? "Buổi sáng" : body.phase === "noon" ? "Buổi trưa" : "Buổi tối";
     const payload = JSON.stringify({
       title: `${phaseLabel} có một bài mới ✦`,
-      body: lesson?.wish || `${lesson?.title || "Một điều mới"} đang chờ cậu mở ra.`,
+      body: lesson?.wish || fallbackWish(body.phase, currentSequence),
       tag: `tam-ngu-${body.phase}`,
       url: "https://nvtruong473.github.io/tam-ngu-6h/",
       timestamp: Date.now(),

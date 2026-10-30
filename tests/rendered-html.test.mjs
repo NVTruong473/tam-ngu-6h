@@ -45,10 +45,11 @@ test("ships a growing progressive curriculum with balanced seed formats", async 
 });
 
 test("does not embed API credentials in the shipped application", async () => {
-  const [page, generator, appendGenerator, workflow] = await Promise.all([
+  const [page, generator, appendGenerator, pushWorker, workflow] = await Promise.all([
     readFile(new URL("app/page.tsx", root), "utf8"),
     readFile(new URL("scripts/generate-curriculum.mjs", root), "utf8"),
     readFile(new URL("scripts/append-curriculum.mjs", root), "utf8"),
+    readFile(new URL("supabase/functions/tam-ngu-api/index.ts", root), "utf8"),
     readFile(new URL(".github/workflows/deploy-pages.yml", root), "utf8"),
   ]);
   const source = `${page}\n${generator}\n${appendGenerator}\n${workflow}`;
@@ -60,4 +61,6 @@ test("does not embed API credentials in the shipped application", async () => {
   assert.match(page, /verify-invite/);
   assert.match(appendGenerator, /generateValidatedLessons/);
   assert.match(appendGenerator, /assertPlainText/);
+  assert.match(pushWorker, /fallbackWish/);
+  assert.match(pushWorker, /phaseWishes/);
 });

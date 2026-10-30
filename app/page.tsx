@@ -441,6 +441,21 @@ export default function Home() {
     }
   }
 
+  function resetLearningProgress() {
+    if (pushState === "enabled") {
+      setPushMessage("Hãy tắt Màn hình khóa trước nếu muốn dừng hẳn. Sau đó mới đặt lại tiến độ học.");
+      return;
+    }
+    localStorage.removeItem(STORAGE.routine);
+    localStorage.removeItem(STORAGE.routineStart);
+    setSelectedModuleIndex(0);
+    setRoutineStartSequence(null);
+    setRoutineEnabled(false);
+    setViewingScheduled(true);
+    setCalendarAdded(false);
+    setPushMessage("Đã đặt lại tiến độ học trên máy này.");
+  }
+
   function selectModule(item: StudyModule) {
     setSelectedModuleIndex(curriculum.findIndex((candidate) => candidate.id === item.id));
     setViewingScheduled(false);
@@ -582,7 +597,7 @@ export default function Home() {
           )}
           {pushMessage && <p className={`settings-message ${pushState === "error" ? "error-note" : ""}`}>{pushMessage}</p>}
           <article className="truth-card"><strong>Giới hạn thật của iPhone</strong><p>PWA có thể gửi thông báo lên Màn hình khóa sau khi đã cài và cấp quyền, kể cả khi app đóng. PWA không thể tạo Live Activity cố định; iOS luôn cho phép người dùng vuốt bỏ hoặc tắt thông báo.</p></article>
-          <button className="secondary-button" onClick={() => { localStorage.clear(); setSelectedModuleIndex(0); setRoutineStartSequence(null); setRoutineEnabled(false); }}>Xóa dữ liệu trên máy</button>
+          <button className="secondary-button" onClick={resetLearningProgress}>Đặt lại tiến độ học</button>
         </section>
       )}
 
