@@ -2180,5 +2180,111 @@
     "nightWish": "Chúc bạn chìm sâu vào giấc ngủ ngọt ngào, mơ thấy những hương vị tuyệt vời và những chuyến đi thú vị.",
     "generatedAt": "2026-10-30T21:00:02.013Z",
     "generator": "gemini-3.5-flash-lite"
+  },
+  {
+    "id": "lesson-0094",
+    "stage": "B1 · Phản xạ trong đời sống",
+    "kind": "sentence",
+    "title": "Khen ngợi ý tưởng sáng tạo trong buổi họp",
+    "context": "Bạn muốn công nhận sự độc đáo trong đề xuất của đồng nghiệp một cách chân thành.",
+    "lines": [
+      {
+        "speaker": "A",
+        "english": "That is a brilliant out-of-the-box perspective that we completely overlooked.",
+        "chinese": "这个跳出常规的精彩视角，是我们之前完全忽略的。",
+        "pinyin": "zhè ge tiào chū cháng guī de jīng cǎi shì jiǎo, shì wǒ men zhī qián wán quán hū lüè de.",
+        "vietnamese": "Đó là một góc nhìn ngoài khuôn khổ vô cùng rực rỡ mà chúng ta đã hoàn toàn bỏ sót."
+      }
+    ],
+    "note": "Cụm 'out-of-the-box perspective' tương đương với '跳出常规的视角' trong tiếng Trung, diễn tả tư duy sáng tạo, đột phá khỏi lối mòn.",
+    "challenge": "Hãy thử dùng câu này để khen ngợi một ý tưởng khác thường của đồng nghiệp trong buổi họp tuần tới.",
+    "grammarFocus": "Sử dụng tính từ mạnh kèm danh từ ghép để đánh giá cao năng lực tư duy của người khác.",
+    "vocabulary": [
+      "out-of-the-box · 跳出常规 · ngoài khuôn khổ",
+      "perspective · 视角 · góc nhìn",
+      "overlooked · 忽略 · bỏ sót"
+    ],
+    "wish": "Chúc bạn có một buổi sáng tràn đầy năng lượng sáng tạo, luôn nhìn thấy những cơ hội độc đáo từ những góc nhìn mới mẻ nhất.",
+    "nightWish": "Khép lại một ngày nhiều ý tưởng hay, chúc bạn chìm vào giấc ngủ thật sâu và thức dậy với tâm trí sảng khoái.",
+    "generatedAt": "2026-10-30T21:50:55.453Z",
+    "generator": "gemini-3.5-flash-lite"
+  },
+  {
+    "id": "lesson-0095",
+    "stage": "B1 · Phản xạ trong đời sống",
+    "kind": "message",
+    "title": "Nhắn tin hỏi thăm người vừa trải qua ca phẫu thuật",
+    "context": "Bạn gửi tin nhắn thể hiện sự quan tâm và sẵn sàng hỗ trợ bạn bè sau khi họ xuất viện.",
+    "lines": [
+      {
+        "speaker": "A",
+        "english": "Just checking in on your recovery, please let me know if you need any groceries delivered.",
+        "chinese": "简单问候一下你的恢复情况，如果需要送些日用品，随时告诉我。",
+        "pinyin": "jiǎn dān wèn hòu yī xià nǐ de huī fù qíng kuàng, rú guǒ xū yào sòng xiē rì yòng pǐn, suí shí gào sù wǒ.",
+        "vietnamese": "Chỉ muốn hỏi thăm tình hình hồi phục của bạn, nếu cần giao ít đồ dùng sinh hoạt nào thì cứ báo mình nhé."
+      }
+    ],
+    "note": "Cụm 'checking in on' tương đương '问候/关心恢复情况', thể hiện sự quan tâm nhẹ nhàng không gây phiền phức.",
+    "challenge": "Soạn một tin nhắn tương tự để hỏi thăm một người quen vừa ốm dậy và gửi đi vào trưa nay.",
+    "grammarFocus": "Cách dùng 'checking in on' để mở lời quan tâm, kết hợp đề nghị hỗ trợ thực tế.",
+    "vocabulary": [
+      "checking in on · 问候情况 · hỏi thăm tình hình",
+      "recovery · 恢复 · hồi phục",
+      "groceries · 日用品 / 蔬菜食品 · thực phẩm và đồ dùng"
+    ],
+    "wish": "Chúc bạn có một buổi trưa yên bình, ấm áp bên những người thân yêu và nhận được nhiều năng lượng chữa lành.",
+    "nightWish": "Đêm nay hãy để mọi lo toan buông xuống, chúc bạn có một giấc ngủ bình yên và cơ thể phục hồi tuyệt đối.",
+    "generatedAt": "2026-10-30T21:50:55.454Z",
+    "generator": "gemini-3.5-flash-lite"
+  },
+  {
+    "id": "lesson-0096",
+    "stage": "B1 · Phản xạ trong đời sống",
+    "kind": "dialogue",
+    "title": "Thương lượng lại thời hạn hoàn thành dự án",
+    "context": "Hai đồng nghiệp thảo luận về việc xin dời deadline do phát sinh lỗi kỹ thuật bất ngờ.",
+    "lines": [
+      {
+        "speaker": "A",
+        "english": "We hit a snag with the database migration; I'm afraid we need an extra two days.",
+        "chinese": "我们在数据库迁移时遇到了卡点，恐怕我们需要多</i>两天时间。",
+        "pinyin": "wǒ men zài shù jù kù qiān yí shí yù dào le qiǎ diǎn, kǒng pà wǒ men xū yào duō liǎng tiān shí jiān.",
+        "vietnamese": "Chúng ta gặp chút vướng mắc khi di chuyển cơ sở dữ liệu; e rằng chúng ta cần thêm hai ngày nữa."
+      },
+      {
+        "speaker": "B",
+        "english": "That's a tight squeeze since the client review is scheduled for Thursday morning.",
+        "chinese": "这有点赶，因为客户评审会安排在周四上午。",
+        "pinyin": "zhè yǒu diǎn gǎn, yīn wèi kè hù pǔn shěn huì ān pái zài zhōu sì shàng wǔ.",
+        "vietnamese": "Hơi gấp đấy vì buổi đánh giá của khách hàng đã lên lịch vào sáng thứ Năm rồi."
+      },
+      {
+        "speaker": "A",
+        "english": "What if we deliver the core module first and push the minor features to the next phase?",
+        "chinese": "如果我们先交付核心模块，把次要功能推迟到下一阶段怎么样？",
+        "pinyin": "rú guǒ wǒ men xiān jiāo fù hé xīn mó kuài, bǎ cì yào gōng néng tuī chí dào xià yī jiē duàn zěn me yàng?",
+        "vietnamese": "Hay là chúng ta giao phần tính năng cốt lõi trước và đẩy các tính năng phụ sang giai đoạn sau nhé?"
+      },
+      {
+        "speaker": "B",
+        "english": "That sounds feasible. Let's draft a quick update for the manager right away.",
+        "chinese": "听起来可行。我们马上给经理草拟一份简短的进度说明吧。",
+        "pinyin": "tīng qǐ lái kě xíng. wǒ men mǎ shàng gěi jīng lǐ cǎo nǐ yī fèn jiǎn duǎn de jìn dù shuō míng ba.",
+        "vietnamese": "Nghe có vẻ khả thi đấy. Chúng ta thảo ngay một bản cập nhật ngắn cho sếp nhé."
+      }
+    ],
+    "note": "Cụm 'hit a snag' (gặp vướng mắc bất ngờ) tương đương '遇到卡点' trong tiếng Trung công sở, rất hay dùng khi xử lý sự cố kỹ thuật.",
+    "challenge": "Đóng vai A và B tự luyện tập lại đoạn hội thoại này với ngữ điệu thương lượng chuyên nghiệp.",
+    "grammarFocus": "Cấu trúc đề xuất giải pháp thay thế 'What if we...' kết hợp thương lượng thời hạn.",
+    "vocabulary": [
+      "hit a snag · 遇到卡点 · gặp vướng mắc",
+      "migration · 迁移 · di chuyển / chuyển đổi",
+      "tight squeeze · 时间紧迫 · thời gian gấp gáp",
+      "feasible · 可行 · khả thi"
+    ],
+    "wish": "Chúc bạn buổi tối giải quyết trọn vẹn mọi công việc tồn đọng và có những phút giây nghỉ ngơi xứng đáng.",
+    "nightWish": "Màn đêm buông xuống mang theo sự tĩnh lặng, chúc bạn chìm vào giấc ngủ êm đềm, quên hết mọi áp lực ban ngày.",
+    "generatedAt": "2026-10-30T21:50:55.454Z",
+    "generator": "gemini-3.5-flash-lite"
   }
 ]
