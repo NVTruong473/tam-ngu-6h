@@ -116,15 +116,11 @@ function assertReading(value, pinyin, lessonId, index) {
   if (!VIETNAMESE_SOUND_MARK.test(value) || NON_VIETNAMESE_LETTER.test(value) || PINYIN_DIGRAPH.test(value)) {
     throw new Error(`Phiên âm Việt còn giống pinyin/Anh tại ${lessonId}, dòng ${index + 1} (${value}).`);
   }
-  if (/\([05-9]\)/.test(value)) throw new Error(`Phiên âm Việt dùng thanh không hợp lệ tại ${lessonId}, dòng ${index + 1}.`);
+  if (/\((?![1-4]\))[^)]*\)|\([^)]*$/u.test(value)) throw new Error(`Phiên âm Việt dùng marker thanh không hợp lệ tại ${lessonId}, dòng ${index + 1}.`);
   const expectedTones = toneCount(pinyin);
   const suppliedTones = (value.match(/\([1-4]\)/g) || []).length;
-  // This is intentionally a learner-friendly approximation, not an IPA
-  // transcription. Pinyin spelling can join syllables and write neutral / erhua
-  // sounds inconsistently, so require visible tone guidance without rejecting
-  // an otherwise useful phrase for an artificial one-to-one count mismatch.
-  if (expectedTones > 0 && suppliedTones === 0) {
-    throw new Error(`Thiếu hoàn toàn số thanh tại ${lessonId}, dòng ${index + 1} (${value}).`);
+  if (expectedTones !== suppliedTones) {
+    throw new Error(`Số thanh pinyin (${expectedTones}) không khớp marker đọc gần Việt (${suppliedTones}) tại ${lessonId}, dòng ${index + 1} (${value}).`);
   }
 }
 
@@ -202,7 +198,9 @@ for (let start = 0; start < targets.length; start += batchSize) {
   for (const lessonLines of validated) {
     for (const { line, vietnameseReading } of lessonLines) line.vietnameseReading = vietnameseReading;
   }
-  writeFileSync(destination, `${JSON.stringify(curriculum, null, 2)}\n`, "utf8");
 }
 
+// Commit the refreshed corpus only after every batch has passed validation.
+// A failed late batch therefore never leaves a half-updated curriculum behind.
+writeFileSync(destination, `${JSON.stringify(curriculum, null, 2)}\n`, "utf8");
 process.stdout.write(`Đã ${refreshAll ? "làm mới" : "thêm"} cách đọc gần tiếng Việt cho ${targets.length} bài.\n`);

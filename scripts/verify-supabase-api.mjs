@@ -20,18 +20,68 @@ try {
 }
 if (!inviteCode) throw new Error("Không đọc được mã ghép đôi riêng từ Keychain.");
 
-const lookupResponse = await fetch(`${apiUrl}/lookup`, {
-  method: "POST",
-  headers: { "content-type": "application/json", "x-invite-code": inviteCode },
-  body: JSON.stringify({ query: "take it easy" }),
-});
-const lookup = await lookupResponse.json().catch(() => null);
-const readingsAreVietnameseFriendly = Array.isArray(lookup?.result?.examples)
-  && lookup.result.examples.every((example) => typeof example?.vietnameseReading === "string"
-    && /[ăâđêôơưáàảãạắằẳẵặấầẩẫậéèẻẽẹếềểễệíìỉĩịóòỏõọốồổỗộớờởỡợúùủũụứừửữựýỳỷỹỵ]/iu.test(example.vietnameseReading)
-    && !/[fjwz]/iu.test(example.vietnameseReading));
-if (!lookupResponse.ok || !lookup?.ok || !lookup?.result?.term || !Array.isArray(lookup?.result?.examples) || lookup.result.examples.length !== 2 || !readingsAreVietnameseFriendly) {
-  throw new Error("Kiểm tra tra nhanh Gemini chưa đạt.");
+const HAN = /\p{Script=Han}/u;
+const LATIN = /\p{Script=Latin}/u;
+const VIETNAMESE_SOUND_MARK = /[ăâđêôơưáàảãạắằẳẵặấầẩẫậéèẻẽẹếềểễệíìỉĩịóòỏõọốồổỗộớờởỡợúùủũụứừửữựýỳỷỹỵ]/iu;
+const PINYIN_TONE_MARKS = new Set("āáǎàēéěèīíǐìōóǒòūúǔùǖǘǚǜĀÁǍÀĒÉĚÈĪÍǏÌŌÓǑÒŪÚǓÙǕǗǙǛ");
+
+function hasPlainLatinText(value) {
+  return typeof value === "string" && value.length > 0 && LATIN.test(value) && !HAN.test(value) && !/[<>\u0000-\u001F\u007F]/u.test(value);
 }
 
-process.stdout.write("Health, Web Push configuration và một lượt tra Gemini đã đạt. Không in mã mời hoặc API key.\n");
+function hasChineseText(value) {
+  return typeof value === "string" && value.length > 0 && HAN.test(value) && !LATIN.test(value) && !/[<>\u0000-\u001F\u007F]/u.test(value);
+}
+
+function isVietnameseFriendlyReading(value) {
+  return typeof value === "string"
+    && VIETNAMESE_SOUND_MARK.test(value)
+    && !HAN.test(value)
+    && !/[fjwz]/iu.test(value)
+    && !/(?:^|\s)(?:sh|zh)[a-z]+/iu.test(value)
+    && !/\((?![1-4]\))[^)]*\)|\([^)]*$/u.test(value);
+}
+
+function hasToneGuidance(pinyin, vietnameseReading) {
+  const pinyinTones = [...pinyin].filter((character) => PINYIN_TONE_MARKS.has(character)).length;
+  const readingTones = (vietnameseReading.match(/\([1-4]\)/g) || []).length;
+  return pinyinTones === 0 ? readingTones === 0 : readingTones > 0;
+}
+
+function isValidLookupResult(result) {
+  if (!result || typeof result !== "object" || !["English", "Chinese", "Mixed"].includes(result.sourceLanguage)) return false;
+  if (!hasPlainLatinText(result.meaning) || !hasPlainLatinText(result.note) || !hasPlainLatinText(result.partOfSpeech)) return false;
+  if (!Array.isArray(result.examples) || result.examples.length !== 2) return false;
+  if (!result.examples.every((example) => hasPlainLatinText(example?.english)
+    && hasChineseText(example?.chinese)
+    && hasPlainLatinText(example?.pinyin)
+    && isVietnameseFriendlyReading(example?.vietnameseReading)
+    && hasToneGuidance(example.pinyin, example.vietnameseReading)
+    && hasPlainLatinText(example?.vietnamese))) return false;
+
+  const hasChineseTerm = typeof result.term === "string" && HAN.test(result.term);
+  if (result.sourceLanguage === "Chinese" && !hasChineseText(result.term)) return false;
+  if (result.sourceLanguage === "English" && !hasPlainLatinText(result.term)) return false;
+  if (hasChineseTerm) {
+    return hasPlainLatinText(result.pinyin)
+      && isVietnameseFriendlyReading(result.vietnameseReading)
+      && hasToneGuidance(result.pinyin, result.vietnameseReading);
+  }
+  return result.pinyin === "" && result.vietnameseReading === "";
+}
+
+async function verifyLookup(query) {
+  const lookupResponse = await fetch(`${apiUrl}/lookup`, {
+    method: "POST",
+    headers: { "content-type": "application/json", "x-invite-code": inviteCode },
+    body: JSON.stringify({ query }),
+  });
+  const lookup = await lookupResponse.json().catch(() => null);
+  if (!lookupResponse.ok || !lookup?.ok || !isValidLookupResult(lookup.result)) {
+    throw new Error("Kiểm tra tra nhanh Gemini chưa đạt.");
+  }
+}
+
+await verifyLookup("take it easy");
+await verifyLookup("慢一点");
+process.stdout.write("Health, Web Push configuration và hai lượt tra Gemini (Anh/Trung) đã đạt. Không in mã mời hoặc API key.\n");

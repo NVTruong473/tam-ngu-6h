@@ -88,6 +88,8 @@ const lookupSchema = {
     note: { type: "STRING" },
     examples: {
       type: "ARRAY",
+      minItems: 2,
+      maxItems: 2,
       items: {
         type: "OBJECT",
         properties: {
@@ -177,8 +179,8 @@ async function subscribe(request: Request, origin: string | null) {
     routineStartSequence?: number;
   };
   const endpoint = body?.subscription?.endpoint || "";
-  if (!isApplePushEndpoint(endpoint)) return json({ error: "Chỉ chấp nhận đăng ký Web Push từ app Safari trên iPhone/iPad." }, 400, origin);
-  if (!Number.isFinite(body?.routineStartSequence)) return json({ error: "Thiếu mốc bắt đầu lộ trình." }, 400, origin);
+  if (!isApplePushEndpoint(endpoint)) return json({ error: "Hãy mở Tam Ngữ từ icon đã cài trên iPhone, rồi thử lại." }, 400, origin);
+  if (!Number.isFinite(body?.routineStartSequence)) return json({ error: "Chưa xác định được nhịp học. Hãy mở lại app rồi thử lại nhé." }, 400, origin);
 
   const { error } = await supabaseAdmin().from("tam_ngu_push_subscriptions").upsert({
     endpoint,
@@ -276,6 +278,46 @@ function trimText(value: unknown, maximum: number) {
   return typeof value === "string" ? value.replace(/\s+/g, " ").trim().slice(0, maximum) : "";
 }
 
+// Gemini's schema constrains the shape of a response, but it does not prove that
+// every field is usable language-learning content. These checks reject malformed,
+// mixed-script, or incomplete answers and let Gemini retry. They do not claim to
+// certify the linguistic quality of a translation.
+const HAN = /\p{Script=Han}/u;
+const LATIN = /\p{Script=Latin}/u;
+const CONTROL_OR_MARKUP = /[<>\u0000-\u001F\u007F]/u;
+const VIETNAMESE_SOUND_MARK = /[ăâđêôơưáàảãạắằẳẵặấầẩẫậéèẻẽẹếềểễệíìỉĩịóòỏõọốồổỗộớờởỡợúùủũụứừửữựýỳỷỹỵ]/iu;
+const PINYIN_TONE_MARKS = new Set("āáǎàēéěèīíǐìōóǒòūúǔùǖǘǚǜĀÁǍÀĒÉĚÈĪÍǏÌŌÓǑÒŪÚǓÙǕǗǙǛ");
+
+function lookupText(value: unknown, maximum: number) {
+  if (typeof value !== "string") return "";
+  const normalized = value.replace(/\s+/g, " ").trim();
+  return normalized.length <= maximum ? normalized : "";
+}
+
+function isPlainLookupText(value: string, minimum = 1) {
+  return value.length >= minimum && !CONTROL_OR_MARKUP.test(value);
+}
+
+function isLatinLookupText(value: string) {
+  return isPlainLookupText(value) && LATIN.test(value) && !HAN.test(value);
+}
+
+function isChineseLookupText(value: string) {
+  return isPlainLookupText(value) && HAN.test(value) && !LATIN.test(value);
+}
+
+function isPinyinText(value: string) {
+  return isPlainLookupText(value) && LATIN.test(value) && !HAN.test(value);
+}
+
+function pinyinToneCount(value: string) {
+  return [...value].filter((character) => PINYIN_TONE_MARKS.has(character)).length;
+}
+
+function toneGuideCount(value: string) {
+  return (value.match(/\([1-4]\)/g) || []).length;
+}
+
 function normalizeVietnameseReading(value: unknown, maximum: number) {
   return trimText(value, maximum)
     .replace(/\(\s*[05]\s*\)/g, "")
@@ -291,41 +333,84 @@ function normalizeVietnameseReading(value: unknown, maximum: number) {
 }
 
 function isVietnameseFriendlyReading(value: string) {
-  return Boolean(value)
-    && /[ăâđêôơưáàảãạắằẳẵặấầẩẫậéèẻẽẹếềểễệíìỉĩịóòỏõọốồổỗộớờởỡợúùủũụứừửữựýỳỷỹỵ]/iu.test(value)
+  return isPlainLookupText(value, 3)
+    && !HAN.test(value)
+    && VIETNAMESE_SOUND_MARK.test(value)
     && !/[fjwz]/iu.test(value)
     && !/(?:^|\s)(?:sh|zh)[a-z]+/iu.test(value)
-    && !/\([05-9]\)/.test(value);
+    && !/\((?![1-4]\))[^)]*\)|\([^)]*$/u.test(value);
+}
+
+function hasToneGuidance(pinyin: string, vietnameseReading: string) {
+  const expected = pinyinToneCount(pinyin);
+  const supplied = toneGuideCount(vietnameseReading);
+  // Exact one-to-one matching is ideal (and requested in the prompt), but live
+  // model output can spell neutral syllables inconsistently. Requiring at least
+  // one visible guide whenever pinyin has tones avoids discarding an otherwise
+  // useful lookup solely for that non-semantic formatting variance.
+  return expected === 0 ? supplied === 0 : supplied > 0;
+}
+
+function normalizeLookupExample(value: unknown): LookupExample | null {
+  const source = (value || {}) as Record<string, unknown>;
+  const english = lookupText(source.english, 240);
+  const chinese = lookupText(source.chinese, 240);
+  const pinyin = lookupText(source.pinyin, 300);
+  const vietnameseReading = normalizeVietnameseReading(lookupText(source.vietnameseReading, 320), 320);
+  const vietnamese = lookupText(source.vietnamese, 260);
+  if (!isLatinLookupText(english)
+    || !isChineseLookupText(chinese)
+    || !isPinyinText(pinyin)
+    || !isVietnameseFriendlyReading(vietnameseReading)
+    || !hasToneGuidance(pinyin, vietnameseReading)
+    || !isLatinLookupText(vietnamese)) return null;
+  return { english, chinese, pinyin, vietnameseReading, vietnamese };
+}
+
+function hasValidTermPronunciation(
+  sourceLanguage: LookupResult["sourceLanguage"],
+  term: string,
+  pinyin: string,
+  vietnameseReading: string,
+) {
+  const hasChinese = HAN.test(term);
+  if (sourceLanguage === "Chinese" && !isChineseLookupText(term)) return false;
+  if (sourceLanguage === "English" && !isLatinLookupText(term)) return false;
+  if (sourceLanguage === "Mixed" && !isPlainLookupText(term)) return false;
+  if (!hasChinese) return !pinyin && !vietnameseReading;
+  return isPinyinText(pinyin)
+    && isVietnameseFriendlyReading(vietnameseReading)
+    && hasToneGuidance(pinyin, vietnameseReading);
 }
 
 function normalizeLookup(result: unknown): LookupResult | null {
   if (!result || typeof result !== "object") return null;
   const source = result as Record<string, unknown>;
   const sourceLanguage = source.sourceLanguage;
-  const examples = Array.isArray(source.examples) ? source.examples.slice(0, 2).map((example) => {
-    const record = (example || {}) as Record<string, unknown>;
-    return {
-      english: trimText(record.english, 240),
-      chinese: trimText(record.chinese, 240),
-      pinyin: trimText(record.pinyin, 300),
-      vietnameseReading: normalizeVietnameseReading(record.vietnameseReading, 320),
-      vietnamese: trimText(record.vietnamese, 260),
-    };
-  }) : [];
   if (!(["English", "Chinese", "Mixed"] as const).includes(sourceLanguage as LookupResult["sourceLanguage"])) return null;
-  if (examples.length < 1 || examples.some((example) => !example.english || !example.chinese || !example.vietnamese || !isVietnameseFriendlyReading(example.vietnameseReading))) return null;
+  if (!Array.isArray(source.examples) || source.examples.length !== 2) return null;
+  const examples = source.examples.map(normalizeLookupExample);
+  if (examples.some((example) => !example)) return null;
   const normalized: LookupResult = {
     sourceLanguage: sourceLanguage as LookupResult["sourceLanguage"],
-    term: trimText(source.term, 160),
-    pinyin: trimText(source.pinyin, 220),
-    vietnameseReading: normalizeVietnameseReading(source.vietnameseReading, 260),
-    partOfSpeech: trimText(source.partOfSpeech, 120),
-    meaning: trimText(source.meaning, 400),
-    note: trimText(source.note, 400),
-    examples,
+    term: lookupText(source.term, 160),
+    pinyin: lookupText(source.pinyin, 220),
+    vietnameseReading: normalizeVietnameseReading(lookupText(source.vietnameseReading, 260), 260),
+    partOfSpeech: lookupText(source.partOfSpeech, 120),
+    meaning: lookupText(source.meaning, 400),
+    note: lookupText(source.note, 400),
+    examples: examples as LookupExample[],
   };
-  if (/\p{Script=Han}/u.test(normalized.term) && !isVietnameseFriendlyReading(normalized.vietnameseReading)) return null;
-  return normalized.term && normalized.meaning ? normalized : null;
+  if (!isPlainLookupText(normalized.partOfSpeech)
+    || !isLatinLookupText(normalized.meaning)
+    || !isLatinLookupText(normalized.note)
+    || !hasValidTermPronunciation(
+      normalized.sourceLanguage,
+      normalized.term,
+      normalized.pinyin,
+      normalized.vietnameseReading,
+    )) return null;
+  return normalized;
 }
 
 async function askGeminiForLookup(query: string) {
@@ -338,7 +423,8 @@ async function askGeminiForLookup(query: string) {
     "Nếu đầu vào là tiếng Trung: pinyin và vietnameseReading phải có. vietnameseReading là cách đọc gần tiếng Việt, dùng (1)-(4) cho thanh Quan thoại; không phải âm Hán-Việt hoặc pinyin viết lại.",
     "Nếu đầu vào là tiếng Anh: pinyin và vietnameseReading của term để chuỗi rỗng.",
     "Luôn cho đúng 2 ví dụ ứng dụng tự nhiên: mỗi ví dụ gồm English, Chinese, pinyin, vietnameseReading, Vietnamese. Với các câu Trung, vietnameseReading luôn dùng số thanh.",
-    "VietnameseReading phải thực sự là gợi âm người Việt dễ đọc: dùng chữ/dấu Việt như ă, â, đ, ê, ô, ơ, ư hoặc dấu thanh Việt khi hợp lý. Không trả pinyin/Anh viết lại; cấm f, j, w, z, các cụm pinyin sh.../zh... và (0)/(5). Ví dụ wǒmen nên gần “uổ(3) mần”, không phải “wo mern”.",
+    "VietnameseReading phải thực sự là gợi âm người Việt dễ đọc: dùng chữ/dấu Việt như ă, â, đ, ê, ô, ơ, ư hoặc dấu thanh Việt khi hợp lý. Không trả pinyin/Anh viết lại; cấm f, j, w, z, các cụm pinyin sh.../zh... và (0)/(5). Số marker (1)–(4) phải đúng bằng số dấu thanh trong pinyin; âm nhẹ không thêm marker. Ví dụ wǒmen nên gần “uổ(3) mần”, không phải “wo mern”.",
+    "Trước khi trả về, tự soát ngữ pháp, chính tả, sắc thái và tính tự nhiên của cả hai câu ví dụ; nếu không chắc, dùng cấu trúc phổ biến thay vì suy diễn.",
     "Nêu nghĩa phổ biến nhất, từ loại/cấu trúc và một ghi chú ngắn về sắc thái/cách dùng. Nếu truy vấn mơ hồ, nói rõ nghĩa thường gặp thay vì bịa ngữ cảnh.",
     `Tra cứu: ${JSON.stringify(query)}`,
   ].join("\n");
@@ -405,6 +491,6 @@ Deno.serve(async (request) => {
     return json({ error: "Không tìm thấy endpoint." }, 404, origin);
   } catch (error) {
     console.error(error instanceof Error ? error.message : "Lỗi không xác định");
-    return json({ error: "Máy chủ tạm thời chưa xử lý được yêu cầu." }, 500, origin);
+    return json({ error: "Chưa xử lý được lúc này. Hãy thử lại sau nhé." }, 500, origin);
   }
 });

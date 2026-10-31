@@ -1,6 +1,6 @@
-# Tâm Ngữ 6H — PWA học Anh–Trung cho iPhone
+# Tam Ngữ 6H — PWA học Anh–Trung cho iPhone
 
-Tâm Ngữ 6H là một PWA cài từ Safari lên Màn hình chính. Nó có icon, chạy toàn màn hình, lưu tiến độ/tra cứu đã xem trên chính iPhone và vẫn mở được sau khi mất mạng (sau lần tải đầu).
+Tam Ngữ 6H là một PWA cài từ Safari lên Màn hình chính. Nó có icon, chạy toàn màn hình, lưu tiến độ/tra cứu đã xem trên chính iPhone và vẫn mở được sau khi mất mạng (sau lần tải đầu).
 
 ## Trải nghiệm người dùng
 
@@ -23,7 +23,7 @@ Sau khi người dùng cài PWA vào Màn hình chính, mở icon và đồng ý
 
 ## Vì sao không bê nguyên widget từ các dự án tham khảo
 
-- [a-new-word-every-day](https://github.com/lukefwalton/a-new-word-every-day) có ý tưởng local-first, chọn nội dung theo ngày và ôn lại rất phù hợp: Tâm Ngữ giữ tiến độ/cached lookup trên máy và mở rộng nội dung theo lộ trình.
+- [a-new-word-every-day](https://github.com/lukefwalton/a-new-word-every-day) có ý tưởng local-first, chọn nội dung theo ngày và ôn lại rất phù hợp: Tam Ngữ giữ tiến độ/cached lookup trên máy và mở rộng nội dung theo lộ trình.
 - [Focus-Vocab](https://github.com/VoPhatDat/Focus-Vocab) gợi ý LocalStorage và active recall; chỉ lấy phần lưu cục bộ nhẹ, không mang vào game/rank/tài khoản không cần thiết.
 - [widgetkit-daily-language](https://github.com/joshspicer/widgetkit-daily-language) là WidgetKit native; [vocaday_app](https://github.com/hbx921/vocaday_app) là Flutter/mobile store. Chúng hữu ích về UX nhưng không thể thành widget iPhone khi chỉ phát hành qua GitHub Pages.
 - [web_vocab_master](https://github.com/HoangCongLap/web_vocab_master) đi theo hướng tài khoản, khóa học và Firebase; hợp với nền tảng nhiều người dùng hơn là món quà local-first này, nên không thêm gánh nặng đăng nhập/thu thập dữ liệu.

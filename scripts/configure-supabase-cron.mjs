@@ -12,7 +12,7 @@ const statements = [
   { query: "create extension if not exists pg_net" },
   { query: "create extension if not exists supabase_vault" },
   {
-    query: `select vault.create_secret($1, 'tam_ngu_cron_secret', 'Tâm Ngữ Web Push dispatcher')
+    query: `select vault.create_secret($1, 'tam_ngu_cron_secret', 'Tam Ngữ Web Push dispatcher')
       where not exists (select 1 from vault.secrets where name = 'tam_ngu_cron_secret')`,
     parameters: [cronSecret],
   },
@@ -21,7 +21,7 @@ const statements = [
       secret_id := (select id from vault.secrets where name = 'tam_ngu_cron_secret'),
       new_secret := $1,
       new_name := 'tam_ngu_cron_secret',
-      new_description := 'Tâm Ngữ Web Push dispatcher',
+      new_description := 'Tam Ngữ Web Push dispatcher',
       new_key_id := null
     )`,
     parameters: [cronSecret],

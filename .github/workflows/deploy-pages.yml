@@ -1,4 +1,4 @@
-name: Deploy Tâm Ngữ 6H to GitHub Pages
+name: Deploy Tam Ngữ 6H to GitHub Pages
 
 on:
   push:
@@ -42,8 +42,18 @@ jobs:
           GEMINI_MODEL: gemini-3.5-flash-lite
           APPEND_LESSON_COUNT: 3
         run: npm run append:curriculum
-      - name: Preserve newly generated lessons
+      - name: Verify generated curriculum before publishing
+        id: verify_curriculum
         if: steps.grow.outcome == 'success'
+        continue-on-error: true
+        run: npm run verify:curriculum
+      - name: Stop an invalid generated curriculum from deploying
+        if: steps.grow.outcome == 'success' && steps.verify_curriculum.outcome != 'success'
+        run: |
+          echo "Generated curriculum failed verification; refusing to publish it."
+          exit 1
+      - name: Preserve newly generated lessons
+        if: steps.grow.outcome == 'success' && steps.verify_curriculum.outcome == 'success'
         run: |
           git config user.name "tam-ngu-bot"
           git config user.email "actions@users.noreply.github.com"

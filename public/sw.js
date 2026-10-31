@@ -1,4 +1,4 @@
-const CACHE_VERSION = "tam-ngu-6h-v8";
+const CACHE_VERSION = "tam-ngu-6h-v9";
 
 self.addEventListener("install", (event) => {
   event.waitUntil(
@@ -75,7 +75,7 @@ self.addEventListener("fetch", (event) => {
 });
 
 self.addEventListener("push", (event) => {
-  const fallback = { title: "Tâm Ngữ 6H", body: "Một bài học nhỏ đang chờ cậu." };
+  const fallback = { title: "Tam Ngữ 6H", body: "Một bài học nhỏ đang chờ cậu." };
   let payload = fallback;
   try { payload = { ...fallback, ...event.data.json() }; } catch {}
   event.waitUntil(self.registration.showNotification(payload.title, {

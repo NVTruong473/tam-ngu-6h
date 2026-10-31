@@ -81,6 +81,21 @@ const itemSchema = {
   ],
 };
 
+const reviewSchema = {
+  type: "ARRAY",
+  minItems: lessonCount,
+  maxItems: lessonCount,
+  items: {
+    type: "OBJECT",
+    properties: {
+      id: { type: "STRING" },
+      approved: { type: "BOOLEAN" },
+      issues: { type: "ARRAY", maxItems: 6, items: { type: "STRING" } },
+    },
+    required: ["id", "approved", "issues"],
+  },
+};
+
 function normalize(value) {
   return String(value || "").normalize("NFKC").toLocaleLowerCase("vi").replace(/[^\p{L}\p{N}]+/gu, " ").trim();
 }
@@ -89,10 +104,21 @@ function assertPlainText(value, label) {
   if (/[<>]/.test(value)) throw new Error(`Có markup hoặc ký tự không hợp lệ trong ${label}.`);
 }
 
-function assertVietnameseFriendlyReading(value, label) {
+const PINYIN_TONE_MARKS = new Set([..."āáǎàēéěèīíǐìōóǒòūúǔùǖǘǚǜĀÁǍÀĒÉĚÈĪÍǏÌŌÓǑÒŪÚǓÙǕǗǙǛ"]);
+
+function toneCount(value) {
+  return [...value].filter((character) => PINYIN_TONE_MARKS.has(character)).length;
+}
+
+function assertVietnameseFriendlyReading(value, pinyin, label) {
   const vietnameseSoundMark = /[ăâđêôơưáàảãạắằẳẵặấầẩẫậéèẻẽẹếềểễệíìỉĩịóòỏõọốồổỗộớờởỡợúùủũụứừửữựýỳỷỹỵ]/iu;
-  if (!vietnameseSoundMark.test(value) || /[fjwz]/iu.test(value) || /(?:^|\s)(?:sh|zh)[a-z]+/iu.test(value) || /\([05-9]\)/.test(value)) {
+  if (!vietnameseSoundMark.test(value) || /[fjwz]/iu.test(value) || /(?:^|\s)(?:sh|zh)[a-z]+/iu.test(value) || /\((?![1-4]\))[^)]*\)|\([^)]*$/u.test(value)) {
     throw new Error(`Phiên âm Việt còn giống pinyin/Anh tại ${label}.`);
+  }
+  const expectedTones = toneCount(pinyin);
+  const suppliedTones = (value.match(/\([1-4]\)/g) || []).length;
+  if (expectedTones !== suppliedTones) {
+    throw new Error(`Số thanh trong phiên âm Việt không khớp pinyin tại ${label} (cần ${expectedTones}, có ${suppliedTones}).`);
   }
 }
 
@@ -149,7 +175,7 @@ Tiêu chuẩn bắt buộc:
 - Không nhận xét ngoài JSON.
 `;
 
-async function callGemini(retryGuidance = "") {
+async function callGemini({ prompt: promptText, responseSchema, temperature, purpose }) {
   let lastError;
   for (let attempt = 0; attempt < keys.length; attempt += 1) {
     const key = keys[attempt];
@@ -159,11 +185,11 @@ async function callGemini(retryGuidance = "") {
         signal: AbortSignal.timeout(120_000),
         headers: { "content-type": "application/json", "x-goog-api-key": key },
         body: JSON.stringify({
-          contents: [{ role: "user", parts: [{ text: `${prompt}${retryGuidance}` }] }],
+          contents: [{ role: "user", parts: [{ text: promptText }] }],
           generationConfig: {
-            temperature: 0.88,
+            temperature,
             responseMimeType: "application/json",
-            responseSchema: { type: "ARRAY", minItems: lessonCount, maxItems: lessonCount, items: itemSchema },
+            responseSchema,
           },
         }),
       });
@@ -174,7 +200,7 @@ async function callGemini(retryGuidance = "") {
       return JSON.parse(text);
     } catch (error) {
       lastError = error;
-      process.stderr.write(`Khóa Gemini ${attempt + 1}/${keys.length} chưa dùng được: ${error.message}\n`);
+      process.stderr.write(`Gemini ${purpose}, khóa ${attempt + 1}/${keys.length} chưa dùng được: ${error.message}\n`);
     }
   }
   throw lastError ?? new Error("Không gọi được Gemini.");
@@ -211,7 +237,7 @@ function validateAndNormalize(items) {
       assertSimplifiedChinese(line.chinese, `${plan.id}, dòng ${lineIndex + 1}`);
       if (!/\p{Script=Latin}/u.test(line.pinyin) || /\p{Script=Han}/u.test(line.pinyin)) throw new Error(`Pinyin không hợp lệ tại ${plan.id}.`);
       if (!/\([1-4]\)/.test(line.vietnameseReading)) throw new Error(`Phiên âm Việt thiếu thanh điệu tại ${plan.id}.`);
-      assertVietnameseFriendlyReading(line.vietnameseReading, `${plan.id}, dòng ${lineIndex + 1}`);
+      assertVietnameseFriendlyReading(line.vietnameseReading, line.pinyin, `${plan.id}, dòng ${lineIndex + 1}`);
       if (plan.kind === "dialogue" && line.speaker.trim().toUpperCase() !== (lineIndex % 2 === 0 ? "A" : "B")) {
         throw new Error(`Speaker không luân phiên A/B tại ${plan.id}.`);
       }
@@ -241,15 +267,55 @@ function validateAndNormalize(items) {
   });
 }
 
+async function reviewGeneratedLessons(items) {
+  const reviewPrompt = [
+    "Bạn là người phản biện học thuật độc lập cho nội dung micro-learning Anh–Trung dành cho người Việt đã học khoảng một tháng.",
+    "Không viết lại bài. Đánh giá từng bài bên dưới một cách nghiêm khắc nhưng công bằng.",
+    "approved chỉ được true khi tất cả đều ổn: ngữ pháp và độ tự nhiên tiếng Anh; tiếng Trung giản thể tự nhiên; ý nghĩa Anh–Trung–Việt tương đương; pinyin hợp lý; vietnameseReading thực sự là gợi âm Việt và khớp các thanh; grammarFocus, vocabulary, note và challenge đúng trọng tâm B1; không có câu hoặc lời chúc sáo rỗng/lệch ngữ cảnh.",
+    "Nếu có lỗi hoặc nghi ngờ thực chất, approved=false và issues phải nêu ngắn gọn, cụ thể theo đúng bài. Nếu không có lỗi, issues là mảng rỗng. Không nhận xét ngoài JSON.",
+    "Các bài cần phản biện:",
+    JSON.stringify(items, null, 2),
+  ].join("\n");
+  const reviews = await callGemini({
+    prompt: reviewPrompt,
+    responseSchema: reviewSchema,
+    temperature: 0.12,
+    purpose: "phản biện chất lượng",
+  });
+  if (!Array.isArray(reviews) || reviews.length !== items.length) throw new Error("Phản biện không trả đủ số bài.");
+  const expectedIds = new Set(items.map((item) => item.id));
+  const byId = new Map(reviews.map((review) => [review?.id, review]));
+  if (byId.size !== items.length || [...byId.keys()].some((id) => !expectedIds.has(id))) {
+    throw new Error("Phản biện trả sai id bài học.");
+  }
+  const rejected = items.flatMap((item) => {
+    const review = byId.get(item.id);
+    const issues = Array.isArray(review?.issues)
+      ? review.issues.filter((issue) => typeof issue === "string" && issue.trim()).map((issue) => issue.trim())
+      : [];
+    return review?.approved === true ? [] : [`${item.id}: ${issues.join("; ") || "phản biện không duyệt nội dung"}`];
+  });
+  if (rejected.length) throw new Error(`Phản biện học thuật từ chối lô bài: ${rejected.join(" | ")}`);
+}
+
 async function generateValidatedLessons() {
   let lastValidationError;
+  let retryGuidance = "";
   for (let attempt = 1; attempt <= 3; attempt += 1) {
-    const candidate = await callGemini(attempt === 1 ? "" : "\nLô trước không qua kiểm tra kỹ thuật. Hãy tạo lại toàn bộ bài thật sạch, đặc biệt không có HTML/Markdown, pinyin không chứa chữ Hán, vietnameseReading phải có các thanh (1)–(4), và dialogue phải xen kẽ A/B.");
     try {
-      return validateAndNormalize(candidate);
+      const candidate = await callGemini({
+        prompt: `${prompt}${retryGuidance}`,
+        responseSchema: { type: "ARRAY", minItems: lessonCount, maxItems: lessonCount, items: itemSchema },
+        temperature: 0.88,
+        purpose: "tạo bài",
+      });
+      const validated = validateAndNormalize(candidate);
+      await reviewGeneratedLessons(validated);
+      return validated;
     } catch (error) {
       lastValidationError = error;
       process.stderr.write(`Lô Gemini ${attempt}/3 bị chặn kiểm duyệt: ${error.message}\n`);
+      retryGuidance = `\nLô trước không đạt kiểm tra kỹ thuật hoặc phản biện học thuật. Hãy tạo lại toàn bộ bài thật sạch; không có HTML/Markdown, pinyin không chứa chữ Hán, vietnameseReading phải có đúng số thanh (1)–(4) theo pinyin và dialogue phải xen kẽ A/B. Lý do gần nhất: ${error.message.slice(0, 1200)}`;
     }
   }
   throw lastValidationError ?? new Error("Không có lô bài nào đạt kiểm tra chất lượng.");

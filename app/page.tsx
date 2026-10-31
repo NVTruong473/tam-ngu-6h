@@ -110,16 +110,71 @@ function containsChinese(value: string) {
   return /\p{Script=Han}/u.test(value);
 }
 
+const PINYIN_TONE_MARKS = new Set([..."āáǎàēéěèīíǐìōóǒòūúǔùǖǘǚǜĀÁǍÀĒÉĚÈĪÍǏÌŌÓǑÒŪÚǓÙǕǗǙǛ"]);
+
+function isPlainLookupText(value: unknown, minimum = 1): value is string {
+  return typeof value === "string"
+    && value.trim().length >= minimum
+    && !/[<>`\u0000-\u001F\u007F]/u.test(value);
+}
+
+function hasLatinLookupText(value: unknown) {
+  return isPlainLookupText(value) && /\p{Script=Latin}/u.test(value) && !containsChinese(value);
+}
+
+function hasChineseLookupText(value: unknown) {
+  return isPlainLookupText(value) && containsChinese(value) && !/[A-Za-z]/.test(value);
+}
+
+function hasMatchingToneGuides(pinyin: string, vietnameseReading: string) {
+  const pinyinTones = [...pinyin].filter((character) => PINYIN_TONE_MARKS.has(character)).length;
+  const readingTones = (vietnameseReading.match(/\([1-4]\)/g) || []).length;
+  return pinyinTones === readingTones;
+}
+
+function isVietnameseFriendlyReading(value: unknown) {
+  return isPlainLookupText(value, 3)
+    && !containsChinese(value)
+    && /[ăâđêôơưáàảãạắằẳẵặấầẩẫậéèẻẽẹếềểễệíìỉĩịóòỏõọốồổỗộớờởỡợúùủũụứừửữựýỳỷỹỵ]/iu.test(value)
+    && !/[fjwz]/iu.test(value)
+    && !/(?:^|\s)(?:sh|zh)[a-z]+/iu.test(value)
+    && !/\((?![1-4]\))[^)]*\)|\([^)]*$/u.test(value);
+}
+
+function validLookupExample(value: unknown): value is LookupExample {
+  if (!value || typeof value !== "object") return false;
+  const example = value as Partial<LookupExample>;
+  return hasLatinLookupText(example.english)
+    && hasChineseLookupText(example.chinese)
+    && hasLatinLookupText(example.pinyin)
+    && isVietnameseFriendlyReading(example.vietnameseReading)
+    && typeof example.pinyin === "string"
+    && typeof example.vietnameseReading === "string"
+    && hasMatchingToneGuides(example.pinyin, example.vietnameseReading)
+    && hasLatinLookupText(example.vietnamese);
+}
+
 function validLookupResult(value: unknown): value is LookupResult {
   if (!value || typeof value !== "object") return false;
   const result = value as Partial<LookupResult>;
-  return Boolean(
-    result.term
-    && result.meaning
-    && result.partOfSpeech
-    && Array.isArray(result.examples)
-    && result.examples.length > 0,
-  );
+  if (!(["English", "Chinese", "Mixed"] as const).includes(result.sourceLanguage as LookupResult["sourceLanguage"])) return false;
+  if (!isPlainLookupText(result.partOfSpeech)
+    || !hasLatinLookupText(result.meaning)
+    || !hasLatinLookupText(result.note)
+    || !Array.isArray(result.examples)
+    || result.examples.length !== 2
+    || !result.examples.every(validLookupExample)) return false;
+
+  const term = result.term || "";
+  const pinyin = result.pinyin || "";
+  const vietnameseReading = result.vietnameseReading || "";
+  if (result.sourceLanguage === "Chinese" && !hasChineseLookupText(term)) return false;
+  if (result.sourceLanguage === "English" && !hasLatinLookupText(term)) return false;
+  if (result.sourceLanguage === "Mixed" && !isPlainLookupText(term)) return false;
+  if (!containsChinese(term)) return pinyin === "" && vietnameseReading === "";
+  return hasLatinLookupText(pinyin)
+    && isVietnameseFriendlyReading(vietnameseReading)
+    && hasMatchingToneGuides(pinyin, vietnameseReading);
 }
 
 function scheduleAt(timestamp: number) {
@@ -312,7 +367,7 @@ export default function Home() {
   async function enableLockScreen() {
     if (!PUSH_API_URL) {
       setPushState("error");
-      setPushMessage("Máy chủ thông báo chưa được kết nối.");
+      setPushMessage("Tính năng thông báo chưa sẵn sàng. Hãy thử lại sau nhé.");
       return;
     }
     const standalone = window.matchMedia("(display-mode: standalone)").matches || (navigator as Navigator & { standalone?: boolean }).standalone === true;
@@ -335,9 +390,9 @@ export default function Home() {
       if (permission !== "granted") throw new Error("Cậu chưa cho phép thông báo trong iPhone.");
       const registration = await navigator.serviceWorker.ready;
       const keyResponse = await fetch(`${PUSH_API_URL}/vapid-key`);
-      if (!keyResponse.ok) throw new Error("Chưa lấy được khóa thông báo.");
+      if (!keyResponse.ok) throw new Error("Chưa thể bật thông báo lúc này.");
       const { publicKey } = await keyResponse.json() as { publicKey?: string };
-      if (!publicKey) throw new Error("Máy chủ thông báo chưa sẵn sàng.");
+      if (!publicKey) throw new Error("Chưa thể bật thông báo lúc này.");
       const subscription = await registration.pushManager.getSubscription() || await registration.pushManager.subscribe({
         userVisibleOnly: true,
         applicationServerKey: urlBase64ToUint8Array(publicKey),
@@ -455,7 +510,7 @@ export default function Home() {
       setLookupCache(nextCache);
       localStorage.setItem(LOOKUP_CACHE_KEY, JSON.stringify(nextCache));
       setLookupResult(body.result);
-      setLookupMessage("Kết quả thô · Gemini xử lý ở máy chủ, không có API key trong iPhone.");
+      setLookupMessage("Đã lưu kết quả tra cứu trên máy này.");
       setLookupState("success");
     } catch (error) {
       setLookupState("error");
@@ -492,8 +547,8 @@ export default function Home() {
       <header className="topbar">
         <div className="brand-mark" aria-hidden="true">语</div>
         <div>
-          <p className="eyebrow">MỘT MÓN QUÀ NHỎ</p>
-          <h1>Tâm Ngữ <span>6H</span></h1>
+          <p className="eyebrow">ANH · TRUNG · VIỆT</p>
+          <h1>Tam Ngữ <span>6H</span></h1>
         </div>
         <button className="icon-button" onClick={() => setShowInstall(true)} aria-label="Hướng dẫn cài ứng dụng">↗</button>
       </header>
@@ -581,7 +636,7 @@ export default function Home() {
 
           <div className="section-heading">
             <div>
-              <p className="eyebrow">{studyModule.stage} · BÀI {moduleIndex + 1} · KHO TỰ MỞ RỘNG</p>
+              <p className="eyebrow">{studyModule.stage} · BÀI {moduleIndex + 1}</p>
               <h2>{studyModule.title}</h2>
             </div>
           </div>
@@ -626,7 +681,7 @@ export default function Home() {
 
       {tab === "library" && (
         <section className="screen library-screen">
-          <div className="page-title"><p className="eyebrow">LỘ TRÌNH SỐNG A2 → C1</p><h2>Thư viện đã mở</h2><p>{curriculum.length} bài sẵn sàng trên máy. Gemini nối thêm 3 bài mới mỗi ngày; bài cũ chỉ quay lại khi cần ôn có chủ ý.</p></div>
+          <div className="page-title"><p className="eyebrow">ÔN LẠI THEO NHỊP CỦA BẠN</p><h2>Thư viện bài học</h2><p>Tìm lại các bài đã mở hoặc chọn một chủ đề để ôn bất kỳ lúc nào.</p></div>
           <label className="search-box">
             <span aria-hidden="true">⌕</span>
             <input value={query} onChange={(event) => setQuery(event.target.value)} placeholder="Tìm tiếng Anh, Trung hoặc Việt…" />
@@ -650,17 +705,16 @@ export default function Home() {
             <div className="setting-row"><span className="setting-icon">⌂</span><div><strong>Cài lên Màn hình chính</strong><small>Mở toàn màn hình với icon như một app.</small></div><button onClick={() => setShowInstall(true)}>Xem</button></div>
             <div className="setting-row"><span className="setting-icon">✓</span><div><strong>Tự động lưu</strong><small>Tiến độ và nhịp hằng ngày được lưu trên máy.</small></div><span className="status-pill">Đang bật</span></div>
             <div className="setting-row"><span className="setting-icon">◷</span><div><strong>06:00 · 12:00 · 18:00</strong><small>Mỗi mốc có một bài mới và một lời nhắn riêng.</small></div><span className="status-pill">Mỗi ngày</span></div>
-            <div className="setting-row"><span className="setting-icon">∞</span><div><strong>Kho bài tự mở rộng</strong><small>{curriculum.length} bài hiện có; Gemini tạo thêm theo lộ trình, kiểm tra trùng lặp rồi mới phát hành.</small></div><span className="status-pill">Liên tục</span></div>
             <div className="setting-row"><span className="setting-icon">▣</span><div><strong>Thẻ bài học Màn hình khóa</strong><small>Hiện cả khi app đã đóng. Thẻ mới thay thẻ cũ; vuốt để xóa sau khi đọc.</small></div>{pushState === "unsupported" ? <span className="status-pill">Safari iPhone</span> : pushState === "enabled" ? <button onClick={disableLockScreen}>Tắt</button> : <button onClick={enableLockScreen}>Bật</button>}</div>
           </article>
           {PUSH_API_URL && !inviteReady && (
             <div className="pairing-box">
-              <label htmlFor="pairing-code"><strong>Ghép đôi ứng dụng riêng</strong><small>Dán mã đi kèm đường link riêng. Chỉ cần làm một lần trên iPhone.</small></label>
-              <div><input id="pairing-code" value={inviteDraft} onChange={(event) => setInviteDraft(event.target.value)} placeholder="Mã ghép đôi" autoCapitalize="none" autoCorrect="off" /><button disabled={savingInvite} onClick={saveInviteCode}>{savingInvite ? "Đang kiểm tra…" : "Lưu"}</button></div>
+              <label htmlFor="pairing-code"><strong>Kích hoạt liên kết riêng</strong><small>Dán mã đi kèm đường link riêng. Chỉ cần làm một lần trên iPhone.</small></label>
+              <div><input id="pairing-code" value={inviteDraft} onChange={(event) => setInviteDraft(event.target.value)} placeholder="Mã từ đường link" autoCapitalize="none" autoCorrect="off" /><button disabled={savingInvite} onClick={saveInviteCode}>{savingInvite ? "Đang kiểm tra…" : "Lưu"}</button></div>
             </div>
           )}
           {pushMessage && <p className={`settings-message ${pushState === "error" ? "error-note" : ""}`}>{pushMessage}</p>}
-          <article className="truth-card"><strong>Cách thẻ bài học hoạt động</strong><p>Đây là thông báo hệ thống của iPhone, không phải lớp phủ lên ảnh nền. iPhone cho người dùng vuốt thẻ để xóa và tự quyết âm thanh/âm lượng. App chỉ giữ một thẻ mới nhất để Màn hình khóa luôn gọn.</p></article>
+          <article className="truth-card"><strong>Thông báo bài học</strong><p>Vuốt thẻ để xóa sau khi đọc. Âm lượng và cách hiển thị do iPhone quyết định.</p></article>
           {FEEDBACK_FORM_URL && (
             <a className="feedback-card" href={FEEDBACK_FORM_URL} target="_blank" rel="noreferrer" aria-label="Mở form nhắn cho dev">
               <span className="setting-icon" aria-hidden="true">✉</span>
@@ -684,11 +738,11 @@ export default function Home() {
             <div className="sheet-handle" />
             <div className="install-icon">语</div>
             <p className="eyebrow">CHỈ MẤT KHOẢNG 20 GIÂY</p>
-            <h2 id="install-title">Đưa Tâm Ngữ lên iPhone</h2>
+            <h2 id="install-title">Đưa Tam Ngữ lên iPhone</h2>
             <ol>
               <li><span>1</span><p>Mở đường link bằng <strong>Safari</strong>.</p></li>
               <li><span>2</span><p>Chạm nút <strong>Chia sẻ</strong> ở thanh công cụ.</p></li>
-              <li><span>3</span><p>Chọn <strong>Thêm vào Màn hình chính</strong> và bật “Mở dưới dạng ứng dụng”.</p></li>
+              <li><span>3</span><p>Chọn <strong>Thêm vào Màn hình chính</strong>. Nếu iPhone hiện “Mở dưới dạng ứng dụng”, hãy để tùy chọn đó bật.</p></li>
               <li><span>4</span><p>Mở icon vừa tạo, vào <strong>Cài đặt</strong> trong app rồi bật thẻ bài học Màn hình khóa.</p></li>
             </ol>
             <button className="primary-button wide" onClick={() => setShowInstall(false)}>Mình hiểu rồi</button>
