@@ -2556,5 +2556,108 @@
     "nightWish": "Khép lại một ngày dài nhiều suy ngẫm, chúc bạn có giấc ngủ sâu và những giấc mơ thật đẹp.",
     "generatedAt": "2026-11-01T15:32:50.579Z",
     "generator": "gemini-3.5-flash-lite"
+  },
+  {
+    "id": "lesson-0100",
+    "stage": "B1 · Phản xạ trong đời sống",
+    "kind": "sentence",
+    "title": "Bày tỏ quan điểm về việc cân bằng giữa công việc và cuộc sống",
+    "context": "Khi bạn bè bàn luận về cách sắp xếp thời gian giữa sự nghiệp và sở thích cá nhân vào buổi sáng.",
+    "lines": [
+      {
+        "speaker": "A",
+        "english": "Striking the right balance between professional ambitions and personal well-being is an art in itself.",
+        "chinese": "在职业追求与个人身心健康之间找到完美的平衡本身就是一门艺术。",
+        "pinyin": "zài zhíyè zhuīqiú yǔ gèrén shēnxīn jiànkāng zhījiān zhǎodào wánměi de pínghéng běnshēn jiù shì yī mén yìshù.",
+        "vietnameseReading": "trai(4) chí(2) yê(4) truây(1) chiếu(2) ỷ(3) cợ(4) rấn(2) sên(1) xin(1) chiên(4) khang(1) trư(1) chiên(1) chảo(3) tao(4) oản(2) mây(3) tơ pính(2) hẻng(2) pẩn(3) sên(1) chiêu(4) sứ(4) i(1) mớn(2) i(4) su(4)",
+        "vietnamese": "Việc tìm kiếm sự cân bằng hoàn hảo giữa theo đuổi nghề nghiệp và sức khỏe thể chất, tinh thần cá nhân vốn dĩ là một nghệ thuật."
+      }
+    ],
+    "note": "Cấu trúc '在...与...之间找到...' (Tìm kiếm sự cân bằng giữa X và Y) giúp câu văn mang tính triết lý và chuyên nghiệp. Trong tiếng Anh, cấu trúc 'Striking the right balance' được dùng tương đương để diễn tả sự khéo léo trong cách sắp xếp.",
+    "challenge": "Hãy thu âm một đoạn ngắn 1 phút chia sẻ quan điểm của bạn bằng cả tiếng Anh và tiếng Trung về cách bạn cân bằng thời gian mỗi ngày.",
+    "grammarFocus": "Sử dụng cấu trúc '在...与...之间' để kết nối hai khái niệm trừu tượng.",
+    "vocabulary": [
+      "professional ambitions · 职业追求 · theo đuổi nghề nghiệp",
+      "personal well-being · 个人身心健康 · sức khỏe cá nhân",
+      "art in itself · 一门艺术 · vốn là một nghệ thuật"
+    ],
+    "wish": "Chúc bạn buổi sáng tràn đầy cảm hứng, tự tin sắp xếp mọi việc thật trôi chảy và tận hưởng từng khoảnh khắc ý nghĩa.",
+    "nightWish": "Khép lại một ngày nhiều suy ngẫm, chúc bạn chìm vào giấc ngủ sâu với tâm hồn thật nhẹ nhàng và bình yên.",
+    "generatedAt": "2026-11-01T15:37:20.646Z",
+    "generator": "gemini-3.5-flash-lite"
+  },
+  {
+    "id": "lesson-0101",
+    "stage": "B1 · Phản xạ trong đời sống",
+    "kind": "message",
+    "title": "Nhắn tin báo cáo nhanh tình huống khẩn cấp tại văn phòng",
+    "context": "Nhắn tin cho đồng nghiệp vào buổi trưa để thông báo về sự cố hệ thống dữ liệu.",
+    "lines": [
+      {
+        "speaker": "A",
+        "english": "Just a heads-up, the primary server crashed unexpectedly, so our team is currently rushing to restore the backup data.",
+        "chinese": "提前跟你说一声，主服务器突然宕机了，我们团队目前正全力以赴恢复备份数据。",
+        "pinyin": "tíqián gēn nǐ shuō yīshēng, zhǔ fúwùqì tūrán dàngjī le, wǒmen tuánduì mùqián zhèng quánlì yǐfù huīfù bèifèn shùjù.",
+        "vietnameseReading": "thí(2) chién(2) cên(1) nỉ(3) suô(1) i(1) sâng(1) chủ(3) phơ(2) uô(4) chỉ(4) thu(1) ran(2) tang(4) chi(1) lơ uổ(3) mần thuán(2) tuy(4) mu(4) chién(2) chấng(4) chuán(2) li(4) ỉ(3) phu(4) huy(1) phu(4) pây(4) phên(4) su(4) chu(4)",
+        "vietnamese": "Báo trước với bạn một tiếng, máy chủ chính đột nhiên bị sập, đội ngũ của chúng tôi hiện đang nỗ lực hết sức để khôi phục dữ liệu sao lưu."
+      }
+    ],
+    "note": "Cụm từ '提前跟你说一声' (Báo trước với bạn một tiếng) rất phổ biến trong giao tiếp công sở qua tin nhắn để thông báo sự việc trước khi người nhận kịp hỏi. Tiếng Anh dùng 'Just a heads-up' với sắc thái tương đương.",
+    "challenge": "Viết một tin nhắn ngắn báo cáo sự cố công nghệ giả định cho sếp của bạn bằng cả hai ngôn ngữ.",
+    "grammarFocus": "Cụm từ mở đầu '提前跟你说一声' kết hợp với từ chỉ trạng thái khẩn cấp '全力以赴'.",
+    "vocabulary": [
+      "primary server · 主服务器 · máy chủ chính",
+      "crashed unexpectedly · 突然宕机 · đột ngột sập nguồn",
+      "restore backup data · 恢复备份数据 · khôi phục dữ liệu sao lưu"
+    ],
+    "wish": "Chúc bạn bữa trưa ngon miệng và giữ vững tinh thần linh hoạt để xử lý mọi tình huống phát sinh thật suôn sẻ.",
+    "nightWish": "Mong rằng màn đêm sẽ xua tan mọi mệt mỏi công việc, đưa bạn vào giấc ngủ thật êm đềm và ngon giấc.",
+    "generatedAt": "2026-11-01T15:37:20.647Z",
+    "generator": "gemini-3.5-flash-lite"
+  },
+  {
+    "id": "lesson-0102",
+    "stage": "B1 · Phản xạ trong đời sống",
+    "kind": "dialogue",
+    "title": "Trò chuyện về việc lựa chọn không gian sống ở thành phố lớn",
+    "context": "Hai người bạn gặp nhau vào buổi tối để bàn về việc chuyển nhà ra vùng ngoại ô.",
+    "lines": [
+      {
+        "speaker": "A",
+        "english": "Have you seriously considered renting an apartment in the suburbs to escape the city noise?",
+        "chinese": "你有认真考虑过在郊区租一套公寓来 逃离城市的喧嚣吗？",
+        "pinyin": "nǐ yǒu rènzhēn kǎolǜ guò zài jiāoqū zū yī tào gōngyù lái táolí chéngshì de xuānxiāo ma?",
+        "vietnameseReading": "nỉ(3) iểu(3) rần(4) chên(1) khảo(3) lu(4) cuô(4) trai(4) chia(1) khu(1) chu(1) i(1) thao(4) công(1) uy(4) lai(2) thao(2) lí(2) chấng(2) sứ(4) tơ suản(1) xẻo(1) ma",
+        "vietnamese": "Cậu đã thực sự cân nhắc việc thuê một căn hộ ở ngoại ô để trốn chạy khỏi sự ồn ào của thành phố chưa?"
+      },
+      {
+        "speaker": "B",
+        "english": "I would love the quietness, but the trade-off is losing hours on the daily commute.",
+        "chinese": "我很想要那份安静，但代价是每天上下班通勤要耗费好几个小时。",
+        "pinyin": "wǒ hěn xiǎng yào nà fèn ānjìng, dàn dàijià shì měitiān shàngxiàbān tōngqín yào hàofèi hǎojǐ gè xiǎoshí.",
+        "vietnameseReading": "uổ(3) hẩn(3) xiảng(3) yao(4) na(4) phên(4) an(1) chỉng(4) tan(4) đai(4) chia(4) sứ(4) mây(3) thêm(1) sang(4) xia(4) ban(1) thong(1) chín(2) yao(4) hảo(4) phây(4) hảo(3) chỉ(3) cợ(4) xẻo(3) sứ(2)",
+        "vietnamese": "Tớ rất muốn có sự yên tĩnh đó, nhưng cái giá phải trả là việc đi lại mỗi ngày sẽ ngốn mất mấy tiếng đồng hồ."
+      },
+      {
+        "speaker": "A",
+        "english": "Fair enough. Convenience always comes at a price in modern urban life.",
+        "chinese": "说得也是。在现代都市生活中，便利性总是伴随着一定的代价。",
+        "pinyin": "shuō de yě shì. zài xiàndài dūshì shēnghuó zhōng, biànlìxìng zǒngshì bànsuí zhe yīdìng de dàijià.",
+        "vietnameseReading": "suô(1) tơ iê(3) sứ(4) trai(4) xiên(4) đai(4) Tu(1) sứ(4) sâng(1) huó(2) trung(1) piên(4) li(4) xíng(4) chung(3) sứ(4) ban(4) suý(2) chơ i(1) tìng(4) tơ đai(4) chia(4)",
+        "vietnamese": "Nói cũng phải. Trong cuộc sống đô thị hiện đại, sự tiện lợi luôn đi kèm với một cái giá nhất định."
+      }
+    ],
+    "note": "Cấu trúc '...伴随着...' (Đi kèm với...) mô tả mối quan hệ nhân quả song hành giữa hai hiện tượng. Cụm '说得也是' (Nói cũng phải) là cách đồng tình rất tự nhiên khi đối phương đưa ra một luận điểm hợp lý.",
+    "challenge": "Hãy đóng vai một trong hai người và ghi âm lại đoạn hội thoại trên với ngữ điệu tự nhiên, thuyết phục.",
+    "grammarFocus": "Sử dụng '...伴随着...' để chỉ sự đi kèm tất yếu của một đặc điểm trong hoàn cảnh cụ thể.",
+    "vocabulary": [
+      "suburbs · 郊区 · vùng ngoại ô",
+      "city noise · 城市的喧嚣 · sự ồn ào của thành phố",
+      "daily commute · 上下班通勤 · việc đi lại làm việc hằng ngày"
+    ],
+    "wish": "Chúc bạn buổi tối ấm cúng bên gia đình, thư giãn trọn vẹn sau một ngày dài bận rộn với những guồng quay.",
+    "nightWish": "Chúc bạn ngủ ngon, mơ những giấc mơ đẹp và nạp đầy năng lượng tích cực cho một ngày mới tuyệt vời.",
+    "generatedAt": "2026-11-01T15:37:20.647Z",
+    "generator": "gemini-3.5-flash-lite"
   }
 ]
