@@ -396,13 +396,6 @@ export default function Home() {
       setPushMessage("Hãy cài app lên Màn hình chính trước khi bật thẻ Màn hình khóa.");
       return;
     }
-    const inviteCode = localStorage.getItem(STORAGE.invite) || "";
-    if (!inviteCode) {
-      setPushState("error");
-      setPushMessage("Thiếu liên kết riêng. Hãy mở lại đúng đường link đã được gửi trước khi bật.");
-      return;
-    }
-
     setPushState("enabling");
     setPushMessage("");
     try {
@@ -420,7 +413,7 @@ export default function Home() {
       const startSequence = routineStartSequence ?? scheduleAt(Date.now()).sequence;
       const response = await fetch(`${PUSH_API_URL}/subscribe`, {
         method: "POST",
-        headers: { "content-type": "application/json", "x-invite-code": inviteCode },
+        headers: { "content-type": "application/json" },
         body: JSON.stringify({
           subscription: subscription.toJSON(),
           timezone: Intl.DateTimeFormat().resolvedOptions().timeZone || "Asia/Ho_Chi_Minh",
@@ -474,7 +467,7 @@ export default function Home() {
       setInviteDraft("");
       setInviteReady(true);
       setPushState("idle");
-      setPushMessage("Đã kích hoạt liên kết riêng. Bây giờ hãy bấm Bật ở mục Thẻ bài học Màn hình khóa.");
+      setPushMessage("Đã mở Tra nhanh AI trên iPhone này.");
     } catch (error) {
       setPushState("error");
       setPushMessage(error instanceof Error ? error.message : "Chưa kiểm tra được mã ghép đôi.");
@@ -488,11 +481,10 @@ export default function Home() {
     try {
       const registration = await navigator.serviceWorker.ready;
       const subscription = await registration.pushManager.getSubscription();
-      const inviteCode = localStorage.getItem(STORAGE.invite) || "";
-      if (subscription && PUSH_API_URL && inviteCode) {
+      if (subscription && PUSH_API_URL) {
         await fetch(`${PUSH_API_URL}/subscribe`, {
           method: "DELETE",
-          headers: { "content-type": "application/json", "x-invite-code": inviteCode },
+          headers: { "content-type": "application/json" },
           body: JSON.stringify({ endpoint: subscription.endpoint }),
         });
       }
@@ -742,8 +734,8 @@ export default function Home() {
           </article>
           {PUSH_API_URL && !inviteReady && (
             <div className="pairing-box">
-              <label htmlFor="pairing-code"><strong>Kích hoạt liên kết riêng</strong><small>Sao chép nguyên đường link trong Zalo rồi dán vào đây. Chỉ cần làm một lần.</small></label>
-              <div><input id="pairing-code" value={inviteDraft} onChange={(event) => setInviteDraft(event.target.value)} placeholder="Dán nguyên đường link riêng…" inputMode="url" autoCapitalize="none" autoCorrect="off" /><button disabled={savingInvite} onClick={saveInviteCode}>{savingInvite ? "Đang kiểm tra…" : "Kích hoạt"}</button></div>
+              <label htmlFor="pairing-code"><strong>Mở Tra nhanh AI (tùy chọn)</strong><small>Không cần cho thông báo. Chỉ dán đường link riêng nếu muốn dùng Gemini để tra từ.</small></label>
+              <div><input id="pairing-code" value={inviteDraft} onChange={(event) => setInviteDraft(event.target.value)} placeholder="Dán đường link riêng cho Tra nhanh…" inputMode="url" autoCapitalize="none" autoCorrect="off" /><button disabled={savingInvite} onClick={saveInviteCode}>{savingInvite ? "Đang kiểm tra…" : "Mở Tra nhanh"}</button></div>
             </div>
           )}
           {pushMessage && <p className={`settings-message ${pushState === "error" ? "error-note" : ""}`}>{pushMessage}</p>}

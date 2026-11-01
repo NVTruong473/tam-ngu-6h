@@ -91,7 +91,8 @@ test("keeps Gemini credentials server-only while shipping push and quick lookup"
   assert.match(page, /LOOKUP_CACHE_KEY/);
   assert.match(page, /subscription\.unsubscribe/);
   assert.match(page, /inviteCodeFromInput/);
-  assert.match(page, /Dán nguyên đường link riêng/);
+  assert.match(page, /Mở Tra nhanh AI \(tùy chọn\)/);
+  assert.match(page, /Không cần cho thông báo/);
   assert.match(appendGenerator, /generateValidatedLessons/);
   assert.match(appendGenerator, /reviewGeneratedLessons/);
   assert.match(appendGenerator, /assertPlainText/);
@@ -107,6 +108,12 @@ test("keeps Gemini credentials server-only while shipping push and quick lookup"
   assert.match(edgeWorker, /GEMINI_API_KEYS/);
   assert.match(edgeWorker, /constantTimeEqual/);
   assert.match(edgeWorker, /isApplePushEndpoint/);
+  assert.match(edgeWorker, /isTrustedAppOrigin/);
+  const subscribeSource = edgeWorker.slice(edgeWorker.indexOf("async function subscribe"), edgeWorker.indexOf("async function unsubscribe"));
+  const unsubscribeSource = edgeWorker.slice(edgeWorker.indexOf("async function unsubscribe"), edgeWorker.indexOf("function verifyInvite"));
+  assert.doesNotMatch(subscribeSource, /x-invite-code/);
+  assert.doesNotMatch(unsubscribeSource, /x-invite-code/);
+  assert.match(subscribeSource, /count: "exact"/);
   assert.doesNotMatch(edgeWorker, /mode: "silent"/);
   assert.match(secretConfigurer, /mkdtempSync/);
   assert.match(secretConfigurer, /GEMINI_API_KEYS/);

@@ -10,6 +10,22 @@ if (!healthResponse.ok || !health?.ok || !health.pushConfigured || !health.looku
   throw new Error("Health check chưa xác nhận được Push và Gemini lookup.");
 }
 
+const publicPushProbe = await fetch(`${apiUrl}/subscribe`, {
+  method: "POST",
+  headers: {
+    "content-type": "application/json",
+    origin: "https://nvtruong473.github.io",
+  },
+  body: JSON.stringify({
+    subscription: { endpoint: "https://example.com/not-an-apple-endpoint", keys: { p256dh: "probe", auth: "probe" } },
+    timezone: "Asia/Ho_Chi_Minh",
+    routineStartSequence: 0,
+  }),
+});
+if (publicPushProbe.status !== 400) {
+  throw new Error("Đăng ký Push một chạm chưa hoạt động đúng hoặc đang bị chặn bởi mã mời.");
+}
+
 const privateInvite = execFileSync("security", ["find-generic-password", "-s", "TamNgu6H Invite", "-w"], { encoding: "utf8" }).trim();
 let inviteCode = privateInvite;
 try {
@@ -84,4 +100,4 @@ async function verifyLookup(query) {
 
 await verifyLookup("take it easy");
 await verifyLookup("慢一点");
-process.stdout.write("Health, Web Push configuration và hai lượt tra Gemini (Anh/Trung) đã đạt. Không in mã mời hoặc API key.\n");
+process.stdout.write("Health, Push một chạm và hai lượt tra Gemini (Anh/Trung) đã đạt. Không in mã mời hoặc API key.\n");

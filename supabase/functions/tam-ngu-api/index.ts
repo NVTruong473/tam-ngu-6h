@@ -155,6 +155,10 @@ function isApplePushEndpoint(endpoint: string) {
   }
 }
 
+function isTrustedAppOrigin(origin: string | null) {
+  return Boolean(origin && allowedOrigins.has(origin));
+}
+
 function supabaseAdmin() {
   const url = Deno.env.get("SUPABASE_URL");
   const serviceRole = Deno.env.get("SUPABASE_SERVICE_ROLE_KEY");
@@ -170,9 +174,7 @@ function geminiKeys() {
 }
 
 async function subscribe(request: Request, origin: string | null) {
-  if (!authorized(request, "x-invite-code", Deno.env.get("TAM_NGU_INVITE_CODE"))) {
-    return json({ error: "Liên kết mời không hợp lệ." }, 401, origin);
-  }
+  if (!isTrustedAppOrigin(origin)) return json({ error: "Yêu cầu không đến từ Tam Ngữ 6H." }, 403, origin);
   const body = await request.json().catch(() => null) as null | {
     subscription?: WebPushSubscription;
     timezone?: string;
@@ -182,7 +184,22 @@ async function subscribe(request: Request, origin: string | null) {
   if (!isApplePushEndpoint(endpoint)) return json({ error: "Hãy mở Tam Ngữ từ icon đã cài trên iPhone, rồi thử lại." }, 400, origin);
   if (!Number.isFinite(body?.routineStartSequence)) return json({ error: "Chưa xác định được nhịp học. Hãy mở lại app rồi thử lại nhé." }, 400, origin);
 
-  const { error } = await supabaseAdmin().from("tam_ngu_push_subscriptions").upsert({
+  const admin = supabaseAdmin();
+  const { data: existing, error: existingError } = await admin
+    .from("tam_ngu_push_subscriptions")
+    .select("endpoint")
+    .eq("endpoint", endpoint)
+    .maybeSingle();
+  if (existingError) throw existingError;
+  if (!existing) {
+    const { count, error: countError } = await admin
+      .from("tam_ngu_push_subscriptions")
+      .select("endpoint", { count: "exact", head: true });
+    if (countError) throw countError;
+    if ((count || 0) >= 100) return json({ error: "Danh sách thiết bị đang đầy. Hãy nhắn cho người gửi app nhé." }, 429, origin);
+  }
+
+  const { error } = await admin.from("tam_ngu_push_subscriptions").upsert({
     endpoint,
     subscription: body?.subscription,
     timezone: body?.timezone || "Asia/Ho_Chi_Minh",
@@ -196,11 +213,9 @@ async function subscribe(request: Request, origin: string | null) {
 }
 
 async function unsubscribe(request: Request, origin: string | null) {
-  if (!authorized(request, "x-invite-code", Deno.env.get("TAM_NGU_INVITE_CODE"))) {
-    return json({ error: "Liên kết mời không hợp lệ." }, 401, origin);
-  }
+  if (!isTrustedAppOrigin(origin)) return json({ error: "Yêu cầu không đến từ Tam Ngữ 6H." }, 403, origin);
   const body = await request.json().catch(() => null) as null | { endpoint?: string };
-  if (!body?.endpoint) return json({ error: "Thiếu endpoint." }, 400, origin);
+  if (!body?.endpoint || !isApplePushEndpoint(body.endpoint)) return json({ error: "Endpoint không hợp lệ." }, 400, origin);
   const { error } = await supabaseAdmin().from("tam_ngu_push_subscriptions").delete().eq("endpoint", body.endpoint);
   if (error) throw error;
   return json({ ok: true }, 200, origin);
