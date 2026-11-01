@@ -2762,5 +2762,108 @@
     "nightWish": "Chúc bạn ngủ ngon và có những giấc mơ đẹp, mang lại nguồn cảm hứng bất tận cho hành trình ngày mai.",
     "generatedAt": "2026-11-01T21:15:59.793Z",
     "generator": "gemini-3.5-flash-lite"
+  },
+  {
+    "id": "lesson-0106",
+    "stage": "B1 · Phản xạ trong đời sống",
+    "kind": "sentence",
+    "title": "Chia sẻ trải nghiệm sử dụng dịch vụ thông minh",
+    "context": "Nói về việc trải nghiệm một tính năng tự động hóa mới tại ngân hàng.",
+    "lines": [
+      {
+        "speaker": "A",
+        "english": "Having experienced the new facial recognition ATM, I find it way faster than inserting cards.",
+        "chinese": "体验过新型刷脸取款机后，我发现它比插卡快得多。",
+        "pinyin": "tǐ yàn guò xīn xíng shuā liǎn qǔ kuǎn jī hòu, wǒ fā xiàn tā bǐ chā kǎ kuài de duō.",
+        "vietnameseReading": "thí(3) yan(4) cuô(4) xin(1) xíng(2) soa(1) liến(3) chủ(3) khuân(3) chi(1) hâu(4) uổ(3) pha(1) xiên(4) tha(1) pỉ(3) chá(1) cả(3) khuải(4) tơ tuô(1)",
+        "vietnamese": "Sau khi trải nghiệm máy rút tiền nhận diện khuôn mặt mới, tôi thấy nó nhanh hơn cắm thẻ rất nhiều."
+      }
+    ],
+    "note": "Cấu trúc 体验过...后 (Sau khi đã trải nghiệm...) giúp nhấn mạnh một góc nhìn thực tế dựa trên hành động vừa thực hiện, rất hữu ích trong giao tiếp hiện đại.",
+    "challenge": "Hãy đặt một câu dùng cấu trúc 体验过...后 để nói về trải nghiệm của bạn với một ứng dụng di động mới.",
+    "grammarFocus": "Cấu trúc 体验过...后 dùng để chỉ mốc thời gian sau khi hoàn tất một trải nghiệm.",
+    "vocabulary": [
+      "体验 · tǐ yàn · trải nghiệm",
+      "刷脸 · shuā liǎn · quét mặt",
+      "取款机 · qǔ kuǎn jī · cây rút tiền"
+    ],
+    "wish": "Chúc bạn buổi sáng tràn đầy năng lượng, tự tin khám phá những công nghệ tiện ích mới trong ngày.",
+    "nightWish": "Mong rằng giấc ngủ đêm nay sẽ đưa bạn đến những không gian bình yên và thư thái nhất.",
+    "generatedAt": "2026-11-01T21:48:34.878Z",
+    "generator": "gemini-3.5-flash-lite"
+  },
+  {
+    "id": "lesson-0107",
+    "stage": "B1 · Phản xạ trong đời sống",
+    "kind": "message",
+    "title": "Nhắn tin thông báo thay đổi phòng họp gấp",
+    "context": "Gửi tin nhắn nhóm công sở về việc đổi phòng họp do hệ thống máy chiếu gặp sự cố.",
+    "lines": [
+      {
+        "speaker": "A",
+        "english": "Due to a sudden projector glitch in room three, our department sync is moved to the conference hall on the second floor.",
+        "chinese": "由于三号会议室的投影仪突然故障，我们部门的同步会议改到二楼报告厅了。",
+        "pinyin": "yóu yú sān hào huì yì shì de tóu yǐng yí tū rán gù zhàng, wǒ men bù mén de tóng bù huì yì gǎi dào èr lóu bào gào tīng le.",
+        "vietnameseReading": "iêu(2) ý(2) san(1) hảo(4) huây(4) i(4) sứ(4) tơ thâu(2) ỉng(3) y(2) thu(1) ran(2) cu(4) chảng(4) uổ(3) mần pu(4) mớn(2) tơ thúng(2) pu(4) huây(4) i(4) cải(3) tao(4) ơ(4) lâu(2) pao(4) cao(4) thinh(1) lơ",
+        "vietnamese": "Do máy chiếu phòng họp số ba hỏng bất ngờ, cuộc họp đồng bộ của bộ phận chúng ta chuyển sang hội trường lầu hai."
+      }
+    ],
+    "note": "Cụm từ 由于...故障 (Do sự cố...) kết hợp với 改到 (chuyển đến) là cách thông báo thay đổi kế hoạch cực kỳ chuyên nghiệp trong môi trường công sở.",
+    "challenge": "Hãy viết một tin nhắn ngắn báo chuyển địa điểm họp do sự cố kỹ thuật bằng tiếng Trung.",
+    "grammarFocus": "Cấu trúc nguyên nhân kết quả 由于...，...改到... dùng trong thông báo hành chính.",
+    "vocabulary": [
+      "投影仪 · tóu yǐng yí · máy chiếu",
+      "故障 · gù zhàng · sự cố hỏng hóc",
+      "报告厅 · bào gào tīng · hội trường báo cáo"
+    ],
+    "wish": "Chúc bạn buổi trưa giải quyết xong xuôi mọi thay đổi bất ngờ và có thời gian nghỉ ngơi trọn vẹn.",
+    "nightWish": "Khép lại một ngày bận rộn bằng giấc ngủ sâu, để tâm trí được hoàn toàn thả lỏng và phục hồi.",
+    "generatedAt": "2026-11-01T21:48:34.878Z",
+    "generator": "gemini-3.5-flash-lite"
+  },
+  {
+    "id": "lesson-0108",
+    "stage": "B1 · Phản xạ trong đời sống",
+    "kind": "dialogue",
+    "title": "Thảo luận về sở thích sưu tầm đồ cổ hoài niệm",
+    "context": "Hai đồng nghiệp trò chuyện về lý do thích sưu tầm những món đồ cũ mang dấu ấn thời gian.",
+    "lines": [
+      {
+        "speaker": "A",
+        "english": "I notice you have quite a few vintage items on your desk. What makes you fond of them?",
+        "chinese": "我发现你的桌上摆了不少复古老物件，是什么让你对它们情有独钟？",
+        "pinyin": "wǒ fā xiàn nǐ de zhuō shàng bǎi le bù shǎo fù gǔ lǎo wù jiàn, shì shén me ràng nǐ duì tā men qíng yǒu dú zhōng?",
+        "vietnameseReading": "uổ(3) pha(1) xiên(4) nỉ(3) tơ truô(1) sang(4) bài(3) lơ pu(4) sáo(3) phu(4) cu(3) láo(3) uô(4) chiên(4) sứ(4) sấn(2) mơ rang(4) nỉ(3) tuy(4) tha(1) mần chìng(2) iểu(3) tu(2) trung(1)",
+        "vietnamese": "Tôi thấy trên bàn bạn bày không ít món đồ cổ hoại niệm, điều gì khiến bạn dành tình cảm đặc biệt cho chúng thế?"
+      },
+      {
+        "speaker": "B",
+        "english": "Unlike modern mass-produced goods, every single old piece carries a unique story of its previous owner.",
+        "chinese": "与现代批量生产的商品不同，每一件旧物都承载着前主人独一无二的故事。",
+        "pinyin": "yǔ xiàn dài pī liàng shēng chǎn de shāng pǐn bù tóng, měi yī jiàn jiù wù dōu chéng zài zhe qián zhǔ rén dú yī wú èr de gù shi.",
+        "vietnameseReading": "ỷ(3) xiên(4) đai(4) pi(1) liảng(4) sâng(1) chan(3) tơ sang(1) pín(3) pu(4) thúng(2) mây(3) i(1) chiên(4) chiêu(4) uô(4) tâu(1) chấng(2) trai(4) chơ chién(2) chủ(3) rấn(2) tu(2) i(1) ú(2) ơ(4) tơ cu(4) sứ",
+        "vietnamese": "Khác với hàng sản xuất hàng loạt hiện đại, mỗi món đồ cũ đều mang trên mình câu chuyện độc nhất của chủ nhân trước."
+      },
+      {
+        "speaker": "A",
+        "english": "That makes sense. Preserving them is like keeping a small piece of history alive.",
+        "chinese": "说得也是，保留它们就像让历史的碎片继续鲜活地存在着。",
+        "pinyin": "shuō de yě shì, bǎo liú tā men jiù xiàng ràng lì shǐ de suì piàn jì xù xiān huó de cún zài zhe.",
+        "vietnameseReading": "suô(1) tơ iê(3) sứ(4) bả(3) liu(2) tha(1) mần chiêu(4) xiang(4) rang(4) li(4) chỉ(3) tơ suý(4) pien(4) chi(4) sy(4) xiên(1) huó(2) tơ xuân(2) trai(4) chơ",
+        "vietnamese": "Nói cũng phải, gìn giữ chúng giống như giữ cho những mảnh ghép lịch sử tiếp tục sống động."
+      }
+    ],
+    "note": "Cấu trúc 与...不同 (Khác với...) dùng để so sánh hai đối tượng; cụm từ 情有独钟 diễn tả sự si mê, ưu ái đặc biệt đối với một sở thích nào đó.",
+    "challenge": "Hãy đóng vai A và B đọc to đoạn hội thoại, chú ý ngữ điệu tán đồng ở lượt nói cuối.",
+    "grammarFocus": "Cấu trúc so sánh 与...不同 và cụm tính từ miêu tả cảm xúc 情有独钟.",
+    "vocabulary": [
+      "复古 · fù gǔ · hoài cổ / vintage",
+      "承载 · chéng zài · mang theo / chứa đựng",
+      "碎片 · suì piàn · mảnh vỡ / mảnh ghép"
+    ],
+    "wish": "Chúc bạn buổi tối ấm cúng, tìm thấy niềm vui tĩnh lặng bên những sở thích và đam mê riêng của mình.",
+    "nightWish": "Chúc bạn chìm vào giấc ngủ êm đềm, mang theo những hoài niệm đẹp và thức dậy với nụ cười.",
+    "generatedAt": "2026-11-01T21:48:34.878Z",
+    "generator": "gemini-3.5-flash-lite"
   }
 ]
