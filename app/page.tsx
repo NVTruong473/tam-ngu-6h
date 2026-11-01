@@ -6,10 +6,12 @@ import curriculumData from "./curriculum.json";
 type Tab = "today" | "library" | "settings";
 type PushState = "idle" | "enabling" | "enabled" | "unsupported" | "error";
 type LookupState = "idle" | "loading" | "success" | "error";
+type LookupIntent = "Vocabulary" | "Translation" | "Grammar" | "Correction" | "Conversation" | "Explanation";
 type StudyLine = { speaker: string; english: string; chinese: string; pinyin: string; vietnameseReading: string; vietnamese: string };
 type LookupExample = { english: string; chinese: string; pinyin: string; vietnameseReading: string; vietnamese: string };
 type LookupResult = {
-  sourceLanguage: "English" | "Chinese" | "Mixed";
+  sourceLanguage: string;
+  intent: LookupIntent;
   term: string;
   pinyin: string;
   vietnameseReading: string;
@@ -37,11 +39,15 @@ type StudyModule = {
 const curriculum = curriculumData as StudyModule[];
 const PUSH_API_URL = (process.env.NEXT_PUBLIC_PUSH_API_URL || "").replace(/\/$/, "");
 const FEEDBACK_FORM_URL = (process.env.NEXT_PUBLIC_FEEDBACK_FORM_URL || "").trim();
-const LOOKUP_CACHE_KEY = "tamngu6h.lookup-cache.v1";
+const LOOKUP_CACHE_KEY = "tamngu6h.lookup-cache.v2";
+const LOOKUP_QUERY_MAXIMUM = 240;
+const LOOKUP_INTENTS: LookupIntent[] = ["Vocabulary", "Translation", "Grammar", "Correction", "Conversation", "Explanation"];
+const DEFAULT_SCHEDULE = ["06:00", "12:00", "18:00"];
 const STORAGE = {
   routine: "tamngu6h.routine",
   routineStart: "tamngu6h.routineStart",
   invite: "tamngu6h.invite",
+  schedule: "tamngu6h.schedule.v1",
 };
 
 const WISHES = {
@@ -142,6 +148,10 @@ function hasLatinLookupText(value: unknown) {
   return isPlainLookupText(value) && /\p{Script=Latin}/u.test(value) && !containsChinese(value);
 }
 
+function hasReadableVietnameseText(value: unknown) {
+  return isPlainLookupText(value) && /\p{Script=Latin}/u.test(value);
+}
+
 function hasChineseLookupText(value: unknown) {
   return isPlainLookupText(value) && containsChinese(value) && !/[A-Za-z]/.test(value);
 }
@@ -177,10 +187,12 @@ function validLookupExample(value: unknown): value is LookupExample {
 function validLookupResult(value: unknown): value is LookupResult {
   if (!value || typeof value !== "object") return false;
   const result = value as Partial<LookupResult>;
-  if (!(["English", "Chinese", "Mixed"] as const).includes(result.sourceLanguage as LookupResult["sourceLanguage"])) return false;
-  if (!isPlainLookupText(result.partOfSpeech)
-    || !hasLatinLookupText(result.meaning)
-    || !hasLatinLookupText(result.note)
+  if (!isPlainLookupText(result.sourceLanguage)
+    || result.sourceLanguage.length > 40
+    || !LOOKUP_INTENTS.includes(result.intent as LookupIntent)
+    || !isPlainLookupText(result.partOfSpeech)
+    || !hasReadableVietnameseText(result.meaning)
+    || !hasReadableVietnameseText(result.note)
     || !Array.isArray(result.examples)
     || result.examples.length !== 2
     || !result.examples.every(validLookupExample)) return false;
@@ -188,53 +200,56 @@ function validLookupResult(value: unknown): value is LookupResult {
   const term = result.term || "";
   const pinyin = result.pinyin || "";
   const vietnameseReading = result.vietnameseReading || "";
-  if (result.sourceLanguage === "Chinese" && !hasChineseLookupText(term)) return false;
-  if (result.sourceLanguage === "English" && !hasLatinLookupText(term)) return false;
-  if (result.sourceLanguage === "Mixed" && !isPlainLookupText(term)) return false;
-  if (!containsChinese(term)) return pinyin === "" && vietnameseReading === "";
-  return hasLatinLookupText(pinyin)
+  if (!isPlainLookupText(term)) return false;
+  if (result.sourceLanguage !== "Chinese") return pinyin === "" && vietnameseReading === "";
+  return hasChineseLookupText(term)
+    && hasLatinLookupText(pinyin)
     && isVietnameseFriendlyReading(vietnameseReading)
     && hasMatchingToneGuides(pinyin, vietnameseReading);
 }
 
-function scheduleAt(timestamp: number) {
+function lookupIntentLabel(intent: LookupIntent) {
+  return ({
+    Vocabulary: "Từ vựng",
+    Translation: "Dịch nghĩa",
+    Grammar: "Ngữ pháp",
+    Correction: "Sửa câu",
+    Conversation: "Hội thoại",
+    Explanation: "Giải thích",
+  } as Record<LookupIntent, string>)[intent];
+}
+
+function normalizeScheduleTimes(value: unknown) {
+  if (!Array.isArray(value)) return DEFAULT_SCHEDULE;
+  const times = [...new Set(value.filter((time): time is string => typeof time === "string" && /^(?:[01]\d|2[0-3]):[0-5]\d$/.test(time)))].sort();
+  return times.length >= 1 && times.length <= 24 ? times : DEFAULT_SCHEDULE;
+}
+
+function scheduleAt(timestamp: number, configuredTimes = DEFAULT_SCHEDULE) {
+  const times = normalizeScheduleTimes(configuredTimes);
   const current = new Date(timestamp || Date.now());
   const hour = current.getHours();
+  const currentMinutes = hour * 60 + current.getMinutes();
   const contentDate = new Date(current.getFullYear(), current.getMonth(), current.getDate());
-  let phase: keyof typeof WISHES;
-  let lessonSlot: number;
-  let nextAt: Date;
-
-  if (hour < 6) {
-    phase = "night";
-    lessonSlot = 2;
+  const minuteValues = times.map((time) => Number(time.slice(0, 2)) * 60 + Number(time.slice(3)));
+  let lessonSlot = minuteValues.findLastIndex((minutes) => minutes <= currentMinutes);
+  if (lessonSlot < 0) {
+    lessonSlot = times.length - 1;
     contentDate.setDate(contentDate.getDate() - 1);
-    nextAt = new Date(current.getFullYear(), current.getMonth(), current.getDate(), 6);
-  } else if (hour < 12) {
-    phase = "morning";
-    lessonSlot = 0;
-    nextAt = new Date(current.getFullYear(), current.getMonth(), current.getDate(), 12);
-  } else if (hour < 18) {
-    phase = "noon";
-    lessonSlot = 1;
-    nextAt = new Date(current.getFullYear(), current.getMonth(), current.getDate(), 18);
-  } else if (hour < 22) {
-    phase = "evening";
-    lessonSlot = 2;
-    nextAt = new Date(current.getFullYear(), current.getMonth(), current.getDate(), 22);
-  } else {
-    phase = "night";
-    lessonSlot = 2;
-    nextAt = new Date(current.getFullYear(), current.getMonth(), current.getDate() + 1, 6);
   }
+  const nextIndex = minuteValues.findIndex((minutes) => minutes > currentMinutes);
+  const nextTime = times[nextIndex < 0 ? 0 : nextIndex];
+  const [nextHour, nextMinute] = nextTime.split(":").map(Number);
+  const nextAt = new Date(current.getFullYear(), current.getMonth(), current.getDate() + (nextIndex < 0 ? 1 : 0), nextHour, nextMinute);
+  const phase: keyof typeof WISHES = hour < 6 ? "night" : hour < 12 ? "morning" : hour < 18 ? "noon" : hour < 22 ? "evening" : "night";
 
   const dayNumber = Math.floor(Date.UTC(contentDate.getFullYear(), contentDate.getMonth(), contentDate.getDate()) / 86400000);
-  const sequence = dayNumber * 3 + lessonSlot;
+  const sequence = dayNumber * times.length + lessonSlot;
   const dateKey = `${contentDate.getFullYear()}-${contentDate.getMonth() + 1}-${contentDate.getDate()}-${phase}`;
   const choices = WISHES[phase];
   const wish = choices[Math.abs(hashText(dateKey)) % choices.length];
   const labels = { morning: "BUỔI SÁNG", noon: "BUỔI TRƯA", evening: "BUỔI TỐI", night: "CHÚC NGỦ NGON" };
-  return { sequence, phase, wish, label: labels[phase], nextAt: nextAt.getTime() };
+  return { sequence, phase, wish, label: labels[phase], nextAt: nextAt.getTime(), nextTime };
 }
 
 function speak(text: string, language: string) {
@@ -277,8 +292,11 @@ export default function Home() {
   const [lookupMessage, setLookupMessage] = useState("");
   const [lookupResult, setLookupResult] = useState<LookupResult | null>(null);
   const [lookupCache, setLookupCache] = useState<LookupCacheEntry[]>([]);
+  const [scheduleTimes, setScheduleTimes] = useState(DEFAULT_SCHEDULE);
+  const [scheduleTimeDraft, setScheduleTimeDraft] = useState("09:00");
+  const [savingSchedule, setSavingSchedule] = useState(false);
 
-  const schedule = scheduleAt(now);
+  const schedule = scheduleAt(now, scheduleTimes);
   const unlockedIndex = routineStartSequence === null ? 0 : Math.max(0, schedule.sequence - routineStartSequence);
   const moduleIndex = viewingScheduled ? Math.min(unlockedIndex, curriculum.length - 1) : selectedModuleIndex;
   const studyModule = curriculum[moduleIndex] ?? curriculum[0];
@@ -302,11 +320,14 @@ export default function Home() {
   useEffect(() => {
     const storedRoutine = localStorage.getItem(STORAGE.routine) === "true";
     const storedStart = Number(localStorage.getItem(STORAGE.routineStart));
+    let storedSchedule = DEFAULT_SCHEDULE;
+    try { storedSchedule = normalizeScheduleTimes(JSON.parse(localStorage.getItem(STORAGE.schedule) || "null")); } catch {}
     queueMicrotask(() => {
       const currentTime = Date.now();
+      setScheduleTimes(storedSchedule);
       setRoutineEnabled(storedRoutine);
       if (Number.isFinite(storedStart) && storedStart > 0) setRoutineStartSequence(storedStart);
-      else if (storedRoutine) setRoutineStartSequence(scheduleAt(currentTime).sequence);
+      else if (storedRoutine) setRoutineStartSequence(scheduleAt(currentTime, storedSchedule).sequence);
       setNow(currentTime);
       setReady(true);
     });
@@ -375,7 +396,7 @@ export default function Home() {
 
   function startRoutine() {
     setRoutineEnabled(true);
-    setRoutineStartSequence((current) => current ?? scheduleAt(Date.now()).sequence);
+    setRoutineStartSequence((current) => current ?? scheduleAt(Date.now(), scheduleTimes).sequence);
     setViewingScheduled(true);
   }
 
@@ -410,7 +431,7 @@ export default function Home() {
         userVisibleOnly: true,
         applicationServerKey: urlBase64ToUint8Array(publicKey),
       });
-      const startSequence = routineStartSequence ?? scheduleAt(Date.now()).sequence;
+      const startSequence = routineStartSequence ?? scheduleAt(Date.now(), scheduleTimes).sequence;
       const response = await fetch(`${PUSH_API_URL}/subscribe`, {
         method: "POST",
         headers: { "content-type": "application/json" },
@@ -418,6 +439,8 @@ export default function Home() {
           subscription: subscription.toJSON(),
           timezone: Intl.DateTimeFormat().resolvedOptions().timeZone || "Asia/Ho_Chi_Minh",
           routineStartSequence: startSequence,
+          scheduleTimes,
+          lessonCursor: unlockedIndex,
         }),
       });
       if (!response.ok) {
@@ -426,8 +449,13 @@ export default function Home() {
       }
       try {
         const appRoot = new URL("./", window.location.href).href;
-        await registration.showNotification("Tam Ngữ 6H đã sẵn sàng", {
-          body: "Đã bật bài lúc 06:00 · 12:00 · 18:00. Khóa màn hình để xem thẻ xác nhận này nhé.",
+        const previewLine = studyModule.lines[0];
+        await registration.showNotification(`✨ ${studyModule.title}`, {
+          body: [
+            `EN · ${previewLine?.english || "A new lesson is waiting for you."}`,
+            `中 · ${previewLine?.chinese || "新的一课在等你。"}`,
+            `VI · ${previewLine?.vietnamese || "Một bài học mới đang chờ cậu."}`,
+          ].join("\n"),
           icon: new URL("./icons/icon-192.png", window.location.href).href,
           badge: new URL("./icons/icon-192.png", window.location.href).href,
           tag: "tam-ngu-current-lesson",
@@ -440,10 +468,66 @@ export default function Home() {
       setRoutineEnabled(true);
       setRoutineStartSequence(startSequence);
       setPushState("enabled");
-      setPushMessage("Đã bật thành công. Một thẻ xác nhận vừa được gửi; các bài tiếp theo đến lúc 06:00, 12:00 và 18:00.");
+      setPushMessage(`Đã bật. Thẻ tam ngữ mẫu vừa được gửi; lịch có ${scheduleTimes.length} mốc mỗi ngày.`);
     } catch (error) {
       setPushState("error");
       setPushMessage(error instanceof Error ? error.message : "Không bật được thông báo.");
+    }
+  }
+
+  function addScheduleTime() {
+    const next = normalizeScheduleTimes([...scheduleTimes, scheduleTimeDraft]);
+    if (scheduleTimes.includes(scheduleTimeDraft)) {
+      setPushMessage("Giờ này đã có trong lịch.");
+      return;
+    }
+    if (scheduleTimes.length >= 24) {
+      setPushMessage("Mỗi ngày tối đa 24 mốc thông báo.");
+      return;
+    }
+    setScheduleTimes(next);
+    setPushMessage("");
+  }
+
+  function removeScheduleTime(time: string) {
+    if (scheduleTimes.length === 1) {
+      setPushMessage("Lịch cần ít nhất một mốc mỗi ngày.");
+      return;
+    }
+    setScheduleTimes(scheduleTimes.filter((item) => item !== time));
+  }
+
+  async function saveSchedule() {
+    const normalized = normalizeScheduleTimes(scheduleTimes);
+    setSavingSchedule(true);
+    try {
+      const currentUnlocked = unlockedIndex;
+      const nextStart = scheduleAt(Date.now(), normalized).sequence - currentUnlocked;
+      localStorage.setItem(STORAGE.schedule, JSON.stringify(normalized));
+      localStorage.setItem(STORAGE.routineStart, String(nextStart));
+      setScheduleTimes(normalized);
+      setRoutineStartSequence(nextStart);
+      if (pushState === "enabled" && PUSH_API_URL) {
+        const registration = await navigator.serviceWorker.ready;
+        const subscription = await registration.pushManager.getSubscription();
+        if (!subscription) throw new Error("Không tìm thấy đăng ký thông báo trên máy này.");
+        const response = await fetch(`${PUSH_API_URL}/schedule`, {
+          method: "POST",
+          headers: { "content-type": "application/json" },
+          body: JSON.stringify({
+            endpoint: subscription.endpoint,
+            timezone: Intl.DateTimeFormat().resolvedOptions().timeZone || "Asia/Ho_Chi_Minh",
+            scheduleTimes: normalized,
+          }),
+        });
+        const body = await response.json().catch(() => ({})) as { error?: string };
+        if (!response.ok) throw new Error(body.error || "Chưa lưu được lịch trên máy chủ.");
+      }
+      setPushMessage(`Đã lưu ${normalized.length} mốc thông báo mỗi ngày.`);
+    } catch (error) {
+      setPushMessage(error instanceof Error ? error.message : "Chưa lưu được lịch thông báo.");
+    } finally {
+      setSavingSchedule(false);
     }
   }
 
@@ -505,7 +589,12 @@ export default function Home() {
     const query = lookupQuery.replace(/\s+/g, " ").trim();
     if (!query) {
       setLookupState("error");
-      setLookupMessage("Hãy nhập một từ hoặc một cụm ngắn trước nhé.");
+      setLookupMessage("Hãy nhập một từ, câu hoặc đoạn hội thoại ngắn trước nhé.");
+      return;
+    }
+    if (query.length > LOOKUP_QUERY_MAXIMUM) {
+      setLookupState("error");
+      setLookupMessage(`Nội dung tối đa ${LOOKUP_QUERY_MAXIMUM} ký tự nhé.`);
       return;
     }
     const cacheKey = query.toLocaleLowerCase("vi");
@@ -525,7 +614,7 @@ export default function Home() {
     }
 
     setLookupState("loading");
-    setLookupMessage("Đang tra nghĩa và ví dụ…");
+    setLookupMessage("Đang nhận diện ngôn ngữ và ý định…");
     setLookupResult(null);
     try {
       const response = await fetch(`${PUSH_API_URL}/lookup`, {
@@ -592,16 +681,15 @@ export default function Home() {
           <article className={`session-card ${routineEnabled ? "active" : ""}`}>
             <div className="session-copy">
               <p className="eyebrow">{routineEnabled ? schedule.label : "MỘT BÀI · MỘT LỜI NHẮN"}</p>
-              <h2>{routineEnabled ? currentWish : "Hẹn nhau mỗi 6 giờ"}</h2>
-              <p>{routineEnabled ? `Điều bất ngờ tiếp theo sau ${formatRemaining(remaining)}.` : "Một thẻ bài học mới sẽ đến lúc 06:00, 12:00 và 18:00."}</p>
+              <h2>{routineEnabled ? currentWish : "Hẹn nhau theo nhịp riêng"}</h2>
+              <p>{routineEnabled ? `Bài tiếp theo lúc ${schedule.nextTime}, sau ${formatRemaining(remaining)}.` : "Chọn giờ nhận những thẻ bài học phù hợp với ngày của cậu."}</p>
             </div>
             <div className="session-orbit" aria-hidden="true"><span>♥</span></div>
             {routineEnabled ? (
               <>
-                <div className="daily-times" aria-label="Các mốc bài học hằng ngày">
-                  <span className={schedule.phase === "morning" ? "current" : ""}>06:00</span>
-                  <span className={schedule.phase === "noon" ? "current" : ""}>12:00</span>
-                  <span className={schedule.phase === "evening" || schedule.phase === "night" ? "current" : ""}>18:00</span>
+                <div className="daily-times schedule-summary" aria-label="Lịch bài học hằng ngày">
+                  <span>{scheduleTimes.length} mốc / ngày</span>
+                  <span className="current">Tiếp theo {schedule.nextTime}</span>
                 </div>
                 <div className="session-actions">
                   <button className="primary-button" disabled={pushState === "enabling" || pushState === "enabled"} onClick={enableLockScreen}>
@@ -619,28 +707,30 @@ export default function Home() {
           <section className="lookup-card" aria-labelledby="lookup-title">
             <div className="lookup-heading">
               <div>
-                <p className="eyebrow">TRA NHANH · ANH / TRUNG</p>
-                <h2 id="lookup-title">Gặp từ lạ thì hỏi ngay</h2>
+                <p className="eyebrow">TRA NHANH · TỰ NHẬN DIỆN</p>
+                <h2 id="lookup-title">Hỏi từ, câu hoặc ngữ pháp</h2>
               </div>
               <span aria-hidden="true">⌕</span>
             </div>
             <form className="lookup-form" onSubmit={(event) => { event.preventDefault(); void runLookup(); }}>
-              <input
+              <textarea
                 value={lookupQuery}
                 onChange={(event) => setLookupQuery(event.target.value)}
-                placeholder="Một từ hoặc cụm Anh / Trung…"
-                aria-label="Từ hoặc cụm cần tra"
-                maxLength={100}
+                placeholder="Nhập bằng ngôn ngữ bất kỳ…"
+                aria-label="Nội dung ngôn ngữ cần tra cứu"
+                maxLength={LOOKUP_QUERY_MAXIMUM}
+                rows={2}
               />
               <button disabled={lookupState === "loading"} type="submit">{lookupState === "loading" ? "Đang tra…" : "Tra"}</button>
             </form>
+            <p className="lookup-limit">Từ, câu hoặc hội thoại ngắn · {lookupQuery.length}/{LOOKUP_QUERY_MAXIMUM}</p>
             {lookupMessage && <p className={`lookup-message ${lookupState === "error" ? "error-note" : ""}`}>{lookupMessage}</p>}
             {lookupResult && (
               <article className="lookup-result" aria-live="polite">
                 <div className="lookup-term-row">
                   <div>
                     <strong>{lookupResult.term}</strong>
-                    <small>{lookupResult.sourceLanguage} · {lookupResult.partOfSpeech}</small>
+                    <small>{lookupResult.sourceLanguage} · {lookupIntentLabel(lookupResult.intent)} · {lookupResult.partOfSpeech}</small>
                   </div>
                   <button
                     type="button"
@@ -738,8 +828,22 @@ export default function Home() {
           <article className="settings-card">
             <div className="setting-row"><span className="setting-icon">⌂</span><div><strong>Cài lên Màn hình chính</strong><small>Mở toàn màn hình với icon như một app.</small></div><button onClick={() => setShowInstall(true)}>Xem</button></div>
             <div className="setting-row"><span className="setting-icon">✓</span><div><strong>Tự động lưu</strong><small>Tiến độ và nhịp hằng ngày được lưu trên máy.</small></div><span className="status-pill">Đang bật</span></div>
-            <div className="setting-row"><span className="setting-icon">◷</span><div><strong>06:00 · 12:00 · 18:00</strong><small>Mỗi mốc có một bài mới và một lời nhắn riêng.</small></div><span className="status-pill">Mỗi ngày</span></div>
+            <div className="setting-row"><span className="setting-icon">◷</span><div><strong>{scheduleTimes.length} mốc mỗi ngày</strong><small>{scheduleTimes.join(" · ")}</small></div><span className="status-pill">Tùy chỉnh</span></div>
             <div className="setting-row"><span className="setting-icon">▣</span><div><strong>Thẻ bài học Màn hình khóa</strong><small>Hiện cả khi app đã đóng. Thẻ mới thay thẻ cũ; vuốt để xóa sau khi đọc.</small></div>{pushState === "unsupported" ? <span className="status-pill">Safari iPhone</span> : pushState === "enabled" ? <button onClick={disableLockScreen}>Tắt</button> : <button onClick={enableLockScreen}>Bật</button>}</div>
+          </article>
+          <article className="schedule-card" aria-labelledby="schedule-title">
+            <div className="schedule-card-heading">
+              <div><strong id="schedule-title">Giờ báo bài mới</strong><small>Thêm tối đa 24 mốc; mỗi giờ chỉ nhận một thẻ.</small></div>
+              <span>{scheduleTimes.length}/24</span>
+            </div>
+            <div className="schedule-times">
+              {scheduleTimes.map((time) => <button key={time} type="button" onClick={() => removeScheduleTime(time)} aria-label={`Xóa mốc ${time}`}>{time}<span>×</span></button>)}
+            </div>
+            <div className="schedule-add">
+              <input type="time" value={scheduleTimeDraft} onChange={(event) => setScheduleTimeDraft(event.target.value)} aria-label="Giờ muốn thêm" />
+              <button type="button" onClick={addScheduleTime}>Thêm giờ</button>
+            </div>
+            <button className="schedule-save" type="button" disabled={savingSchedule} onClick={() => void saveSchedule()}>{savingSchedule ? "Đang lưu…" : "Lưu lịch thông báo"}</button>
           </article>
           {PUSH_API_URL && !inviteReady && (
             <div className="pairing-box">
@@ -759,7 +863,7 @@ export default function Home() {
             <summary><span>Về Tam Ngữ 6H</span><small>Xem thêm</small></summary>
             <div className="about-content">
               <h3>Cách học</h3>
-              <p>Mỗi ngày có bài mới lúc 06:00, 12:00 và 18:00. Kho bài được bổ sung tự động và tăng dần từ B1 đến C1.</p>
+              <p>Mặc định có bài mới lúc 06:00, 12:00 và 18:00. Có thể chọn từ 1 đến 24 mốc riêng mỗi ngày. Kho bài được bổ sung tự động và tăng dần từ B1 đến C1.</p>
               <h3>Màn hình khóa</h3>
               <p>Thông báo vẫn đến khi app đã đóng. Vuốt để xóa sau khi đọc; âm lượng và cách hiển thị do điện thoại quyết định.</p>
               <h3>Dữ liệu và Tra nhanh</h3>

@@ -65,8 +65,11 @@ function hasToneGuidance(pinyin, vietnameseReading) {
 }
 
 function isValidLookupResult(result) {
-  if (!result || typeof result !== "object" || !["English", "Chinese", "Mixed"].includes(result.sourceLanguage)) return false;
-  if (!hasPlainLatinText(result.meaning) || !hasPlainLatinText(result.note) || !hasPlainLatinText(result.partOfSpeech)) return false;
+  const intents = ["Vocabulary", "Translation", "Grammar", "Correction", "Conversation", "Explanation"];
+  if (!result || typeof result !== "object" || !hasPlainLatinText(result.sourceLanguage) || !intents.includes(result.intent)) return false;
+  if (!(typeof result.meaning === "string" && LATIN.test(result.meaning) && !/[<>\u0000-\u001F\u007F]/u.test(result.meaning))
+    || !(typeof result.note === "string" && LATIN.test(result.note) && !/[<>\u0000-\u001F\u007F]/u.test(result.note))
+    || !hasPlainLatinText(result.partOfSpeech)) return false;
   if (!Array.isArray(result.examples) || result.examples.length !== 2) return false;
   if (!result.examples.every((example) => hasPlainLatinText(example?.english)
     && hasChineseText(example?.chinese)
@@ -75,10 +78,9 @@ function isValidLookupResult(result) {
     && hasToneGuidance(example.pinyin, example.vietnameseReading)
     && hasPlainLatinText(example?.vietnamese))) return false;
 
-  const hasChineseTerm = typeof result.term === "string" && HAN.test(result.term);
+  if (!(typeof result.term === "string" && result.term.length > 0)) return false;
   if (result.sourceLanguage === "Chinese" && !hasChineseText(result.term)) return false;
-  if (result.sourceLanguage === "English" && !hasPlainLatinText(result.term)) return false;
-  if (hasChineseTerm) {
+  if (result.sourceLanguage === "Chinese") {
     return hasPlainLatinText(result.pinyin)
       && isVietnameseFriendlyReading(result.vietnameseReading)
       && hasToneGuidance(result.pinyin, result.vietnameseReading);
@@ -100,4 +102,6 @@ async function verifyLookup(query) {
 
 await verifyLookup("take it easy");
 await verifyLookup("慢一点");
-process.stdout.write("Health, Push một chạm và hai lượt tra Gemini (Anh/Trung) đã đạt. Không in mã mời hoặc API key.\n");
+await verifyLookup("Kỷ luật");
+await verifyLookup("お疲れ様はどういう意味ですか？");
+process.stdout.write("Health, Push một chạm và bốn lượt tra Gemini đa ngữ đã đạt. Không in mã mời hoặc API key.\n");

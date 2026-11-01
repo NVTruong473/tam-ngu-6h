@@ -29,47 +29,19 @@ const statements = [
   {
     query: `select cron.unschedule(jobid)
       from cron.job
-      where jobname in ('tam-ngu-morning', 'tam-ngu-noon', 'tam-ngu-evening')`,
+      where jobname in ('tam-ngu-morning', 'tam-ngu-noon', 'tam-ngu-evening', 'tam-ngu-custom-schedule')`,
   },
   {
     query: `select cron.schedule(
-  'tam-ngu-morning',
-  '0 23 * * *',
+  'tam-ngu-custom-schedule',
+  '* * * * *',
   $job$select net.http_post(
     url := '${endpoint}',
     headers := jsonb_build_object(
       'content-type', 'application/json',
       'x-cron-secret', (select decrypted_secret from vault.decrypted_secrets where name = 'tam_ngu_cron_secret')
     ),
-    body := '{"phase":"morning"}'::jsonb
-  );$job$
-);`,
-  },
-  {
-    query: `select cron.schedule(
-  'tam-ngu-noon',
-  '0 5 * * *',
-  $job$select net.http_post(
-    url := '${endpoint}',
-    headers := jsonb_build_object(
-      'content-type', 'application/json',
-      'x-cron-secret', (select decrypted_secret from vault.decrypted_secrets where name = 'tam_ngu_cron_secret')
-    ),
-    body := '{"phase":"noon"}'::jsonb
-  );$job$
-);`,
-  },
-  {
-    query: `select cron.schedule(
-  'tam-ngu-evening',
-  '0 11 * * *',
-  $job$select net.http_post(
-    url := '${endpoint}',
-    headers := jsonb_build_object(
-      'content-type', 'application/json',
-      'x-cron-secret', (select decrypted_secret from vault.decrypted_secrets where name = 'tam_ngu_cron_secret')
-    ),
-    body := '{"phase":"evening"}'::jsonb
+    body := '{"mode":"due"}'::jsonb
   );$job$
 );`,
   },
@@ -90,4 +62,4 @@ for (const [index, statement] of statements.entries()) {
   }
 }
 
-process.stdout.write("Đã cấu hình ba lịch Web Push trong Supabase Cron.\n");
+process.stdout.write("Đã cấu hình bộ quét lịch Web Push mỗi phút trong Supabase Cron.\n");

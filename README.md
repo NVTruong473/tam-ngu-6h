@@ -4,7 +4,7 @@ Tam Ngữ 6H là một PWA cài từ Safari lên Màn hình chính. Nó có icon
 
 ## Trải nghiệm người dùng
 
-- Bài mới theo nhịp 06:00, 12:00, 18:00 giờ Việt Nam; mỗi mốc dùng một bài và lời nhắn khác.
+- Mặc định có bài mới lúc 06:00, 12:00, 18:00; mỗi iPhone có thể chọn từ 1 đến 24 mốc riêng theo múi giờ của thiết bị.
 - 96 bài đệm A2.1 → B1 có sẵn ngoại tuyến. GitHub Actions nối tiếp 3 bài đã kiểm tra bằng Gemini mỗi ngày, sau đó tiếp tục B1+ → B2 → B2+ → C1. Không có “cuốn sách 96 trang” cố định.
 - Nội dung gồm câu ứng dụng, thông điệp và hội thoại ngắn; không quay lại nhóm chào hỏi/số đếm nhập môn.
 - Mỗi câu Trung có pinyin, **Đọc gần Việt** và nút phát âm dùng giọng iPhone. “Đọc gần Việt” chỉ là cầu nối, không thay thế nghe giọng Quan thoại chuẩn.
@@ -34,7 +34,7 @@ Sau khi người dùng cài PWA vào Màn hình chính, mở icon và đồng ý
 - GitHub Pages: giao diện PWA và kho bài công khai, miễn phí.
 - Supabase Edge Function `tam-ngu-api`: giữ VAPID, mã mở Tra nhanh 8 số, cron secret và Gemini keys; cung cấp đăng ký Push, gửi Push và `/lookup`. Người dùng nhập mã một lần; Gemini key không nằm trong PWA.
 - `API_KEYS_FILE=/path/secret.rtfd SUPABASE_PROJECT_REF=... GITHUB_REPOSITORY=NVTruong473/tam-ngu-6h npm run supabase:lookup-secrets` nạp Gemini keys từ RTFD vào Supabase và GitHub Secrets mà không đưa key vào source hoặc log.
-- Supabase Cron: 23:00, 05:00, 11:00 UTC tương ứng 06:00, 12:00, 18:00 tại Việt Nam.
+- Supabase Cron: gọi bộ điều phối mỗi phút; Edge Function chỉ gửi cho thiết bị có giờ địa phương trùng lịch đã lưu và chống gửi lặp trong cùng phút.
 - `tam_ngu_push_subscriptions`: RLS bật; `anon`/`authenticated` không có quyền đọc/ghi, chỉ service role của Edge Function được dùng.
 
 Điểm phải nói thật: GitHub Pages là **website công khai**. Link ghép đôi/mã mời bảo vệ việc đăng ký Push và dùng Gemini, không biến bundle tĩnh thành app có đăng nhập. Không đặt thông tin riêng tư trong nội dung bài học. Nếu cần kiểm soát truy cập thật sự, cần bổ sung Supabase Auth hoặc backend có lớp phiên đăng nhập.

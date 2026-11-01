@@ -81,7 +81,8 @@ test("keeps Gemini credentials server-only while shipping push and quick lookup"
   assert.match(page, /Đọc gần Việt/);
   assert.match(page, /Notification\.requestPermission/);
   assert.match(page, /registration\.showNotification/);
-  assert.match(page, /Tam Ngữ 6H đã sẵn sàng/);
+  assert.match(page, /Thẻ tam ngữ mẫu vừa được gửi/);
+  assert.match(page, /`EN · \$\{previewLine/);
   assert.match(page, /NEXT_PUBLIC_PUSH_API_URL/);
   assert.match(page, /NEXT_PUBLIC_FEEDBACK_FORM_URL/);
   assert.match(page, /Nhắn cho dev/);
@@ -89,7 +90,12 @@ test("keeps Gemini credentials server-only while shipping push and quick lookup"
   assert.match(page, /<details className="about-card">/);
   assert.match(workflow, /vars\.NEXT_PUBLIC_FEEDBACK_FORM_URL/);
   assert.match(page, /Hiện bài trên Màn hình khóa/);
-  assert.match(page, /TRA NHANH · ANH \/ TRUNG/);
+  assert.match(page, /TRA NHANH · TỰ NHẬN DIỆN/);
+  assert.match(page, /LOOKUP_QUERY_MAXIMUM = 240/);
+  assert.match(page, /lookupIntentLabel/);
+  assert.match(page, /DEFAULT_SCHEDULE = \["06:00", "12:00", "18:00"\]/);
+  assert.match(page, /Mỗi ngày tối đa 24 mốc thông báo/);
+  assert.match(page, /\/schedule/);
   assert.match(page, /LOOKUP_CACHE_KEY/);
   assert.match(page, /subscription\.unsubscribe/);
   assert.match(page, /inviteCodeFromInput/);
@@ -105,7 +111,16 @@ test("keeps Gemini credentials server-only while shipping push and quick lookup"
   assert.match(pronunciationRepairer, /REPAIR_DRY_RUN/);
   assert.match(curriculumVerifier, /số thanh pinyin/i);
   assert.match(edgeWorker, /webpush/);
+  assert.match(edgeWorker, /notificationLine/);
+  assert.match(edgeWorker, /🧪 BẢN THỬ/);
+  assert.match(edgeWorker, /`中 · \$\{notificationLine/);
+  assert.match(edgeWorker, /`VI · \$\{notificationLine/);
   assert.match(edgeWorker, /askGeminiForLookup/);
+  assert.match(edgeWorker, /Japanese, Korean/);
+  assert.match(edgeWorker, /LOOKUP_QUERY_MAXIMUM = 240/);
+  assert.match(edgeWorker, /validScheduleTimes/);
+  assert.match(edgeWorker, /mode\?: "due"/);
+  assert.match(edgeWorker, /last_dispatch_key/);
   assert.match(edgeWorker, /normalizeLookupExample/);
   assert.match(edgeWorker, /hasToneGuidance/);
   assert.match(edgeWorker, /minItems: 2/);
@@ -124,4 +139,6 @@ test("keeps Gemini credentials server-only while shipping push and quick lookup"
   assert.match(deployer, /functions", "deploy", "tam-ngu-api/);
   assert.match(verifier, /\/lookup/);
   assert.match(verifier, /慢一点/);
+  assert.match(verifier, /Kỷ luật/);
+  assert.match(verifier, /お疲れ様/);
 });

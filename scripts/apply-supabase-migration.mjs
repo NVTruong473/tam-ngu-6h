@@ -19,6 +19,10 @@ const statements = [
   `create index if not exists idx_tam_ngu_push_enabled
     on public.tam_ngu_push_subscriptions (enabled, updated_at desc)
     where enabled = true`,
+  `alter table public.tam_ngu_push_subscriptions
+    add column if not exists schedule_times text[] not null default array['06:00', '12:00', '18:00']::text[],
+    add column if not exists lesson_cursor bigint,
+    add column if not exists last_dispatch_key text`,
   "comment on table public.tam_ngu_push_subscriptions is 'Isolated private Web Push state for Tam Ngu 6H.'",
   "alter table public.tam_ngu_push_subscriptions enable row level security",
   "revoke all on table public.tam_ngu_push_subscriptions from anon, authenticated",
@@ -38,4 +42,4 @@ for (const [index, query] of statements.entries()) {
   }
 }
 
-process.stdout.write("Đã tạo bảng Web Push riêng và làm mới schema cache.\n");
+process.stdout.write("Đã cập nhật bảng Web Push, lịch tùy chỉnh và schema cache.\n");
