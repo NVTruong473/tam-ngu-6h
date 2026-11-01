@@ -1,5 +1,6 @@
 import { readFileSync, writeFileSync } from "node:fs";
 import { resolve } from "node:path";
+import { Pinyin, pinyin } from "pinyin";
 
 const destination = resolve("app/curriculum.json");
 const localKeysFile = process.env.API_KEYS_FILE;
@@ -105,9 +106,208 @@ function assertPlainText(value, label) {
 }
 
 const PINYIN_TONE_MARKS = new Set([..."āáǎàēéěèīíǐìōóǒòūúǔùǖǘǚǜĀÁǍÀĒÉĚÈĪÍǏÌŌÓǑÒŪÚǓÙǕǗǙǛ"]);
+const TONE_BY_MARK = new Map([
+  ["ā", 1], ["á", 2], ["ǎ", 3], ["à", 4], ["ē", 1], ["é", 2], ["ě", 3], ["è", 4],
+  ["ī", 1], ["í", 2], ["ǐ", 3], ["ì", 4], ["ō", 1], ["ó", 2], ["ǒ", 3], ["ò", 4],
+  ["ū", 1], ["ú", 2], ["ǔ", 3], ["ù", 4], ["ǖ", 1], ["ǘ", 2], ["ǚ", 3], ["ǜ", 4],
+  ["Ā", 1], ["Á", 2], ["Ǎ", 3], ["À", 4], ["Ē", 1], ["É", 2], ["Ě", 3], ["È", 4],
+  ["Ī", 1], ["Í", 2], ["Ǐ", 3], ["Ì", 4], ["Ō", 1], ["Ó", 2], ["Ǒ", 3], ["Ò", 4],
+  ["Ū", 1], ["Ú", 2], ["Ǔ", 3], ["Ù", 4], ["Ǖ", 1], ["Ǘ", 2], ["Ǚ", 3], ["Ǜ", 4],
+]);
+const DIGIT_PINYIN = {
+  0: ["ling"],
+  1: ["yi", "yao"],
+  2: ["er", "liang"],
+  3: ["san"],
+  4: ["si"],
+  5: ["wu"],
+  6: ["liu"],
+  7: ["qi"],
+  8: ["ba"],
+  9: ["jiu"],
+};
 
 function toneCount(value) {
   return [...value].filter((character) => PINYIN_TONE_MARKS.has(character)).length;
+}
+
+function basePinyinCharacter(value) {
+  return value
+    .normalize("NFD")
+    .replace(/\p{M}/gu, "")
+    .replace(/[üÜ]/g, "v")
+    .toLocaleLowerCase("en-US");
+}
+
+function pinyinCharacters(value) {
+  return [...String(value || "")]
+    .filter((character) => /\p{Script=Latin}/u.test(character))
+    .map((character) => ({ base: basePinyinCharacter(character), tone: TONE_BY_MARK.get(character) || 0 }));
+}
+
+function plainPinyin(value) {
+  return pinyinCharacters(value).map((character) => character.base).join("");
+}
+
+function pronunciationUnits(chinese) {
+  const units = [];
+  for (const character of [...String(chinese || "")]) {
+    if (/\p{Script=Han}/u.test(character)) {
+      const candidates = [...new Set((pinyin(character, { style: Pinyin.STYLE_TONE, heteronym: true })[0] || [])
+        .map(plainPinyin)
+        .filter(Boolean))];
+      if (candidates.length === 0) throw new Error(`Không đọc được pinyin cho chữ ${character}.`);
+      units.push({ source: character, candidates });
+    } else if (/^\d$/.test(character)) {
+      units.push({ source: character, candidates: DIGIT_PINYIN[character] || [] });
+    }
+  }
+  return units;
+}
+
+function toneSlotsFor(chinese, sourcePinyin) {
+  const units = pronunciationUnits(chinese);
+  const characters = pinyinCharacters(sourcePinyin);
+  const source = characters.map((character) => character.base).join("");
+  let cursor = 0;
+  const tones = [];
+  const syllables = [];
+
+  for (const unit of units) {
+    const candidates = [...unit.candidates].sort((first, second) => second.length - first.length);
+    let candidate = candidates.find((value) => source.startsWith(value, cursor));
+    if (!candidate) {
+      const erhuaCandidate = candidates.find((value) => value.endsWith("er") && source.startsWith("r", cursor));
+      if (erhuaCandidate) candidate = "r";
+    }
+    if (!candidate) throw new Error(`Không thể đối chiếu ${unit.source} với pinyin tại vị trí ${cursor}.`);
+    const segment = characters.slice(cursor, cursor + candidate.length);
+    tones.push(segment.map((character) => character.tone).find(Boolean) || 0);
+    syllables.push(candidate);
+    cursor += candidate.length;
+  }
+
+  if (cursor !== characters.length) throw new Error("Pinyin còn phần không đối chiếu được với câu Trung.");
+  if (tones.filter(Boolean).length !== toneCount(sourcePinyin)) {
+    throw new Error("Số thanh sau đối chiếu không khớp pinyin nguồn.");
+  }
+  return { units, tones, syllables };
+}
+
+function cleanReadingTokens(value) {
+  return String(value || "")
+    .replace(/\([^)]*\)/g, "")
+    .trim()
+    .split(/\s+/)
+    .filter(Boolean)
+    .map((token) => token.replace(/[,.;:!?，。！？'’”]+$/u, ""))
+    .filter(Boolean);
+}
+
+function addLexiconReading(counts, key, token) {
+  if (!counts.has(key)) counts.set(key, new Map());
+  const options = counts.get(key);
+  options.set(token, (options.get(token) || 0) + 1);
+}
+
+function bestLexiconReadings(counts) {
+  return new Map([...counts].map(([key, options]) => [
+    key,
+    [...options].sort((first, second) => second[1] - first[1] || first[0].localeCompare(second[0], "vi"))[0][0],
+  ]));
+}
+
+function buildReadingLexicon() {
+  const exactCounts = new Map();
+  const baseCounts = new Map();
+  for (const lesson of curriculum) {
+    for (const line of lesson.lines || []) {
+      try {
+        const alignment = toneSlotsFor(line.chinese, line.pinyin);
+        const tokens = cleanReadingTokens(line.vietnameseReading);
+        if (tokens.length !== alignment.units.length) continue;
+        tokens.forEach((token, index) => {
+          if (!token || /[fjwz<>`]/iu.test(token) || /\p{Script=Han}/u.test(token)) return;
+          addLexiconReading(exactCounts, `${alignment.syllables[index]}:${alignment.tones[index]}`, token);
+          addLexiconReading(baseCounts, alignment.syllables[index], token);
+        });
+      } catch {
+        // A malformed legacy line must not prevent new lessons from using the
+        // rest of the verified corpus as a pronunciation dictionary.
+      }
+    }
+  }
+  return { exact: bestLexiconReadings(exactCounts), base: bestLexiconReadings(baseCounts) };
+}
+
+const SPECIAL_PINYIN_READINGS = {
+  zhi: "trư", chi: "chư", shi: "sư", ri: "rư", zi: "chư", ci: "xư", si: "xư",
+  yi: "i", wu: "u", yu: "uy", ye: "iê", yue: "uyê", yuan: "uyên", yin: "in",
+  yun: "uyn", ying: "inh", yong: "dung", er: "ơ",
+};
+const PINYIN_INITIALS = {
+  zh: "tr", ch: "ch", sh: "s", b: "b", p: "p", m: "m", f: "ph", d: "đ", t: "th",
+  n: "n", l: "l", g: "c", k: "kh", h: "h", j: "ch", q: "x", x: "x", r: "r",
+  z: "ch", c: "x", s: "x", y: "i", w: "u",
+};
+const PINYIN_FINALS = {
+  a: "a", o: "ô", e: "ơ", ai: "ai", ei: "ây", ao: "ao", ou: "âu",
+  an: "an", en: "ân", ang: "ang", eng: "âng", ong: "ung", i: "i", ia: "ia",
+  ie: "iê", iao: "iao", iu: "iêu", ian: "ien", in: "in", iang: "iang", ing: "inh",
+  iong: "iung", u: "u", ua: "oa", uo: "uô", uai: "oai", ui: "uây", uan: "oan",
+  un: "uân", uang: "oang", ueng: "uâng", v: "uy", ve: "uyê", van: "uyên", vn: "uyn",
+};
+
+function fallbackVietnameseReading(syllable) {
+  if (SPECIAL_PINYIN_READINGS[syllable]) return SPECIAL_PINYIN_READINGS[syllable];
+  const initial = Object.keys(PINYIN_INITIALS).find((candidate) => syllable.startsWith(candidate)) || "";
+  const final = syllable.slice(initial.length);
+  const renderedInitial = PINYIN_INITIALS[initial] || "";
+  let renderedFinal = PINYIN_FINALS[final] || final;
+  if (["zh", "ch", "sh", "r", "z", "c", "s"].includes(initial) && final === "i") renderedFinal = "ư";
+  const rendered = `${renderedInitial}${renderedFinal}`
+    .replace(/f/giu, "ph")
+    .replace(/j/giu, "ch")
+    .replace(/w/giu, "u")
+    .replace(/z/giu, "ch")
+    .replace(/^sh/iu, "s")
+    .replace(/^zh/iu, "tr");
+  return rendered || "ơ";
+}
+
+const READING_LEXICON = buildReadingLexicon();
+
+function readingForSyllable(syllable, tone) {
+  return READING_LEXICON.exact.get(`${syllable}:${tone}`)
+    || READING_LEXICON.base.get(syllable)
+    || fallbackVietnameseReading(syllable);
+}
+
+function normalizeVietnameseReading(line, label) {
+  const alignment = toneSlotsFor(line.chinese, line.pinyin);
+  const tokens = alignment.syllables.map((syllable, index) => readingForSyllable(syllable, alignment.tones[index]));
+  return tokens.map((token, index) => {
+    if (!token || /[fjwz<>`]/iu.test(token) || /\p{Script=Han}/u.test(token)) {
+      throw new Error(`Âm gợi đọc không hợp lệ tại ${label}, vị trí ${index + 1}.`);
+    }
+    return `${token}${alignment.tones[index] ? `(${alignment.tones[index]})` : ""}`;
+  }).join(" ");
+}
+
+function normalizeCandidateReadings(items) {
+  if (!Array.isArray(items)) return items;
+  return items.map((item, itemIndex) => ({
+    ...item,
+    lines: Array.isArray(item?.lines)
+      ? item.lines.map((line, lineIndex) => ({
+        ...line,
+        vietnameseReading: normalizeVietnameseReading(
+          line,
+          `${requestedPlan[itemIndex]?.id || `bài ${itemIndex + 1}`}, dòng ${lineIndex + 1}`,
+        ),
+      }))
+      : item?.lines,
+  }));
 }
 
 function assertVietnameseFriendlyReading(value, pinyin, label) {
@@ -163,8 +363,8 @@ Tiêu chuẩn bắt buộc:
 - sentence và message có đúng 1 line. dialogue có 3 hoặc 4 lượt nói tự nhiên, speaker luân phiên A/B.
 - English và Simplified Chinese phải tự nhiên như người bản ngữ, tương đương dụng ý nhưng không dịch máy từng chữ. Câu Trung chỉ dùng chữ Trung giản thể và dấu câu Trung; không được chèn English/Latin. Tên riêng phải chuyển sang tên phiên âm Trung khi cần.
 - Pinyin có dấu thanh chuẩn và tách từ dễ đọc. Bản Việt tự nhiên, không cứng.
-- Mỗi line phải có vietnameseReading: cách đọc gần tiếng Việt của đúng câu Trung, không phải âm Hán-Việt hoặc pinyin viết lại. Dùng lối gợi âm Việt (có các chữ/dấu như ă, â, đ, ê, ô, ơ, ư khi hợp lý), tách từng âm tiết và ghi thanh Quan thoại bằng (1), (2), (3), (4), ví dụ “wǒ” gần là “uô(3)”. Tuyệt đối không dùng f, j, w, z, cụm pinyin sh.../zh... hay (0)/(5). Không dùng markdown.
-- Mỗi bài có một grammarFocus mới hoặc phát triển sâu hơn; không quay về từ đơn, chào hỏi, số đếm hay mẫu nhập môn.
+- Mỗi line phải có vietnameseReading: cách đọc gần tiếng Việt của đúng câu Trung, không phải âm Hán-Việt hoặc pinyin viết lại. Dùng lối gợi âm Việt (có các chữ/dấu như ă, â, đ, ê, ô, ơ, ư khi hợp lý) và bắt buộc tách đúng một âm gợi đọc cho mỗi chữ Hán/chữ số được đọc. Có thể ghi thanh Quan thoại bằng (1), (2), (3), (4), ví dụ “wǒ” gần là “uô(3)”; chương trình sẽ đối chiếu pinyin và chuẩn hóa lại vị trí thanh. Tuyệt đối không dùng f, j, w, z, cụm pinyin sh.../zh... hay (0)/(5). Không dùng markdown.
+- Mỗi bài có một grammarFocus mới hoặc phát triển sâu hơn; cấu trúc được nêu phải xuất hiện đầy đủ ngay trong line của bài và lời giải thích không được gán quan hệ nhân quả/tất yếu nếu cấu trúc chỉ mang nghĩa đi kèm. Không quay về từ đơn, chào hỏi, số đếm hay mẫu nhập môn.
 - vocabulary gồm 3–7 cụm từ thật sự hữu ích lấy từ bài, ghi dạng “English · 中文 · nghĩa Việt”.
 - Khoảng 20% kiến thức được ôn có chủ ý trong ngữ cảnh mới; 80% phải mới. Không lặp tiêu đề, câu, hội thoại hay ghi chú trong danh sách gần nhất.
 - Luân phiên rộng các miền: công việc, đời sống, di chuyển, ăn uống, cảm xúc, quan hệ, giải quyết hiểu lầm, công nghệ, sức khỏe, du lịch, văn hóa, kế hoạch và quan điểm.
@@ -271,7 +471,7 @@ async function reviewGeneratedLessons(items) {
   const reviewPrompt = [
     "Bạn là người phản biện học thuật độc lập cho nội dung micro-learning Anh–Trung dành cho người Việt đã học khoảng một tháng.",
     "Không viết lại bài. Đánh giá từng bài bên dưới một cách nghiêm khắc nhưng công bằng.",
-    "approved chỉ được true khi tất cả đều ổn: ngữ pháp và độ tự nhiên tiếng Anh; tiếng Trung giản thể tự nhiên; ý nghĩa Anh–Trung–Việt tương đương; pinyin hợp lý; vietnameseReading thực sự là gợi âm Việt và khớp các thanh; grammarFocus, vocabulary, note và challenge đúng trọng tâm B1; không có câu hoặc lời chúc sáo rỗng/lệch ngữ cảnh.",
+    "approved chỉ được true khi tất cả đều ổn: ngữ pháp và độ tự nhiên tiếng Anh; tiếng Trung giản thể tự nhiên; ý nghĩa Anh–Trung–Việt tương đương; pinyin hợp lý; vietnameseReading thực sự là gợi âm Việt và khớp các thanh; grammarFocus, vocabulary, note và challenge đúng trọng tâm B1; cấu trúc mà grammarFocus nêu phải thật sự xuất hiện đầy đủ trong line và phần giải thích không được phóng đại nghĩa; không có câu hoặc lời chúc sáo rỗng/lệch ngữ cảnh.",
     "Nếu có lỗi hoặc nghi ngờ thực chất, approved=false và issues phải nêu ngắn gọn, cụ thể theo đúng bài. Nếu không có lỗi, issues là mảng rỗng. Không nhận xét ngoài JSON.",
     "Các bài cần phản biện:",
     JSON.stringify(items, null, 2),
@@ -309,13 +509,13 @@ async function generateValidatedLessons() {
         temperature: 0.88,
         purpose: "tạo bài",
       });
-      const validated = validateAndNormalize(candidate);
+      const validated = validateAndNormalize(normalizeCandidateReadings(candidate));
       await reviewGeneratedLessons(validated);
       return validated;
     } catch (error) {
       lastValidationError = error;
       process.stderr.write(`Lô Gemini ${attempt}/3 bị chặn kiểm duyệt: ${error.message}\n`);
-      retryGuidance = `\nLô trước không đạt kiểm tra kỹ thuật hoặc phản biện học thuật. Hãy tạo lại toàn bộ bài thật sạch; không có HTML/Markdown, pinyin không chứa chữ Hán, vietnameseReading phải có đúng số thanh (1)–(4) theo pinyin và dialogue phải xen kẽ A/B. Lý do gần nhất: ${error.message.slice(0, 1200)}`;
+      retryGuidance = `\nLô trước không đạt kiểm tra kỹ thuật hoặc phản biện học thuật. Hãy tạo lại toàn bộ bài thật sạch; không có HTML/Markdown, pinyin không chứa chữ Hán, vietnameseReading phải tách đúng một âm gợi đọc cho mỗi chữ Hán/chữ số được đọc và dialogue phải xen kẽ A/B. Lý do gần nhất: ${error.message.slice(0, 1200)}`;
     }
   }
   throw lastValidationError ?? new Error("Không có lô bài nào đạt kiểm tra chất lượng.");

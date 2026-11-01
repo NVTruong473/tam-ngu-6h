@@ -2453,5 +2453,108 @@
     "nightWish": "Màn đêm buông xuống mang theo sự tĩnh lặng, chúc bạn chìm vào giấc ngủ êm đềm, quên hết mọi áp lực ban ngày.",
     "generatedAt": "2026-10-30T21:50:55.454Z",
     "generator": "gemini-3.5-flash-lite"
+  },
+  {
+    "id": "lesson-0097",
+    "stage": "B1 · Phản xạ trong đời sống",
+    "kind": "sentence",
+    "title": "Bày tỏ thái độ kiên quyết trước quyết định khó khăn",
+    "context": "Buổi sáng, tự nhủ bản thân phải dứt khoát trong công việc.",
+    "lines": [
+      {
+        "speaker": "A",
+        "english": "No matter how tough the situation gets, there is no turning back now.",
+        "chinese": "无论情况多艰难，现在都已经没有退路了。",
+        "pinyin": "Wúlùn qíngkuàng duō jiānnán, xiànzài dōu yǐjīng méiyǒu tuìlù le.",
+        "vietnameseReading": "ú(2) luân(4) chìng(2) cuạng(4) tuô(1) chiên(1) nan(2) xiên(4) trai(4) tâu(1) ỉ(3) cing(1) mây(2) iểu(3) thuy(4) lu(4) lơ",
+        "vietnamese": "Dù tình hình có khó khăn thế nào đi nữa, bây giờ đã không còn đường lui."
+      }
+    ],
+    "note": "Cấu trúc 无论...都... (Dù... cũng...) kết hợp với 无路可退/没有退路 giúp nhấn mạnh sự kiên quyết, không do dự trước khó khăn.",
+    "challenge": "Hãy tự nhủ một câu thể hiện sự quyết tâm không lùi bước khi đối diện với thử thách công việc hôm nay.",
+    "grammarFocus": "Sử dụng cấu trúc '无论...都...' để diễn tả sự kiên định trong mọi hoàn cảnh.",
+    "vocabulary": [
+      "No matter how · 无论 · Dù cho thế nào",
+      "Tough situation · 艰难情况 · Tình hình khó khăn",
+      "No turning back · 没有退路 · Không có đường lui"
+    ],
+    "wish": "Chúc bạn buổi sáng tràn đầy năng lượng, đối mặt mọi thử thách với cái đầu lạnh và trái tim kiên định.",
+    "nightWish": "Mong rằng hôm nay của bạn khép lại thật trọn vẹn, mọi lo âu đã được để lại phía sau giấc ngủ sâu.",
+    "generatedAt": "2026-11-01T15:32:50.577Z",
+    "generator": "gemini-3.5-flash-lite"
+  },
+  {
+    "id": "lesson-0098",
+    "stage": "B1 · Phản xạ trong đời sống",
+    "kind": "message",
+    "title": "Nhắn tin xin dời lịch họp vì sự cố kỹ thuật",
+    "context": "Buổi trưa, nhắn tin gấp cho đối tác khi máy tính đột ngột gặp sự cố.",
+    "lines": [
+      {
+        "speaker": "A",
+        "english": "My laptop crashed unexpectedly; could we push our online sync back by fifteen minutes?",
+        "chinese": "我的笔记本电脑突然死机了，我们能把线上同步会议推迟十五分钟吗？",
+        "pinyin": "Wǒ de bǐjìběn diànnǎo tūrán sǐjī le, wǒmen néng bǎ xiànshàng tóngbù huìyì tuīchí shíwǔ fēnzhōng ma?",
+        "vietnameseReading": "uổ(3) tơ pỉ(3) chi(4) pẩn(3) tiển(4) nào(3) thu(1) ran(2) sư(3) chi(1) lơ uổ(3) mần nẻng(2) bả(3) xiên(4) sang(4) thong(2) pu(4) huây(4) i(4) thuy(1) chí(2) sứ(2) uổ(3) phân(1) trung(1) ma",
+        "vietnamese": "Máy tính xách tay của tôi bị treo đột ngột, chúng ta có thể lùi cuộc họp trực tuyến lại mười lăm phút được không?"
+      }
+    ],
+    "note": "Cụm 笔记本电脑死机了 (máy tính bị treo/sập nguồn) kết hợp với 推迟 (trì hoãn) là cách xin phép lịch sự, chuyên nghiệp khi gặp sự cố bất ngờ.",
+    "challenge": "Nhắn một tin nhắn bằng tiếng Trung thông báo sự cố kỹ thuật nhỏ và đề xuất hoãn thời gian.",
+    "grammarFocus": "Dùng “能……吗？” kết hợp “把……推迟……” để đề xuất dời lịch một cách lịch sự.",
+    "vocabulary": [
+      "Laptop · 笔记本电脑 · Máy tính xách tay",
+      "Crashed · 死机 · Treo máy / sập nguồn",
+      "Push back · 推迟 · Trì hoãn / lùi lại"
+    ],
+    "wish": "Buổi trưa nhẹ nhàng nhé, mong mọi sự cố kỹ thuật đều được giải quyết nhanh gọn và êm đẹp.",
+    "nightWish": "Chúc bạn chìm vào giấc ngủ thật êm dịu, không một tiếng chuông báo thức hay tin nhắn công việc làm phiền.",
+    "generatedAt": "2026-11-01T15:32:50.579Z",
+    "generator": "gemini-3.5-flash-lite"
+  },
+  {
+    "id": "lesson-0099",
+    "stage": "B1 · Phản xạ trong đời sống",
+    "kind": "dialogue",
+    "title": "Thảo luận về lựa chọn phong cách sống hiện đại",
+    "context": "Buổi tối, trò chuyện với bạn bè về việc chọn sống ở trung tâm hay ngoại ô.",
+    "lines": [
+      {
+        "speaker": "A",
+        "english": "Have you ever thought about moving to the suburbs for a quieter living environment?",
+        "chinese": "你有考虑过搬到郊区去住，换个更安静的生活环境吗？",
+        "pinyin": "Nǐ yǒu kǎolǜ guò bān dào jiāoqū qù zhù, huàn gè gèng ānjìng de shēnghuó huánjìng ma?",
+        "vietnameseReading": "nỉ(3) iểu(3) khảo(3) lu(4) cuô(4) ban(1) tao(4) chia(1) khu(1) chiệu(4) chu(4) hoản(4) cợ(4) cêng(4) an(1) chỉng(4) tơ sâng(1) huó(2) huan(2) chỉng(4) ma",
+        "vietnamese": "Cậu đã bao giờ nghĩ đến việc chuyển ra ngoại ô sống để đổi lấy môi trường yên tĩnh hơn chưa?"
+      },
+      {
+        "speaker": "B",
+        "english": "I have, but the daily commute would consume too much of my energy.",
+        "chinese": "想过，不过每天上下班通勤会消耗我太多精力。",
+        "pinyin": "Xiǎng guò, búguò měitiān shàngxiàbān tōngqín huì xiāohào wǒ tài duō jīnglì.",
+        "vietnameseReading": "xiảng(3) cuô(4) pu(2) cuô(4) mây(3) thêm(1) sang(4) xia(4) ban(1) thong(1) chín(2) huây(4) xẻo(1) hảo(4) uổ(3) thai(4) tuô(1) cing(1) li(4)",
+        "vietnamese": "Có nghĩ chứ, nhưng việc đi lại đi làm mỗi ngày sẽ ngốn quá nhiều sức lực của tớ."
+      },
+      {
+        "speaker": "A",
+        "english": "That is a fair point. Peace and quiet come at the cost of convenience.",
+        "chinese": "说得也是，宁静的生活环境往往伴随着交通的不便。",
+        "pinyin": "Shuō de yě shì, níngjìng de shēnghuó huánjìng wǎngwǎng bànsuí zhe jiāotōng de bú biàn.",
+        "vietnameseReading": "suô(1) tơ iê(3) sứ(4) ninh(2) chỉng(4) tơ sâng(1) huó(2) huan(2) chỉng(4) uảng(3) uảng(3) ban(4) suý(2) chơ chia(1) thong(1) tơ pu(2) piên(4)",
+        "vietnamese": "Nói cũng phải, môi trường sống yên bình thường đi kèm với sự bất tiện về giao thông."
+      }
+    ],
+    "note": "Cấu trúc 伴随着 (đi kèm với / gắn liền với) rất hữu ích khi phân tích hai mặt lợi hại của một quyết định trong cuộc sống.",
+    "challenge": "Đóng vai A hoặc B đọc to đoạn hội thoại, chú ý ngữ điệu thảo luận và cân nhắc được mất.",
+    "grammarFocus": "Dùng “伴随着” để diễn tả một yếu tố xuất hiện hoặc thay đổi cùng một yếu tố khác.",
+    "vocabulary": [
+      "Suburbs · 郊区 · Ngoại ô",
+      "Commute · 通勤 · Việc đi lại đi làm",
+      "Convenience · 便利 · Sự tiện lợi"
+    ],
+    "wish": "Buổi tối thảnh thơi, chúc bạn tìm thấy sự cân bằng hoàn hảo giữa công việc và cuộc sống riêng.",
+    "nightWish": "Khép lại một ngày dài nhiều suy ngẫm, chúc bạn có giấc ngủ sâu và những giấc mơ thật đẹp.",
+    "generatedAt": "2026-11-01T15:32:50.579Z",
+    "generator": "gemini-3.5-flash-lite"
   }
 ]
