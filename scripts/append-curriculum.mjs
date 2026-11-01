@@ -228,8 +228,9 @@ function buildReadingLexicon() {
         if (tokens.length !== alignment.units.length) continue;
         tokens.forEach((token, index) => {
           if (!token || /[fjwz<>`]/iu.test(token) || /\p{Script=Han}/u.test(token)) return;
-          addLexiconReading(exactCounts, `${alignment.syllables[index]}:${alignment.tones[index]}`, token);
-          addLexiconReading(baseCounts, alignment.syllables[index], token);
+          const normalizedToken = token.toLocaleLowerCase("vi");
+          addLexiconReading(exactCounts, `${alignment.syllables[index]}:${alignment.tones[index]}`, normalizedToken);
+          addLexiconReading(baseCounts, alignment.syllables[index], normalizedToken);
         });
       } catch {
         // A malformed legacy line must not prevent new lessons from using the
@@ -473,6 +474,9 @@ async function reviewGeneratedLessons(items) {
     "Không viết lại bài. Đánh giá từng bài bên dưới một cách nghiêm khắc nhưng công bằng.",
     "approved chỉ được true khi tất cả đều ổn: ngữ pháp và độ tự nhiên tiếng Anh; tiếng Trung giản thể tự nhiên; ý nghĩa Anh–Trung–Việt tương đương; pinyin hợp lý; vietnameseReading thực sự là gợi âm Việt và khớp các thanh; grammarFocus, vocabulary, note và challenge đúng trọng tâm B1; cấu trúc mà grammarFocus nêu phải thật sự xuất hiện đầy đủ trong line và phần giải thích không được phóng đại nghĩa; không có câu hoặc lời chúc sáo rỗng/lệch ngữ cảnh.",
     "Nếu có lỗi hoặc nghi ngờ thực chất, approved=false và issues phải nêu ngắn gọn, cụ thể theo đúng bài. Nếu không có lỗi, issues là mảng rỗng. Không nhận xét ngoài JSON.",
+    "So sánh với recentLessons bên dưới: từ chối nếu bài mới lặp lại cùng tình huống, mâu thuẫn, thông điệp hoặc bộ từ vựng cốt lõi của một bài gần đây; chỉ cho phép ôn lại một cấu trúc nhỏ trong bối cảnh thực sự khác.",
+    "recentLessons:",
+    JSON.stringify(recent, null, 2),
     "Các bài cần phản biện:",
     JSON.stringify(items, null, 2),
   ].join("\n");

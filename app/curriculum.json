@@ -2619,44 +2619,44 @@
     "id": "lesson-0102",
     "stage": "B1 · Phản xạ trong đời sống",
     "kind": "dialogue",
-    "title": "Trò chuyện về việc lựa chọn không gian sống ở thành phố lớn",
-    "context": "Hai người bạn gặp nhau vào buổi tối để bàn về việc chuyển nhà ra vùng ngoại ô.",
+    "title": "Thống nhất lại cách chia việc nhà",
+    "context": "Buổi tối, hai người sống cùng nhà trao đổi thẳng thắn để san sẻ việc nhà công bằng hơn.",
     "lines": [
       {
         "speaker": "A",
-        "english": "Have you seriously considered renting an apartment in the suburbs to escape the city noise?",
-        "chinese": "你有认真考虑过在郊区租一套公寓来 逃离城市的喧嚣吗？",
-        "pinyin": "nǐ yǒu rènzhēn kǎolǜ guò zài jiāoqū zū yī tào gōngyù lái táolí chéngshì de xuānxiāo ma?",
-        "vietnameseReading": "nỉ(3) iểu(3) rần(4) chên(1) khảo(3) lu(4) cuô(4) trai(4) chia(1) khu(1) chu(1) i(1) thao(4) công(1) uy(4) lai(2) thao(2) lí(2) chấng(2) sứ(4) tơ suản(1) xẻo(1) ma",
-        "vietnamese": "Cậu đã thực sự cân nhắc việc thuê một căn hộ ở ngoại ô để trốn chạy khỏi sự ồn ào của thành phố chưa?"
+        "english": "Should we redistribute the household chores? I've been a little overwhelmed lately.",
+        "chinese": "我们是不是该重新分配一下家务？我最近有点忙不过来。",
+        "pinyin": "Wǒmen shìbushì gāi chóngxīn fēnpèi yíxià jiāwù? Wǒ zuìjìn yǒudiǎn mángbuguòlái.",
+        "vietnameseReading": "uổ(3) mần sứ(4) pu sứ(4) cai(1) chúng(2) xin(1) phân(1) phây(4) i(2) xia(4) chia(1) u(4) uổ(3) chuây(4) chin(4) iểu(3) tiển(3) máng(2) pu cuô(4) lái(2)",
+        "vietnamese": "Chúng ta có nên chia lại việc nhà không? Gần đây tớ hơi xoay xở không xuể."
       },
       {
         "speaker": "B",
-        "english": "I would love the quietness, but the trade-off is losing hours on the daily commute.",
-        "chinese": "我很想要那份安静，但代价是每天上下班通勤要耗费好几个小时。",
-        "pinyin": "wǒ hěn xiǎng yào nà fèn ānjìng, dàn dàijià shì měitiān shàngxiàbān tōngqín yào hàofèi hǎojǐ gè xiǎoshí.",
-        "vietnameseReading": "uổ(3) hẩn(3) xiảng(3) yao(4) na(4) phên(4) an(1) chỉng(4) tan(4) đai(4) chia(4) sứ(4) mây(3) thêm(1) sang(4) xia(4) ban(1) thong(1) chín(2) yao(4) hảo(4) phây(4) hảo(3) chỉ(3) cợ(4) xẻo(3) sứ(2)",
-        "vietnamese": "Tớ rất muốn có sự yên tĩnh đó, nhưng cái giá phải trả là việc đi lại mỗi ngày sẽ ngốn mất mấy tiếng đồng hồ."
+        "english": "That makes sense. I can handle the cooking if you take care of the grocery shopping.",
+        "chinese": "有道理。如果你负责买菜，我可以负责做饭。",
+        "pinyin": "Yǒu dàolǐ. Rúguǒ nǐ fùzé mǎicài, wǒ kěyǐ fùzé zuòfàn.",
+        "vietnameseReading": "iểu(3) tao(4) lỉ(3) rú(2) cuổ(3) nỉ(3) phu(4) chớ(2) mải(3) chai(4) uổ(3) khở(3) ỉ(3) phu(4) chớ(2) chuô(4) phan(4)",
+        "vietnamese": "Có lý đấy. Nếu cậu phụ trách đi chợ thì tớ có thể lo việc nấu ăn."
       },
       {
         "speaker": "A",
-        "english": "Fair enough. Convenience always comes at a price in modern urban life.",
-        "chinese": "说得也是。在现代都市生活中，便利性总是伴随着一定的代价。",
-        "pinyin": "shuō de yě shì. zài xiàndài dūshì shēnghuó zhōng, biànlìxìng zǒngshì bànsuí zhe yīdìng de dàijià.",
-        "vietnameseReading": "suô(1) tơ iê(3) sứ(4) trai(4) xiên(4) đai(4) Tu(1) sứ(4) sâng(1) huó(2) trung(1) piên(4) li(4) xíng(4) chung(3) sứ(4) ban(4) suý(2) chơ i(1) tìng(4) tơ đai(4) chia(4)",
-        "vietnamese": "Nói cũng phải. Trong cuộc sống đô thị hiện đại, sự tiện lợi luôn đi kèm với một cái giá nhất định."
+        "english": "Deal. Let's try it for a week and adjust the plan if needed.",
+        "chinese": "一言为定。我们先试一个星期，有需要再调整。",
+        "pinyin": "Yìyánwéidìng. Wǒmen xiān shì yí ge xīngqī, yǒu xūyào zài tiáozhěng.",
+        "vietnameseReading": "i(4) ién(2) uây(2) tính(4) uổ(3) mần xiên(1) sứ(4) i(2) cợ xinh(1) chi(1) iểu(3) xu(1) yao(4) trai(4) thiáo(2) trẩng(3)",
+        "vietnamese": "Thống nhất nhé. Chúng ta thử trong một tuần rồi điều chỉnh nếu cần."
       }
     ],
-    "note": "Cấu trúc '...伴随着...' (Đi kèm với...) mô tả mối quan hệ nhân quả song hành giữa hai hiện tượng. Cụm '说得也是' (Nói cũng phải) là cách đồng tình rất tự nhiên khi đối phương đưa ra một luận điểm hợp lý.",
-    "challenge": "Hãy đóng vai một trong hai người và ghi âm lại đoạn hội thoại trên với ngữ điệu tự nhiên, thuyết phục.",
-    "grammarFocus": "Sử dụng '...伴随着...' để chỉ sự đi kèm tất yếu của một đặc điểm trong hoàn cảnh cụ thể.",
+    "note": "Mẫu “如果……，……可以……” giúp đưa ra phương án phân công mềm mại thay vì ra lệnh. “负责” dùng để nói rõ phần việc hoặc trách nhiệm của mỗi người.",
+    "challenge": "Nói 1–2 phút về cách bạn muốn chia ba việc nhà, dùng ít nhất một câu điều kiện bằng cả tiếng Anh và tiếng Trung.",
+    "grammarFocus": "Dùng “如果……，……可以……” để đề xuất một cách phân công có điều kiện.",
     "vocabulary": [
-      "suburbs · 郊区 · vùng ngoại ô",
-      "city noise · 城市的喧嚣 · sự ồn ào của thành phố",
-      "daily commute · 上下班通勤 · việc đi lại làm việc hằng ngày"
+      "household chores · 家务 · việc nhà",
+      "take responsibility for · 负责 · phụ trách",
+      "adjust the plan · 调整 · điều chỉnh kế hoạch"
     ],
-    "wish": "Chúc bạn buổi tối ấm cúng bên gia đình, thư giãn trọn vẹn sau một ngày dài bận rộn với những guồng quay.",
-    "nightWish": "Chúc bạn ngủ ngon, mơ những giấc mơ đẹp và nạp đầy năng lượng tích cực cho một ngày mới tuyệt vời.",
+    "wish": "Chúc buổi tối của bạn nhẹ tênh vì mọi phần việc đều được san sẻ bằng sự tử tế và thấu hiểu.",
+    "nightWish": "Ngủ ngon nhé; mong căn phòng yên ắng giữ hộ bạn những mệt mỏi chưa kịp gọi thành tên.",
     "generatedAt": "2026-11-01T15:37:20.647Z",
     "generator": "gemini-3.5-flash-lite"
   }
