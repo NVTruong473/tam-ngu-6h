@@ -2659,5 +2659,108 @@
     "nightWish": "Ngủ ngon nhé; mong căn phòng yên ắng giữ hộ bạn những mệt mỏi chưa kịp gọi thành tên.",
     "generatedAt": "2026-11-01T15:37:20.647Z",
     "generator": "gemini-3.5-flash-lite"
+  },
+  {
+    "id": "lesson-0103",
+    "stage": "B1 · Phản xạ trong đời sống",
+    "kind": "sentence",
+    "title": "Bày tỏ cảm giác choáng ngợp trước khối lượng công việc",
+    "context": "Nhân viên văn phòng đang đứng trước hàng loạt dự án dồn dập vào sáng đầu tuần.",
+    "lines": [
+      {
+        "speaker": "A",
+        "english": "Looking at this endless to-do list, I honestly feel a bit overwhelmed by the sheer volume of work.",
+        "chinese": "面对这一长串做不完的待办事项，说实话，面对如此庞大的工作量我确实感到有点应接不暇。",
+        "pinyin": "miàn duì zhè yī cháng chuàn zuò bù wán de dài bàn shì xiàng, shuō shí huà, miàn duì rú cǐ páng dà de gōng zuò liàng wǒ què shí gǎn dào yǒu diǎn yìng jiē bù xiá.",
+        "vietnameseReading": "mien(4) tuy(4) chè(4) i(1) chang(2) chuân(4) chuô(4) pu(4) oản(2) tơ đai(4) ban(4) sứ(4) xiang(4) suô(1) sứ(2) hua(4) mien(4) tuy(4) rú(2) cứ(3) páng(2) ta(4) tơ công(1) chuô(4) liảng(4) uổ(3) chiết(4) sứ(2) cản(3) tao(4) iểu(3) điển(3) ying(4) chie(1) pu(4) xia(2)",
+        "vietnamese": "Nhìn vào danh sách việc cần làm vô tận này, thành thật mà nói, tôi thực sự cảm thấy hơi ngợp trước khối lượng công việc lớn như vậy."
+      }
+    ],
+    "note": "Cụm từ 面对 (miàn duì) giúp cấu trúc hóa trạng thái đối diện với một thử thách lớn, kết hợp cùng tính từ 应接不暇 (yìng jiē bù xiá) mô tả cảm giác tiếp nhận không xuể, rất tinh tế ở cấp độ B1.",
+    "challenge": "Hãy thu âm câu này với giọng điệu thể hiện sự bất ngờ xen lẫn mệt mỏi nhưng vẫn kiểm soát được tình hình trong vòng 1 phút.",
+    "grammarFocus": "Cấu trúc 面对…，确实感到… giúp diễn đạt phản ứng tâm lý chân thực trước áp lực công việc.",
+    "vocabulary": [
+      "待办事项 · dài bàn shì xiàng · danh sách việc cần làm",
+      "工作量 · gōng zuò liàng · khối lượng công việc",
+      "应接不暇 · yìng jiē bù xiá · ứng phó không xuể"
+    ],
+    "wish": "Chúc bạn buổi sáng tràn đầy năng lượng, tự tin xử lý mọi thử thách và biến áp lực thành động lực tiến bước.",
+    "nightWish": "Khép lại một ngày bận rộn bằng giấc ngủ thật sâu, để tâm trí được gột sạch mọi lo toan và đón bình minh rạng rỡ.",
+    "generatedAt": "2026-11-01T21:15:59.793Z",
+    "generator": "gemini-3.5-flash-lite"
+  },
+  {
+    "id": "lesson-0104",
+    "stage": "B1 · Phản xạ trong đời sống",
+    "kind": "message",
+    "title": "Nhắn tin chia sẻ kinh nghiệm chọn thiết bị điện tử",
+    "context": "Nhắn tin qua ứng dụng công sở để tư vấn cho đồng nghiệp về việc mua máy tính xách tay mới.",
+    "lines": [
+      {
+        "speaker": "A",
+        "english": "If you are upgrading your laptop, I strongly recommend prioritizing battery longevity and stable performance over fancy appearance.",
+        "chinese": "如果你打算换新笔记本电脑，我强烈建议把续航能力和稳定性能放在比花哨外观更重要的位置。",
+        "pinyin": "rú guǒ nǐ dǎ suàn huàn xīn bǐ jì běn diàn nǎo, wǒ qiáng liè jiàn yì bǎ xù háng néng lì hé wěn dìng xìng néng fàng zài bǐ huā shao wài guān gèng zhòng yào de wèi zhì.",
+        "vietnameseReading": "rú(2) cuổ(3) nỉ(3) tả(3) suản(4) hoản(4) xin(1) pỉ(3) chi(4) pẩn(3) tiển(4) nào(3) uổ(3) xiang(2) liê(4) chiên(4) i(4) bả(3) sy(4) háng(2) nẻng(2) li(4) hứa(2) uẩn(3) tìng(4) xíng(4) nẻng(2) phang(4) trai(4) pỉ(3) hua(1) sáo uải(4) cuan(1) cêng(4) trung(4) yao(4) tơ uây(4) trư(4)",
+        "vietnamese": "Nếu bạn định đổi máy tính xách tay mới, tôi khuyên chân thành nên đặt thời lượng pin và hiệu năng ổn định lên trên vẻ ngoài bắt mắt."
+      }
+    ],
+    "note": "Cấu trúc 把...放在...gắn liền với cụm từ so sánh 相比 (so với) giúp đưa ra lời khuyên mang tính thực tế cao, tránh việc chạy theo hình thức bên ngoài.",
+    "challenge": "Viết một tin nhắn ngắn tương tự bằng tiếng Trung để khuyên bạn bè chọn mua điện thoại dựa trên dung lượng pin.",
+    "grammarFocus": "Cấu trúc 把 A 和 B 放在比 C 更重要的位置 thể hiện rõ quan điểm ưu tiên thực dụng.",
+    "vocabulary": [
+      "续航能力 · xù háng néng lì · khả năng duy trì pin",
+      "稳定性能 · wěn dìng xìng néng · hiệu năng ổn định",
+      "花哨外观 · huā shao wài guān · vẻ ngoài hào nhoáng"
+    ],
+    "wish": "Chúc bạn buổi trưa ngon miệng, thư giãn thoải mái và có những quyết định mua sắm thông thái, hiệu quả.",
+    "nightWish": "Chúc bạn có những phút giây nghỉ ngơi yên bình vào ban đêm, mơ về những món quà tuyệt vời và tương lai tươi sáng.",
+    "generatedAt": "2026-11-01T21:15:59.793Z",
+    "generator": "gemini-3.5-flash-lite"
+  },
+  {
+    "id": "lesson-0105",
+    "stage": "B1 · Phản xạ trong đời sống",
+    "kind": "dialogue",
+    "title": "Bàn bạc về việc thay đổi thói quen tập thể dục",
+    "context": "Hai người bạn trò chuyện vào buổi tối về việc từ bỏ tập gym muộn để chuyển sang chạy bộ buổi sáng.",
+    "lines": [
+      {
+        "speaker": "A",
+        "english": "I'm thinking of quitting my late-night gym sessions and switching to morning jogging instead.",
+        "chinese": "我在考虑放弃深夜去健身房的习惯，改在清晨跑步。",
+        "pinyin": "wǒ zài kǎo lǜ fàng qì shēn yè qù jiàn shēn fáng de xí guàn, gǎi zài qīng chén pǎo bù.",
+        "vietnameseReading": "uổ(3) trai(4) khảo(3) lu(4) phang(4) chỉ(4) sên(1) yê(4) chiệu(4) chiên(4) sên(1) pháng(2) tơ si(2) cuản(4) cải(3) trai(4) ch'ing(1) chân(2) pao(3) pu(4)",
+        "vietnamese": "Tôi đang tính bỏ thói quen tập gym đêm muộn và chuyển sang chạy bộ vào sáng sớm."
+      },
+      {
+        "speaker": "B",
+        "english": "That sounds like a healthier choice, but waking up early requires incredible willpower.",
+        "chinese": "听起来是个更健康的决定，不过早起需要极大的毅力。",
+        "pinyin": "tīng qǐ lai shì gè gèng jiàn kāng de jué dìng, bù guò zǎo qǐ xū yào jí dà de yì lì.",
+        "vietnameseReading": "thinh(1) chỉ(3) lai sứ(4) cợ(4) cêng(4) chiên(4) khang(1) tơ chié(2) tìng(4) pu(4) cuô(4) tảo(3) chỉ(3) sy(1) yao(4) chí(2) ta(4) tơ i(4) li(4)",
+        "vietnamese": "Nghe có vẻ là lựa chọn lành mạnh hơn, nhưng dậy sớm đòi hỏi ý chí phi thường đấy."
+      },
+      {
+        "speaker": "A",
+        "english": "True, but as the saying goes, early birds catch the worm. I need a fresh start.",
+        "chinese": "确实如此，不过俗话说得好，早起的鸟儿有虫吃，我需要一个崭新的开始。",
+        "pinyin": "què shí rú cǐ, bù guò sú huà shuō de hǎo, zǎo qǐ de niǎo ér yǒu chóng chī, wǒ xū yào yī gè zhǎn xīn de kāi shǐ.",
+        "vietnameseReading": "chiết(4) sứ(2) rú(2) cứ(3) pu(4) cuô(4) su(2) hua(4) suô(1) tơ hảo(3) tảo(3) chỉ(3) tơ niao(3) ơ(2) iểu(3) chóng(2) chư(1) uổ(3) sy(1) yao(4) i(1) cợ(4) chản(3) xin(1) tơ khai(1) chỉ(3)",
+        "vietnamese": "Đúng vậy, nhưng như người ta thường nói, trâu chậm uống nước đục, tôi cần một sự khởi đầu mới mẻ."
+      }
+    ],
+    "note": "Cấu trúc 考虑放弃...改在... (cân nhắc từ bỏ... chuyển sang...) rất tự nhiên khi muốn thay đổi lối sống. Cụm từ 俗话说得好 (tục ngữ có câu) tạo điểm nhấn văn hóa quen thuộc.",
+    "challenge": "Luyện tập đoạn hội thoại này cùng bạn học hoặc ghi âm lại cả hai vai A và B trong vòng 2 phút.",
+    "grammarFocus": "Cấu trúc 考虑放弃 A，改在 B diễn đạt rõ ràng hành động thay đổi thói quen sinh hoạt.",
+    "vocabulary": [
+      "深夜 · shēn yè · đêm khuya",
+      "毅力 · yì lì · nghị lực",
+      "崭新 · zhǎn xīn · hoàn toàn mới"
+    ],
+    "wish": "Chúc bạn buổi tối bình yên, thư giãn trọn vẹn và chuẩn bị một tâm thế vững vàng cho ngày mai.",
+    "nightWish": "Chúc bạn ngủ ngon và có những giấc mơ đẹp, mang lại nguồn cảm hứng bất tận cho hành trình ngày mai.",
+    "generatedAt": "2026-11-01T21:15:59.793Z",
+    "generator": "gemini-3.5-flash-lite"
   }
 ]
