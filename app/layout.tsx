@@ -4,7 +4,7 @@ import "./globals.css";
 export const metadata: Metadata = {
   metadataBase: new URL(process.env.NEXT_PUBLIC_SITE_URL ?? "http://localhost:3001"),
   title: "Tam Ngữ 6H",
-  description: "Bài học Anh – Trung ngắn gọn theo nhịp ngày, lưu trực tiếp trên iPhone.",
+  description: "Bài học Anh – Trung – Việt trên Màn hình khóa, theo lịch riêng của cậu.",
   applicationName: "Tam Ngữ 6H",
   manifest: "./manifest.webmanifest",
   robots: { index: false, follow: false },
@@ -15,7 +15,7 @@ export const metadata: Metadata = {
   },
   openGraph: {
     title: "Tam Ngữ 6H",
-    description: "Mỗi 6 giờ, một câu mới · một lời dành riêng cho cậu",
+    description: "Một câu mới · một lời dành riêng · đúng nhịp của cậu",
     type: "website",
     locale: "vi_VN",
     images: [{ url: "./og.png", width: 1200, height: 630, alt: "Tam Ngữ 6H" }],
