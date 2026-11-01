@@ -85,6 +85,8 @@ test("keeps Gemini credentials server-only while shipping push and quick lookup"
   assert.match(page, /NEXT_PUBLIC_PUSH_API_URL/);
   assert.match(page, /NEXT_PUBLIC_FEEDBACK_FORM_URL/);
   assert.match(page, /Nhắn cho dev/);
+  assert.match(page, /Về Tam Ngữ 6H/);
+  assert.match(page, /<details className="about-card">/);
   assert.match(workflow, /vars\.NEXT_PUBLIC_FEEDBACK_FORM_URL/);
   assert.match(page, /Hiện bài trên Màn hình khóa/);
   assert.match(page, /TRA NHANH · ANH \/ TRUNG/);
@@ -96,6 +98,7 @@ test("keeps Gemini credentials server-only while shipping push and quick lookup"
   assert.match(page, /autoComplete="one-time-code"/);
   assert.match(appendGenerator, /generateValidatedLessons/);
   assert.match(appendGenerator, /reviewGeneratedLessons/);
+  assert.match(appendGenerator, /GENERATION_ATTEMPTS/);
   assert.match(appendGenerator, /assertPlainText/);
   assert.match(pronunciationEnricher, /vietnameseReading/);
   assert.match(pronunciationRepairer, /toneSlotsFor/);

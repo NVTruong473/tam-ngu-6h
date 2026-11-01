@@ -41,6 +41,7 @@ jobs:
           GEMINI_API_KEYS: ${{ secrets.GEMINI_API_KEYS }}
           GEMINI_MODEL: gemini-3.5-flash-lite
           APPEND_LESSON_COUNT: 3
+          GENERATION_ATTEMPTS: 8
         run: npm run append:curriculum
       - name: Verify generated curriculum before publishing
         id: verify_curriculum

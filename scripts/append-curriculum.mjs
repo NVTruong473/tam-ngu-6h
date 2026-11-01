@@ -9,6 +9,10 @@ const requestedCount = Number(process.env.APPEND_LESSON_COUNT || 3);
 const lessonCount = Number.isInteger(requestedCount) && requestedCount > 0 && requestedCount <= 12
   ? requestedCount
   : 3;
+const requestedAttempts = Number(process.env.GENERATION_ATTEMPTS || 8);
+const generationAttempts = Number.isInteger(requestedAttempts) && requestedAttempts >= 3 && requestedAttempts <= 12
+  ? requestedAttempts
+  : 8;
 
 function keysFromLocalFile() {
   if (!localKeysFile) return [];
@@ -505,7 +509,7 @@ async function reviewGeneratedLessons(items) {
 async function generateValidatedLessons() {
   let lastValidationError;
   let retryGuidance = "";
-  for (let attempt = 1; attempt <= 3; attempt += 1) {
+  for (let attempt = 1; attempt <= generationAttempts; attempt += 1) {
     try {
       const candidate = await callGemini({
         prompt: `${prompt}${retryGuidance}`,
@@ -518,7 +522,7 @@ async function generateValidatedLessons() {
       return validated;
     } catch (error) {
       lastValidationError = error;
-      process.stderr.write(`Lô Gemini ${attempt}/3 bị chặn kiểm duyệt: ${error.message}\n`);
+      process.stderr.write(`Lô Gemini ${attempt}/${generationAttempts} bị chặn kiểm duyệt: ${error.message}\n`);
       retryGuidance = `\nLô trước không đạt kiểm tra kỹ thuật hoặc phản biện học thuật. Hãy tạo lại toàn bộ bài thật sạch; không có HTML/Markdown, pinyin không chứa chữ Hán, vietnameseReading phải tách đúng một âm gợi đọc cho mỗi chữ Hán/chữ số được đọc và dialogue phải xen kẽ A/B. Lý do gần nhất: ${error.message.slice(0, 1200)}`;
     }
   }

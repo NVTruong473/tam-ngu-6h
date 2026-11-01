@@ -609,7 +609,7 @@ export default function Home() {
                   </button>
                   <button className="text-button danger" onClick={stopRoutine}>Tắt nhịp</button>
                 </div>
-                <p className={`honest-note ${pushState === "error" ? "error-note" : ""}`}>{pushMessage || "Bài mới sẽ hiện cả khi app đã đóng. iPhone quyết định âm lượng; vuốt thẻ để xóa khi đã đọc."}</p>
+                {pushMessage && <p className={`honest-note ${pushState === "error" ? "error-note" : ""}`}>{pushMessage}</p>}
               </>
             ) : (
               <button className="primary-button wide" onClick={startRoutine}>Bật nhịp hằng ngày</button>
@@ -715,7 +715,7 @@ export default function Home() {
 
       {tab === "library" && (
         <section className="screen library-screen">
-          <div className="page-title"><p className="eyebrow">ÔN LẠI THEO NHỊP CỦA BẠN</p><h2>Thư viện bài học</h2><p>Tìm lại các bài đã mở hoặc chọn một chủ đề để ôn bất kỳ lúc nào.</p></div>
+          <div className="page-title"><h2>Thư viện bài học</h2></div>
           <label className="search-box">
             <span aria-hidden="true">⌕</span>
             <input value={query} onChange={(event) => setQuery(event.target.value)} placeholder="Tìm tiếng Anh, Trung hoặc Việt…" />
@@ -734,7 +734,7 @@ export default function Home() {
 
       {tab === "settings" && (
         <section className="screen settings-screen">
-          <div className="page-title"><p className="eyebrow">NHẸ NHÀNG & RIÊNG TƯ</p><h2>Cài đặt</h2><p>Mọi tiến độ nằm trên chính chiếc iPhone này.</p></div>
+          <div className="page-title"><h2>Cài đặt</h2></div>
           <article className="settings-card">
             <div className="setting-row"><span className="setting-icon">⌂</span><div><strong>Cài lên Màn hình chính</strong><small>Mở toàn màn hình với icon như một app.</small></div><button onClick={() => setShowInstall(true)}>Xem</button></div>
             <div className="setting-row"><span className="setting-icon">✓</span><div><strong>Tự động lưu</strong><small>Tiến độ và nhịp hằng ngày được lưu trên máy.</small></div><span className="status-pill">Đang bật</span></div>
@@ -748,14 +748,24 @@ export default function Home() {
             </div>
           )}
           {pushMessage && <p className={`settings-message ${pushState === "error" ? "error-note" : ""}`}>{pushMessage}</p>}
-          <article className="truth-card"><strong>Thông báo bài học</strong><p>Vuốt thẻ để xóa sau khi đọc. Âm lượng và cách hiển thị do iPhone quyết định.</p></article>
           {FEEDBACK_FORM_URL && (
             <a className="feedback-card" href={FEEDBACK_FORM_URL} target="_blank" rel="noreferrer" aria-label="Mở form nhắn cho dev">
               <span className="setting-icon" aria-hidden="true">✉</span>
-              <span className="feedback-copy"><strong>Nhắn cho dev</strong><small>Góp ý, điều muốn có thêm, hay một lời trêu vui về trà sữa đều được chào đón.</small></span>
+              <span className="feedback-copy"><strong>Nhắn cho dev</strong><small>Gửi góp ý hoặc báo lỗi.</small></span>
               <span className="feedback-arrow" aria-hidden="true">↗</span>
             </a>
           )}
+          <details className="about-card">
+            <summary><span>Về Tam Ngữ 6H</span><small>Xem thêm</small></summary>
+            <div className="about-content">
+              <h3>Cách học</h3>
+              <p>Mỗi ngày có bài mới lúc 06:00, 12:00 và 18:00. Kho bài được bổ sung tự động và tăng dần từ B1 đến C1.</p>
+              <h3>Màn hình khóa</h3>
+              <p>Thông báo vẫn đến khi app đã đóng. Vuốt để xóa sau khi đọc; âm lượng và cách hiển thị do điện thoại quyết định.</p>
+              <h3>Dữ liệu và Tra nhanh</h3>
+              <p>Tiến độ được lưu trên thiết bị. Tra nhanh gửi từ cần tra tới máy chủ bảo mật; API key không nằm trong app.</p>
+            </div>
+          </details>
           <button className="secondary-button" onClick={resetLearningProgress}>Đặt lại tiến độ học</button>
         </section>
       )}
