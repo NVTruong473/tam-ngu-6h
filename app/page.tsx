@@ -466,7 +466,11 @@ export default function Home() {
       localStorage.setItem(STORAGE.invite, code);
       setInviteDraft("");
       setInviteReady(true);
-      setPushState("idle");
+      if ("serviceWorker" in navigator && PUSH_API_URL) {
+        const registration = await navigator.serviceWorker.ready;
+        const subscription = await registration.pushManager.getSubscription();
+        setPushState(subscription ? "enabled" : "idle");
+      }
       setPushMessage("Đã mở Tra nhanh AI trên iPhone này.");
     } catch (error) {
       setPushState("error");
