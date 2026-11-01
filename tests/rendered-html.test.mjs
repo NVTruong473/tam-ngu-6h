@@ -88,6 +88,8 @@ test("keeps Gemini credentials server-only while shipping push and quick lookup"
   assert.match(page, /TRA NHANH · ANH \/ TRUNG/);
   assert.match(page, /LOOKUP_CACHE_KEY/);
   assert.match(page, /subscription\.unsubscribe/);
+  assert.match(page, /inviteCodeFromInput/);
+  assert.match(page, /Dán nguyên đường link riêng/);
   assert.match(appendGenerator, /generateValidatedLessons/);
   assert.match(appendGenerator, /reviewGeneratedLessons/);
   assert.match(appendGenerator, /assertPlainText/);

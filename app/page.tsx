@@ -106,6 +106,26 @@ function urlBase64ToUint8Array(value: string) {
   return Uint8Array.from([...raw].map((character) => character.charCodeAt(0)));
 }
 
+function inviteCodeFromInput(value: string) {
+  const candidate = value.trim();
+  if (!candidate) return "";
+  try {
+    const url = new URL(candidate);
+    const hashParams = new URLSearchParams(url.hash.replace(/^#/, ""));
+    return (hashParams.get("invite") || url.searchParams.get("invite") || "").trim();
+  } catch {
+    const embeddedInvite = candidate.match(/(?:^|[#?&])invite=([^&#]+)/i)?.[1];
+    if (embeddedInvite) {
+      try {
+        return decodeURIComponent(embeddedInvite).trim();
+      } catch {
+        return embeddedInvite.trim();
+      }
+    }
+    return candidate;
+  }
+}
+
 function containsChinese(value: string) {
   return /\p{Script=Han}/u.test(value);
 }
@@ -422,10 +442,10 @@ export default function Home() {
   }
 
   async function saveInviteCode() {
-    const code = inviteDraft.trim();
+    const code = inviteCodeFromInput(inviteDraft);
     if (code.length < 8) {
       setPushState("error");
-      setPushMessage("Mã ghép đôi chưa đúng. Hãy sao chép nguyên mã đi kèm liên kết.");
+      setPushMessage("Liên kết riêng chưa đúng. Hãy dán nguyên đường link đã nhận qua Zalo.");
       return;
     }
     setSavingInvite(true);
@@ -435,13 +455,13 @@ export default function Home() {
           method: "POST",
           headers: { "x-invite-code": code },
         });
-        if (!response.ok) throw new Error("Mã ghép đôi chưa đúng. Hãy mở lại liên kết riêng được gửi cho cậu.");
+        if (!response.ok) throw new Error("Liên kết riêng chưa đúng. Hãy sao chép lại nguyên đường link đã nhận qua Zalo.");
       }
       localStorage.setItem(STORAGE.invite, code);
       setInviteDraft("");
       setInviteReady(true);
       setPushState("idle");
-      setPushMessage("Đã kiểm tra liên kết riêng. Bây giờ có thể bật Màn hình khóa.");
+      setPushMessage("Đã kích hoạt liên kết riêng. Bây giờ hãy bấm Bật ở mục Thẻ bài học Màn hình khóa.");
     } catch (error) {
       setPushState("error");
       setPushMessage(error instanceof Error ? error.message : "Chưa kiểm tra được mã ghép đôi.");
@@ -709,8 +729,8 @@ export default function Home() {
           </article>
           {PUSH_API_URL && !inviteReady && (
             <div className="pairing-box">
-              <label htmlFor="pairing-code"><strong>Kích hoạt liên kết riêng</strong><small>Dán mã đi kèm đường link riêng. Chỉ cần làm một lần trên iPhone.</small></label>
-              <div><input id="pairing-code" value={inviteDraft} onChange={(event) => setInviteDraft(event.target.value)} placeholder="Mã từ đường link" autoCapitalize="none" autoCorrect="off" /><button disabled={savingInvite} onClick={saveInviteCode}>{savingInvite ? "Đang kiểm tra…" : "Lưu"}</button></div>
+              <label htmlFor="pairing-code"><strong>Kích hoạt liên kết riêng</strong><small>Sao chép nguyên đường link trong Zalo rồi dán vào đây. Chỉ cần làm một lần.</small></label>
+              <div><input id="pairing-code" value={inviteDraft} onChange={(event) => setInviteDraft(event.target.value)} placeholder="Dán nguyên đường link riêng…" inputMode="url" autoCapitalize="none" autoCorrect="off" /><button disabled={savingInvite} onClick={saveInviteCode}>{savingInvite ? "Đang kiểm tra…" : "Kích hoạt"}</button></div>
             </div>
           )}
           {pushMessage && <p className={`settings-message ${pushState === "error" ? "error-note" : ""}`}>{pushMessage}</p>}
