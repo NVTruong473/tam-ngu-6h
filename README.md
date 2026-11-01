@@ -5,7 +5,7 @@ Tam Ngữ 6H là một PWA cài từ Safari lên Màn hình chính. Nó có icon
 ## Trải nghiệm người dùng
 
 - Mặc định có bài mới lúc 06:00, 12:00, 18:00; mỗi iPhone có thể chọn từ 1 đến 24 mốc riêng theo múi giờ của thiết bị.
-- 96 bài đệm A2.1 → B1 có sẵn ngoại tuyến. GitHub Actions nối tiếp 3 bài đã kiểm tra bằng Gemini mỗi ngày, sau đó tiếp tục B1+ → B2 → B2+ → C1. Không có “cuốn sách 96 trang” cố định.
+- Kho bài đệm A2.1 → B1 có sẵn ngoại tuyến. GitHub Actions nối tiếp tối đa 24 bài đã kiểm tra bằng Gemini mỗi ngày, theo bốn lô nhỏ để giữ chất lượng, sau đó tiếp tục B1+ → B2 → B2+ → C1. Không có một “cuốn sách” cố định.
 - Nội dung gồm câu ứng dụng, thông điệp và hội thoại ngắn; không quay lại nhóm chào hỏi/số đếm nhập môn.
 - Mỗi câu Trung có pinyin, **Đọc gần Việt** và nút phát âm dùng giọng iPhone. “Đọc gần Việt” chỉ là cầu nối, không thay thế nghe giọng Quan thoại chuẩn.
 - Tra nhanh Anh/Trung trả nghĩa, sắc thái và hai ví dụ song ngữ. API key Gemini chỉ ở Supabase Edge Function; iPhone chỉ nhận kết quả đã lọc và tự lưu tối đa 30 lần tra gần nhất.
@@ -58,7 +58,7 @@ SUPABASE_PROJECT_REF="fcsuldrerhbynwotcvyn" npm run supabase:verify
 
 `supabase:verify` chỉ in trạng thái đạt/không đạt; nó không in API key hoặc mã mời. Nó dùng một truy vấn Gemini mẫu để kiểm tra luồng tra cứu thật.
 
-Trên GitHub, Secret `GEMINI_API_KEYS` chứa các key phân tách bằng xuống dòng. Workflow thêm 3 bài mỗi ngày lúc 00:23 giờ Việt Nam và phát hành lại sau khi kiểm tra dữ liệu. Các Variable công khai `NEXT_PUBLIC_PUSH_API_URL` và `NEXT_PUBLIC_FEEDBACK_FORM_URL` lần lượt chỉ chứa URL Edge Function và URL Form người trả lời, không chứa bí mật. Không đưa link chỉnh sửa Google Form vào repo hoặc bundle.
+Trên GitHub, Secret `GEMINI_API_KEYS` chứa các key phân tách bằng xuống dòng. Workflow tạo bốn lô, mỗi lô 6 bài, vào 00:23 giờ Việt Nam và chỉ phát hành khi toàn bộ dữ liệu đạt kiểm tra. Các Variable công khai `NEXT_PUBLIC_PUSH_API_URL` và `NEXT_PUBLIC_FEEDBACK_FORM_URL` lần lượt chỉ chứa URL Edge Function và URL Form người trả lời, không chứa bí mật. Không đưa link chỉnh sửa Google Form vào repo hoặc bundle.
 
 ## Kiểm thử và phát hành
 

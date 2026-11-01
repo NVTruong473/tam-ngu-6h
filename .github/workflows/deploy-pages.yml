@@ -9,7 +9,7 @@ on:
   workflow_dispatch:
     inputs:
       append_lessons:
-        description: "Tạo thêm 3 bài bằng Gemini trước khi phát hành"
+        description: "Tạo thêm 24 bài bằng Gemini trước khi phát hành"
         required: false
         default: false
         type: boolean
@@ -33,16 +33,20 @@ jobs:
           node-version: 22
           cache: npm
       - run: npm ci
-      - name: Append three reviewed lessons from Gemini
+      - name: Append 24 reviewed lessons from Gemini
         id: grow
         if: github.event_name == 'schedule' || inputs.append_lessons == true
         continue-on-error: true
         env:
           GEMINI_API_KEYS: ${{ secrets.GEMINI_API_KEYS }}
           GEMINI_MODEL: gemini-3.5-flash-lite
-          APPEND_LESSON_COUNT: 3
+          APPEND_LESSON_COUNT: 6
           GENERATION_ATTEMPTS: 8
-        run: npm run append:curriculum
+        run: |
+          for batch in 1 2 3 4; do
+            echo "Generating reviewed lesson batch $batch/4"
+            npm run append:curriculum
+          done
       - name: Verify generated curriculum before publishing
         id: verify_curriculum
         if: steps.grow.outcome == 'success'

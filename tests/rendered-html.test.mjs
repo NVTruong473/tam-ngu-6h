@@ -76,6 +76,8 @@ test("keeps Gemini credentials server-only while shipping push and quick lookup"
   assert.doesNotMatch(source, /(?:AQ\.|sk-proj-|sk-or-v1-|gsk_|nvapi-)[A-Za-z0-9_-]{8,}/);
   assert.match(generator, /process\.env\.GEMINI_API_KEY/);
   assert.match(workflow, /secrets\.GEMINI_API_KEYS/);
+  assert.match(workflow, /Append 24 reviewed lessons/);
+  assert.match(workflow, /for batch in 1 2 3 4/);
   assert.match(page, /Thư viện bài học/);
   assert.doesNotMatch(page, /Gemini tạo thêm theo lộ trình/);
   assert.match(page, /Đọc gần Việt/);
