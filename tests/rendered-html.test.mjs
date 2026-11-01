@@ -92,7 +92,8 @@ test("keeps Gemini credentials server-only while shipping push and quick lookup"
   assert.match(page, /subscription\.unsubscribe/);
   assert.match(page, /inviteCodeFromInput/);
   assert.match(page, /Mở Tra nhanh AI \(tùy chọn\)/);
-  assert.match(page, /Không cần cho thông báo/);
+  assert.match(page, /Nhập mã 8 số một lần/);
+  assert.match(page, /autoComplete="one-time-code"/);
   assert.match(appendGenerator, /generateValidatedLessons/);
   assert.match(appendGenerator, /reviewGeneratedLessons/);
   assert.match(appendGenerator, /assertPlainText/);

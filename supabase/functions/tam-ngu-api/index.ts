@@ -223,7 +223,7 @@ async function unsubscribe(request: Request, origin: string | null) {
 
 function verifyInvite(request: Request, origin: string | null) {
   if (!authorized(request, "x-invite-code", Deno.env.get("TAM_NGU_INVITE_CODE"))) {
-    return json({ error: "Liên kết mời không hợp lệ." }, 401, origin);
+    return json({ error: "Mã mở Tra nhanh không hợp lệ." }, 401, origin);
   }
   return json({ ok: true }, 200, origin);
 }
@@ -475,7 +475,7 @@ async function askGeminiForLookup(query: string) {
 
 async function lookup(request: Request, origin: string | null) {
   if (!authorized(request, "x-invite-code", Deno.env.get("TAM_NGU_INVITE_CODE"))) {
-    return json({ error: "Liên kết riêng không hợp lệ." }, 401, origin);
+    return json({ error: "Mã mở Tra nhanh không hợp lệ." }, 401, origin);
   }
   const body = await request.json().catch(() => null) as null | { query?: unknown };
   const query = trimText(body?.query, 100);

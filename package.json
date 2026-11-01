@@ -17,6 +17,7 @@
     "verify:curriculum": "node scripts/verify-curriculum.mjs",
     "supabase:apply": "node scripts/apply-supabase-migration.mjs",
     "supabase:lookup-secrets": "node scripts/configure-supabase-lookup.mjs",
+    "supabase:rotate-access-code": "node scripts/rotate-tam-ngu-access-code.mjs",
     "supabase:deploy": "node scripts/deploy-supabase-function.mjs",
     "supabase:verify": "node scripts/verify-supabase-api.mjs",
     "start": "WRANGLER_LOG_PATH=.wrangler/wrangler.log vinext start",

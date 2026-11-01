@@ -122,7 +122,7 @@ function inviteCodeFromInput(value: string) {
         return embeddedInvite.trim();
       }
     }
-    return candidate;
+    return candidate.replace(/[\s-]+/g, "");
   }
 }
 
@@ -340,7 +340,7 @@ export default function Home() {
     const hasInvite = Boolean(invite || localStorage.getItem(STORAGE.invite));
     queueMicrotask(() => {
       setInviteReady(hasInvite);
-      if (invite) setPushMessage("Đã nhận liên kết riêng. Cài app lên Màn hình chính, rồi bật thẻ bài học trên Màn hình khóa.");
+      if (invite) setPushMessage("Đã mở Tra nhanh AI trên thiết bị này.");
       try {
         const cached = JSON.parse(localStorage.getItem(LOOKUP_CACHE_KEY) || "[]");
         if (Array.isArray(cached)) setLookupCache(cached.filter((entry): entry is LookupCacheEntry => Boolean(entry?.key && validLookupResult(entry?.result))).slice(0, 30));
@@ -451,7 +451,7 @@ export default function Home() {
     const code = inviteCodeFromInput(inviteDraft);
     if (code.length < 8) {
       setPushState("error");
-      setPushMessage("Liên kết riêng chưa đúng. Hãy dán nguyên đường link đã nhận qua Zalo.");
+      setPushMessage("Mã mở Tra nhanh phải có đủ 8 số.");
       return;
     }
     setSavingInvite(true);
@@ -461,7 +461,7 @@ export default function Home() {
           method: "POST",
           headers: { "x-invite-code": code },
         });
-        if (!response.ok) throw new Error("Liên kết riêng chưa đúng. Hãy sao chép lại nguyên đường link đã nhận qua Zalo.");
+        if (!response.ok) throw new Error("Mã mở Tra nhanh chưa đúng.");
       }
       localStorage.setItem(STORAGE.invite, code);
       setInviteDraft("");
@@ -470,7 +470,7 @@ export default function Home() {
       setPushMessage("Đã mở Tra nhanh AI trên iPhone này.");
     } catch (error) {
       setPushState("error");
-      setPushMessage(error instanceof Error ? error.message : "Chưa kiểm tra được mã ghép đôi.");
+      setPushMessage(error instanceof Error ? error.message : "Chưa kiểm tra được mã mở Tra nhanh.");
     } finally {
       setSavingInvite(false);
     }
@@ -516,7 +516,7 @@ export default function Home() {
     if (!PUSH_API_URL || !inviteCode) {
       setLookupResult(null);
       setLookupState("error");
-      setLookupMessage("Tra nhanh chỉ mở trong liên kết riêng của app. Hãy mở lại đúng link được gửi cho cậu.");
+      setLookupMessage("Tra nhanh chưa được mở. Vào Cài đặt và nhập mã 8 số một lần nhé.");
       return;
     }
 
@@ -530,6 +530,11 @@ export default function Home() {
         body: JSON.stringify({ query }),
       });
       const body = await response.json().catch(() => ({})) as { error?: string; result?: unknown };
+      if (response.status === 401) {
+        localStorage.removeItem(STORAGE.invite);
+        setInviteReady(false);
+        throw new Error("Mã đã đổi hoặc hết hạn. Vào Cài đặt và nhập mã 8 số mới nhé.");
+      }
       if (!response.ok || !validLookupResult(body.result)) throw new Error(body.error || "Chưa tra được lúc này.");
       const nextCache = [{ key: cacheKey, result: body.result }, ...lookupCache.filter((entry) => entry.key !== cacheKey)].slice(0, 30);
       setLookupCache(nextCache);
@@ -734,8 +739,8 @@ export default function Home() {
           </article>
           {PUSH_API_URL && !inviteReady && (
             <div className="pairing-box">
-              <label htmlFor="pairing-code"><strong>Mở Tra nhanh AI (tùy chọn)</strong><small>Không cần cho thông báo. Chỉ dán đường link riêng nếu muốn dùng Gemini để tra từ.</small></label>
-              <div><input id="pairing-code" value={inviteDraft} onChange={(event) => setInviteDraft(event.target.value)} placeholder="Dán đường link riêng cho Tra nhanh…" inputMode="url" autoCapitalize="none" autoCorrect="off" /><button disabled={savingInvite} onClick={saveInviteCode}>{savingInvite ? "Đang kiểm tra…" : "Mở Tra nhanh"}</button></div>
+              <label htmlFor="pairing-code"><strong>Mở Tra nhanh AI (tùy chọn)</strong><small>Nhập mã 8 số một lần. Không cần mã này để nhận bài trên Màn hình khóa.</small></label>
+              <div><input id="pairing-code" value={inviteDraft} onChange={(event) => setInviteDraft(event.target.value.replace(/\D/g, "").slice(0, 8))} placeholder="Mã 8 số" inputMode="numeric" pattern="[0-9]*" maxLength={8} autoComplete="one-time-code" /><button disabled={savingInvite} onClick={saveInviteCode}>{savingInvite ? "Đang kiểm tra…" : "Mở Tra nhanh"}</button></div>
             </div>
           )}
           {pushMessage && <p className={`settings-message ${pushState === "error" ? "error-note" : ""}`}>{pushMessage}</p>}
