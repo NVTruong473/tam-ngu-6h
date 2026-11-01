@@ -33,6 +33,7 @@ Sau khi người dùng cài PWA vào Màn hình chính, mở icon và đồng ý
 
 - GitHub Pages: giao diện PWA và kho bài công khai, miễn phí.
 - Supabase Edge Function `tam-ngu-api`: giữ VAPID, mã mở Tra nhanh 8 số, cron secret và Gemini keys; cung cấp đăng ký Push, gửi Push và `/lookup`. Người dùng nhập mã một lần; Gemini key không nằm trong PWA.
+- `API_KEYS_FILE=/path/secret.rtfd SUPABASE_PROJECT_REF=... GITHUB_REPOSITORY=NVTruong473/tam-ngu-6h npm run supabase:lookup-secrets` nạp Gemini keys từ RTFD vào Supabase và GitHub Secrets mà không đưa key vào source hoặc log.
 - Supabase Cron: 23:00, 05:00, 11:00 UTC tương ứng 06:00, 12:00, 18:00 tại Việt Nam.
 - `tam_ngu_push_subscriptions`: RLS bật; `anon`/`authenticated` không có quyền đọc/ghi, chỉ service role của Edge Function được dùng.
 

@@ -17,6 +17,7 @@
     "verify:curriculum": "node scripts/verify-curriculum.mjs",
     "supabase:apply": "node scripts/apply-supabase-migration.mjs",
     "supabase:lookup-secrets": "node scripts/configure-supabase-lookup.mjs",
+    "api-keys:audit": "node scripts/audit-api-key-file.mjs",
     "supabase:rotate-access-code": "node scripts/rotate-tam-ngu-access-code.mjs",
     "supabase:deploy": "node scripts/deploy-supabase-function.mjs",
     "supabase:verify": "node scripts/verify-supabase-api.mjs",

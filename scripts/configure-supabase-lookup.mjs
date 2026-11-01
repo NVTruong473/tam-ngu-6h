@@ -1,14 +1,18 @@
 import { execFileSync } from "node:child_process";
-import { mkdtempSync, readFileSync, rmSync, writeFileSync } from "node:fs";
+import { mkdtempSync, readFileSync, rmSync, statSync, writeFileSync } from "node:fs";
 import { tmpdir } from "node:os";
 import { join } from "node:path";
 
 const ref = process.env.SUPABASE_PROJECT_REF;
-const sourceFile = process.env.API_KEYS_FILE;
+const sourcePath = process.env.API_KEYS_FILE;
+const repository = process.env.GITHUB_REPOSITORY;
 if (!ref) throw new Error("Thiếu SUPABASE_PROJECT_REF.");
-if (!sourceFile) throw new Error("Thiếu API_KEYS_FILE chứa các GEMINI_API_KEY.");
+if (!sourcePath) throw new Error("Thiếu API_KEYS_FILE chứa các GEMINI_API_KEY.");
 
-const source = readFileSync(sourceFile, "utf8");
+const sourceFile = statSync(sourcePath).isDirectory() ? join(sourcePath, "TXT.rtf") : sourcePath;
+const source = sourceFile.endsWith(".rtf")
+  ? execFileSync("textutil", ["-convert", "txt", "-stdout", sourceFile], { encoding: "utf8" })
+  : readFileSync(sourceFile, "utf8");
 const keys = [...source.matchAll(/^\s*export\s+GEMINI_API_KEY(?:_\d+)?\s*=\s*[\"']?([^\"'\s]+)[\"']?\s*$/gm)]
   .map((match) => match[1])
   .filter(Boolean);
@@ -26,8 +30,15 @@ try {
     ["--yes", "supabase@latest", "secrets", "set", "--env-file", envFile, "--project-ref", ref],
     { stdio: "inherit", env: { ...process.env, SUPABASE_ACCESS_TOKEN: token } },
   );
+  if (repository) {
+    execFileSync(
+      "gh",
+      ["secret", "set", "GEMINI_API_KEYS", "--repo", repository],
+      { input: keys.join(","), stdio: ["pipe", "inherit", "inherit"] },
+    );
+  }
 } finally {
   rmSync(temporaryDirectory, { recursive: true, force: true });
 }
 
-process.stdout.write(`Đã cấu hình ${keys.length} khóa Gemini chỉ ở Supabase Edge Function.\n`);
+process.stdout.write(`Đã cấu hình ${keys.length} khóa Gemini ở Supabase${repository ? " và GitHub Actions" : ""}; không in giá trị key.\n`);
