@@ -431,10 +431,23 @@ export default function Home() {
         const result = await response.json().catch(() => ({})) as { error?: string };
         throw new Error(result.error || "Không đăng ký được thông báo.");
       }
+      try {
+        const appRoot = new URL("./", window.location.href).href;
+        await registration.showNotification("Tam Ngữ 6H đã sẵn sàng", {
+          body: "Đã bật bài lúc 06:00 · 12:00 · 18:00. Khóa màn hình để xem thẻ xác nhận này nhé.",
+          icon: new URL("./icons/icon-192.png", window.location.href).href,
+          badge: new URL("./icons/icon-192.png", window.location.href).href,
+          tag: "tam-ngu-current-lesson",
+          renotify: false,
+          data: { url: appRoot },
+        });
+      } catch {
+        // Subscription remains valid even if iOS delays the local confirmation.
+      }
       setRoutineEnabled(true);
       setRoutineStartSequence(startSequence);
       setPushState("enabled");
-      setPushMessage("Đã bật thẻ bài học trên Màn hình khóa lúc 06:00, 12:00 và 18:00. Âm lượng theo cài đặt iPhone.");
+      setPushMessage("Đã bật thành công. Một thẻ xác nhận vừa được gửi; các bài tiếp theo đến lúc 06:00, 12:00 và 18:00.");
     } catch (error) {
       setPushState("error");
       setPushMessage(error instanceof Error ? error.message : "Không bật được thông báo.");

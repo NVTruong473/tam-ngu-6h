@@ -80,6 +80,8 @@ test("keeps Gemini credentials server-only while shipping push and quick lookup"
   assert.doesNotMatch(page, /Gemini tạo thêm theo lộ trình/);
   assert.match(page, /Đọc gần Việt/);
   assert.match(page, /Notification\.requestPermission/);
+  assert.match(page, /registration\.showNotification/);
+  assert.match(page, /Tam Ngữ 6H đã sẵn sàng/);
   assert.match(page, /NEXT_PUBLIC_PUSH_API_URL/);
   assert.match(page, /NEXT_PUBLIC_FEEDBACK_FORM_URL/);
   assert.match(page, /Nhắn cho dev/);
