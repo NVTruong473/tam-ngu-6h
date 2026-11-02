@@ -274,6 +274,8 @@ export default function Home() {
   const [showInstall, setShowInstall] = useState(false);
   const [showWidgetInstall, setShowWidgetInstall] = useState(false);
   const [widgetInstallMessage, setWidgetInstallMessage] = useState("");
+  const [widgetInstallerSource, setWidgetInstallerSource] = useState("");
+  const [widgetInstallerLoading, setWidgetInstallerLoading] = useState(false);
   const [pushState, setPushState] = useState<PushState>("idle");
   const [pushMessage, setPushMessage] = useState("");
   const [lookupQuery, setLookupQuery] = useState("");
@@ -380,6 +382,33 @@ export default function Home() {
     localStorage.setItem(STORAGE.routine, String(routineEnabled));
     if (routineStartSequence !== null) localStorage.setItem(STORAGE.routineStart, String(routineStartSequence));
   }, [ready, routineEnabled, routineStartSequence]);
+
+  useEffect(() => {
+    if (!showWidgetInstall || widgetInstallerSource) return;
+    let cancelled = false;
+    queueMicrotask(() => {
+      if (!cancelled) {
+        setWidgetInstallerLoading(true);
+        setWidgetInstallMessage("");
+      }
+    });
+    const scriptUrl = new URL("./widget/tam-ngu-6h.js", window.location.href).href;
+    fetch(scriptUrl, { cache: "no-store" })
+      .then((response) => {
+        if (!response.ok) throw new Error("Không tải được bộ cài widget.");
+        return response.text();
+      })
+      .then((source) => {
+        if (!cancelled) setWidgetInstallerSource(source);
+      })
+      .catch(() => {
+        if (!cancelled) setWidgetInstallMessage("Chưa chuẩn bị được bộ cài. Hãy kiểm tra mạng rồi mở lại mục này.");
+      })
+      .finally(() => {
+        if (!cancelled) setWidgetInstallerLoading(false);
+      });
+    return () => { cancelled = true; };
+  }, [showWidgetInstall, widgetInstallerSource]);
 
   useEffect(() => {
     const timer = window.setInterval(() => {
@@ -625,21 +654,21 @@ export default function Home() {
   }
 
   async function copyAndOpenWidgetInstaller() {
-    setWidgetInstallMessage("Đang chuẩn bị widget…");
+    if (!widgetInstallerSource) {
+      setWidgetInstallMessage("Bộ cài chưa sẵn sàng. Hãy kiểm tra mạng rồi thử lại.");
+      return;
+    }
     try {
-      const scriptUrl = new URL("./widget/tam-ngu-6h.js", window.location.href).href;
-      const response = await fetch(scriptUrl, { cache: "no-store" });
-      if (!response.ok) throw new Error("Không tải được mã widget.");
-      const script = await response.text();
       const widgetStartSequence = scheduleAt(Date.now(), scheduleTimes).sequence - unlockedIndex;
-      const personalizedScript = script
-        .replace('const SCHEDULE = ["06:00", "12:00", "18:00"];', `const SCHEDULE = ${JSON.stringify(scheduleTimes)};`)
-        .replace("const ROUTINE_START_SEQUENCE = null;", `const ROUTINE_START_SEQUENCE = ${widgetStartSequence};`);
+      const configTemplate = 'const TAM_NGU_CONFIG = {"schedule":["06:00","12:00","18:00"],"routineStartSequence":null};';
+      const personalizedConfig = `const TAM_NGU_CONFIG = ${JSON.stringify({ schedule: scheduleTimes, routineStartSequence: widgetStartSequence })};`;
+      const personalizedScript = widgetInstallerSource.replace(configTemplate, personalizedConfig);
+      if (personalizedScript === widgetInstallerSource) throw new Error("Bộ cài không hợp lệ.");
       await navigator.clipboard.writeText(personalizedScript);
-      setWidgetInstallMessage("Đã sao chép. Trong Scriptable, dán mã và đặt tên “Tam Ngữ 6H”.");
+      setWidgetInstallMessage("Đã sao chép bộ cài. Sang Scriptable, chạm giữ để dán và đặt tên “Tam Ngữ 6H”.");
       window.setTimeout(() => { window.location.href = "scriptable:///add"; }, 350);
     } catch {
-      setWidgetInstallMessage("iPhone chưa cho phép sao chép tự động. Hãy dùng nút Tải mã widget bên dưới.");
+      setWidgetInstallMessage("Không sao chép được. Hãy mở Tam Ngữ 6H bằng Safari rồi thử lại.");
     }
   }
 
@@ -881,16 +910,18 @@ export default function Home() {
             <div className="widget-preview" aria-hidden="true"><small>NÓI THỬ · TAM NGỮ 6H</small><strong>Tôi thường mua cà phê trên đường đi làm.</strong></div>
             <p className="eyebrow">KHÔNG PHẢI THÔNG BÁO</p>
             <h2 id="widget-install-title">Bài học luôn ở Màn hình khóa</h2>
-            <p className="widget-explainer">Widget dùng bản Scriptable miễn phí làm cầu nối với iOS. Không có API key hay dữ liệu riêng tư nào nằm trong mã.</p>
+            <p className="widget-explainer">Cài một lần. Bài học tự cập nhật và vẫn có bản dự phòng khi mất mạng.</p>
             <ol>
               <li><span>1</span><p>Cài <a href="https://apps.apple.com/app/scriptable/id1405459188" target="_blank" rel="noreferrer"><strong>Scriptable</strong></a> từ App Store.</p></li>
-              <li><span>2</span><p>Chạm nút bên dưới. App sao chép mã và mở trang tạo script; dán mã, đặt tên <strong>Tam Ngữ 6H</strong>, rồi chạy thử một lần.</p></li>
+              <li><span>2</span><p>Chạm nút bên dưới. Trong script trống, chạm giữ → <strong>Dán</strong>, đặt tên <strong>Tam Ngữ 6H</strong>, rồi chạy thử một lần.</p></li>
               <li><span>3</span><p>Nhấn giữ Màn hình khóa → <strong>Tùy chỉnh</strong> → <strong>Thêm widget</strong> → Scriptable → chọn khung chữ nhật và script Tam Ngữ 6H.</p></li>
+              <li><span>4</span><p>Sau khi xong, có thể nhấn giữ icon Scriptable → <strong>Xóa ứng dụng</strong> → <strong>Xóa khỏi Màn hình chính</strong>. Không chọn xóa hẳn app.</p></li>
             </ol>
-            <button className="primary-button wide" onClick={() => void copyAndOpenWidgetInstaller()}>Sao chép mã &amp; mở Scriptable</button>
-            <a className="widget-download" href="./widget/tam-ngu-6h.js" download>Tải mã widget thủ công</a>
+            <button className="primary-button wide" disabled={widgetInstallerLoading || !widgetInstallerSource} onClick={() => void copyAndOpenWidgetInstaller()}>
+              {widgetInstallerLoading ? "Đang chuẩn bị…" : "Sao chép bộ cài & mở Scriptable"}
+            </button>
             {widgetInstallMessage && <p className="widget-install-message">{widgetInstallMessage}</p>}
-            <p className="honest-note">Widget dùng lịch hiện tại của cậu. Nếu đổi giờ sau này, hãy cài lại mã widget. iOS quyết định thời điểm làm mới nên bài có thể trễ vài phút; thông báo vẫn là kênh đúng giờ.</p>
+            <p className="honest-note">Scriptable phải còn trong Thư viện ứng dụng để iOS chạy widget. Nếu đổi lịch học, mở lại mục này để cập nhật lịch; iOS có thể làm mới widget trễ vài phút.</p>
             <button className="text-button widget-close" onClick={() => setShowWidgetInstall(false)}>Chưa cài bây giờ</button>
           </section>
         </div>
