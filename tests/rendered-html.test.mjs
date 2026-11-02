@@ -22,7 +22,7 @@ test("exports an installable PWA with one replaceable lock-screen card", async (
   assert.ok(manifest.icons.some((icon) => icon.sizes === "1024x1024" && icon.purpose === "maskable"));
   assert.equal(highResolutionIcon.readUInt32BE(16), 1024);
   assert.equal(highResolutionIcon.readUInt32BE(20), 1024);
-  assert.match(serviceWorker, /tam-ngu-6h-v10/);
+  assert.match(serviceWorker, /tam-ngu-6h-v11/);
   assert.match(serviceWorker, /html\.matchAll/);
   assert.match(serviceWorker, /skipWaiting/);
   assert.match(serviceWorker, /clients\.claim/);
