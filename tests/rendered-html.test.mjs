@@ -1,7 +1,6 @@
 import assert from "node:assert/strict";
 import { readFile } from "node:fs/promises";
 import test from "node:test";
-import vm from "node:vm";
 
 const root = new URL("../", import.meta.url);
 
@@ -22,7 +21,7 @@ test("exports an installable PWA with one replaceable lock-screen card", async (
   assert.ok(manifest.icons.some((icon) => icon.sizes === "1024x1024" && icon.purpose === "maskable"));
   assert.equal(highResolutionIcon.readUInt32BE(16), 1024);
   assert.equal(highResolutionIcon.readUInt32BE(20), 1024);
-  assert.match(serviceWorker, /tam-ngu-6h-v11/);
+  assert.match(serviceWorker, /tam-ngu-6h-v12/);
   assert.match(serviceWorker, /html\.matchAll/);
   assert.match(serviceWorker, /skipWaiting/);
   assert.match(serviceWorker, /clients\.claim/);
@@ -71,98 +70,21 @@ test("ships a growing progressive curriculum with balanced seed formats", async 
   assert.doesNotMatch(JSON.stringify(curriculum), /<\/?[a-z][^>]*>/i);
 });
 
-test("ships an optional lock-screen widget bridge without secrets", async () => {
-  const [page, widgetLoader, widgetRuntime, widgetFeedText] = await Promise.all([
+test("keeps setup inside Tam Ngữ with one explicit iOS permission", async () => {
+  const [page, packageText] = await Promise.all([
     readFile(new URL("app/page.tsx", root), "utf8"),
-    readFile(new URL("public/widget/tam-ngu-6h.js", root), "utf8"),
-    readFile(new URL("public/widget/runtime-v1.js", root), "utf8"),
-    readFile(new URL("public/widget/lessons.json", root), "utf8"),
+    readFile(new URL("package.json", root), "utf8"),
   ]);
-  const curriculum = JSON.parse(await readFile(new URL("app/curriculum.json", root), "utf8"));
-  const widgetFeed = JSON.parse(widgetFeedText);
 
-  assert.match(page, /Widget bài học/);
-  assert.match(page, /scriptable:\/\/\/add/);
-  assert.match(page, /pageParams\.get\("lesson"\)/);
-  assert.match(page, /personalizedScript/);
-  assert.match(page, /JSON\.stringify\(\{ schedule: scheduleTimes, routineStartSequence: widgetStartSequence \}\)/);
-  assert.match(page, /navigator\.clipboard\.writeText/);
-  assert.doesNotMatch(page, /widget-download|Tải mã widget thủ công/);
-  assert.match(widgetLoader, /TAM_NGU_CONFIG/);
-  assert.match(widgetLoader, /libraryDirectory\(\)/);
-  assert.match(widgetLoader, /importModule\(tamNguRuntimePath\)/);
-  assert.doesNotMatch(widgetLoader, /\beval\s*\(/);
-  assert.ok(Buffer.byteLength(widgetLoader, "utf8") < 1600);
-  assert.match(widgetRuntime, /TAM_NGU_RUNTIME_V1/);
-  assert.match(widgetRuntime, /config\.runsInAccessoryWidget/);
-  assert.match(widgetRuntime, /refreshAfterDate/);
-  assert.match(widgetRuntime, /ROUTINE_START_SEQUENCE/);
-  assert.match(widgetRuntime, /NÓI THỬ/);
-  assert.doesNotMatch(`${widgetLoader}\n${widgetRuntime}`, /(?:AQ\.|sk-proj-|sk-or-v1-|gsk_|nvapi-)[A-Za-z0-9_-]{8,}/);
-  assert.equal(widgetFeed.lessons.length, curriculum.length);
+  assert.match(page, /showActivation/);
+  assert.match(page, /Cho phép & hoàn tất/);
+  assert.match(page, /Notification\.requestPermission/);
+  assert.match(page, /pushManager\.subscribe/);
+  assert.match(page, /activationPrompt/);
+  assert.match(page, /Không app phụ/);
+  assert.doesNotMatch(page, /Scriptable|scriptable:\/\/\/|showWidgetInstall|navigator\.clipboard/);
+  assert.doesNotMatch(packageText, /build-widget-data|generate:widget-data/);
 });
-
-test("executes the Scriptable widget runtime with a personalized schedule", async () => {
-  const widgetRuntime = await readFile(new URL("public/widget/runtime-v1.js", root), "utf8");
-  const textNodes = [];
-  class FakeStack {
-    addText(content) {
-      const node = { content, font: null, textColor: null, minimumScaleFactor: 1, lineLimit: 0 };
-      textNodes.push(node);
-      return node;
-    }
-    addSpacer() {}
-    addImage() { return { tintColor: null, imageSize: null }; }
-  }
-  class FakeWidget extends FakeStack {
-    constructor() {
-      super();
-      this.url = "";
-      this.refreshAfterDate = null;
-    }
-    addStack() { return new FakeStack(); }
-    setPadding() {}
-  }
-  let renderedWidget = null;
-  let completed = false;
-  const context = {
-    module: { exports: {} },
-    Request: class {
-      async loadJSON() {
-        return { lessons: [{ id: "lesson-1", number: 1, english: "Good morning", chinese: "早上好", vietnamese: "Chào buổi sáng" }] };
-      }
-    },
-    FileManager: {
-      local: () => ({
-        documentsDirectory: () => "/documents",
-        joinPath: (left, right) => `${left}/${right}`,
-        writeString: () => undefined,
-        fileExists: () => false,
-        readString: () => "",
-      }),
-    },
-    ListWidget: FakeWidget,
-    LinearGradient: class {},
-    Color: class { static white() { return new this("FFFFFF"); } },
-    Font: { boldSystemFont: (size) => ({ size, bold: true }), systemFont: (size) => ({ size, bold: false }) },
-    SFSymbol: { named: () => ({ image: {} }) },
-    Size: class {},
-    config: { runsInAccessoryWidget: false, runsInApp: false, widgetFamily: "medium" },
-    Script: {
-      setWidget: (widget) => { renderedWidget = widget; },
-      complete: () => { completed = true; },
-    },
-  };
-  vm.runInNewContext(widgetRuntime, context);
-  assert.equal(typeof context.module.exports, "function");
-  await context.module.exports({ schedule: ["07:15", "13:30", "19:45"], routineStartSequence: 0 });
-  assert.ok(renderedWidget);
-  assert.match(renderedWidget.url, /lesson=lesson-1/);
-  assert.equal(typeof renderedWidget.refreshAfterDate?.getTime, "function");
-  assert.ok(textNodes.some((node) => node.content.includes("TAM NGỮ 6H")));
-  assert.equal(completed, true);
-});
-
 test("keeps Gemini credentials server-only while shipping push and quick lookup", async () => {
   const [page, generator, appendGenerator, pronunciationEnricher, pronunciationRepairer, curriculumVerifier, edgeWorker, workflow, secretConfigurer, deployer, verifier, rateLimitMigration] = await Promise.all([
     readFile(new URL("app/page.tsx", root), "utf8"),

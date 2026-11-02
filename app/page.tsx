@@ -49,6 +49,7 @@ const STORAGE = {
   routineStart: "tamngu6h.routineStart",
   lookupClient: "tamngu6h.lookup-client.v1",
   schedule: "tamngu6h.schedule.v1",
+  activationPrompt: "tamngu6h.activation-prompt.v1",
 };
 
 const WISHES = {
@@ -272,10 +273,7 @@ export default function Home() {
   const [query, setQuery] = useState("");
   const [ready, setReady] = useState(false);
   const [showInstall, setShowInstall] = useState(false);
-  const [showWidgetInstall, setShowWidgetInstall] = useState(false);
-  const [widgetInstallMessage, setWidgetInstallMessage] = useState("");
-  const [widgetInstallerSource, setWidgetInstallerSource] = useState("");
-  const [widgetInstallerLoading, setWidgetInstallerLoading] = useState(false);
+  const [showActivation, setShowActivation] = useState(false);
   const [pushState, setPushState] = useState<PushState>("idle");
   const [pushMessage, setPushMessage] = useState("");
   const [lookupQuery, setLookupQuery] = useState("");
@@ -311,6 +309,7 @@ export default function Home() {
   useEffect(() => {
     const storedRoutine = localStorage.getItem(STORAGE.routine) === "true";
     const storedStart = Number(localStorage.getItem(STORAGE.routineStart));
+    const standalone = window.matchMedia("(display-mode: standalone)").matches || (navigator as Navigator & { standalone?: boolean }).standalone === true;
     let storedSchedule = DEFAULT_SCHEDULE;
     try { storedSchedule = normalizeScheduleTimes(JSON.parse(localStorage.getItem(STORAGE.schedule) || "null")); } catch {}
     queueMicrotask(() => {
@@ -372,7 +371,11 @@ export default function Home() {
     } else if (PUSH_API_URL) {
       navigator.serviceWorker.ready
         .then((registration) => registration.pushManager.getSubscription())
-        .then((subscription) => setPushState(subscription ? "enabled" : "idle"))
+        .then((subscription) => {
+          setPushState(subscription ? "enabled" : "idle");
+          if (subscription) localStorage.setItem(STORAGE.activationPrompt, "completed");
+          else if (standalone && Notification.permission !== "denied" && localStorage.getItem(STORAGE.activationPrompt) !== "dismissed") setShowActivation(true);
+        })
         .catch(() => setPushState("idle"));
     }
   }, []);
@@ -382,33 +385,6 @@ export default function Home() {
     localStorage.setItem(STORAGE.routine, String(routineEnabled));
     if (routineStartSequence !== null) localStorage.setItem(STORAGE.routineStart, String(routineStartSequence));
   }, [ready, routineEnabled, routineStartSequence]);
-
-  useEffect(() => {
-    if (!showWidgetInstall || widgetInstallerSource) return;
-    let cancelled = false;
-    queueMicrotask(() => {
-      if (!cancelled) {
-        setWidgetInstallerLoading(true);
-        setWidgetInstallMessage("");
-      }
-    });
-    const scriptUrl = new URL("./widget/tam-ngu-6h.js", window.location.href).href;
-    fetch(scriptUrl, { cache: "no-store" })
-      .then((response) => {
-        if (!response.ok) throw new Error("Không tải được bộ cài widget.");
-        return response.text();
-      })
-      .then((source) => {
-        if (!cancelled) setWidgetInstallerSource(source);
-      })
-      .catch(() => {
-        if (!cancelled) setWidgetInstallMessage("Chưa chuẩn bị được bộ cài. Hãy kiểm tra mạng rồi mở lại mục này.");
-      })
-      .finally(() => {
-        if (!cancelled) setWidgetInstallerLoading(false);
-      });
-    return () => { cancelled = true; };
-  }, [showWidgetInstall, widgetInstallerSource]);
 
   useEffect(() => {
     const timer = window.setInterval(() => {
@@ -422,6 +398,8 @@ export default function Home() {
     setRoutineEnabled(true);
     setRoutineStartSequence((current) => current ?? scheduleAt(Date.now(), scheduleTimes).sequence);
     setViewingScheduled(true);
+    const standalone = window.matchMedia("(display-mode: standalone)").matches || (navigator as Navigator & { standalone?: boolean }).standalone === true;
+    if (standalone && pushState !== "enabled" && pushState !== "unsupported") setShowActivation(true);
   }
 
   function stopRoutine() {
@@ -494,6 +472,8 @@ export default function Home() {
       setRoutineEnabled(true);
       setRoutineStartSequence(startSequence);
       setPushState("enabled");
+      localStorage.setItem(STORAGE.activationPrompt, "completed");
+      setShowActivation(false);
       setPushMessage(`Đã bật. Thẻ tam ngữ mẫu vừa được gửi; lịch có ${scheduleTimes.length} mốc mỗi ngày.`);
     } catch (error) {
       setPushState("error");
@@ -651,25 +631,6 @@ export default function Home() {
     setViewingScheduled(false);
     setTab("today");
     window.scrollTo({ top: 0, behavior: "smooth" });
-  }
-
-  async function copyAndOpenWidgetInstaller() {
-    if (!widgetInstallerSource) {
-      setWidgetInstallMessage("Bộ cài chưa sẵn sàng. Hãy kiểm tra mạng rồi thử lại.");
-      return;
-    }
-    try {
-      const widgetStartSequence = scheduleAt(Date.now(), scheduleTimes).sequence - unlockedIndex;
-      const configTemplate = 'const TAM_NGU_CONFIG = {"schedule":["06:00","12:00","18:00"],"routineStartSequence":null};';
-      const personalizedConfig = `const TAM_NGU_CONFIG = ${JSON.stringify({ schedule: scheduleTimes, routineStartSequence: widgetStartSequence })};`;
-      const personalizedScript = widgetInstallerSource.replace(configTemplate, personalizedConfig);
-      if (personalizedScript === widgetInstallerSource) throw new Error("Bộ cài không hợp lệ.");
-      await navigator.clipboard.writeText(personalizedScript);
-      setWidgetInstallMessage("Đã sao chép bộ cài. Sang Scriptable, chạm giữ để dán và đặt tên “Tam Ngữ 6H”.");
-      window.setTimeout(() => { window.location.href = "scriptable:///add"; }, 350);
-    } catch {
-      setWidgetInstallMessage("Không sao chép được. Hãy mở Tam Ngữ 6H bằng Safari rồi thử lại.");
-    }
   }
 
   return (
@@ -839,8 +800,7 @@ export default function Home() {
             <div className="setting-row"><span className="setting-icon">⌂</span><div><strong>Cài lên Màn hình chính</strong><small>Mở toàn màn hình với icon như một app.</small></div><button onClick={() => setShowInstall(true)}>Xem</button></div>
             <div className="setting-row"><span className="setting-icon">✓</span><div><strong>Tự động lưu</strong><small>Tiến độ và nhịp hằng ngày được lưu trên máy.</small></div><span className="status-pill">Đang bật</span></div>
             <div className="setting-row"><span className="setting-icon">◷</span><div><strong>{scheduleTimes.length} mốc mỗi ngày</strong><small>{scheduleTimes.join(" · ")}</small></div><span className="status-pill">Tùy chỉnh</span></div>
-            <div className="setting-row"><span className="setting-icon">▣</span><div><strong>Thẻ bài học Màn hình khóa</strong><small>Hiện cả khi app đã đóng. Thẻ mới thay thẻ cũ; vuốt để xóa sau khi đọc.</small></div>{pushState === "unsupported" ? <span className="status-pill">Safari iPhone</span> : pushState === "enabled" ? <button onClick={disableLockScreen}>Tắt</button> : <button onClick={enableLockScreen}>Bật</button>}</div>
-            <div className="setting-row widget-setting"><span className="setting-icon">语</span><div><strong>Widget bài học <em>Mới</em></strong><small>Luôn hiện trên Màn hình khóa hoặc Màn hình chính; chạm để mở đáp án.</small></div><button onClick={() => setShowWidgetInstall(true)}>Cài</button></div>
+            <div className="setting-row"><span className="setting-icon">▣</span><div><strong>Bài học trên Màn hình khóa</strong><small>Hoạt động khi app đã đóng; bài mới thay bài cũ để màn hình luôn gọn.</small></div>{pushState === "unsupported" ? <span className="status-pill">Cần iOS 16.4+</span> : pushState === "enabled" ? <button onClick={disableLockScreen}>Tắt</button> : <button onClick={enableLockScreen}>Bật</button>}</div>
           </article>
           <article className="schedule-card" aria-labelledby="schedule-title">
             <div className="schedule-card-heading">
@@ -896,33 +856,32 @@ export default function Home() {
               <li><span>1</span><p>Mở đường link bằng <strong>Safari</strong>.</p></li>
               <li><span>2</span><p>Chạm nút <strong>Chia sẻ</strong> ở thanh công cụ.</p></li>
               <li><span>3</span><p>Chọn <strong>Thêm vào Màn hình chính</strong>. Nếu iPhone hiện “Mở dưới dạng ứng dụng”, hãy để tùy chọn đó bật.</p></li>
-              <li><span>4</span><p>Mở icon vừa tạo, vào <strong>Cài đặt</strong> trong app rồi bật thẻ bài học Màn hình khóa.</p></li>
+              <li><span>4</span><p>Mở icon vừa tạo và chạm <strong>Cho phép &amp; hoàn tất</strong>. Không cần cài thêm ứng dụng nào.</p></li>
             </ol>
             <button className="primary-button wide" onClick={() => setShowInstall(false)}>Mình hiểu rồi</button>
           </section>
         </div>
       )}
 
-      {showWidgetInstall && (
-        <div className="modal-backdrop" role="presentation" onClick={() => setShowWidgetInstall(false)}>
-          <section className="install-sheet widget-install-sheet" role="dialog" aria-modal="true" aria-labelledby="widget-install-title" onClick={(event) => event.stopPropagation()}>
+      {showActivation && (
+        <div className="modal-backdrop" role="presentation">
+          <section className="install-sheet activation-sheet" role="dialog" aria-modal="true" aria-labelledby="activation-title">
             <div className="sheet-handle" />
-            <div className="widget-preview" aria-hidden="true"><small>NÓI THỬ · TAM NGỮ 6H</small><strong>Tôi thường mua cà phê trên đường đi làm.</strong></div>
-            <p className="eyebrow">KHÔNG PHẢI THÔNG BÁO</p>
-            <h2 id="widget-install-title">Bài học luôn ở Màn hình khóa</h2>
-            <p className="widget-explainer">Cài một lần. Bài học tự cập nhật và vẫn có bản dự phòng khi mất mạng.</p>
-            <ol>
-              <li><span>1</span><p>Cài <a href="https://apps.apple.com/app/scriptable/id1405459188" target="_blank" rel="noreferrer"><strong>Scriptable</strong></a> từ App Store.</p></li>
-              <li><span>2</span><p>Chạm nút bên dưới. Trong script trống, chạm giữ → <strong>Dán</strong>, đặt tên <strong>Tam Ngữ 6H</strong>, rồi chạy thử một lần.</p></li>
-              <li><span>3</span><p>Nhấn giữ Màn hình khóa → <strong>Tùy chỉnh</strong> → <strong>Thêm widget</strong> → Scriptable → chọn khung chữ nhật và script Tam Ngữ 6H.</p></li>
-              <li><span>4</span><p>Sau khi xong, có thể nhấn giữ icon Scriptable → <strong>Xóa ứng dụng</strong> → <strong>Xóa khỏi Màn hình chính</strong>. Không chọn xóa hẳn app.</p></li>
-            </ol>
-            <button className="primary-button wide" disabled={widgetInstallerLoading || !widgetInstallerSource} onClick={() => void copyAndOpenWidgetInstaller()}>
-              {widgetInstallerLoading ? "Đang chuẩn bị…" : "Sao chép bộ cài & mở Scriptable"}
+            <div className="activation-preview" aria-hidden="true">
+              <span>语</span>
+              <div><small>TAM NGỮ 6H · BÀI MỚI</small><strong>Mỗi lần mở máy, học thêm một chút.</strong></div>
+            </div>
+            <p className="eyebrow">CHỈ CÒN MỘT XÁC NHẬN</p>
+            <h2 id="activation-title">Bật bài học trên Màn hình khóa</h2>
+            <p className="activation-copy">iPhone sẽ hỏi quyền thông báo một lần. Sau đó Tam Ngữ tự gửi bài theo lịch, kể cả khi app đã đóng.</p>
+            <div className="activation-points" aria-label="Thiết lập tự động">
+              <span>✓ Không app phụ</span><span>✓ Không nhập mã</span><span>✓ Tự lưu lịch</span>
+            </div>
+            <button className="primary-button wide" disabled={pushState === "enabling"} onClick={() => void enableLockScreen()}>
+              {pushState === "enabling" ? "Đang hoàn tất…" : "Cho phép & hoàn tất"}
             </button>
-            {widgetInstallMessage && <p className="widget-install-message">{widgetInstallMessage}</p>}
-            <p className="honest-note">Scriptable phải còn trong Thư viện ứng dụng để iOS chạy widget. Nếu đổi lịch học, mở lại mục này để cập nhật lịch; iOS có thể làm mới widget trễ vài phút.</p>
-            <button className="text-button widget-close" onClick={() => setShowWidgetInstall(false)}>Chưa cài bây giờ</button>
+            {pushMessage && <p className={`activation-message ${pushState === "error" ? "error-note" : ""}`}>{pushMessage}</p>}
+            <button className="text-button activation-close" onClick={() => { localStorage.setItem(STORAGE.activationPrompt, "dismissed"); setShowActivation(false); }}>Để sau</button>
           </section>
         </div>
       )}
