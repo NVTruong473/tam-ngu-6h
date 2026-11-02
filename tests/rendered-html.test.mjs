@@ -21,7 +21,7 @@ test("exports an installable PWA with one replaceable lock-screen card", async (
   assert.ok(manifest.icons.some((icon) => icon.sizes === "1024x1024" && icon.purpose === "maskable"));
   assert.equal(highResolutionIcon.readUInt32BE(16), 1024);
   assert.equal(highResolutionIcon.readUInt32BE(20), 1024);
-  assert.match(serviceWorker, /tam-ngu-6h-v12/);
+  assert.match(serviceWorker, /tam-ngu-6h-v13/);
   assert.match(serviceWorker, /html\.matchAll/);
   assert.match(serviceWorker, /skipWaiting/);
   assert.match(serviceWorker, /clients\.claim/);
@@ -52,9 +52,9 @@ test("ships a growing progressive curriculum with balanced seed formats", async 
   assert.match(curriculum.at(-1).stage, /^B1/);
   assert.ok(curriculum.every((item) => item.lines.length >= 1));
   assert.ok(curriculum.every((item) => item.notification
-    && [...item.notification.english].length <= 64
-    && [...item.notification.chinese].length <= 26
-    && [...item.notification.vietnamese].length <= 68));
+    && [...item.notification.english].length <= 39
+    && [...item.notification.chinese].length <= 16
+    && [...item.notification.vietnamese].length <= 42));
   assert.ok(curriculum.every((item) => item.lines.every((line) => line.english && line.chinese && line.pinyin && line.vietnamese)));
   assert.ok(curriculum.every((item) => item.lines.every((line) => line.vietnameseReading && /\([1-4]\)/.test(line.vietnameseReading))));
   assert.ok(curriculum.every((item) => item.lines.every((line) => /[ăâđêôơưáàảãạắằẳẵặấầẩẫậéèẻẽẹếềểễệíìỉĩịóòỏõọốồổỗộớờởỡợúùủũụứừửữựýỳỷỹỵ]/iu.test(line.vietnameseReading))));
@@ -113,9 +113,13 @@ test("keeps Gemini credentials server-only while shipping push and quick lookup"
   assert.match(page, /Đọc gần Việt/);
   assert.match(page, /Notification\.requestPermission/);
   assert.match(page, /registration\.showNotification/);
+  assert.match(page, /EN  \$\{preview\?\.english/);
+  assert.match(edgeWorker, /EN  \$\{notification\.english/);
+  assert.match(edgeWorker, /encodeURIComponent\(lesson\.id\)/);
   assert.match(page, /Thẻ tam ngữ mẫu vừa được gửi/);
-  assert.match(page, /`✨ \$\{preview\?\.english/);
+  assert.match(page, /Bài tam ngữ mẫu/);
   assert.match(page, /`中  \$\{preview\?\.chinese/);
+  assert.match(page, /Hiển thị bản xem trước → Luôn luôn/);
   assert.match(page, /icon-v2-192\.png/);
   assert.match(page, /NEXT_PUBLIC_PUSH_API_URL/);
   assert.match(page, /NEXT_PUBLIC_FEEDBACK_FORM_URL/);
@@ -145,7 +149,8 @@ test("keeps Gemini credentials server-only while shipping push and quick lookup"
   assert.match(curriculumVerifier, /số thanh pinyin/i);
   assert.match(edgeWorker, /webpush/);
   assert.match(edgeWorker, /lesson\?\.notification \|\| firstLine/);
-  assert.match(edgeWorker, /`🧪 \$\{notification\?\.english/);
+  assert.match(edgeWorker, /"🧪 Bản xem thử"/);
+  assert.match(edgeWorker, /`\$\{symbol\} \$\{clock\.time\} · Bài mới`/);
   assert.match(edgeWorker, /`中  \$\{notification\.chinese/);
   assert.match(edgeWorker, /`VI  \$\{notification\.vietnamese/);
   assert.match(edgeWorker, /notificationId: isDueRun/);

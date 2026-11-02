@@ -456,15 +456,16 @@ export default function Home() {
         const preview = studyModule.notification || previewLine;
         const existing = await registration.getNotifications();
         existing.forEach((notification) => notification.close());
-        await registration.showNotification(`✨ ${preview?.english || "A new lesson is waiting."}`, {
+        await registration.showNotification("✨ Bài tam ngữ mẫu", {
           body: [
+            `EN  ${preview?.english || "A new lesson is waiting."}`,
             `中  ${preview?.chinese || "新的一课在等你。"}`,
             `VI  ${preview?.vietnamese || "Một bài học mới đang chờ cậu."}`,
           ].join("\n"),
           icon: new URL("./icons/icon-v2-192.png", window.location.href).href,
           tag: "tam-ngu-current-lesson",
           renotify: false,
-          data: { url: appRoot },
+          data: { url: new URL(`?lesson=${encodeURIComponent(studyModule.id)}`, appRoot).href },
         });
       } catch {
         // Subscription remains valid even if iOS delays the local confirmation.
@@ -830,7 +831,7 @@ export default function Home() {
               <h3>Cách học</h3>
               <p>Mặc định có bài mới lúc 06:00, 12:00 và 18:00. Có thể chọn từ 1 đến 24 mốc riêng mỗi ngày. Kho bài được bổ sung tự động và tăng dần từ B1 đến C1.</p>
               <h3>Màn hình khóa</h3>
-              <p>Thông báo vẫn đến khi app đã đóng. Vuốt để xóa sau khi đọc; âm lượng và cách hiển thị do điện thoại quyết định. Với lịch rất dày, app có thể xen lại bài cũ để ôn thay vì gửi nội dung AI chưa được kiểm tra.</p>
+              <p>Thông báo vẫn đến khi app đã đóng. Mỗi thẻ có đủ câu Anh, Trung và Việt; chạm thẻ mới mở đúng bài để xem phát âm, ngữ pháp và ví dụ. Muốn đọc nội dung trước Face ID: vào Cài đặt iPhone → Thông báo → Hiển thị bản xem trước → Luôn luôn. Vuốt để xóa sau khi đọc; âm lượng và cách hiển thị do điện thoại quyết định.</p>
               <h3>Dữ liệu và Tra nhanh</h3>
               <p>Tiến độ được lưu trên thiết bị. Tra nhanh dùng ngay, không cần nhập mã; API key chỉ nằm trên máy chủ và có giới hạn rộng để ngăn spam.</p>
             </div>

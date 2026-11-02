@@ -5,7 +5,10 @@ const destination = resolve("app/curriculum.json");
 const sourcePath = process.env.API_KEYS_FILE;
 const model = process.env.GEMINI_MODEL || "gemini-3.5-flash-lite";
 const batchSize = 1;
-const limits = { english: 64, chinese: 26, vietnamese: 68 };
+const forceRegeneration = process.env.REGENERATE_NOTIFICATIONS === "1";
+// iOS' abbreviated Lock Screen card only guarantees a few body lines. Keep
+// each language to a complete one-line thought instead of relying on ellipses.
+const limits = { english: 39, chinese: 16, vietnamese: 42 };
 if (!sourcePath) throw new Error("Thiếu API_KEYS_FILE.");
 
 const source = readFileSync(sourcePath, "utf8");
@@ -105,11 +108,11 @@ function validateSnippets(snippets, lessons) {
 async function createReviewedBatch(lessons, batchIndex) {
   let feedback = "";
   for (let attempt = 1; attempt <= 8; attempt += 1) {
-    const originals = lessons.map((lesson) => ({ id: lesson.id, title: lesson.title, lines: lesson.lines }));
+    const originals = lessons.map((lesson) => ({ id: lesson.id, title: lesson.title, source: lesson.lines[0] }));
     const generationPrompt = `
 Tạo bản hiển thị Màn hình khóa cho các micro-lesson Anh–Trung–Việt dưới đây.
-Mỗi bản là một câu độc lập, tự nhiên, thực dụng và giữ đúng ý chính của line đầu. Có thể lược chi tiết phụ nhưng không đổi sự việc, thì, phủ định, chủ thể hay sắc thái. Ba ngôn ngữ phải tương đương nghĩa.
-Giới hạn cứng tính theo Unicode: english <= ${limits.english}, chinese <= ${limits.chinese}, vietnamese <= ${limits.vietnamese} ký tự. Hãy nhắm english 35–58, chinese 8–24, vietnamese 35–62 ký tự để chắc chắn không vượt trần. Ví dụ phong cách: "I grab coffee on my way to work." / "上班路上我买杯咖啡。" / "Tôi mua cà phê trên đường đi làm." Không viết nhãn EN/中/VI, không markdown, không dấu ba chấm, không cắt dở câu.
+Mỗi bản là một câu độc lập, tự nhiên, thực dụng và giữ đúng ý giao tiếp cốt lõi của source. Có thể lược thời lượng, lý do hoặc mô tả phụ nếu câu còn trọn nghĩa; không đổi sự việc, phủ định, chủ thể hay sắc thái chính. Ba ngôn ngữ phải tương đương nghĩa.
+Giới hạn cứng tính theo Unicode: english <= ${limits.english}, chinese <= ${limits.chinese}, vietnamese <= ${limits.vietnamese} ký tự. Hãy nhắm english 24–37, chinese 7–16, vietnamese 26–41 ký tự để chắc chắn không vượt trần. Ưu tiên một ý giao tiếp cốt lõi, câu hoàn chỉnh và từ ngữ thông dụng. Ví dụ phong cách: "I get coffee on my way to work." / "上班路上我买咖啡。" / "Tôi mua cà phê trên đường đi làm." Không viết nhãn EN/中/VI, không markdown, không dấu ba chấm, không cắt dở câu.
 Giữ nguyên id và thứ tự. Chỉ trả JSON.
 ${feedback}
 Nguồn:
@@ -146,7 +149,9 @@ ${JSON.stringify(reviewItems)}
 
 for (let start = 0; start < curriculum.length; start += batchSize) {
   const lessons = curriculum.slice(start, start + batchSize);
-  if (lessons.every((lesson) => lesson.notification)) {
+  const alreadyFitsLockScreen = lessons.every((lesson) => lesson.notification
+    && Object.entries(limits).every(([field, maximum]) => [...String(lesson.notification[field] || "")].length <= maximum));
+  if (alreadyFitsLockScreen || (!forceRegeneration && lessons.every((lesson) => lesson.notification))) {
     process.stdout.write(`Giữ snippet đã có ${Math.min(start + batchSize, curriculum.length)}/${curriculum.length}.\n`);
     continue;
   }

@@ -357,17 +357,21 @@ async function dispatch(request: Request, origin: string | null) {
     const notification = lesson?.notification || firstLine;
     const symbol = phase === "morning" ? "☀️" : phase === "noon" ? "🌤️" : "🌙";
     const notificationBody = [
+      notification?.english ? `EN  ${notification.english}` : "",
       notification?.chinese ? `中  ${notification.chinese}` : "",
       notification?.vietnamese ? `VI  ${notification.vietnamese}` : "",
     ].filter(Boolean).join("\n") || lesson?.wish || fallbackWish(phase, currentSequence);
+    const lessonUrl = lesson?.id
+      ? new URL(`?lesson=${encodeURIComponent(lesson.id)}`, publicAppUrl).href
+      : publicAppUrl;
     const payload = JSON.stringify({
       title: body?.preview
-        ? `🧪 ${notification?.english || "A new lesson is ready."}`
-        : `${symbol} ${notification?.english || "A new lesson is ready."}`,
+        ? "🧪 Bản xem thử"
+        : `${symbol} ${clock.time} · Bài mới`,
       body: notificationBody,
       notificationId: isDueRun ? `due:${clock.dispatchKey}` : `manual:${dispatchId}`,
       tag: "tam-ngu-current-lesson",
-      url: publicAppUrl,
+      url: lessonUrl,
       timestamp: Date.now(),
     });
     try {
