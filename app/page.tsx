@@ -833,7 +833,7 @@ export default function Home() {
           </article>
           <article className="schedule-card" aria-labelledby="schedule-title">
             <div className="schedule-card-heading">
-              <div><strong id="schedule-title">Giờ báo bài mới</strong><small>Thêm tối đa 24 mốc; mỗi giờ chỉ nhận một thẻ.</small></div>
+              <div><strong id="schedule-title">Giờ báo bài mới</strong><small>Thêm tối đa 24 mốc; mỗi mốc chỉ nhận một thẻ.</small></div>
               <span>{scheduleTimes.length}/24</span>
             </div>
             <div className="schedule-times">

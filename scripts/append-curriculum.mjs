@@ -453,7 +453,14 @@ function validateAndNormalize(items) {
     }
 
     item.vocabulary.forEach((entry) => {
-      if (typeof entry !== "string" || entry.trim().split("·").map((part) => part.trim()).filter(Boolean).length !== 3) {
+      const parts = typeof entry === "string" ? entry.trim().split("·").map((part) => part.trim()).filter(Boolean) : [];
+      if (parts.length !== 3
+        || !/\p{Script=Latin}/u.test(parts[0])
+        || /\p{Script=Han}/u.test(parts[0])
+        || !/\p{Script=Han}/u.test(parts[1])
+        || /[A-Za-z]/u.test(parts[1])
+        || !/\p{Script=Latin}/u.test(parts[2])
+        || /\p{Script=Han}/u.test(parts[2])) {
         throw new Error(`Từ vựng không đúng định dạng tại ${plan.id}.`);
       }
       assertPlainText(entry, `vocabulary tại ${plan.id}`);
@@ -476,7 +483,9 @@ async function reviewGeneratedLessons(items) {
   const reviewPrompt = [
     "Bạn là người phản biện học thuật độc lập cho nội dung micro-learning Anh–Trung dành cho người Việt đã học khoảng một tháng.",
     "Không viết lại bài. Đánh giá từng bài bên dưới một cách nghiêm khắc nhưng công bằng.",
-    "approved chỉ được true khi tất cả đều ổn: ngữ pháp và độ tự nhiên tiếng Anh; tiếng Trung giản thể tự nhiên; ý nghĩa Anh–Trung–Việt tương đương; pinyin hợp lý; vietnameseReading thực sự là gợi âm Việt và khớp các thanh; grammarFocus, vocabulary, note và challenge đúng trọng tâm B1; cấu trúc mà grammarFocus nêu phải thật sự xuất hiện đầy đủ trong line và phần giải thích không được phóng đại nghĩa; không có câu hoặc lời chúc sáo rỗng/lệch ngữ cảnh.",
+    "approved chỉ được true khi tất cả đều ổn: ngữ pháp và độ tự nhiên tiếng Anh; tiếng Trung giản thể tự nhiên; ý nghĩa Anh–Trung–Việt tương đương; pinyin hợp lý; vietnameseReading thực sự là gợi âm Việt và khớp các thanh; grammarFocus, vocabulary, note và challenge đúng trọng tâm B1; cấu trúc mà grammarFocus nêu phải thật sự xuất hiện đầy đủ trong line và phần giải thích không được phóng đại nghĩa.",
+    "Ứng dụng bắt buộc có cả wish và nightWish. Tuyệt đối không từ chối chỉ vì hai trường này tồn tại. Chỉ báo lỗi khi chính nội dung lời chúc quá sáo rỗng, sai buổi, lặp ý gần đây hoặc lệch ngữ cảnh; hãy nêu chính xác cụm nào có vấn đề.",
+    "vocabulary bắt buộc theo thứ tự English · 中文 · nghĩa Việt và ba vế phải tương đương nghĩa trong ngữ cảnh, không chỉ cùng xuất hiện trong một câu.",
     "Nếu có lỗi hoặc nghi ngờ thực chất, approved=false và issues phải nêu ngắn gọn, cụ thể theo đúng bài. Nếu không có lỗi, issues là mảng rỗng. Không nhận xét ngoài JSON.",
     "So sánh với recentLessons bên dưới: từ chối nếu bài mới lặp lại cùng tình huống, mâu thuẫn, thông điệp hoặc bộ từ vựng cốt lõi của một bài gần đây; chỉ cho phép ôn lại một cấu trúc nhỏ trong bối cảnh thực sự khác.",
     "recentLessons:",

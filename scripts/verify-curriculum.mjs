@@ -177,7 +177,14 @@ for (const [lessonIndex, lesson] of (Array.isArray(curriculum) ? curriculum : []
     } else {
       for (const [vocabularyIndex, entry] of lesson.vocabulary.entries()) {
         if (!assertText(entry, `${lessonId} / vocabulary ${vocabularyIndex + 1}`, 5)) continue;
-        if (entry.split("·").map((part) => part.trim()).filter(Boolean).length !== 3) {
+        const parts = entry.split("·").map((part) => part.trim()).filter(Boolean);
+        if (parts.length !== 3
+          || !/\p{Script=Latin}/u.test(parts[0] ?? "")
+          || /\p{Script=Han}/u.test(parts[0] ?? "")
+          || !/\p{Script=Han}/u.test(parts[1] ?? "")
+          || /[A-Za-z]/u.test(parts[1] ?? "")
+          || !/\p{Script=Latin}/u.test(parts[2] ?? "")
+          || /\p{Script=Han}/u.test(parts[2] ?? "")) {
           addFailure(`${lessonId} / vocabulary ${vocabularyIndex + 1}: phải có English · 中文 · nghĩa Việt.`);
         }
       }
