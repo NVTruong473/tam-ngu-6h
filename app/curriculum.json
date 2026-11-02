@@ -2997,5 +2997,316 @@
     "nightWish": "Chuyện cũ cứ nằm yên ở đó nhé; đêm nay bạn chỉ cần một giấc ngủ không phải giải thích gì.",
     "generatedAt": "2026-11-02T02:48:41.653Z",
     "generator": "gemini-3.5-flash-lite"
+  },
+  {
+    "id": "lesson-0113",
+    "stage": "B1 · Phản xạ trong đời sống",
+    "kind": "message",
+    "title": "Nhắn tin nhờ đồng nghiệp nhận giùm đơn hàng bưu điện",
+    "context": "Nhắn tin nhờ đồng nghiệp ở văn phòng nhận hộ gói hàng vì bạn có việc ra ngoài buổi trưa.",
+    "lines": [
+      {
+        "speaker": "A",
+        "english": "Could you do me a huge favor and accept a courier delivery for me if it arrives before I get back?",
+        "chinese": "能不能帮个大忙，如果快递在我回来之前到的话，替我签收一下？",
+        "pinyin": "néng bu néng bāng gè dà máng, rú guǒ kuài dì zài wǒ huí lái zhī qián dào de huà, tì wǒ qiān shōu yī xià?",
+        "vietnameseReading": "nẻng(2) pu nẻng(2) pang(1) cợ(4) ta(4) máng(2) rú(2) cuổ(3) khuải(4) tì(4) trai(4) uổ(3) huây(2) lai(2) trư(1) chién(2) tao(4) tơ hua(4) thí(4) uổ(3) chiên(1) sấu(1) i(1) xia(4)",
+        "vietnamese": "Bạn có thể giúp tôi một việc lớn được không, nếu bưu phẩm tới trước khi tôi quay về, hãy ký nhận hộ tôi một chút nhé?"
+      }
+    ],
+    "note": "Cấu trúc 能不能... (có thể... hay không) là cách nhờ vả rất tự nhiên, kết hợp với cụm 帮个大忙 (giúp một việc lớn) tạo sự thân thiện nhưng không quá sỗ sàng. Khác với tiếng Anh dùng conditional clause 'if it arrives', tiếng Trung dùng cấu trúc giả định 如果...的话 kết hợp với 在...之前 (trước khi...)",
+    "challenge": "Hãy soạn một tin nhắn ngắn bằng tiếng Trung để nhờ đồng nghiệp nhận giùm tài liệu giao tới vào chiều nay.",
+    "grammarFocus": "Cấu trúc giả định 如果...的话 (nếu... thì) kết hợp với 替... (làm thay cho ai) giúp diễn đạt yêu cầu nhờ vả một cách lịch sự, rõ ràng trong giao tiếp công việc.",
+    "vocabulary": [
+      "courier delivery · 快递 · bưu phẩm",
+      "sign for · 签收 · ký nhận",
+      "huge favor · 大忙 · việc lớn"
+    ],
+    "wish": "Chúc bạn buổi trưa nạp đầy năng lượng, mọi việc suôn sẻ và luôn giữ được tinh thần làm việc tích cực, hăng hái suốt cả ngày.",
+    "nightWish": "Đêm nay hãy thả lỏng cơ thể, gác lại mọi lo toan công việc và chìm vào giấc ngủ thật sâu, mơ những giấc mơ thật đẹp bạn nhé.",
+    "generatedAt": "2026-11-02T02:56:10.373Z",
+    "generator": "gemini-3.5-flash-lite"
+  },
+  {
+    "id": "lesson-0114",
+    "stage": "B1 · Phản xạ trong đời sống",
+    "kind": "dialogue",
+    "title": "Bàn về dự định học thêm ngoại ngữ thứ hai",
+    "context": "Hai người bạn đang ngồi uống cà phê vào buổi tối và chia sẻ về dự định thử thách bản thân với một ngôn ngữ mới.",
+    "lines": [
+      {
+        "speaker": "A",
+        "english": "Have you ever considered learning a completely different foreign language just for fun?",
+        "chinese": "你有没有考虑过纯粹为了好玩去学一门完全不同的外语？",
+        "pinyin": "Nǐ yǒu méiyǒu kǎolǜ guò chúncuì wèile hǎowán qù xué yīmén wánquán bùtóng de wàiyǔ?",
+        "vietnameseReading": "nỉ(3) iểu(3) mây(2) iểu(3) khảo(3) lu(4) cuô(4) chuân(2) chuy(4) uây(4) lơ hảo(3) oản(2) chiệu(4) xue(2) i(1) mớn(2) oản(2) chuán(2) pu(4) thúng(2) tơ uải(4) ỷ(3)",
+        "vietnamese": "Bạn đã bao giờ cân nhắc việc học một ngoại ngữ hoàn toàn khác chỉ để cho vui chưa?"
+      },
+      {
+        "speaker": "B",
+        "english": "I have thought about it, but given my current tight schedule, mastering one is already challenging enough.",
+        "chinese": "我倒是有过这个想法，不过鉴于我目前排得满满当当的日程，精通一门已经够有挑战性的了。",
+        "pinyin": "Wǒ dǎoshì yǒuguò zhège xiǎngfǎ, bùguò jiànyú wǒ mùqián pái dé mǎnmǎndāngdāng de rìchéng, jīngtōng yīmén yǐjīng gòu yǒu tiǎozhànxìng de le.",
+        "vietnameseReading": "uổ(3) tao(3) sứ(4) iểu(3) cuô(4) chè(4) cợ xiảng(3) phả(3) pu(4) cuô(4) chiên(4) ý(2) uổ(3) mu(4) chién(2) phái(2) tơ(2) mản(3) mản(3) tang(1) tang(1) tơ rư(4) chấng(2) cing(1) thong(1) i(1) mớn(2) ỉ(3) cing(1) câu(4) iểu(3) thiaỏ(3) chan(4) xíng(4) tơ lơ",
+        "vietnamese": "Tôi cũng từng có ý nghĩ đó, nhưng với lịch trình hiện tại đang kín mít của tôi, việc tinh thông một ngoại ngữ đã đủ tính thử thách rồi."
+      },
+      {
+        "speaker": "A",
+        "english": "That is true, but starting small beats doing nothing at all.",
+        "chinese": "话是这么说，不过从微小的步子开始总比什么都不做好得多。",
+        "pinyin": "Huà shì zhème shuō, bùguò cóng wéixiǎo de bùzi kāishǐ zǒng bǐ shénme dōu bù zuò hǎo de duō.",
+        "vietnameseReading": "hua(4) sứ(4) chè(4) mơ suô(1) pu(4) cuô(4) chỏng(2) uấy(2) xẻo(3) tơ pu(4) tư khai(1) chỉ(3) chung(3) pỉ(3) sấn(2) mơ tâu(1) pu(4) chuô(4) hảo(3) tơ tuô(1)",
+        "vietnamese": "Nói thì nói vậy, nhưng bắt đầu từ những bước nhỏ vẫn tốt hơn nhiều so với việc không làm gì cả."
+      }
+    ],
+    "note": "Cấu trúc 鉴于 (dựa trên / xét thấy) rất hữu ích để nêu lý do trước khi đưa ra lời giải thích. Ngoài ra, cụm từ 满满当当 diễn tả sự kín đặc, bận rộn một cách rất tự nhiên trong văn nói tiếng Trung.",
+    "challenge": "Hãy thu âm một đoạn ngắn 1 đến 2 phút chia sẻ bằng tiếng Trung về lý do bạn muốn hoặc chưa muốn học thêm một ngôn ngữ mới vào lúc này.",
+    "grammarFocus": "Sử dụng từ 鉴于 để đưa ra tiền đề và 满满当当 để nhấn mạnh mức độ bận rộn.",
+    "vocabulary": [
+      "foreign language · 外语 · ngoại ngữ",
+      "tight schedule · 日程 · lịch trình / thời gian biểu",
+      "challenging · 挑战性 · tính thử thách"
+    ],
+    "wish": "Mong buổi tối của bạn trôi qua thật nhẹ nhàng, mang lại cảm hứng mới mẻ cho những mục tiêu phía trước.",
+    "nightWish": "Khép lại một ngày bận rộn, chúc bạn chìm vào giấc ngủ sâu với những giấc mơ êm đềm và thức dậy thật rạng rỡ.",
+    "generatedAt": "2026-11-02T02:56:16.311Z",
+    "generator": "gemini-3.5-flash-lite"
+  },
+  {
+    "id": "lesson-0115",
+    "stage": "B1 · Phản xạ trong đời sống",
+    "kind": "sentence",
+    "title": "Bàn về thói quen chi tiêu không dùng tiền mặt",
+    "context": "Trò chuyện với bạn bè về sự thay đổi thói quen mang vác ví tiền khi ra đường trong xã hội hiện đại.",
+    "lines": [
+      {
+        "speaker": "A",
+        "english": "Carrying a physical wallet nowadays feels almost redundant since mobile payments cover everything.",
+        "chinese": "如今随身带实体钱包几乎多余，因为手机支付能搞定一切。",
+        "pinyin": "rújīn suíshēn dài shítǐ qiánbāo jīhū duōyú, yīnwèi shǒujī zhīfù néng gǎodìng yīqiè.",
+        "vietnameseReading": "rú(2) cin(1) suý(2) sên(1) đai(4) sứ(2) thí(3) chién(2) pao(1) chi(1) hú(1) tuô(1) ý(2) y(1) uây(4) sẩu(3) chi(1) trư(1) phu(4) nẻng(2) cảo(3) tìng(4) i(1) chỉê(4)",
+        "vietnamese": "Mang theo ví tiền mặt ngày nay hầu như đã thừa thãi, bởi vì thanh toán bằng điện thoại có thể lo liệu mọi thứ."
+      }
+    ],
+    "note": "Cấu trúc 几乎… (hầu như...) kết hợp với tính từ 多余 (thừa thãi) dùng để đánh giá một thói quen cũ đang dần phai nhạt. Điểm khác biệt so với tiếng Anh là tiếng Trung dùng cụm 搞定一切 (lo liệu mọi thứ) ở cuối câu để tạo sắc thái gọn gàng và quyết đoán hơn.",
+    "challenge": "Hãy thu âm một đoạn ngắn chia sẻ quan điểm của bạn về việc bạn có còn mang tiền mặt khi ra đường hay không bằng cách dùng cấu trúc tương tự.",
+    "grammarFocus": "Cấu trúc 几乎… (hầu như...) kết hợp với vị ngữ đánh giá trạng thái.",
+    "vocabulary": [
+      "redundant · 几乎多余 · thừa thãi",
+      "mobile payments · 手机支付 · thanh toán di động",
+      "cover everything · 搞定一切 · lo liệu mọi thứ",
+      "physical wallet · 实体钱包 · ví tiền vật lý"
+    ],
+    "wish": "Chúc bạn buổi sáng tràn đầy năng lượng, sẵn sàng tiếp thu những kiến thức thú vị và tự tin vận dụng vào đời sống hàng ngày.",
+    "nightWish": "Khép lại một ngày nhiều trải nghiệm, chúc bạn chìm vào giấc ngủ thật sâu và thức dậy với tâm thế hào hứng cho ngày mai.",
+    "generatedAt": "2026-11-02T02:56:24.711Z",
+    "generator": "gemini-3.5-flash-lite"
+  },
+  {
+    "id": "lesson-0116",
+    "stage": "B1 · Phản xạ trong đời sống",
+    "kind": "message",
+    "title": "Nhắn tin nhắc nhở người giao hàng về địa chỉ phụ",
+    "context": "Bạn đang đặt một đơn hàng giao tới văn phòng phụ nhưng sợ tài xế nhầm với trụ sở chính, cần nhắn tin nhắc nhở cụ thể.",
+    "lines": [
+      {
+        "speaker": "A",
+        "english": "Please kindly deliver the package to the side entrance instead of the main lobby to avoid congestion.",
+        "chinese": "请把包裹送到侧门而不是大堂，以免造成拥堵。",
+        "pinyin": "qǐng bǎ bāo guǒ sòng dào cè mén ér bú shì dà táng, yǐ miǎn zào chéng yǒng dǔ.",
+        "vietnameseReading": "chỉnh(3) bả(3) pao(1) cuổ(3) sông(4) tao(4) trơ(4) mớn(2) ơ(2) pu(2) sứ(4) ta(4) tháng(2) ỉ(3) mản(3) tảo(4) chấng(2) yỏng(3) đụ(3)",
+        "vietnamese": "Xin hãy giao bưu phẩm đến cửa hông thay vì sảnh chính để tránh ùn tắc."
+      }
+    ],
+    "note": "Cấu trúc A 而不是 B (A chứ không phải B) giúp xác định rõ ràng sự lựa chọn thay thế trong yêu cầu; cụm yǐ miǎn (以免) dùng để chỉ mục đích tránh xảy ra một tình huống bất lợi.",
+    "challenge": "Hãy viết một tin nhắn ngắn bằng tiếng Trung dặn shipper giao hàng vào tủ đồ thông minh thay vì để ở quầy lễ tân.",
+    "grammarFocus": "Sử dụng cấu trúc A 而不是 B kết hợp với 免得/以免 để đưa ra chỉ dẫn thay thế rõ ràng và phòng ngừa sự cố.",
+    "vocabulary": [
+      "side entrance · 侧门 · cửa hông",
+      "main lobby · 大堂 · sảnh chính",
+      "congestion · 拥堵 · ùn tắc"
+    ],
+    "wish": "Chúc bạn buổi trưa thật thư thái, giải quyết nhanh gọn mọi việc lặt vặt và nạp đầy năng lượng cho buổi chiều.",
+    "nightWish": "Mong ánh trăng ngoài cửa sổ dịu dàng ôm ấp giấc mơ của bạn, để ngày mai thức dậy với một tâm hồn thật nhẹ nhõm.",
+    "generatedAt": "2026-11-02T02:56:43.255Z",
+    "generator": "gemini-3.5-flash-lite"
+  },
+  {
+    "id": "lesson-0117",
+    "stage": "B1 · Phản xạ trong đời sống",
+    "kind": "dialogue",
+    "title": "Bàn về việc tập trung làm việc sâu giữa không gian mở",
+    "context": "Hai đồng nghiệp thảo luận về cách duy trì sự tập trung khi văn phòng đổi sang không gian mở nhiều tiếng ồn.",
+    "lines": [
+      {
+        "speaker": "A",
+        "english": "How do you manage to stay focused in this bustling open-plan office all day?",
+        "chinese": "在这间嘈杂的开放式办公室里，你整天是怎么保持专注的？",
+        "pinyin": "zài zhè jiān cáo zá de kāi fàng shì bàn gōng shì lǐ, nǐ zhěng tiān shì zěn me bǎo chí zhuān zhù de?",
+        "vietnameseReading": "trai(4) chè(4) chiên(1) thảo(2) trá(2) tơ khai(1) phang(4) sứ(4) ban(4) công(1) sứ(4) lỉ(3) nỉ(3) chẩng(3) thêm(1) sứ(4) chẩn(3) mơ bả(3) chí(2) chuai(1) chu(4) tơ",
+        "vietnamese": "Làm thế nào mà bạn duy trì được sự tập trung suốt cả ngày trong văn phòng mở ồn ào này thế?"
+      },
+      {
+        "speaker": "B",
+        "english": "I simply put on noise-canceling headphones whenever I need to dive into deep work.",
+        "chinese": "每当我需要投入深度工作时，就会戴上降噪耳机。",
+        "pinyin": "měi dāng wǒ xū yào tóu rù shēn dù gōng zuò shí, jiù huì dài shàng jiàng zào ěr jī.",
+        "vietnameseReading": "mây(3) tang(1) uổ(3) sy(1) yao(4) thâu(2) rú(4) sên(1) tu(4) công(1) chuô(4) sứ(2) chiêu(4) huây(4) đai(4) sang(4) ciàng(4) tảo(4) ơ(3) chi(1)",
+        "vietnamese": "Mỗi khi cần lao vào công việc chuyên sâu, tôi chỉ đơn giản là đeo tai nghe chống ồn vào."
+      },
+      {
+        "speaker": "A",
+        "english": "That is a smart trick; I should definitely invest in a good pair myself.",
+        "chinese": "这倒是个聪明的招数，我也该去买一副好点的了。",
+        "pinyin": "zhè dǎo shì gè cōng míng de zhāo shù, wǒ yě gāi qù mǎi yī fù hǎo diǎn de le.",
+        "vietnameseReading": "chè(4) tao(3) sứ(4) cợ(4) châu(1) mính(2) tơ trao(1) su(4) uổ(3) iê(3) cai(1) chiệu(4) mải(3) i(1) phu(4) hảo(3) điển(3) tơ lơ",
+        "vietnamese": "Đó quả là một mẹo khôn ngoan, tôi chắc chắn cũng nên đầu tư một cặp thật tốt."
+      }
+    ],
+    "note": "Cấu trúc 每当...时 (mỗi khi... khi) dùng để diễn tả hành động lặp đi lặp lại theo thói quen; kết hợp với 投入深度工作 (đầu tư vào công việc chuyên sâu) tạo nên phong cách giao tiếp công sở hiện đại và chuyên nghiệp.",
+    "challenge": "Hãy viết hoặc nói một đoạn ngắn kể về cách bạn tìm lại sự tập trung khi xung quanh quá ồn ào bằng tiếng Trung.",
+    "grammarFocus": "Cấu trúc 每当...时 dùng để nhấn mạnh tình huống lặp lại đều đặn.",
+    "vocabulary": [
+      "open-plan office · 开放式办公室 · văn phòng không gian mở",
+      "noise-canceling headphones · 降噪耳机 · tai nghe chống ồn",
+      "deep work · 深度工作 · công việc chuyên sâu"
+    ],
+    "wish": "Chúc bạn một buổi tối tràn ngập sự bình yên, để trí tuệ được nghỉ ngơi và năng lượng sáng tạo lại đong đầy cho ngày mai.",
+    "nightWish": "Khép lại một ngày nhiều bận rộn, chúc bạn chìm vào giấc ngủ thật sâu và mơ những giấc mơ thật đẹp.",
+    "generatedAt": "2026-11-02T02:56:54.016Z",
+    "generator": "gemini-3.5-flash-lite"
+  },
+  {
+    "id": "lesson-0118",
+    "stage": "B1 · Phản xạ trong đời sống",
+    "kind": "sentence",
+    "title": "Chia sẻ quan điểm về giá trị của những trải nghiệm bất ngờ",
+    "context": "Trò chuyện cùng bạn bè về việc những tình huống không lên lịch trước thường mang lại nhiều bài học thú vị nhất.",
+    "lines": [
+      {
+        "speaker": "A",
+        "english": "Often, the most unforgettable memories come from the detours we never planned to take.",
+        "chinese": "通常，那些最难忘的回忆往往源于我们从未计划过的绕路。",
+        "pinyin": "tōng cháng, nà xiē zuì nán wàng de huí yì wǎng wǎng yuán yú wǒ men cóng wèi jì huà guò de rào lù.",
+        "vietnameseReading": "thong(1) chang(2) na(4) xiế(1) chuây(4) nan(2) oảng(4) tơ huây(2) i(4) uảng(3) uảng(3) uản(2) ý(2) uổ(3) mần chỏng(2) uây(4) chi(4) hua(4) cuô(4) tơ rao(4) lu(4)",
+        "vietnamese": "Thông thường, những kỷ niệm khó quên nhất thường bắt nguồn từ những con đường vòng mà chúng ta chưa từng lên kế hoạch."
+      }
+    ],
+    "note": "Cấu trúc 往往源于... (thường bắt nguồn từ...) giúp diễn đạt nguyên nhân sâu xa của một hiện tượng. Tiếng Anh dùng cấu trúc chủ ngữ chỉ vật cùng mệnh đề quan hệ ngầm để tạo sự trôi chảy, trong khi tiếng Trung đặt nguyên nhân làm trung tâm vị ngữ.",
+    "challenge": "Hãy viết hoặc nói một câu bằng tiếng Trung kể về một chuyến đi lạc đường nhưng mang lại trải nghiệm tuyệt vời, sử dụng cấu trúc 往往源于... để phân tích nguyên nhân.",
+    "grammarFocus": "Cấu trúc 往往源于... (thường bắt nguồn từ...) dùng để chỉ nguyên nhân cốt lõi của một sự việc.",
+    "vocabulary": [
+      "unforgettable memory · 难忘的回忆 · kỷ niệm khó quên",
+      "detour · 绕路 · đường vòng",
+      "come from · 源于 · bắt nguồn từ"
+    ],
+    "wish": "Chúc bạn buổi sáng tràn đầy cảm hứng, luôn cởi mở đón nhận những ngã rẽ bất ngờ trên hành trình hoàn thiện bản thân mỗi ngày.",
+    "nightWish": "Mong rằng giấc ngủ đêm nay sẽ mang đến cho bạn sự bình yên tuyệt đối, khép lại một ngày dài với những giấc mơ đẹp đẽ và nhẹ nhàng nhất.",
+    "generatedAt": "2026-11-02T02:56:58.246Z",
+    "generator": "gemini-3.5-flash-lite"
+  },
+  {
+    "id": "lesson-0119",
+    "stage": "B1 · Phản xạ trong đời sống",
+    "kind": "message",
+    "title": "Nhắn tin rủ đồng nghiệp đi cà phê trưa để đổi gió",
+    "context": "Một nhân viên nhắn tin cho đồng nghiệp vào buổi trưa để rủ ra ngoài đổi không khí thay vì ăn cơm hộp tại văn phòng.",
+    "lines": [
+      {
+        "speaker": "A",
+        "english": "Instead of staying cooped up at your desk eating takeout, fancy grabbing a quick iced coffee outside with me?",
+        "chinese": "与其闷在办公桌前吃外卖，不如和我一起去外面买杯冰咖啡顺便透透气吧？",
+        "pinyin": "yǔqí mèn zài bàngōngzhuō qián chī wàimài, bùrú hé wǒ yīqǐ qù wàimiàn mǎi bēi bīng kāfēi shùnbiàn tòutòuqì ba?",
+        "vietnameseReading": "ỷ(3) chí(2) mần(4) trai(4) ban(4) công(1) truô(1) chién(2) chư(1) uải(4) mải(4) pu(4) rú(2) hứa(2) uổ(3) i(1) chỉ(3) chiệu(4) uải(4) mien(4) mải(3) bê(1) bỉng(1) kha(1) phây(1) suấn(4) piên(4) thâu(4) thâu(4) chỉ(4) pa",
+        "vietnamese": "Thay vì cứ ngồi lỳ ở bàn làm việc ăn đồ gọi ngoài, hay là cùng mình ra ngoài mua một ly cà phê đá để đổi gió chút nhé?"
+      }
+    ],
+    "note": "Cấu trúc 与其...不如... (thà... còn hơn / thay vì... chi bằng...) rất hữu ích khi bạn muốn đưa ra một lựa chọn thay thế hợp lý hơn trong giao tiếp hàng ngày. Điểm khác biệt so với tiếng Anh là tiếng Trung đặt vế lựa chọn thay thế (与其) lên trước vế hành động được đề xuất (不如).",
+    "challenge": "Hãy dùng cấu trúc 与其...不如... để nhắn tin cho một người bạn đề xuất thay đổi kế hoạch ăn trưa trong hôm nay.",
+    "grammarFocus": "Cấu trúc 与其 A 不如 B dùng để thể hiện sự so sánh và đưa ra phương án thay thế tối ưu hơn.",
+    "vocabulary": [
+      "Instead of · 与其 · Thay vì",
+      "Takeout · 外卖 · Đồ ăn mang đi",
+      "Get some fresh air · 透透气 · Hít thở không khí trong lành / đổi gió",
+      "Iced coffee · 冰咖啡 · Cà phê đá"
+    ],
+    "wish": "Buổi trưa năng lượng nhé! Mong rằng ly cà phê tỉnh táo sẽ giúp bạn xua tan mọi mệt mỏi của nửa ngày đầu.",
+    "nightWish": "Khép lại một ngày dài nhiều bận rộn, chúc bạn chìm vào giấc ngủ thật sâu và thức dậy với nụ cười rạng rỡ.",
+    "generatedAt": "2026-11-02T02:57:32.371Z",
+    "generator": "gemini-3.5-flash-lite"
+  },
+  {
+    "id": "lesson-0120",
+    "stage": "B1 · Phản xạ trong đời sống",
+    "kind": "dialogue",
+    "title": "Bàn về việc tự học kỹ năng mới ngoài giờ làm",
+    "context": "Hai người đồng nghiệp trò chuyện vào buổi tối tại sảnh công ty về quyết định học thêm một lĩnh vực hoàn toàn mới.",
+    "lines": [
+      {
+        "speaker": "A",
+        "english": "How do you manage to squeeze in learning video editing on top of a full-time job?",
+        "chinese": "在兼顾全职工作的同时，你是怎么挤出时间学视频剪辑的？",
+        "pinyin": "zài jiāngù quánzhí gōngzuò de tóngshí, nǐ shì zěnme jǐ chū shíjiān xué shìpǐn jiǎnjí de?",
+        "vietnameseReading": "trai(4) chiên(1) cu(4) chuán(2) chí(2) công(1) chuô(4) tơ thúng(2) sứ(2) nỉ(3) sứ(4) chẩn(3) mơ chỉ(3) chu(1) sứ(2) chiên(1) xue(2) sứ(4) pín(3) chien(3) chí(2) tơ",
+        "vietnamese": "Làm sao mà bạn có thể chèn thêm thời gian học dựng video trong khi vẫn phải lo công việc toàn thời gian thế?"
+      },
+      {
+        "speaker": "B",
+        "english": "It is all about making the most of fragmented time instead of waiting for a long free block.",
+        "chinese": "关键在于充分利用碎片化时间，而不是等待长块的空闲。",
+        "pinyin": "guānjiàn zàiyú chōngfèn lìyòng suìpiànhuà shíjiān, ér bú shì děngdài cháng kuài de kòngxián.",
+        "vietnameseReading": "cuan(1) chiên(4) trai(4) ý(2) chông(1) phên(4) li(4) yống(4) suý(4) pien(4) hua(4) sứ(2) chiên(1) ơ(2) pu(2) sứ(4) đẩy(3) đai(4) chang(2) khuải(4) tơ khổng(4) xiên(2)",
+        "vietnamese": "Mấu chốt nằm ở việc tận dụng tối đa thời gian vụn vặt, chứ không phải chờ đợi một khoảng rảnh dài."
+      },
+      {
+        "speaker": "A",
+        "english": "That makes total sense; consistency really outweighs intensity when building a new skill.",
+        "chinese": "说得对，培养新技能时，持续性确实比突击更为重要。",
+        "pinyin": "shuō de duì, péiyǎng xīn jìnéng shí, chíxùxìng quèshí bǐ tūjī gèng wéi zhòngyào.",
+        "vietnameseReading": "suô(1) tơ tuy(4) phây(2) iang(3) xin(1) chi(4) nẻng(2) sứ(2) chí(2) sy(4) xíng(4) chiết(4) sứ(2) pỉ(3) thu(1) chi(1) cêng(4) uấy(2) trung(4) yao(4)",
+        "vietnamese": "Nói rất phải, khi xây dựng một kỹ năng mới thì sự duy trì thực ra quan trọng hơn là học dồn dập."
+      }
+    ],
+    "note": "Cấu trúc 在…的同时 (trong khi/kiêm luôn việc…) được dùng để chỉ hai hành động hoặc trạng thái diễn ra song song. Khác với tiếng Anh thường dùng giới từ kết hợp danh động từ (on top of...), tiếng Trung dùng cấu trúc liên kết thời gian rất uyển chuyển.",
+    "challenge": "Hãy viết hoặc nói một câu phản hồi bằng tiếng Trung khoảng 1 đến 2 phút chia sẻ về cách bạn sắp xếp thời gian học thêm một thói quen mới mỗi ngày.",
+    "grammarFocus": "Sử dụng cấu trúc 在…的同时 để diễn tả hành động diễn ra đồng thời, kết hợp với cụm từ 碎片化时间 chỉ thời gian vụn vặt.",
+    "vocabulary": [
+      "full-time job · 全职工作 · công việc toàn thời gian",
+      "fragmented time · 碎片化时间 · thời gian vụn vặt",
+      "consistency · 持续性 · tính kiên trì duy trì"
+    ],
+    "wish": "Mong rằng mọi nỗ lực nhỏ nhặt tích lũy mỗi ngày của bạn vào buổi tối sẽ nở hoa thành những trái ngọt rực rỡ trong tương lai.",
+    "nightWish": "Khép lại một ngày dài bận rộn, hãy buông bỏ mọi lo toan để chìm vào giấc ngủ thật sâu và êm đềm bạn nhé.",
+    "generatedAt": "2026-11-02T02:57:38.279Z",
+    "generator": "gemini-3.5-flash-lite"
+  },
+  {
+    "id": "lesson-0121",
+    "stage": "B1+ · Diễn đạt linh hoạt",
+    "kind": "sentence",
+    "title": "Bày tỏ sự thấu hiểu sâu sắc trước một quyết định khó khăn",
+    "context": "Nói với một người bạn vừa đưa ra quyết định từ bỏ công việc ổn định để theo đuổi đam mê.",
+    "lines": [
+      {
+        "speaker": "A",
+        "english": "It takes immense courage to walk away from a stable career path and start all over again.",
+        "chinese": "放弃稳定的职业道路从头开始，需要极大的勇气。",
+        "pinyin": "fàngqì wěndìng de zhíyè dàolù cóngtóu kāishǐ, xūyào jídà de yǒngqì.",
+        "vietnameseReading": "phang(4) chỉ(4) uẩn(3) tìng(4) tơ chí(2) yê(4) tao(4) lu(4) chỏng(2) thâu(2) khai(1) chỉ(3) sy(1) yao(4) chí(2) ta(4) tơ yỏng(3) chỉ(4)",
+        "vietnamese": "Từ bỏ con đường sự nghiệp ổn định để bắt đầu lại từ đầu đòi hỏi lòng dũng cảm to lớn."
+      }
+    ],
+    "note": "Cấu trúc 从头开始 (bắt đầu lại từ đầu) kết hợp với tính từ mức độ 极大的 (cực kỳ lớn) giúp diễn tả sự trân trọng và thấu hiểu sâu sắc đối với nỗ lực thay đổi cuộc đời của người khác. Trong tiếng Anh, cụm walk away from và start all over again mang sắc thái tương đương.",
+    "challenge": "Hãy viết hoặc nói một câu bằng cả tiếng Anh và tiếng Trung để động viên một người bạn đang chuẩn bị bước vào một ngã rẽ lớn trong đời.",
+    "grammarFocus": "Sử dụng cụm từ chỉ hành động 从头开始 kết hợp với danh từ chỉ phẩm chất 勇气 để diễn đạt sự công nhận quyết tâm của người khác.",
+    "vocabulary": [
+      "stable career · 稳定的职业 · sự nghiệp ổn định",
+      "start all over again · 从头开始 · bắt đầu lại từ đầu",
+      "immense courage · 极大的勇气 · lòng dũng cảm to lớn"
+    ],
+    "wish": "Chào buổi sáng! Chúc bạn hôm nay có đủ sự dũng cảm để bước qua những vùng an toàn cũ và đón nhận những cơ hội tuyệt vời đang chờ đợi.",
+    "nightWish": "Khép lại một ngày dài với những suy ngẫm, chúc bạn chìm vào giấc ngủ thật sâu và thức dậy với tâmtrí trong trẻo nhất vào ngày mai.",
+    "generatedAt": "2026-11-02T02:58:03.401Z",
+    "generator": "gemini-3.5-flash-lite"
   }
 ]
