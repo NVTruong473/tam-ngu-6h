@@ -336,7 +336,10 @@ async function dispatch(request: Request, origin: string | null) {
     const displayTime = isDueRun ? clock.time : phase === "morning" ? "06:00" : phase === "noon" ? "12:00" : "18:00";
     const currentSequence = sequenceAt(now, phase);
     const fallbackCursor = Math.max(0, currentSequence - Number(row.routine_start_sequence));
-    const lessonIndex = Math.max(0, Math.min(curriculum.length - 1, Number.isInteger(row.lesson_cursor) ? Number(row.lesson_cursor) : fallbackCursor));
+    const rawCursor = Math.max(0, Number.isInteger(row.lesson_cursor) ? Number(row.lesson_cursor) : fallbackCursor);
+    // Keep a dense custom schedule useful even if free AI generation is delayed:
+    // cycle through reviewed lessons instead of repeating the final item forever.
+    const lessonIndex = curriculum.length > 0 ? rawCursor % curriculum.length : 0;
     const lesson = curriculum[lessonIndex];
     const firstLine = lesson?.lines?.[0];
     const symbol = phase === "morning" ? "☀️" : phase === "noon" ? "🌤️" : "🌙";
@@ -360,7 +363,7 @@ async function dispatch(request: Request, origin: string | null) {
       await supabaseAdmin().from("tam_ngu_push_subscriptions").update({
         last_sent_at: new Date().toISOString(),
         last_error: null,
-        lesson_cursor: Math.min(curriculum.length - 1, lessonIndex + 1),
+        lesson_cursor: rawCursor + 1,
         last_dispatch_key: isDueRun ? clock.dispatchKey : row.last_dispatch_key,
       }).eq("endpoint", row.endpoint);
     } catch (error) {

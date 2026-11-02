@@ -3002,7 +3002,7 @@
     "id": "lesson-0113",
     "stage": "B1 · Phản xạ trong đời sống",
     "kind": "message",
-    "title": "Nhắn tin nhờ đồng nghiệp nhận giùm đơn hàng bưu điện",
+    "title": "Nhờ đồng nghiệp nhận giúp bưu phẩm",
     "context": "Nhắn tin nhờ đồng nghiệp ở văn phòng nhận hộ gói hàng vì bạn có việc ra ngoài buổi trưa.",
     "lines": [
       {
@@ -3085,7 +3085,7 @@
         "chinese": "如今随身带实体钱包几乎多余，因为手机支付能搞定一切。",
         "pinyin": "rújīn suíshēn dài shítǐ qiánbāo jīhū duōyú, yīnwèi shǒujī zhīfù néng gǎodìng yīqiè.",
         "vietnameseReading": "rú(2) cin(1) suý(2) sên(1) đai(4) sứ(2) thí(3) chién(2) pao(1) chi(1) hú(1) tuô(1) ý(2) y(1) uây(4) sẩu(3) chi(1) trư(1) phu(4) nẻng(2) cảo(3) tìng(4) i(1) chỉê(4)",
-        "vietnamese": "Mang theo ví tiền mặt ngày nay hầu như đã thừa thãi, bởi vì thanh toán bằng điện thoại có thể lo liệu mọi thứ."
+        "vietnamese": "Ngày nay, mang theo ví tiền gần như đã trở nên thừa thãi vì thanh toán di động có thể lo liệu hầu hết mọi việc."
       }
     ],
     "note": "Cấu trúc 几乎… (hầu như...) kết hợp với tính từ 多余 (thừa thãi) dùng để đánh giá một thói quen cũ đang dần phai nhạt. Điểm khác biệt so với tiếng Anh là tiếng Trung dùng cụm 搞定一切 (lo liệu mọi thứ) ở cuối câu để tạo sắc thái gọn gàng và quyết đoán hơn.",
@@ -3111,7 +3111,7 @@
     "lines": [
       {
         "speaker": "A",
-        "english": "Please kindly deliver the package to the side entrance instead of the main lobby to avoid congestion.",
+        "english": "Please deliver the package to the side entrance instead of the main lobby to avoid congestion.",
         "chinese": "请把包裹送到侧门而不是大堂，以免造成拥堵。",
         "pinyin": "qǐng bǎ bāo guǒ sòng dào cè mén ér bú shì dà táng, yǐ miǎn zào chéng yǒng dǔ.",
         "vietnameseReading": "chỉnh(3) bả(3) pao(1) cuổ(3) sông(4) tao(4) trơ(4) mớn(2) ơ(2) pu(2) sứ(4) ta(4) tháng(2) ỉ(3) mản(3) tảo(4) chấng(2) yỏng(3) đụ(3)",
@@ -3186,10 +3186,10 @@
       {
         "speaker": "A",
         "english": "Often, the most unforgettable memories come from the detours we never planned to take.",
-        "chinese": "通常，那些最难忘的回忆往往源于我们从未计划过的绕路。",
-        "pinyin": "tōng cháng, nà xiē zuì nán wàng de huí yì wǎng wǎng yuán yú wǒ men cóng wèi jì huà guò de rào lù.",
-        "vietnameseReading": "thong(1) chang(2) na(4) xiế(1) chuây(4) nan(2) oảng(4) tơ huây(2) i(4) uảng(3) uảng(3) uản(2) ý(2) uổ(3) mần chỏng(2) uây(4) chi(4) hua(4) cuô(4) tơ rao(4) lu(4)",
-        "vietnamese": "Thông thường, những kỷ niệm khó quên nhất thường bắt nguồn từ những con đường vòng mà chúng ta chưa từng lên kế hoạch."
+        "chinese": "那些最难忘的回忆往往源于我们从未计划过的绕路。",
+        "pinyin": "nà xiē zuì nán wàng de huí yì wǎng wǎng yuán yú wǒ men cóng wèi jì huà guò de rào lù.",
+        "vietnameseReading": "na(4) xiế(1) chuây(4) nan(2) oảng(4) tơ huây(2) i(4) uảng(3) uảng(3) uản(2) ý(2) uổ(3) mần chỏng(2) uây(4) chi(4) hua(4) cuô(4) tơ rao(4) lu(4)",
+        "vietnamese": "Những kỷ niệm khó quên nhất thường bắt nguồn từ những con đường vòng mà chúng ta chưa từng định đi."
       }
     ],
     "note": "Cấu trúc 往往源于... (thường bắt nguồn từ...) giúp diễn đạt nguyên nhân sâu xa của một hiện tượng. Tiếng Anh dùng cấu trúc chủ ngữ chỉ vật cùng mệnh đề quan hệ ngầm để tạo sự trôi chảy, trong khi tiếng Trung đặt nguyên nhân làm trung tâm vị ngữ.",
@@ -3253,9 +3253,9 @@
       {
         "speaker": "B",
         "english": "It is all about making the most of fragmented time instead of waiting for a long free block.",
-        "chinese": "关键在于充分利用碎片化时间，而不是等待长块的空闲。",
-        "pinyin": "guānjiàn zàiyú chōngfèn lìyòng suìpiànhuà shíjiān, ér bú shì děngdài cháng kuài de kòngxián.",
-        "vietnameseReading": "cuan(1) chiên(4) trai(4) ý(2) chông(1) phên(4) li(4) yống(4) suý(4) pien(4) hua(4) sứ(2) chiên(1) ơ(2) pu(2) sứ(4) đẩy(3) đai(4) chang(2) khuải(4) tơ khổng(4) xiên(2)",
+        "chinese": "关键在于充分利用碎片化时间，而不是等到有一大段空闲时间。",
+        "pinyin": "guānjiàn zàiyú chōngfèn lìyòng suìpiànhuà shíjiān, ér bú shì děng dào yǒu yí dà duàn kòngxián shíjiān.",
+        "vietnameseReading": "cuan(1) chiên(4) trai(4) ý(2) chông(1) phên(4) li(4) yống(4) suý(4) pien(4) hua(4) sứ(2) chiên(1) ơ(2) pu(2) sứ(4) tẩng(3) tao(4) iểu(3) i(2) ta(4) toan(4) khổng(4) xiên(2) sứ(2) chiên(1)",
         "vietnamese": "Mấu chốt nằm ở việc tận dụng tối đa thời gian vụn vặt, chứ không phải chờ đợi một khoảng rảnh dài."
       },
       {
@@ -3305,7 +3305,7 @@
       "immense courage · 极大的勇气 · lòng dũng cảm to lớn"
     ],
     "wish": "Chào buổi sáng! Chúc bạn hôm nay có đủ sự dũng cảm để bước qua những vùng an toàn cũ và đón nhận những cơ hội tuyệt vời đang chờ đợi.",
-    "nightWish": "Khép lại một ngày dài với những suy ngẫm, chúc bạn chìm vào giấc ngủ thật sâu và thức dậy với tâmtrí trong trẻo nhất vào ngày mai.",
+    "nightWish": "Chuyện khó đã có ban ngày lo; tối nay cứ để tâm trí nghỉ ở một nơi thật yên.",
     "generatedAt": "2026-11-02T02:58:03.401Z",
     "generator": "gemini-3.5-flash-lite"
   }

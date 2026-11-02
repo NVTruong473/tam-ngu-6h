@@ -865,7 +865,7 @@ export default function Home() {
               <h3>Cách học</h3>
               <p>Mặc định có bài mới lúc 06:00, 12:00 và 18:00. Có thể chọn từ 1 đến 24 mốc riêng mỗi ngày. Kho bài được bổ sung tự động và tăng dần từ B1 đến C1.</p>
               <h3>Màn hình khóa</h3>
-              <p>Thông báo vẫn đến khi app đã đóng. Vuốt để xóa sau khi đọc; âm lượng và cách hiển thị do điện thoại quyết định.</p>
+              <p>Thông báo vẫn đến khi app đã đóng. Vuốt để xóa sau khi đọc; âm lượng và cách hiển thị do điện thoại quyết định. Với lịch rất dày, app có thể xen lại bài cũ để ôn thay vì gửi nội dung AI chưa được kiểm tra.</p>
               <h3>Dữ liệu và Tra nhanh</h3>
               <p>Tiến độ được lưu trên thiết bị. Tra nhanh gửi từ cần tra tới máy chủ bảo mật; API key không nằm trong app.</p>
             </div>

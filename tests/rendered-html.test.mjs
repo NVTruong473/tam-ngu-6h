@@ -124,6 +124,8 @@ test("keeps Gemini credentials server-only while shipping push and quick lookup"
   assert.match(edgeWorker, /validScheduleTimes/);
   assert.match(edgeWorker, /mode\?: "due"/);
   assert.match(edgeWorker, /last_dispatch_key/);
+  assert.match(edgeWorker, /rawCursor % curriculum\.length/);
+  assert.match(edgeWorker, /lesson_cursor: rawCursor \+ 1/);
   assert.match(edgeWorker, /normalizeLookupExample/);
   assert.match(edgeWorker, /hasToneGuidance/);
   assert.match(edgeWorker, /minItems: 2/);
