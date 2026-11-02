@@ -70,6 +70,28 @@ test("ships a growing progressive curriculum with balanced seed formats", async 
   assert.doesNotMatch(JSON.stringify(curriculum), /<\/?[a-z][^>]*>/i);
 });
 
+test("ships an optional lock-screen widget bridge without secrets", async () => {
+  const [page, widgetScript, widgetFeedText] = await Promise.all([
+    readFile(new URL("app/page.tsx", root), "utf8"),
+    readFile(new URL("public/widget/tam-ngu-6h.js", root), "utf8"),
+    readFile(new URL("public/widget/lessons.json", root), "utf8"),
+  ]);
+  const curriculum = JSON.parse(await readFile(new URL("app/curriculum.json", root), "utf8"));
+  const widgetFeed = JSON.parse(widgetFeedText);
+
+  assert.match(page, /Widget bài học/);
+  assert.match(page, /scriptable:\/\/\/add/);
+  assert.match(page, /pageParams\.get\("lesson"\)/);
+  assert.match(page, /personalizedScript/);
+  assert.match(page, /JSON\.stringify\(scheduleTimes\)/);
+  assert.match(widgetScript, /config\.runsInAccessoryWidget/);
+  assert.match(widgetScript, /refreshAfterDate/);
+  assert.match(widgetScript, /ROUTINE_START_SEQUENCE/);
+  assert.match(widgetScript, /NÓI THỬ/);
+  assert.doesNotMatch(widgetScript, /(?:AQ\.|sk-proj-|sk-or-v1-|gsk_|nvapi-)[A-Za-z0-9_-]{8,}/);
+  assert.equal(widgetFeed.lessons.length, curriculum.length);
+});
+
 test("keeps Gemini credentials server-only while shipping push and quick lookup", async () => {
   const [page, generator, appendGenerator, pronunciationEnricher, pronunciationRepairer, curriculumVerifier, edgeWorker, workflow, secretConfigurer, deployer, verifier, rateLimitMigration] = await Promise.all([
     readFile(new URL("app/page.tsx", root), "utf8"),

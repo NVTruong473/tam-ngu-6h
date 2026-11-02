@@ -272,6 +272,8 @@ export default function Home() {
   const [query, setQuery] = useState("");
   const [ready, setReady] = useState(false);
   const [showInstall, setShowInstall] = useState(false);
+  const [showWidgetInstall, setShowWidgetInstall] = useState(false);
+  const [widgetInstallMessage, setWidgetInstallMessage] = useState("");
   const [pushState, setPushState] = useState<PushState>("idle");
   const [pushMessage, setPushMessage] = useState("");
   const [lookupQuery, setLookupQuery] = useState("");
@@ -351,6 +353,17 @@ export default function Home() {
         localStorage.removeItem(LOOKUP_CACHE_KEY);
       }
     });
+
+    const pageParams = new URLSearchParams(window.location.search);
+    const requestedLesson = pageParams.get("lesson");
+    const requestedLessonIndex = curriculum.findIndex((lesson) => lesson.id === requestedLesson);
+    if (requestedLessonIndex >= 0) {
+      queueMicrotask(() => {
+        setSelectedModuleIndex(requestedLessonIndex);
+        setViewingScheduled(false);
+        setTab("today");
+      });
+    }
 
     if (!("serviceWorker" in navigator) || !("PushManager" in window) || !("Notification" in window)) {
       queueMicrotask(() => setPushState("unsupported"));
@@ -611,6 +624,25 @@ export default function Home() {
     window.scrollTo({ top: 0, behavior: "smooth" });
   }
 
+  async function copyAndOpenWidgetInstaller() {
+    setWidgetInstallMessage("Đang chuẩn bị widget…");
+    try {
+      const scriptUrl = new URL("./widget/tam-ngu-6h.js", window.location.href).href;
+      const response = await fetch(scriptUrl, { cache: "no-store" });
+      if (!response.ok) throw new Error("Không tải được mã widget.");
+      const script = await response.text();
+      const widgetStartSequence = scheduleAt(Date.now(), scheduleTimes).sequence - unlockedIndex;
+      const personalizedScript = script
+        .replace('const SCHEDULE = ["06:00", "12:00", "18:00"];', `const SCHEDULE = ${JSON.stringify(scheduleTimes)};`)
+        .replace("const ROUTINE_START_SEQUENCE = null;", `const ROUTINE_START_SEQUENCE = ${widgetStartSequence};`);
+      await navigator.clipboard.writeText(personalizedScript);
+      setWidgetInstallMessage("Đã sao chép. Trong Scriptable, dán mã và đặt tên “Tam Ngữ 6H”.");
+      window.setTimeout(() => { window.location.href = "scriptable:///add"; }, 350);
+    } catch {
+      setWidgetInstallMessage("iPhone chưa cho phép sao chép tự động. Hãy dùng nút Tải mã widget bên dưới.");
+    }
+  }
+
   return (
     <main className={`app-shell ${ready ? "is-ready" : ""}`}>
       <div className="ambient ambient-one" />
@@ -779,6 +811,7 @@ export default function Home() {
             <div className="setting-row"><span className="setting-icon">✓</span><div><strong>Tự động lưu</strong><small>Tiến độ và nhịp hằng ngày được lưu trên máy.</small></div><span className="status-pill">Đang bật</span></div>
             <div className="setting-row"><span className="setting-icon">◷</span><div><strong>{scheduleTimes.length} mốc mỗi ngày</strong><small>{scheduleTimes.join(" · ")}</small></div><span className="status-pill">Tùy chỉnh</span></div>
             <div className="setting-row"><span className="setting-icon">▣</span><div><strong>Thẻ bài học Màn hình khóa</strong><small>Hiện cả khi app đã đóng. Thẻ mới thay thẻ cũ; vuốt để xóa sau khi đọc.</small></div>{pushState === "unsupported" ? <span className="status-pill">Safari iPhone</span> : pushState === "enabled" ? <button onClick={disableLockScreen}>Tắt</button> : <button onClick={enableLockScreen}>Bật</button>}</div>
+            <div className="setting-row widget-setting"><span className="setting-icon">语</span><div><strong>Widget bài học <em>Mới</em></strong><small>Luôn hiện trên Màn hình khóa hoặc Màn hình chính; chạm để mở đáp án.</small></div><button onClick={() => setShowWidgetInstall(true)}>Cài</button></div>
           </article>
           <article className="schedule-card" aria-labelledby="schedule-title">
             <div className="schedule-card-heading">
@@ -837,6 +870,28 @@ export default function Home() {
               <li><span>4</span><p>Mở icon vừa tạo, vào <strong>Cài đặt</strong> trong app rồi bật thẻ bài học Màn hình khóa.</p></li>
             </ol>
             <button className="primary-button wide" onClick={() => setShowInstall(false)}>Mình hiểu rồi</button>
+          </section>
+        </div>
+      )}
+
+      {showWidgetInstall && (
+        <div className="modal-backdrop" role="presentation" onClick={() => setShowWidgetInstall(false)}>
+          <section className="install-sheet widget-install-sheet" role="dialog" aria-modal="true" aria-labelledby="widget-install-title" onClick={(event) => event.stopPropagation()}>
+            <div className="sheet-handle" />
+            <div className="widget-preview" aria-hidden="true"><small>NÓI THỬ · TAM NGỮ 6H</small><strong>Tôi thường mua cà phê trên đường đi làm.</strong></div>
+            <p className="eyebrow">KHÔNG PHẢI THÔNG BÁO</p>
+            <h2 id="widget-install-title">Bài học luôn ở Màn hình khóa</h2>
+            <p className="widget-explainer">Widget dùng bản Scriptable miễn phí làm cầu nối với iOS. Không có API key hay dữ liệu riêng tư nào nằm trong mã.</p>
+            <ol>
+              <li><span>1</span><p>Cài <a href="https://apps.apple.com/app/scriptable/id1405459188" target="_blank" rel="noreferrer"><strong>Scriptable</strong></a> từ App Store.</p></li>
+              <li><span>2</span><p>Chạm nút bên dưới. App sao chép mã và mở trang tạo script; dán mã, đặt tên <strong>Tam Ngữ 6H</strong>, rồi chạy thử một lần.</p></li>
+              <li><span>3</span><p>Nhấn giữ Màn hình khóa → <strong>Tùy chỉnh</strong> → <strong>Thêm widget</strong> → Scriptable → chọn khung chữ nhật và script Tam Ngữ 6H.</p></li>
+            </ol>
+            <button className="primary-button wide" onClick={() => void copyAndOpenWidgetInstaller()}>Sao chép mã &amp; mở Scriptable</button>
+            <a className="widget-download" href="./widget/tam-ngu-6h.js" download>Tải mã widget thủ công</a>
+            {widgetInstallMessage && <p className="widget-install-message">{widgetInstallMessage}</p>}
+            <p className="honest-note">Widget dùng lịch hiện tại của cậu. Nếu đổi giờ sau này, hãy cài lại mã widget. iOS quyết định thời điểm làm mới nên bài có thể trễ vài phút; thông báo vẫn là kênh đúng giờ.</p>
+            <button className="text-button widget-close" onClick={() => setShowWidgetInstall(false)}>Chưa cài bây giờ</button>
           </section>
         </div>
       )}
