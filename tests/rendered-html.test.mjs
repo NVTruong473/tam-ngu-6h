@@ -5,10 +5,11 @@ import test from "node:test";
 const root = new URL("../", import.meta.url);
 
 test("exports an installable PWA with one replaceable lock-screen card", async () => {
-  const [html, manifestText, serviceWorker] = await Promise.all([
+  const [html, manifestText, serviceWorker, highResolutionIcon] = await Promise.all([
     readFile(new URL("dist/client/index.html", root), "utf8"),
     readFile(new URL("dist/client/manifest.webmanifest", root), "utf8"),
     readFile(new URL("dist/client/sw.js", root), "utf8"),
+    readFile(new URL("dist/client/icons/icon-v2-1024.png", root)),
   ]);
   const manifest = JSON.parse(manifestText);
 
@@ -17,7 +18,10 @@ test("exports an installable PWA with one replaceable lock-screen card", async (
   assert.equal(manifest.display, "standalone");
   assert.equal(manifest.orientation, "portrait");
   assert.ok(manifest.icons.some((icon) => icon.sizes === "512x512"));
-  assert.match(serviceWorker, /tam-ngu-6h-v9/);
+  assert.ok(manifest.icons.some((icon) => icon.sizes === "1024x1024" && icon.purpose === "maskable"));
+  assert.equal(highResolutionIcon.readUInt32BE(16), 1024);
+  assert.equal(highResolutionIcon.readUInt32BE(20), 1024);
+  assert.match(serviceWorker, /tam-ngu-6h-v10/);
   assert.match(serviceWorker, /html\.matchAll/);
   assert.match(serviceWorker, /skipWaiting/);
   assert.match(serviceWorker, /clients\.claim/);
@@ -25,6 +29,11 @@ test("exports an installable PWA with one replaceable lock-screen card", async (
   assert.match(serviceWorker, /showNotification/);
   assert.match(serviceWorker, /tam-ngu-current-lesson/);
   assert.match(serviceWorker, /renotify: false/);
+  assert.match(serviceWorker, /seenNotificationIds/);
+  assert.match(serviceWorker, /getNotifications/);
+  assert.match(serviceWorker, /notification\.close/);
+  assert.match(serviceWorker, /icon-v2-192\.png/);
+  assert.doesNotMatch(serviceWorker, /badge:/);
   assert.match(serviceWorker, /notificationclick/);
 });
 
@@ -42,6 +51,10 @@ test("ships a growing progressive curriculum with balanced seed formats", async 
   assert.match(curriculum[0].stage, /^A2\.1/);
   assert.match(curriculum.at(-1).stage, /^B1/);
   assert.ok(curriculum.every((item) => item.lines.length >= 1));
+  assert.ok(curriculum.every((item) => item.notification
+    && [...item.notification.english].length <= 64
+    && [...item.notification.chinese].length <= 26
+    && [...item.notification.vietnamese].length <= 68));
   assert.ok(curriculum.every((item) => item.lines.every((line) => line.english && line.chinese && line.pinyin && line.vietnamese)));
   assert.ok(curriculum.every((item) => item.lines.every((line) => line.vietnameseReading && /\([1-4]\)/.test(line.vietnameseReading))));
   assert.ok(curriculum.every((item) => item.lines.every((line) => /[ăâđêôơưáàảãạắằẳẵặấầẩẫậéèẻẽẹếềểễệíìỉĩịóòỏõọốồổỗộớờởỡợúùủũụứừửữựýỳỷỹỵ]/iu.test(line.vietnameseReading))));
@@ -86,7 +99,9 @@ test("keeps Gemini credentials server-only while shipping push and quick lookup"
   assert.match(page, /Notification\.requestPermission/);
   assert.match(page, /registration\.showNotification/);
   assert.match(page, /Thẻ tam ngữ mẫu vừa được gửi/);
-  assert.match(page, /`EN · \$\{previewLine/);
+  assert.match(page, /`✨ \$\{preview\?\.english/);
+  assert.match(page, /`中  \$\{preview\?\.chinese/);
+  assert.match(page, /icon-v2-192\.png/);
   assert.match(page, /NEXT_PUBLIC_PUSH_API_URL/);
   assert.match(page, /NEXT_PUBLIC_FEEDBACK_FORM_URL/);
   assert.match(page, /Nhắn cho dev/);
@@ -114,10 +129,12 @@ test("keeps Gemini credentials server-only while shipping push and quick lookup"
   assert.match(pronunciationRepairer, /REPAIR_DRY_RUN/);
   assert.match(curriculumVerifier, /số thanh pinyin/i);
   assert.match(edgeWorker, /webpush/);
-  assert.match(edgeWorker, /notificationLine/);
-  assert.match(edgeWorker, /🧪 BẢN THỬ/);
-  assert.match(edgeWorker, /`中 · \$\{notificationLine/);
-  assert.match(edgeWorker, /`VI · \$\{notificationLine/);
+  assert.match(edgeWorker, /lesson\?\.notification \|\| firstLine/);
+  assert.match(edgeWorker, /`🧪 \$\{notification\?\.english/);
+  assert.match(edgeWorker, /`中  \$\{notification\.chinese/);
+  assert.match(edgeWorker, /`VI  \$\{notification\.vietnamese/);
+  assert.match(edgeWorker, /notificationId: isDueRun/);
+  assert.match(edgeWorker, /install_hash/);
   assert.match(edgeWorker, /askGeminiForLookup/);
   assert.match(edgeWorker, /Japanese, Korean/);
   assert.match(edgeWorker, /LOOKUP_QUERY_MAXIMUM = 240/);

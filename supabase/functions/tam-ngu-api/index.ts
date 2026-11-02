@@ -32,13 +32,10 @@ type StudyModule = {
   title: string;
   wish?: string;
   nightWish?: string;
+  notification?: { english: string; chinese: string; vietnamese: string };
   lines: Array<{ english: string; chinese: string; pinyin?: string; vietnamese?: string }>;
 };
 
-function notificationLine(value: string | undefined, maximum = 110) {
-  const normalized = String(value || "").replace(/\s+/g, " ").trim();
-  return normalized.length > maximum ? `${normalized.slice(0, maximum - 1).trimEnd()}…` : normalized;
-}
 type LookupExample = {
   english: string;
   chinese: string;
@@ -148,6 +145,13 @@ function authorized(request: Request, header: "x-cron-secret", expected: string 
   return Boolean(expected && provided && constantTimeEqual(provided, expected));
 }
 
+async function saltedDigest(scope: string, value: string) {
+  const salt = Deno.env.get("TAM_NGU_RATE_LIMIT_SALT");
+  if (!salt) throw new Error("Server identity salt is not configured.");
+  const bytes = await crypto.subtle.digest("SHA-256", new TextEncoder().encode(`${salt}:${scope}:${value}`));
+  return [...new Uint8Array(bytes)].map((byte) => byte.toString(16).padStart(2, "0")).join("");
+}
+
 function sequenceAt(date: Date, phase: Phase) {
   const vietnamTime = new Date(date.toLocaleString("en-US", { timeZone: "Asia/Ho_Chi_Minh" }));
   const day = Math.floor(Date.UTC(vietnamTime.getFullYear(), vietnamTime.getMonth(), vietnamTime.getDate()) / 86_400_000);
@@ -210,14 +214,22 @@ async function subscribe(request: Request, origin: string | null) {
     routineStartSequence?: number;
     scheduleTimes?: string[];
     lessonCursor?: number;
+    clientId?: string;
   };
   const endpoint = body?.subscription?.endpoint || "";
   if (!isApplePushEndpoint(endpoint)) return json({ error: "Hãy mở Tam Ngữ từ icon đã cài trên iPhone, rồi thử lại." }, 400, origin);
   if (!Number.isFinite(body?.routineStartSequence)) return json({ error: "Chưa xác định được nhịp học. Hãy mở lại app rồi thử lại nhé." }, 400, origin);
   const scheduleTimes = validScheduleTimes(body?.scheduleTimes || ["06:00", "12:00", "18:00"]);
   if (!scheduleTimes) return json({ error: "Lịch cần từ 1 đến 24 mốc giờ hợp lệ." }, 400, origin);
+  const clientId = typeof body?.clientId === "string" && /^tg6h_[a-f0-9]{36}$/.test(body.clientId) ? body.clientId : null;
+  const installHash = clientId ? await saltedDigest("install", clientId) : null;
 
   const admin = supabaseAdmin();
+  if (installHash) {
+    const { error: replacementError } = await admin.from("tam_ngu_push_subscriptions")
+      .delete().eq("install_hash", installHash).neq("endpoint", endpoint);
+    if (replacementError) throw replacementError;
+  }
   const { data: existing, error: existingError } = await admin
     .from("tam_ngu_push_subscriptions")
     .select("endpoint")
@@ -242,6 +254,7 @@ async function subscribe(request: Request, origin: string | null) {
     enabled: true,
     updated_at: new Date().toISOString(),
     last_error: null,
+    install_hash: installHash,
   }, { onConflict: "endpoint" });
   if (error) throw error;
   return json({ ok: true }, 201, origin);
@@ -317,6 +330,7 @@ async function dispatch(request: Request, origin: string | null) {
   const curriculum = await curriculumResponse.json() as StudyModule[];
   const subscriptions = (subscriptionsResult.data || []) as PushSubscriptionRow[];
   const now = new Date();
+  const dispatchId = crypto.randomUUID();
   const publicKey = Deno.env.get("VAPID_PUBLIC_KEY");
   const privateKey = Deno.env.get("VAPID_PRIVATE_KEY");
   const subject = Deno.env.get("VAPID_SUBJECT") || "mailto:owner@example.com";
@@ -332,7 +346,6 @@ async function dispatch(request: Request, origin: string | null) {
     if (isDueRun && (!times.includes(clock.time) || row.last_dispatch_key === clock.dispatchKey)) continue;
     due += 1;
     const phase = isDueRun ? phaseAtHour(clock.hour) : body!.phase!;
-    const displayTime = isDueRun ? clock.time : phase === "morning" ? "06:00" : phase === "noon" ? "12:00" : "18:00";
     const currentSequence = sequenceAt(now, phase);
     const fallbackCursor = Math.max(0, currentSequence - Number(row.routine_start_sequence));
     const rawCursor = Math.max(0, Number.isInteger(row.lesson_cursor) ? Number(row.lesson_cursor) : fallbackCursor);
@@ -341,17 +354,18 @@ async function dispatch(request: Request, origin: string | null) {
     const lessonIndex = curriculum.length > 0 ? rawCursor % curriculum.length : 0;
     const lesson = curriculum[lessonIndex];
     const firstLine = lesson?.lines?.[0];
+    const notification = lesson?.notification || firstLine;
     const symbol = phase === "morning" ? "☀️" : phase === "noon" ? "🌤️" : "🌙";
     const notificationBody = [
-      firstLine?.english ? `EN · ${notificationLine(firstLine.english)}` : "",
-      firstLine?.chinese ? `中 · ${notificationLine(firstLine.chinese)}` : "",
-      firstLine?.vietnamese ? `VI · ${notificationLine(firstLine.vietnamese)}` : "",
+      notification?.chinese ? `中  ${notification.chinese}` : "",
+      notification?.vietnamese ? `VI  ${notification.vietnamese}` : "",
     ].filter(Boolean).join("\n") || lesson?.wish || fallbackWish(phase, currentSequence);
     const payload = JSON.stringify({
       title: body?.preview
-        ? `🧪 BẢN THỬ · ${lesson?.title || "Một bài mới"}`
-        : `${symbol} ${displayTime} · ${lesson?.title || "Một bài mới"}`,
+        ? `🧪 ${notification?.english || "A new lesson is ready."}`
+        : `${symbol} ${notification?.english || "A new lesson is ready."}`,
       body: notificationBody,
+      notificationId: isDueRun ? `due:${clock.dispatchKey}` : `manual:${dispatchId}`,
       tag: "tam-ngu-current-lesson",
       url: publicAppUrl,
       timestamp: Date.now(),
@@ -602,17 +616,10 @@ async function lookup(request: Request, origin: string | null) {
   if (query.length > LOOKUP_QUERY_MAXIMUM) return json({ error: `Nội dung tối đa ${LOOKUP_QUERY_MAXIMUM} ký tự.` }, 400, origin);
   const clientId = request.headers.get("x-client-id") || "";
   if (!/^tg6h_[a-f0-9]{36}$/.test(clientId)) return json({ error: "Thiết bị chưa sẵn sàng. Hãy đóng và mở lại app." }, 400, origin);
-  const salt = Deno.env.get("TAM_NGU_RATE_LIMIT_SALT");
-  if (!salt) throw new Error("Lookup rate-limit salt is not configured.");
-
   const forwarded = (request.headers.get("cf-connecting-ip") || request.headers.get("x-forwarded-for")?.split(",")[0] || "unknown").trim().slice(0, 80);
-  const digest = async (value: string) => {
-    const bytes = await crypto.subtle.digest("SHA-256", new TextEncoder().encode(`${salt}:${value}`));
-    return [...new Uint8Array(bytes)].map((byte) => byte.toString(16).padStart(2, "0")).join("");
-  };
   const requestId = crypto.randomUUID();
   const admin = supabaseAdmin();
-  const [deviceHash, networkHash] = await Promise.all([digest(`device:${clientId}`), digest(`network:${forwarded}`)]);
+  const [deviceHash, networkHash] = await Promise.all([saltedDigest("device", clientId), saltedDigest("network", forwarded)]);
   const { data: quota, error: quotaError } = await admin.rpc("tam_ngu_take_lookup_quota", {
     p_request_id: requestId,
     p_device_hash: deviceHash,

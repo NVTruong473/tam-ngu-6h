@@ -1,4 +1,6 @@
-const CACHE_VERSION = "tam-ngu-6h-v9";
+const CACHE_VERSION = "tam-ngu-6h-v10";
+const NOTIFICATION_CACHE = "tam-ngu-notifications-v1";
+const seenNotificationIds = new Set();
 
 self.addEventListener("install", (event) => {
   event.waitUntil(
@@ -6,9 +8,10 @@ self.addEventListener("install", (event) => {
       const root = new URL("./", self.registration.scope);
       const shell = [
         new URL("manifest.webmanifest", root).href,
-        new URL("icons/icon-192.png", root).href,
-        new URL("icons/icon-512.png", root).href,
-        new URL("icons/apple-touch-icon.png", root).href,
+        new URL("icons/icon-v2-192.png", root).href,
+        new URL("icons/icon-v2-512.png", root).href,
+        new URL("icons/icon-v2-1024.png", root).href,
+        new URL("icons/apple-touch-icon-v2.png", root).href,
         new URL("mascot.png", root).href,
       ];
       await cache.addAll(shell);
@@ -31,7 +34,7 @@ self.addEventListener("install", (event) => {
 self.addEventListener("activate", (event) => {
   event.waitUntil(
     Promise.all([
-      caches.keys().then((keys) => Promise.all(keys.filter((key) => key !== CACHE_VERSION).map((key) => caches.delete(key)))),
+      caches.keys().then((keys) => Promise.all(keys.filter((key) => ![CACHE_VERSION, NOTIFICATION_CACHE].includes(key)).map((key) => caches.delete(key)))),
       self.clients.claim(),
     ]),
   );
@@ -74,20 +77,35 @@ self.addEventListener("fetch", (event) => {
   );
 });
 
-self.addEventListener("push", (event) => {
-  const fallback = { title: "Tam Ngữ 6H", body: "Một bài học nhỏ đang chờ cậu." };
-  let payload = fallback;
-  try { payload = { ...fallback, ...event.data.json() }; } catch {}
-  event.waitUntil(self.registration.showNotification(payload.title, {
+async function displayPush(payload) {
+  const notificationId = String(payload.notificationId || `${payload.title}:${payload.body}`).slice(0, 240);
+  if (seenNotificationIds.has(notificationId)) return;
+  seenNotificationIds.add(notificationId);
+
+  const cache = await caches.open(NOTIFICATION_CACHE);
+  const marker = new Request(new URL(`.notification/${encodeURIComponent(notificationId)}`, self.registration.scope).href);
+  if (await cache.match(marker)) return;
+  await cache.put(marker, new Response("seen", { headers: { "x-created-at": String(Date.now()) } }));
+
+  const existing = await self.registration.getNotifications().catch(() => []);
+  existing.forEach((notification) => notification.close());
+  await self.registration.showNotification(payload.title, {
     body: payload.body,
-    icon: new URL("icons/icon-192.png", self.registration.scope).href,
-    badge: new URL("icons/icon-192.png", self.registration.scope).href,
-    // The newest lesson replaces the earlier card instead of creating a stack.
+    icon: new URL("icons/icon-v2-192.png", self.registration.scope).href,
+    // iOS owns the card layout; one stable tag plus explicit closing above
+    // guarantees that a new lesson replaces the previous lesson card.
     tag: "tam-ngu-current-lesson",
     renotify: false,
     timestamp: payload.timestamp || Date.now(),
     data: { url: payload.url || self.registration.scope },
-  }));
+  });
+}
+
+self.addEventListener("push", (event) => {
+  const fallback = { title: "Tam Ngữ 6H", body: "Một bài học nhỏ đang chờ cậu." };
+  let payload = fallback;
+  try { payload = { ...fallback, ...event.data.json() }; } catch {}
+  event.waitUntil(displayPush(payload));
 });
 
 self.addEventListener("notificationclick", (event) => {

@@ -10,8 +10,8 @@ export const metadata: Metadata = {
   robots: { index: false, follow: false },
   appleWebApp: { capable: true, statusBarStyle: "default", title: "Tam Ngữ 6H" },
   icons: {
-    icon: "./icons/icon-192.png",
-    apple: "./icons/apple-touch-icon.png",
+    icon: "./icons/icon-v2-192.png",
+    apple: "./icons/apple-touch-icon-v2.png",
   },
   openGraph: {
     title: "Tam Ngữ 6H",

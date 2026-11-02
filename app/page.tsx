@@ -34,6 +34,7 @@ type StudyModule = {
   vocabulary?: string[];
   wish?: string;
   nightWish?: string;
+  notification?: { english: string; chinese: string; vietnamese: string };
 };
 
 const curriculum = curriculumData as StudyModule[];
@@ -422,6 +423,7 @@ export default function Home() {
           routineStartSequence: startSequence,
           scheduleTimes,
           lessonCursor: unlockedIndex,
+          clientId: ensureLookupClientId(),
         }),
       });
       if (!response.ok) {
@@ -431,14 +433,15 @@ export default function Home() {
       try {
         const appRoot = new URL("./", window.location.href).href;
         const previewLine = studyModule.lines[0];
-        await registration.showNotification(`✨ ${studyModule.title}`, {
+        const preview = studyModule.notification || previewLine;
+        const existing = await registration.getNotifications();
+        existing.forEach((notification) => notification.close());
+        await registration.showNotification(`✨ ${preview?.english || "A new lesson is waiting."}`, {
           body: [
-            `EN · ${previewLine?.english || "A new lesson is waiting for you."}`,
-            `中 · ${previewLine?.chinese || "新的一课在等你。"}`,
-            `VI · ${previewLine?.vietnamese || "Một bài học mới đang chờ cậu."}`,
+            `中  ${preview?.chinese || "新的一课在等你。"}`,
+            `VI  ${preview?.vietnamese || "Một bài học mới đang chờ cậu."}`,
           ].join("\n"),
-          icon: new URL("./icons/icon-192.png", window.location.href).href,
-          badge: new URL("./icons/icon-192.png", window.location.href).href,
+          icon: new URL("./icons/icon-v2-192.png", window.location.href).href,
           tag: "tam-ngu-current-lesson",
           renotify: false,
           data: { url: appRoot },

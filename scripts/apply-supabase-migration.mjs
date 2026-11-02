@@ -6,6 +6,7 @@ if (!ref) throw new Error("Thiếu SUPABASE_PROJECT_REF.");
 
 const token = execFileSync("security", ["find-generic-password", "-s", "Supabase CLI", "-w"], { encoding: "utf8" }).trim();
 const lookupRateLimitMigration = readFileSync(new URL("../supabase/migrations/20261102090000_lookup_rate_limit.sql", import.meta.url), "utf8");
+const pushInstallDedupeMigration = readFileSync(new URL("../supabase/migrations/20261102103000_push_install_dedupe.sql", import.meta.url), "utf8");
 const statements = [
   `create table if not exists public.tam_ngu_push_subscriptions (
     endpoint text primary key,
@@ -30,6 +31,7 @@ const statements = [
   "revoke all on table public.tam_ngu_push_subscriptions from anon, authenticated",
   "grant all on table public.tam_ngu_push_subscriptions to service_role",
   lookupRateLimitMigration,
+  pushInstallDedupeMigration,
   "notify pgrst, 'reload schema'",
 ];
 

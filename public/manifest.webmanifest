@@ -1,5 +1,5 @@
 {
-  "id": "./",
+  "id": "./?install=v2",
   "name": "Tam Ngữ 6H",
   "short_name": "Tam Ngữ 6H",
   "description": "Học Anh – Trung – Việt nhẹ nhàng, riêng tư và dùng được offline.",
@@ -13,16 +13,22 @@
   "categories": ["education", "lifestyle"],
   "icons": [
     {
-      "src": "icons/icon-192.png",
+      "src": "icons/icon-v2-192.png",
       "sizes": "192x192",
       "type": "image/png",
       "purpose": "any"
     },
     {
-      "src": "icons/icon-512.png",
+      "src": "icons/icon-v2-512.png",
       "sizes": "512x512",
       "type": "image/png",
-      "purpose": "any maskable"
+      "purpose": "any"
+    },
+    {
+      "src": "icons/icon-v2-1024.png",
+      "sizes": "1024x1024",
+      "type": "image/png",
+      "purpose": "maskable"
     }
   ]
 }

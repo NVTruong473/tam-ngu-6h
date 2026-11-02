@@ -13,6 +13,7 @@ const requiredLessonFields = ["id", "stage", "kind", "title", "context", "lines"
 const advancedFields = ["grammarFocus", "vocabulary", "wish", "nightWish"];
 const textFields = ["stage", "title", "context", "note", "challenge"];
 const lineTextFields = ["speaker", "english", "chinese", "pinyin", "vietnameseReading", "vietnamese"];
+const notificationLimits = { english: 64, chinese: 26, vietnamese: 68 };
 const PINYIN_TONE_MARKS = new Set(["ā", "á", "ǎ", "à", "ē", "é", "ě", "è", "ī", "í", "ǐ", "ì", "ō", "ó", "ǒ", "ò", "ū", "ú", "ǔ", "ù", "ǖ", "ǘ", "ǚ", "ǜ", "Ā", "Á", "Ǎ", "À", "Ē", "É", "Ě", "È", "Ī", "Í", "Ǐ", "Ì", "Ō", "Ó", "Ǒ", "Ò", "Ū", "Ú", "Ǔ", "Ù", "Ǖ", "Ǘ", "Ǚ", "Ǜ"]);
 const VIETNAMESE_SOUND_MARK = /[ăâđêôơưáàảãạắằẳẵặấầẩẫậéèẻẽẹếềểễệíìỉĩịóòỏõọốồổỗộớờởỡợúùủũụứừửữựýỳỷỹỵ]/iu;
 const MARKUP_OR_CONTROL = /[<>`\u0000-\u0008\u000B\u000C\u000E-\u001F\u007F]/u;
@@ -95,6 +96,26 @@ for (const [lessonIndex, lesson] of (Array.isArray(curriculum) ? curriculum : []
     seenIds.add(lesson.id);
   }
   const lessonId = typeof lesson.id === "string" ? lesson.id : location;
+
+  if (!lesson.notification || typeof lesson.notification !== "object" || Array.isArray(lesson.notification)) {
+    addFailure(`${lessonId}: thiếu notification gọn cho Màn hình khóa.`);
+  } else {
+    for (const [field, maximum] of Object.entries(notificationLimits)) {
+      if (assertText(lesson.notification[field], `${lessonId} / notification.${field}`, 3)
+        && [...lesson.notification[field]].length > maximum) {
+        addFailure(`${lessonId}: notification.${field} vượt ${maximum} ký tự.`);
+      }
+    }
+    if (!/\p{Script=Latin}/u.test(lesson.notification.english ?? "") || /\p{Script=Han}/u.test(lesson.notification.english ?? "")) {
+      addFailure(`${lessonId}: notification English sai hệ chữ.`);
+    }
+    if (!/\p{Script=Han}/u.test(lesson.notification.chinese ?? "") || /[A-Za-z]/u.test(lesson.notification.chinese ?? "")) {
+      addFailure(`${lessonId}: notification Chinese sai hệ chữ.`);
+    }
+    if (!/\p{Script=Latin}/u.test(lesson.notification.vietnamese ?? "") || /\p{Script=Han}/u.test(lesson.notification.vietnamese ?? "")) {
+      addFailure(`${lessonId}: notification Vietnamese sai hệ chữ.`);
+    }
+  }
 
   for (const field of textFields) assertText(lesson[field], `${lessonId} / ${field}`, 3);
   if (!kinds.includes(lesson.kind)) addFailure(`${lessonId}: kind phải là sentence, message hoặc dialogue.`);

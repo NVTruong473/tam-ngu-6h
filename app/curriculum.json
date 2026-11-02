@@ -16,7 +16,12 @@
       }
     ],
     "note": "Dùng 'usually' kết hợp 'on my way to' để diễn tả thói quen trên đường làm việc.",
-    "challenge": "Nói 1 phút về việc bạn thường làm gì vào buổi sáng."
+    "challenge": "Nói 1 phút về việc bạn thường làm gì vào buổi sáng.",
+    "notification": {
+      "english": "I usually grab coffee on my way to work.",
+      "chinese": "我上班路上通常买杯咖啡。",
+      "vietnamese": "Tôi thường mua cà phê trên đường đi làm."
+    }
   },
   {
     "id": "lesson-002",
@@ -35,7 +40,12 @@
       }
     ],
     "note": "Cấu trúc 'might be about' giúp thông báo sự chậm trễ một cách lịch sự, không chắc chắn tuyệt đối.",
-    "challenge": "Nhắn tin hoặc nói giả định một tình huống đi muộn."
+    "challenge": "Nhắn tin hoặc nói giả định một tình huống đi muộn.",
+    "notification": {
+      "english": "I'm stuck in traffic, I might be ten late.",
+      "chinese": "我堵车了，可能会迟到十分钟。",
+      "vietnamese": "Tôi đang kẹt xe, có thể đến muộn mười phút."
+    }
   },
   {
     "id": "lesson-003",
@@ -70,7 +80,12 @@
       }
     ],
     "note": "Cụm 'push back' nghĩa là lùi lịch, rất hay dùng trong công sở.",
-    "challenge": "Đóng vai đề xuất đổi lịch hẹn với bạn bè hoặc đồng nghiệp."
+    "challenge": "Đóng vai đề xuất đổi lịch hẹn với bạn bè hoặc đồng nghiệp.",
+    "notification": {
+      "english": "Can we push our afternoon meeting back an hour?",
+      "chinese": "把下午的会议推迟一小时行吗？",
+      "vietnamese": "Lùi cuộc họp chiều lại một tiếng được không?"
+    }
   },
   {
     "id": "lesson-004",
@@ -89,7 +104,12 @@
       }
     ],
     "note": "Dùng 'lately' kết hợp với thì hiện tại hoàn thành để diễn tả sự thay đổi gần đây.",
-    "challenge": "Kể về một thói quen bạn đã thay đổi trong tháng qua."
+    "challenge": "Kể về một thói quen bạn đã thay đổi trong tháng qua.",
+    "notification": {
+      "english": "I haven't watched many movies lately.",
+      "chinese": "最近我没怎么看电影。",
+      "vietnamese": "Dạo này tôi không xem nhiều phim."
+    }
   },
   {
     "id": "lesson-005",
@@ -108,7 +128,12 @@
       }
     ],
     "note": "Dùng 'a bit earlier' để đề xuất điều chỉnh thời gian quen thuộc.",
-    "challenge": "Nhắn tin rủ ai đó thay đổi giờ ăn hoặc giờ hẹn."
+    "challenge": "Nhắn tin rủ ai đó thay đổi giờ ăn hoặc giờ hẹn.",
+    "notification": {
+      "english": "Do you want to grab lunch a bit early today?",
+      "chinese": "今天要不要早点去吃午饭？",
+      "vietnamese": "Hôm nay bạn muốn đi ăn trưa sớm hơn một chút không?"
+    }
   },
   {
     "id": "lesson-006",
@@ -143,7 +168,12 @@
       }
     ],
     "note": "Cấu trúc 'In that case' rất tự nhiên khi đưa ra quyết định dựa trên tình huống mới phát sinh.",
-    "challenge": "Thảo luận về việc đổi kế hoạch cuối tuần do trời mưa."
+    "challenge": "Thảo luận về việc đổi kế hoạch cuối tuần do trời mưa.",
+    "notification": {
+      "english": "I planned to hike, but the forecast is bad.",
+      "chinese": "我本想去徒步，但天气预报不好。",
+      "vietnamese": "Tôi định đi leo núi nhưng dự báo xấu."
+    }
   },
   {
     "id": "lesson-007",
@@ -162,7 +192,12 @@
       }
     ],
     "note": "Mẫu câu 'spend + thời gian + V-ing' cực kỳ hữu ích khi kể chuyện quá khứ.",
-    "challenge": "Kể về cách bạn đã tiêu tốn thời gian vào ngày Chủ nhật gần nhất."
+    "challenge": "Kể về cách bạn đã tiêu tốn thời gian vào ngày Chủ nhật gần nhất.",
+    "notification": {
+      "english": "I spent Sunday reading in a quiet café.",
+      "chinese": "周日我在安静咖啡馆看书。",
+      "vietnamese": "Tôi đọc sách ở quán cà phê yên tĩnh."
+    }
   },
   {
     "id": "lesson-008",
@@ -181,7 +216,12 @@
       }
     ],
     "note": "Cụm 'Sorry for keeping you waiting' là cách xin lỗi chuẩn mực và thân thiện.",
-    "challenge": "Gửi tin nhắn xin lỗi vì trễ hẹn và cập nhật vị trí hiện tại."
+    "challenge": "Gửi tin nhắn xin lỗi vì trễ hẹn và cập nhật vị trí hiện tại.",
+    "notification": {
+      "english": "Sorry to keep you waiting, I just got off.",
+      "chinese": "不好意思久等了，我刚下车。",
+      "vietnamese": "Xin lỗi để bạn đợi lâu, tôi vừa xuống xe."
+    }
   },
   {
     "id": "lesson-009",
@@ -224,7 +264,12 @@
       }
     ],
     "note": "Cách xử lý tình huống bất ngờ khi đi ăn uống bằng các câu ngắn gọn, thực tế.",
-    "challenge": "Đóng vai xử lý tình huống khi địa điểm hẹn gặp bị đóng cửa."
+    "challenge": "Đóng vai xử lý tình huống khi địa điểm hẹn gặp bị đóng cửa.",
+    "notification": {
+      "english": "Our favorite noodle shop is closed today.",
+      "chinese": "我们最喜欢的面馆今天关门了。",
+      "vietnamese": "Quán mì yêu thích của chúng ta đóng cửa rồi."
+    }
   },
   {
     "id": "lesson-010",
@@ -243,7 +288,12 @@
       }
     ],
     "note": "Cấu trúc 'whenever I have time' nhấn mạnh sự linh hoạt tuỳ theo thời gian rảnh.",
-    "challenge": "Nói 1 phút về thói quen vận động của bạn."
+    "challenge": "Nói 1 phút về thói quen vận động của bạn.",
+    "notification": {
+      "english": "I try to take a short walk after dinner.",
+      "chinese": "晚饭后我尽量去散一会儿步。",
+      "vietnamese": "Sau bữa tối tôi cố gắng đi dạo một lát."
+    }
   },
   {
     "id": "lesson-011",
@@ -262,7 +312,12 @@
       }
     ],
     "note": "'Just a heads-up' là cụm từ cực kỳ tự nhiên khi muốn báo trước thông tin quan trọng.",
-    "challenge": "Viết tin nhắn thông báo thay đổi địa điểm cho một nhóm bạn."
+    "challenge": "Viết tin nhắn thông báo thay đổi địa điểm cho một nhóm bạn.",
+    "notification": {
+      "english": "Our meeting room has been changed to Room 402.",
+      "chinese": "我们的会议室已换到402室。",
+      "vietnamese": "Phòng họp của chúng ta đã đổi sang phòng 402."
+    }
   },
   {
     "id": "lesson-012",
@@ -297,7 +352,12 @@
       }
     ],
     "note": "Dùng so sánh hơn ('much faster than') để kể về một trải nghiệm thực tế.",
-    "challenge": "Kể một trải nghiệm mua sắm gần đây của bạn trong 1 phút."
+    "challenge": "Kể một trải nghiệm mua sắm gần đây của bạn trong 1 phút.",
+    "notification": {
+      "english": "My online order arrived faster than expected.",
+      "chinese": "网购比预期的快很多就到了。",
+      "vietnamese": "Đơn hàng online của tôi đến nhanh hơn dự kiến."
+    }
   },
   {
     "id": "lesson-013",
@@ -316,7 +376,12 @@
       }
     ],
     "note": "Dùng 'I'm hoping to' kết hợp 'so I can' để nối liền mục đích và hành động.",
-    "challenge": "Nói về kế hoạch buổi tối của bạn nếu mọi việc suôn sẻ."
+    "challenge": "Nói về kế hoạch buổi tối của bạn nếu mọi việc suôn sẻ.",
+    "notification": {
+      "english": "I hope to finish early to catch a movie tonight.",
+      "chinese": "我希望早点完成工作，今晚去看电影。",
+      "vietnamese": "Tôi hy vọng xong sớm để tối nay đi xem phim."
+    }
   },
   {
     "id": "lesson-014",
@@ -335,7 +400,12 @@
       }
     ],
     "note": "Cụm 'Something urgent came up' là cách báo bận đột xuất lịch sự và phổ biến.",
-    "challenge": "Nhắn tin cáo lỗi và dời lịch hẹn với một người bạn."
+    "challenge": "Nhắn tin cáo lỗi và dời lịch hẹn với một người bạn.",
+    "notification": {
+      "english": "Something urgent came up, can we reschedule?",
+      "chinese": "有点急事，能改到明天吗？",
+      "vietnamese": "Có việc gấp, dời lịch sang mai được không?"
+    }
   },
   {
     "id": "lesson-015",
@@ -370,7 +440,12 @@
       }
     ],
     "note": "Mẫu câu 'How did you find...?' dùng để hỏi cảm nhận rất tự nhiên thay vì chỉ dùng 'What do you think'.",
-    "challenge": "Tự nói 1 phút nhận xét về một bộ phim hoặc một sự kiện bạn vừa tham gia."
+    "challenge": "Tự nói 1 phút nhận xét về một bộ phim hoặc một sự kiện bạn vừa tham gia.",
+    "notification": {
+      "english": "It was better than I expected.",
+      "chinese": "比我预期的要好。",
+      "vietnamese": "Hay hơn tôi mong đợi."
+    }
   },
   {
     "id": "lesson-016",
@@ -389,7 +464,12 @@
       }
     ],
     "note": "Dùng '堵得厉害' để nhấn mạnh mức độ kẹt xe nặng, tự nhiên hơn là chỉ nói '堵车'.",
-    "challenge": "Hãy tự quay video 1 phút giải thích lý do bạn đến trễ trong tình huống công sở giả định."
+    "challenge": "Hãy tự quay video 1 phút giải thích lý do bạn đến trễ trong tình huống công sở giả định.",
+    "notification": {
+      "english": "Sorry for being late, traffic was terrible.",
+      "chinese": "抱歉我迟到了，路上堵得厉害。",
+      "vietnamese": "Xin lỗi tôi đến muộn, trên đường tắc khủng khiếp."
+    }
   },
   {
     "id": "lesson-017",
@@ -408,7 +488,12 @@
       }
     ],
     "note": "Cụm từ '请查收' rất lịch sự và chuyên nghiệp khi nhắn tin công việc yêu cầu ai đó nhận tài liệu.",
-    "challenge": "Viết một tin nhắn ngắn báo cáo hoàn thành công việc gửi vào nhóm làm việc."
+    "challenge": "Viết một tin nhắn ngắn báo cáo hoàn thành công việc gửi vào nhóm làm việc.",
+    "notification": {
+      "english": "I've emailed the updated report, please check.",
+      "chinese": "更新后的报告已发到您邮箱，请查收。",
+      "vietnamese": "Tôi đã gửi báo cáo cập nhật qua email, hãy kiểm tra."
+    }
   },
   {
     "id": "lesson-018",
@@ -443,7 +528,12 @@
       }
     ],
     "note": "Cấu trúc '...在哪里吗' dùng để hỏi đường đi hoặc vị trí vật dụng trong văn phòng rất hữu ích.",
-    "challenge": "Đóng vai hỏi đường đi đến phòng họp hoặc phòng pantry với đồng nghiệp."
+    "challenge": "Đóng vai hỏi đường đi đến phòng họp hoặc phòng pantry với đồng nghiệp.",
+    "notification": {
+      "english": "Do you know where David's desk is?",
+      "chinese": "你知道大卫的座位在哪吗？",
+      "vietnamese": "Bạn có biết bàn David ở đâu không?"
+    }
   },
   {
     "id": "lesson-019",
@@ -462,7 +552,12 @@
       }
     ],
     "note": "Từ '招牌菜' chỉ món ăn nổi tiếng nhất, món tủ của quán, giúp bạn gọi nhanh món ngon.",
-    "challenge": "Tập nói câu hỏi món đặc sản khi bước vào một nhà hàng bất kỳ."
+    "challenge": "Tập nói câu hỏi món đặc sản khi bước vào một nhà hàng bất kỳ.",
+    "notification": {
+      "english": "What is the most popular dish here?",
+      "chinese": "请问招牌菜是什么？",
+      "vietnamese": "Xin hỏi món đặc sản ở đây là gì?"
+    }
   },
   {
     "id": "lesson-020",
@@ -481,7 +576,12 @@
       }
     ],
     "note": "Dùng '...先...吧' để đề nghị người khác làm gì trước, rất hay dùng khi hẹn hò ăn uống.",
-    "challenge": "Soạn tin nhắn thông báo trễ hẹn và bảo bạn bè gọi món trước bằng tiếng Trung."
+    "challenge": "Soạn tin nhắn thông báo trễ hẹn và bảo bạn bè gọi món trước bằng tiếng Trung.",
+    "notification": {
+      "english": "Traffic is heavy, you guys go ahead and order.",
+      "chinese": "路上太堵了，你们先点菜吧。",
+      "vietnamese": "Đường tắc quá, mọi người cứ gọi món trước đi."
+    }
   },
   {
     "id": "lesson-021",
@@ -516,7 +616,12 @@
       }
     ],
     "note": "Mẫu câu '可以不要放...' rất tiện dụng khi bạn muốn loại bỏ một nguyên liệu nào đó trong món ăn.",
-    "challenge": "Thực hành gọi một món ăn và dặn đầu bếp không cho loại gia vị bạn không thích."
+    "challenge": "Thực hành gọi một món ăn và dặn đầu bếp không cho loại gia vị bạn không thích.",
+    "notification": {
+      "english": "Excuse me, can you make this without onions?",
+      "chinese": "请问这道菜可以不要葱吗？",
+      "vietnamese": "Phục vụ ơi, món này có thể không cho hành không?"
+    }
   },
   {
     "id": "lesson-022",
@@ -535,7 +640,12 @@
       }
     ],
     "note": "Cấu trúc '大一码' nghĩa là lớn hơn một cỡ, rất tự nhiên khi đi mua quần áo.",
-    "challenge": "Tập hỏi nhân viên cửa hàng quần áo về màu sắc hoặc size khác."
+    "challenge": "Tập hỏi nhân viên cửa hàng quần áo về màu sắc hoặc size khác.",
+    "notification": {
+      "english": "Do you have this in a larger size?",
+      "chinese": "这件衣服有大一码的吗？",
+      "vietnamese": "Chiếc áo này có size lớn hơn không?"
+    }
   },
   {
     "id": "lesson-023",
@@ -554,7 +664,12 @@
       }
     ],
     "note": "Từ '顺便' diễn tả hành động tiện thể làm giúp việc gì đó rất tự nhiên trong văn nói.",
-    "challenge": "Viết tin nhắn nhờ bạn mua giúp 2 món đồ khi họ ra ngoài."
+    "challenge": "Viết tin nhắn nhờ bạn mua giúp 2 món đồ khi họ ra ngoài.",
+    "notification": {
+      "english": "Please buy a carton of milk if you go shopping.",
+      "chinese": "你去超市时顺便帮我买盒牛奶吧。",
+      "vietnamese": "Nếu đi siêu thị thì tiện thể mua hộ tôi hộp sữa."
+    }
   },
   {
     "id": "lesson-024",
@@ -597,7 +712,12 @@
       }
     ],
     "note": "Cụm từ '挺合身的' (rất vừa vặn) và '颜色深了一点' rất hay dùng khi nhận xét trang phục.",
-    "challenge": "Đóng vai người mua hàng và bạn nhận xét về một bộ trang phục trong gương."
+    "challenge": "Đóng vai người mua hàng và bạn nhận xét về một bộ trang phục trong gương.",
+    "notification": {
+      "english": "How does this jacket look on me?",
+      "chinese": "这件外套我穿着怎么样？",
+      "vietnamese": "Tôi mặc chiếc áo khoác này trông thế nào?"
+    }
   },
   {
     "id": "lesson-025",
@@ -616,7 +736,12 @@
       }
     ],
     "note": "Cấu trúc '...怎么走' là cách chuẩn xác nhất để hỏi đường đi đến một địa điểm.",
-    "challenge": "Tập hỏi đường đến ngân hàng hoặc siêu thị gần nơi bạn đang đứng."
+    "challenge": "Tập hỏi đường đến ngân hàng hoặc siêu thị gần nơi bạn đang đứng.",
+    "notification": {
+      "english": "Excuse me, where is the nearest subway station?",
+      "chinese": "请问最近的地铁站怎么走？",
+      "vietnamese": "Xin hỏi trạm tàu điện ngầm gần nhất ở đâu?"
+    }
   },
   {
     "id": "lesson-026",
@@ -635,7 +760,12 @@
       }
     ],
     "note": "Dùng '...对面的...' giúp người nghe xác định vị trí đối chiếu nhanh chóng khi hẹn gặp.",
-    "challenge": "Soạn tin nhắn mô tả vị trí bạn đang đứng để bạn bè dễ tìm thấy."
+    "challenge": "Soạn tin nhắn mô tả vị trí bạn đang đứng để bạn bè dễ tìm thấy.",
+    "notification": {
+      "english": "I am waiting at the entrance opposite the store.",
+      "chinese": "我在书店对面的出口等你。",
+      "vietnamese": "Tôi đang đợi bạn ở lối ra đối diện hiệu sách."
+    }
   },
   {
     "id": "lesson-027",
@@ -670,7 +800,12 @@
       }
     ],
     "note": "Cụm từ '走反了' (đi ngược chiều/sai hướng) rất tự nhiên khi nhắc nhở ai đó đi lạc đường.",
-    "challenge": "Thực hành hỏi lại đường và ghi nhớ chỉ dẫn rẽ phải/rẽ trái."
+    "challenge": "Thực hành hỏi lại đường và ghi nhớ chỉ dẫn rẽ phải/rẽ trái.",
+    "notification": {
+      "english": "Is this the right way to the museum?",
+      "chinese": "请问去博物馆是走这条路吗？",
+      "vietnamese": "Đi bảo tàng là đi theo đường này phải không?"
+    }
   },
   {
     "id": "lesson-028",
@@ -689,7 +824,12 @@
       }
     ],
     "note": "Cấu trúc '把...改到...' rất chuyên nghiệp khi cần thay đổi thời gian lịch hẹn.",
-    "challenge": "Tập nói câu xin đổi lịch hẹn sang một thời điểm khác trong tuần."
+    "challenge": "Tập nói câu xin đổi lịch hẹn sang một thời điểm khác trong tuần.",
+    "notification": {
+      "english": "Can we move our meeting to tomorrow afternoon?",
+      "chinese": "我们能把会议改到明天下午吗？",
+      "vietnamese": "Chúng ta có thể dời cuộc họp sang chiều mai không?"
+    }
   },
   {
     "id": "lesson-029",
@@ -708,7 +848,12 @@
       }
     ],
     "note": "Dùng '跟...确认一下' để mở đầu câu hỏi xác nhận thông tin lịch trình một cách lịch sự.",
-    "challenge": "Viết tin nhắn ngắn xác nhận thời gian và địa điểm hẹn gặp với ai đó."
+    "challenge": "Viết tin nhắn ngắn xác nhận thời gian và địa điểm hẹn gặp với ai đó.",
+    "notification": {
+      "english": "Just to confirm, we are meeting at 3 PM today?",
+      "chinese": "我们今天下午三点见面，对吗？",
+      "vietnamese": "Xác nhận lại là chiều nay 3 giờ chúng ta gặp nhau nhé?"
+    }
   },
   {
     "id": "lesson-030",
@@ -751,7 +896,12 @@
       }
     ],
     "note": "Cấu trúc thương lượng '...怎么样' và '...可以' rất tự nhiên khi chốt lịch hẹn.",
-    "challenge": "Đóng vai lên lịch hẹn đi chơi cuối tuần với một người bạn bằng tiếng Trung."
+    "challenge": "Đóng vai lên lịch hẹn đi chơi cuối tuần với một người bạn bằng tiếng Trung.",
+    "notification": {
+      "english": "Are you free this Saturday morning for a coffee?",
+      "chinese": "这周六上午你有空喝杯咖啡吗？",
+      "vietnamese": "Thứ bảy tuần này bạn rảnh uống ly cà phê không?"
+    }
   },
   {
     "id": "lesson-031",
@@ -770,7 +920,12 @@
       }
     ],
     "note": "Cấu trúc 'Could you clarify what you mean by...' rất lịch sự khi muốn yêu cầu đối phương giải nghĩa một từ chuyên môn hoặc khái niệm mơ hồ.",
-    "challenge": "Hãy đặt câu hỏi tương tự với một từ vựng tiếng Anh bạn vừa học hôm nay."
+    "challenge": "Hãy đặt câu hỏi tương tự với một từ vựng tiếng Anh bạn vừa học hôm nay.",
+    "notification": {
+      "english": "Could you clarify what you mean by that term?",
+      "chinese": "能解释一下那个词的意思吗？",
+      "vietnamese": "Bạn có thể giải thích rõ thuật ngữ đó không?"
+    }
   },
   {
     "id": "lesson-032",
@@ -789,7 +944,12 @@
       }
     ],
     "note": "Sử dụng 'because / 因为' để nối mệnh đề kết quả với mệnh đề nguyên nhân một cách trôi chảy.",
-    "challenge": "Nhắn tin báo trễ cho đồng nghiệp bằng tiếng Trung kèm lý do công việc."
+    "challenge": "Nhắn tin báo trễ cho đồng nghiệp bằng tiếng Trung kèm lý do công việc.",
+    "notification": {
+      "english": "I will be five minutes late due to heavy traffic.",
+      "chinese": "我因交通拥堵会迟到五分钟。",
+      "vietnamese": "Tôi sẽ đến muộn năm phút vì kẹt xe."
+    }
   },
   {
     "id": "lesson-033",
@@ -824,7 +984,12 @@
       }
     ],
     "note": "Cấu trúc so sánh hơn 'more ... than / 比较...但...' giúp nêu bật ưu nhược điểm trước khi quyết định.",
-    "challenge": "Thảo luận với bạn bè về việc chọn giữa hai quán cà phê."
+    "challenge": "Thảo luận với bạn bè về việc chọn giữa hai quán cà phê.",
+    "notification": {
+      "english": "Should we book the small room or the large one?",
+      "chinese": "我们应该预订小会议室还是大会议室？",
+      "vietnamese": "Chúng ta nên đặt phòng họp nhỏ hay phòng lớn?"
+    }
   },
   {
     "id": "lesson-034",
@@ -843,7 +1008,12 @@
       }
     ],
     "note": "Mẫu câu 'How about / 怎么样' là cách tối ưu để đưa ra đề xuất mang tính xây dựng mà không áp đặt.",
-    "challenge": "Đề xuất dời lịch hẹn với đối tác qua tin nhắn."
+    "challenge": "Đề xuất dời lịch hẹn với đối tác qua tin nhắn.",
+    "notification": {
+      "english": "Shall we reschedule our meeting to tomorrow morning?",
+      "chinese": "把会议改到明天上午怎么样？",
+      "vietnamese": "Hay là dời cuộc họp của chúng ta sang sáng mai nhé?"
+    }
   },
   {
     "id": "lesson-035",
@@ -862,7 +1032,12 @@
       }
     ],
     "note": "Cụm 'Please let me know / 请告诉我' rất thông dụng trong văn phong công sở để nhắc nhở khéo.",
-    "challenge": "Gửi tin nhắn xác nhận tài liệu cho giảng viên hoặc sếp."
+    "challenge": "Gửi tin nhắn xác nhận tài liệu cho giảng viên hoặc sếp.",
+    "notification": {
+      "english": "Please let me know if you received the document.",
+      "chinese": "收到文件请告诉我一声。",
+      "vietnamese": "Vui lòng cho tôi biết nếu bạn nhận được tài liệu."
+    }
   },
   {
     "id": "lesson-036",
@@ -897,7 +1072,12 @@
       }
     ],
     "note": "Công thức từ chối lịch sự: 'I would love to, but... / 我很想...但是...' giúp giữ quan hệ tốt đẹp.",
-    "challenge": "Từ chối một lời mời đi chơi từ bạn bè bằng tiếng Anh kèm lý do chính đáng."
+    "challenge": "Từ chối một lời mời đi chơi từ bạn bè bằng tiếng Anh kèm lý do chính đáng.",
+    "notification": {
+      "english": "Would you like to grab some lunch together?",
+      "chinese": "你现在想一起去吃午饭吗？",
+      "vietnamese": "Bây giờ bạn có muốn đi ăn trưa cùng nhau không?"
+    }
   },
   {
     "id": "lesson-037",
@@ -916,7 +1096,12 @@
       }
     ],
     "note": "Động từ 'elaborate' mang sắc thái trang trọng hơn 'explain', dùng để yêu cầu đào sâu vào chi tiết.",
-    "challenge": "Yêu cầu giảng viên nói rõ hơn về một ý trong bài giảng."
+    "challenge": "Yêu cầu giảng viên nói rõ hơn về một ý trong bài giảng.",
+    "notification": {
+      "english": "Could you elaborate on the third point?",
+      "chinese": "你能详细讲讲第三点吗？",
+      "vietnamese": "Bạn có thể giải thích rõ hơn về điểm thứ ba không?"
+    }
   },
   {
     "id": "lesson-038",
@@ -935,7 +1120,12 @@
       }
     ],
     "note": "Cụm 'push back / 延后' rất hay được dùng trong môi trường làm việc khi cần lùi lịch.",
-    "challenge": "Nhắn tin xin dời lịch hẹn với bạn bè do kẹt việc."
+    "challenge": "Nhắn tin xin dời lịch hẹn với bạn bè do kẹt việc.",
+    "notification": {
+      "english": "Can we push the meeting back by an hour?",
+      "chinese": "我们可以把会议延后一个小时吗？",
+      "vietnamese": "Chúng ta có thể hoãn cuộc họp lại một tiếng không?"
+    }
   },
   {
     "id": "lesson-039",
@@ -970,7 +1160,12 @@
       }
     ],
     "note": "Sử dụng liên từ 'but / 但' để chỉ sự đối lập và đưa ra giải pháp tổng hợp ở câu tiếp theo.",
-    "challenge": "So sánh ưu nhược điểm của việc học online và học offline."
+    "challenge": "So sánh ưu nhược điểm của việc học online và học offline.",
+    "notification": {
+      "english": "Online saves travel; in-person meetings work better.",
+      "chinese": "线上省通勤时间，线下开会更高效。",
+      "vietnamese": "Làm online đỡ đi lại; họp trực tiếp hiệu quả hơn."
+    }
   },
   {
     "id": "lesson-040",
@@ -989,7 +1184,12 @@
       }
     ],
     "note": "Cấu trúc 'to avoid / 以免' giúp làm rõ mục đích phòng ngừa rủi ro của hành động trước đó.",
-    "challenge": "Nói một câu giải thích tại sao bạn phải kiểm tra kỹ bài vở trước khi nộp."
+    "challenge": "Nói một câu giải thích tại sao bạn phải kiểm tra kỹ bài vở trước khi nộp.",
+    "notification": {
+      "english": "I am checking these details to avoid mistakes.",
+      "chinese": "我核对细节以免报告出错。",
+      "vietnamese": "Tôi kiểm tra các chi tiết này để tránh sai sót."
+    }
   },
   {
     "id": "lesson-041",
@@ -1008,7 +1208,12 @@
       }
     ],
     "note": "Mẫu câu điều kiện 'If ..., let us ... / 如果..., 我们...' giúp đưa ra chỉ dẫn hành động rất rõ ràng.",
-    "challenge": "Nhắn tin hướng dẫn đồng nghiệp cách xử lý khi máy in bị kẹt giấy."
+    "challenge": "Nhắn tin hướng dẫn đồng nghiệp cách xử lý khi máy in bị kẹt giấy.",
+    "notification": {
+      "english": "If the system crashes again, let us restart our computers.",
+      "chinese": "如果系统再次崩溃，我们立即重启电脑。",
+      "vietnamese": "Nếu hệ thống lại sập, chúng ta hãy khởi động lại máy tính ngay."
+    }
   },
   {
     "id": "lesson-042",
@@ -1043,7 +1248,12 @@
       }
     ],
     "note": "Kết hợp nhuần nhuyễn giữa việc xin làm rõ thông tin và thương lượng phương án mua hàng.",
-    "challenge": "Đóng vai người mua hàng để hỏi giá và thương lượng qua lại bằng tiếng Anh."
+    "challenge": "Đóng vai người mua hàng để hỏi giá và thương lượng qua lại bằng tiếng Anh.",
+    "notification": {
+      "english": "Could you clarify if this price includes shipping fees?",
+      "chinese": "你能明确一下这个价格是否包含运费吗？",
+      "vietnamese": "Bạn có thể làm rõ xem giá này đã bao gồm phí vận chuyển chưa?"
+    }
   },
   {
     "id": "lesson-043",
@@ -1062,7 +1272,12 @@
       }
     ],
     "note": "Dùng từ 'conservative / 保守' trong bối cảnh công việc để chỉ phương án an toàn, ít rủi ro.",
-    "challenge": "Nói một câu nêu lý do chọn phương án an toàn trong công việc hoặc học tập."
+    "challenge": "Nói một câu nêu lý do chọn phương án an toàn trong công việc hoặc học tập.",
+    "notification": {
+      "english": "We should choose the conservative option to minimize risks.",
+      "chinese": "我们应选保守方案以降低财务风险。",
+      "vietnamese": "Chúng ta nên chọn phương án thận trọng để giảm thiểu rủi ro."
+    }
   },
   {
     "id": "lesson-044",
@@ -1081,7 +1296,12 @@
       }
     ],
     "note": "Cấu trúc đề xuất thời gian và địa điểm rõ ràng giúp tiết kiệm thời gian nhắn qua lại.",
-    "challenge": "Nhắn tin hẹn bạn bè đi học nhóm với đầy đủ thời gian và địa điểm."
+    "challenge": "Nhắn tin hẹn bạn bè đi học nhóm với đầy đủ thời gian và địa điểm.",
+    "notification": {
+      "english": "How about meeting at the downtown café at 3 PM tomorrow?",
+      "chinese": "明天下午三点在市中心咖啡馆见面怎么样？",
+      "vietnamese": "Hẹn gặp nhau ở quán cà phê trung tâm lúc 3 giờ chiều mai nhé?"
+    }
   },
   {
     "id": "lesson-045",
@@ -1116,7 +1336,12 @@
       }
     ],
     "note": "Sử dụng 'Since / 既然' để nêu tiền đề thực tế trước khi đưa ra chốt phương án cuối cùng.",
-    "challenge": "Tự tổng kết một vấn đề và đưa ra quyết định cuối cùng bằng cả tiếng Anh và tiếng Trung trong 1 phút."
+    "challenge": "Tự tổng kết một vấn đề và đưa ra quyết định cuối cùng bằng cả tiếng Anh và tiếng Trung trong 1 phút.",
+    "notification": {
+      "english": "Since plan A is too risky and plan B is costly, what is next?",
+      "chinese": "既然方案甲风险大方案乙成本高，下一步怎么办？",
+      "vietnamese": "Vì phương án A quá rủi ro và phương án B tốn kém, bước tiếp là gì?"
+    }
   },
   {
     "id": "lesson-046",
@@ -1135,7 +1360,12 @@
       }
     ],
     "note": "Cấu trúc 'appreciate you doing something' diễn tả lòng biết ơn chân thành đối với hành động tốn nhiều công sức của người khác.",
-    "challenge": "Hãy nói trong 1 phút về một lần ai đó giúp bạn và bạn dùng mẫu câu này để cảm ơn họ."
+    "challenge": "Hãy nói trong 1 phút về một lần ai đó giúp bạn và bạn dùng mẫu câu này để cảm ơn họ.",
+    "notification": {
+      "english": "I really appreciate you going out of your way to help me.",
+      "chinese": "这次多亏你帮忙，我非常感激。",
+      "vietnamese": "Lần này nhờ bạn cất công giúp đỡ, tôi thực sự rất biết ơn."
+    }
   },
   {
     "id": "lesson-047",
@@ -1154,7 +1384,12 @@
       }
     ],
     "note": "Cụm từ 'take your time' kết hợp với 'no rush' giúp giảm áp lực tâm lý cho người đang chịu căng thẳng.",
-    "challenge": "Tưởng tượng đồng nghiệp đang quá tải, hãy thu âm tin nhắn thoại 1 phút trấn an họ bằng ý này."
+    "challenge": "Tưởng tượng đồng nghiệp đang quá tải, hãy thu âm tin nhắn thoại 1 phút trấn an họ bằng ý này.",
+    "notification": {
+      "english": "Take your time, there is no rush on this end.",
+      "chinese": "你先忙，我们不着急。",
+      "vietnamese": "Bạn cứ thong thả, bên này không vội đâu."
+    }
   },
   {
     "id": "lesson-048",
@@ -1189,7 +1424,12 @@
       }
     ],
     "note": "Chiến lược từ chối mềm: Bắt đầu bằng 'I'd love to' (Tôi rất muốn) để giữ quan hệ, sau đó dùng 'but' để đưa ra lý do khách quan.",
-    "challenge": "Đóng vai người từ chối và người mời, thực hành hội thoại trong 1 phút."
+    "challenge": "Đóng vai người từ chối và người mời, thực hành hội thoại trong 1 phút.",
+    "notification": {
+      "english": "Do you want to grab dinner together after work today?",
+      "chinese": "你今天下班后一起吃晚饭吗？",
+      "vietnamese": "Hôm nay tan làm bạn có muốn đi ăn tối cùng nhau không?"
+    }
   },
   {
     "id": "lesson-049",
@@ -1208,7 +1448,12 @@
       }
     ],
     "note": "Mẫu câu 'I agree with..., though...' giúp bạn thể hiện sự ủng hộ nhưng vẫn khéo léo đưa ra rào cản cần giải quyết.",
-    "challenge": "Nói trong 1 phút về một ý tưởng bạn đồng ý một phần và giải thích lý do."
+    "challenge": "Nói trong 1 phút về một ý tưởng bạn đồng ý một phần và giải thích lý do.",
+    "notification": {
+      "english": "I agree with the direction, though we need to consider costs.",
+      "chinese": "大方向我同意，不过成本得考虑一下。",
+      "vietnamese": "Tôi đồng ý với hướng đi này, nhưng cần cân nhắc chi phí."
+    }
   },
   {
     "id": "lesson-050",
@@ -1227,7 +1472,12 @@
       }
     ],
     "note": "Cách dùng 'Make sure you...' mang sắc thái quan tâm, ân cần như một lời nhắc nhở thân thiết thay vì ra lệnh.",
-    "challenge": "Gửi một tin nhắn thoại 1 phút hỏi thăm sức khỏe một người bạn lâu ngày không gặp."
+    "challenge": "Gửi một tin nhắn thoại 1 phút hỏi thăm sức khỏe một người bạn lâu ngày không gặp.",
+    "notification": {
+      "english": "Make sure you drink plenty of warm water and rest well.",
+      "chinese": "记得多喝热水，好好休息。",
+      "vietnamese": "Nhớ uống nhiều nước ấm và nghỉ ngơi thật tốt nhé."
+    }
   },
   {
     "id": "lesson-051",
@@ -1262,7 +1512,12 @@
       }
     ],
     "note": "Cụm từ 'be tied up with' là cách nói chuyên nghiệp để chỉ việc đang bận ngập đầu với việc khác, giúp từ chối mà không bị coi là lười biếng.",
-    "challenge": "Thực hành đối thoại từ chối công việc phát sinh với sếp trong 1 phút."
+    "challenge": "Thực hành đối thoại từ chối công việc phát sinh với sếp trong 1 phút.",
+    "notification": {
+      "english": "Can you review this extra report before Friday?",
+      "chinese": "周五前你能帮忙看这份额外报告吗？",
+      "vietnamese": "Trước thứ Sáu bạn xem giúp báo cáo bổ sung này nhé?"
+    }
   },
   {
     "id": "lesson-052",
@@ -1281,7 +1536,12 @@
       }
     ],
     "note": "Cụm 'pull something off' diễn tả việc thành công vượt qua khó khăn, dùng để khen ngợi đồng đội rất hiệu quả.",
-    "challenge": "Nói 1 phút bày tỏ sự công nhận đối với đóng góp của một người bạn trong nhóm."
+    "challenge": "Nói 1 phút bày tỏ sự công nhận đối với đóng góp của một người bạn trong nhóm.",
+    "notification": {
+      "english": "We couldn't have done this without your dedication.",
+      "chinese": "如果没有你的付出，我们根本做不到。",
+      "vietnamese": "Chúng ta hoàn toàn không thể làm được điều này nếu thiếu bạn."
+    }
   },
   {
     "id": "lesson-053",
@@ -1300,7 +1560,12 @@
       }
     ],
     "note": "Cấu trúc 'bear with me' là cách lịch sự để xin lỗi và xin sự kiên nhẫn từ người đang chờ đợi bạn.",
-    "challenge": "Giả lập tình huống trễ hẹn và ghi âm 1 phút giải thích tình hình cho đối tác."
+    "challenge": "Giả lập tình huống trễ hẹn và ghi âm 1 phút giải thích tình hình cho đối tác.",
+    "notification": {
+      "english": "Traffic is quite heavy, please bear with me for a few minutes.",
+      "chinese": "路上堵车，请再等我几分钟。",
+      "vietnamese": "Đường khá tắc, xin hãy đợi tôi thêm vài phút nữa nhé."
+    }
   },
   {
     "id": "lesson-054",
@@ -1335,7 +1600,12 @@
       }
     ],
     "note": "Thay vì nói 'Không được', hãy dùng 'might be a bit tight' kết hợp câu hỏi gợi ý 'how about...' để đổi lịch uyển chuyển.",
-    "challenge": "Thực hành thương lượng lại thời gian cuộc họp trong 1 phút."
+    "challenge": "Thực hành thương lượng lại thời gian cuộc họp trong 1 phút.",
+    "notification": {
+      "english": "Should we hold the meeting at 9 AM tomorrow?",
+      "chinese": "明天早上九点开会怎么样？",
+      "vietnamese": "Mai họp lúc 9 giờ sáng được không?"
+    }
   },
   {
     "id": "lesson-055",
@@ -1354,7 +1624,12 @@
       }
     ],
     "note": "Cụm từ 'seem a bit distracted' giúp nhận xét tâm trạng người khác một cách tế nhị, không mang tính phán xét.",
-    "challenge": "Nói 1 phút về cách bạn quan tâm và an ủi một người đang gặp chuyện phiền lòng."
+    "challenge": "Nói 1 phút về cách bạn quan tâm và an ủi một người đang gặp chuyện phiền lòng.",
+    "notification": {
+      "english": "You seem a bit distracted today, is everything okay?",
+      "chinese": "你今天心不在焉，没事吧？",
+      "vietnamese": "Hôm nay trông bạn hơi lơ đễnh, mọi chuyện ổn chứ?"
+    }
   },
   {
     "id": "lesson-056",
@@ -1373,7 +1648,12 @@
       }
     ],
     "note": "Kết hợp cảm ơn 'Thanks for inviting me' với nhu cầu cá nhân 'recharge' giúp việc từ chối trở nên cực kỳ lịch sự và thấu đáo.",
-    "challenge": "Ghi âm tin nhắn 1 phút từ chối một lời rủ đi chơi nhưng vẫn giữ tình cảm tốt đẹp."
+    "challenge": "Ghi âm tin nhắn 1 phút từ chối một lời rủ đi chơi nhưng vẫn giữ tình cảm tốt đẹp.",
+    "notification": {
+      "english": "Thanks for inviting me, but I need a quiet weekend to recharge.",
+      "chinese": "谢谢邀请，周末我需要安静充充电。",
+      "vietnamese": "Cảm ơn lời mời, tôi cần một cuối tuần yên tĩnh để nạp năng lượng."
+    }
   },
   {
     "id": "lesson-057",
@@ -1408,7 +1688,12 @@
       }
     ],
     "note": "Câu 'I owe you one' là cách nói cửa miệng rất tự nhiên của người bản xứ khi muốn hứa hẹn đền đáp sự giúp đỡ.",
-    "challenge": "Đóng vai hai người trong tình huống này và nói chuyện trong 1 phút."
+    "challenge": "Đóng vai hai người trong tình huống này và nói chuyện trong 1 phút.",
+    "notification": {
+      "english": "I really appreciate you finishing my tasks while I was sick.",
+      "chinese": "生病时你帮我做完工作，实在太感谢了。",
+      "vietnamese": "Tôi rất cảm kích vì bạn đã làm hộ việc khi tôi ốm."
+    }
   },
   {
     "id": "lesson-058",
@@ -1427,7 +1712,12 @@
       }
     ],
     "note": "Liên từ 'provided that' (với điều kiện là) giúp bạn thỏa thuận ranh giới và trách nhiệm một cách rõ ràng khi đồng ý giúp việc.",
-    "challenge": "Nói trong 1 phút về một thỏa thuận bạn đưa ra điều kiện kèm theo."
+    "challenge": "Nói trong 1 phút về một thỏa thuận bạn đưa ra điều kiện kèm theo.",
+    "notification": {
+      "english": "I can help with the presentation if you send the data by noon.",
+      "chinese": "中午前发数据，我可以帮做演示。",
+      "vietnamese": "Tôi có thể giúp thuyết trình nếu bạn gửi dữ liệu trước trưa."
+    }
   },
   {
     "id": "lesson-059",
@@ -1446,7 +1736,12 @@
       }
     ],
     "note": "Cụm 'well-deserved rest' nhấn mạnh rằng người nghe đã bỏ ra rất nhiều công sức và xứng đáng được thư giãn.",
-    "challenge": "Gửi tin nhắn thoại 1 phút khen ngợi và động viên ai đó vừa hoàn thành nhiệm vụ lớn."
+    "challenge": "Gửi tin nhắn thoại 1 phút khen ngợi và động viên ai đó vừa hoàn thành nhiệm vụ lớn.",
+    "notification": {
+      "english": "You handled the tough questions brilliantly, get some rest.",
+      "chinese": "你今天应对尖锐问题表现出色，去休息吧。",
+      "vietnamese": "Bạn đã xử lý các câu hỏi hóc búa rất xuất sắc, hãy đi nghỉ ngơi."
+    }
   },
   {
     "id": "lesson-060",
@@ -1489,7 +1784,12 @@
       }
     ],
     "note": "Bài hội thoại tổng hợp cách dùng 'I'd love to, but...' để từ chối khéo léo, kết hợp sự thấu hiểu từ phía người hỏi và lời chúc chân thành.",
-    "challenge": "Đóng vai cả hai nhân vật và đọc lại đoạn hội thoại trong 1 phút với biểu cảm tự nhiên."
+    "challenge": "Đóng vai cả hai nhân vật và đọc lại đoạn hội thoại trong 1 phút với biểu cảm tự nhiên.",
+    "notification": {
+      "english": "Are you joining our weekend camping trip to the mountains?",
+      "chinese": "这个周末去山里的露营活动你参加吗？",
+      "vietnamese": "Cuối tuần này bạn có tham gia chuyến cắm trại trên núi không?"
+    }
   },
   {
     "id": "lesson-061",
@@ -1508,7 +1808,12 @@
       }
     ],
     "note": "Cấu trúc '让我没想到的是...' (Điều khiến tôi không ngờ là) kết hợp với '竟然' (lại/cố tình/bỗng nhiên) giúp câu kể chuyện có độ kịch tính cao hơn.",
-    "challenge": "Kể lại trong 1 phút một tình huống bạn bất ngờ vì ai đó đồng ý giúp đỡ."
+    "challenge": "Kể lại trong 1 phút một tình huống bạn bất ngờ vì ai đó đồng ý giúp đỡ.",
+    "notification": {
+      "english": "To my surprise, he agreed to help us without hesitation.",
+      "chinese": "他竟然毫不犹豫地答应帮我们。",
+      "vietnamese": "Thật bất ngờ khi anh ấy không chút do dự đồng ý giúp chúng tôi."
+    }
   },
   {
     "id": "lesson-062",
@@ -1527,7 +1832,12 @@
       }
     ],
     "note": "Cụm '塞在路上' (kẹt trên đường) rất tự nhiên khi nhắn tin gấp thay cho từ '堵车' thông thường.",
-    "challenge": "Gửi tin nhắn thoại 1 phút giải thích lý do bạn đến muộn trong một buổi hẹn quan trọng."
+    "challenge": "Gửi tin nhắn thoại 1 phút giải thích lý do bạn đến muộn trong một buổi hẹn quan trọng.",
+    "notification": {
+      "english": "I'm so sorry, I'm stuck in traffic and will be ten minutes late.",
+      "chinese": "对不起，我塞车了，可能晚十分钟。",
+      "vietnamese": "Xin lỗi nhé, tôi bị kẹt xe và sẽ đến muộn mười phút."
+    }
   },
   {
     "id": "lesson-063",
@@ -1562,7 +1872,12 @@
       }
     ],
     "note": "Cụm '记混了' có nghĩa là nhớ lẫn lộn, nhớ sai giữa hai mốc thời gian, rất hay dùng trong văn nói khi xảy ra nhầm lẫn.",
-    "challenge": "Đóng vai người nhầm lịch hẹn và giải thích trong 1 phút."
+    "challenge": "Đóng vai người nhầm lịch hẹn và giải thích trong 1 phút.",
+    "notification": {
+      "english": "Wait, I thought our meeting was at three this afternoon?",
+      "chinese": "等等，我以为我们约的是下午三点？",
+      "vietnamese": "Khoan đã, tôi cứ tưởng lịch họp là ba giờ chiều nay chứ?"
+    }
   },
   {
     "id": "lesson-064",
@@ -1581,7 +1896,12 @@
       }
     ],
     "note": "Mẫu câu '从...角度来看' (Xét từ góc độ...) giúp câu nói mang tính chuyên nghiệp và khách quan hơn.",
-    "challenge": "Trình bày trong 1 phút quan điểm của bạn về việc học ngoại ngữ qua app hay qua lớp học."
+    "challenge": "Trình bày trong 1 phút quan điểm của bạn về việc học ngoại ngữ qua app hay qua lớp học.",
+    "notification": {
+      "english": "From my perspective, quality matters more than quantity here.",
+      "chinese": "从我的角度看，这里质量比数量重要得多。",
+      "vietnamese": "Dưới góc nhìn của tôi, ở đây chất lượng quan trọng hơn số lượng."
+    }
   },
   {
     "id": "lesson-065",
@@ -1600,7 +1920,12 @@
       }
     ],
     "note": "Từ '累瘫了' diễn tả trạng thái mệt mỏi đến mức rũ rượi, kiệt sức (mệt lả người).",
-    "challenge": "Gửi tin nhắn thoại 1 phút kể về ngày mệt mỏi nhất tuần qua của bạn."
+    "challenge": "Gửi tin nhắn thoại 1 phút kể về ngày mệt mỏi nhất tuần qua của bạn.",
+    "notification": {
+      "english": "Today was exhausting, I just want to crash on the couch.",
+      "chinese": "今天太累了，只想瘫在沙发上。",
+      "vietnamese": "Hôm nay mệt quá, tôi chỉ muốn nằm dài trên sô-pha."
+    }
   },
   {
     "id": "lesson-066",
@@ -1635,7 +1960,12 @@
       }
     ],
     "note": "Cụm '计划有变' (kế hoạch có thay đổi) rất hữu ích trong công sở khi lịch trình bị dời lại.",
-    "challenge": "Đóng vai người giải thích lịch làm việc thay đổi trong 1 phút."
+    "challenge": "Đóng vai người giải thích lịch làm việc thay đổi trong 1 phút.",
+    "notification": {
+      "english": "Did you finish the quarterly report? The boss is asking.",
+      "chinese": "季度报告你完成了没有？老板在问。",
+      "vietnamese": "Báo cáo quý cậu làm xong chưa đấy? Sếp đang hỏi kìa."
+    }
   },
   {
     "id": "lesson-067",
@@ -1654,7 +1984,12 @@
       }
     ],
     "note": "Cấu trúc '...肯定...了，所以才...' giúp phân tích nguyên nhân một cách logic khi kể chuyện.",
-    "challenge": "Đưa ra phỏng đoán trong 1 phút vì sao một người bạn đến muộn buổi hẹn tối qua."
+    "challenge": "Đưa ra phỏng đoán trong 1 phút vì sao một người bạn đến muộn buổi hẹn tối qua.",
+    "notification": {
+      "english": "She must have missed our call because her phone died.",
+      "chinese": "她手机肯定没电了，所以才没接电话。",
+      "vietnamese": "Chắc điện thoại cô ấy hết pin nên mới không bắt máy."
+    }
   },
   {
     "id": "lesson-068",
@@ -1673,7 +2008,12 @@
       }
     ],
     "note": "Cụm '多亏你出手相助' (Nhờ có bạn ra tay cứu giúp) diễn tả lòng biết ơn chân thành ở mức độ cao.",
-    "challenge": "Gửi tin nhắn 1 phút cảm ơn người đã giúp bạn trong một tình huống khẩn cấp."
+    "challenge": "Gửi tin nhắn 1 phút cảm ơn người đã giúp bạn trong một tình huống khẩn cấp.",
+    "notification": {
+      "english": "I cannot thank you enough for helping me out of trouble.",
+      "chinese": "你出手相助，我真不知该怎么谢你。",
+      "vietnamese": "Tôi thực sự không biết phải cảm ơn bạn thế nào cho phải."
+    }
   },
   {
     "id": "lesson-069",
@@ -1708,7 +2048,12 @@
       }
     ],
     "note": "Câu '说得也是' dùng để thừa nhận quan điểm của người đối diện một cách cởi mở trước khi kết luận.",
-    "challenge": "Trình bày quan điểm của bạn về sự ổn định hay thử thách trong 1 phút."
+    "challenge": "Trình bày quan điểm của bạn về sự ổn định hay thử thách trong 1 phút.",
+    "notification": {
+      "english": "Stability is far more important than chasing risky dreams.",
+      "chinese": "安稳生活比追求风险梦想重要得多。",
+      "vietnamese": "Sống ổn định quan trọng hơn nhiều việc theo đuổi giấc mơ rủi ro."
+    }
   },
   {
     "id": "lesson-070",
@@ -1727,7 +2072,12 @@
       }
     ],
     "note": "Cấu trúc tương phản '一开始...，没想到现在却...' rất hay dùng để kể về sự quay ngoắt 180 độ trong cảm xúc.",
-    "challenge": "Kể lại trong 1 phút một món ăn hoặc thói quen mà bạn từng ghét nhưng giờ lại thích."
+    "challenge": "Kể lại trong 1 phút một món ăn hoặc thói quen mà bạn từng ghét nhưng giờ lại thích.",
+    "notification": {
+      "english": "I was against moving abroad, but now I love living here.",
+      "chinese": "我曾反对出国，如今却很热爱这里。",
+      "vietnamese": "Tôi từng phản đối ra nước ngoài, nay lại rất yêu nơi này."
+    }
   },
   {
     "id": "lesson-071",
@@ -1746,7 +2096,12 @@
       }
     ],
     "note": "Cụm '正常发挥' (phát huy bình thường / đúng phong độ) là lời khuyên kinh điển khi động viên ai đó trước kỳ thi hoặc phỏng vấn.",
-    "challenge": "Gửi tin nhắn thoại 1 phút khích lệ một người bạn trước ngày thi quan trọng."
+    "challenge": "Gửi tin nhắn thoại 1 phút khích lệ một người bạn trước ngày thi quan trọng.",
+    "notification": {
+      "english": "Don't overthink it; just show them your true capabilities.",
+      "chinese": "别想太多，展现出你的真实水平就行。",
+      "vietnamese": "Đừng nghĩ quá nhiều, hãy thể hiện năng lực thật của bạn."
+    }
   },
   {
     "id": "lesson-072",
@@ -1781,7 +2136,12 @@
       }
     ],
     "note": "Cụm '怪不得' có nghĩa là 'Thảo nào / Hèn chi', dùng để thốt lên khi vỡ lẽ ra nguyên nhân của sự việc.",
-    "challenge": "Đóng vai giải thích nhầm địa điểm hẹn gặp trong 1 phút."
+    "challenge": "Đóng vai giải thích nhầm địa điểm hẹn gặp trong 1 phút.",
+    "notification": {
+      "english": "Where are you? I've waited at the station cafe for 20 minutes.",
+      "chinese": "你在哪儿？我在车站咖啡馆等二十分钟了。",
+      "vietnamese": "Cậu đang ở đâu? Tớ đợi ở quán cà phê nhà ga 20 phút rồi."
+    }
   },
   {
     "id": "lesson-073",
@@ -1800,7 +2160,12 @@
       }
     ],
     "note": "Cấu trúc song hành '与其..., 不如...' (Thay vì... chi bằng...) rất hữu ích khi đưa ra lời khuyên mang tính triết lý, sâu sắc.",
-    "challenge": "Chia sẻ trong 1 phút cách bạn chọn ưu tiên việc gì khi có quá nhiều việc phải làm."
+    "challenge": "Chia sẻ trong 1 phút cách bạn chọn ưu tiên việc gì khi có quá nhiều việc phải làm.",
+    "notification": {
+      "english": "Instead of worrying over what we cannot control, focus on now.",
+      "chinese": "与其纠结无法控制的事，不如把重心放在当下。",
+      "vietnamese": "Thay vì bận tâm chuyện ngoài tầm kiểm soát, hãy tập trung hiện tại."
+    }
   },
   {
     "id": "lesson-074",
@@ -1819,7 +2184,12 @@
       }
     ],
     "note": "Từ '搞砸了' là cách nói thông dụng trong khẩu ngữ để chỉ việc bị làm hỏng bét, làm đổ bể.",
-    "challenge": "Gửi tin nhắn 1 phút xin lỗi vì làm hỏng một kế hoạch chung và đưa ra cách đền bù."
+    "challenge": "Gửi tin nhắn 1 phút xin lỗi vì làm hỏng một kế hoạch chung và đưa ra cách đền bù.",
+    "notification": {
+      "english": "I'm so sorry for messing up. I'll cover all extra costs.",
+      "chinese": "预订搞砸了，所有额外费用我来承担。",
+      "vietnamese": "Xin lỗi vì làm hỏng việc. Mọi chi phí phát sinh tớ chịu hết."
+    }
   },
   {
     "id": "lesson-075",
@@ -1854,7 +2224,12 @@
       }
     ],
     "note": "Cụm '不是滋味' diễn tả cảm giác khó chịu, chạnh lòng trong lòng, rất hay dùng khi bị ai đó nói chạm vào tự ái.",
-    "challenge": "Đóng vai giải thích một câu nói đùa bị hiểu lầm trong 1 phút."
+    "challenge": "Đóng vai giải thích một câu nói đùa bị hiểu lầm trong 1 phút.",
+    "notification": {
+      "english": "Did you really mean what you said in the meeting?",
+      "chinese": "你刚才在会上的话是认真的吗？",
+      "vietnamese": "Câu nói của cậu trong cuộc họp là thật à?"
+    }
   },
   {
     "id": "lesson-076",
@@ -1873,7 +2248,12 @@
       }
     ],
     "note": "Cấu trúc 从…来看 (có góc nhìn từ...) giúp mở đầu câu nêu ý kiến mang tính cá nhân nhưng không quá cực đoan.",
-    "challenge": "Hãy nói 1 phút bằng tiếng Trung/Anh về một việc bạn nghĩ công ty nên ưu tiên trong tuần tới."
+    "challenge": "Hãy nói 1 phút bằng tiếng Trung/Anh về một việc bạn nghĩ công ty nên ưu tiên trong tuần tới.",
+    "notification": {
+      "english": "From my perspective, we should prioritize this project.",
+      "chinese": "我认为我们应该优先考虑这个项目。",
+      "vietnamese": "Theo quan điểm của tôi, chúng ta nên ưu tiên dự án này."
+    }
   },
   {
     "id": "lesson-077",
@@ -1892,7 +2272,12 @@
       }
     ],
     "note": "Cụm 非常抱歉 thể hiện sự xin lỗi chân thành, kết hợp 可能会 (có khả năng sẽ) giúp dự báo thời gian linh hoạt.",
-    "challenge": "Nhắn một tin nhắn giả định báo trễ họp do sự cố bất ngờ."
+    "challenge": "Nhắn một tin nhắn giả định báo trễ họp do sự cố bất ngờ.",
+    "notification": {
+      "english": "I am stuck in traffic and might be ten minutes late.",
+      "chinese": "我堵车了，可能会晚十分钟到。",
+      "vietnamese": "Tôi bị kẹt xe và có thể sẽ đến muộn mười phút."
+    }
   },
   {
     "id": "lesson-078",
@@ -1927,7 +2312,12 @@
       }
     ],
     "note": "Mẫu câu 还是 dùng để hỏi lựa chọn thay thế (A hay B); 这样 (như vậy) dùng để nối tiếp hệ quả.",
-    "challenge": "Thực hiện đoạn hội thoại ngắn chọn ngày đi du lịch cùng bạn bè."
+    "challenge": "Thực hiện đoạn hội thoại ngắn chọn ngày đi du lịch cùng bạn bè.",
+    "notification": {
+      "english": "Should we depart on Monday morning or Tuesday afternoon?",
+      "chinese": "我们应该周一早上还是周二下午出发？",
+      "vietnamese": "Chúng ta nên xuất phát vào sáng thứ Hai hay chiều thứ Ba?"
+    }
   },
   {
     "id": "lesson-079",
@@ -1946,7 +2336,12 @@
       }
     ],
     "note": "Cấu trúc 与其…不如… (thay vì... chi bằng...) là cấu trúc rất hữu ích ở cấp độ B1 để phản biện mang tính xây dựng.",
-    "challenge": "Nêu 2 lựa chọn công việc và dùng cấu trúc này để chọn phương án tối ưu."
+    "challenge": "Nêu 2 lựa chọn công việc và dùng cấu trúc này để chọn phương án tối ưu.",
+    "notification": {
+      "english": "Instead of a meeting, how about sending a status report?",
+      "chinese": "与其开会，不如发个进度报告？",
+      "vietnamese": "Thay vì họp, gửi báo cáo tiến độ thì thế nào?"
+    }
   },
   {
     "id": "lesson-080",
@@ -1965,7 +2360,12 @@
       }
     ],
     "note": "Cụm 确认一下 (xác nhận lại một chút) giúp cuộc trao đổi công việc minh bạch và rõ ràng trách nhiệm.",
-    "challenge": "Nhắn tin xác nhận phân công công việc trong một nhóm dự án giả định."
+    "challenge": "Nhắn tin xác nhận phân công công việc trong một nhóm dự án giả định.",
+    "notification": {
+      "english": "Just to confirm, I am responsible for the financial forecast?",
+      "chinese": "确认一下，我是负责财务预测的吗？",
+      "vietnamese": "Xác nhận lại một chút, tôi phụ trách dự báo tài chính phải không?"
+    }
   },
   {
     "id": "lesson-081",
@@ -2008,7 +2408,12 @@
       }
     ],
     "note": "Từ 倾向于 thể hiện xu hướng lựa chọn; 民宿 chỉ nhà nghỉ dạng homestay rất phổ biến trong du lịch hiện đại.",
-    "challenge": "Đóng vai người lập kế hoạch du lịch và thuyết phục bạn đồng hành."
+    "challenge": "Đóng vai người lập kế hoạch du lịch và thuyết phục bạn đồng hành.",
+    "notification": {
+      "english": "Are you more into beach relaxation or mountain hiking?",
+      "chinese": "你更倾向去海边放松还是爬山？",
+      "vietnamese": "Bạn thích thư giãn ở biển hay leo núi hơn?"
+    }
   },
   {
     "id": "lesson-082",
@@ -2027,7 +2432,12 @@
       }
     ],
     "note": "Cấu trúc 这取决于... (điều này phụ thuộc vào...) là mẫu câu ghi điểm mạnh khi giao tiếp công việc chuyên nghiệp.",
-    "challenge": "Nói về một kế hoạch cuối tuần phụ thuộc vào thời tiết."
+    "challenge": "Nói về một kế hoạch cuối tuần phụ thuộc vào thời tiết.",
+    "notification": {
+      "english": "It depends on whether we can finish the report by Friday.",
+      "chinese": "这取决于周五前能不能完成报告。",
+      "vietnamese": "Việc này phụ thuộc vào việc có xong báo cáo trước thứ Sáu không."
+    }
   },
   {
     "id": "lesson-083",
@@ -2046,7 +2456,12 @@
       }
     ],
     "note": "Cụm 温馨提示 (nhắc nhở ấm áp/thân thiện) là cách mở đầu tinh tế trước khi nhắc đến hạn chót (截止).",
-    "challenge": "Soạn một tin nhắn nhắc deadline cho thành viên chậm tiến độ trong nhóm."
+    "challenge": "Soạn một tin nhắn nhắc deadline cho thành viên chậm tiến độ trong nhóm.",
+    "notification": {
+      "english": "Client presentation files are due tomorrow noon.",
+      "chinese": "客户演示文件明天中午截止。",
+      "vietnamese": "Tài liệu thuyết trình đến hạn vào trưa mai."
+    }
   },
   {
     "id": "lesson-084",
@@ -2081,7 +2496,12 @@
       }
     ],
     "note": "Từ 积极 chỉ sự tích cực, chủ động; 联合研讨会 chỉ buổi hội thảo hoặc họp nhóm phối hợp chuyên môn.",
-    "challenge": "Chia sẻ kinh nghiệm làm việc với người mới bằng ngoại ngữ trong 1 phút."
+    "challenge": "Chia sẻ kinh nghiệm làm việc với người mới bằng ngoại ngữ trong 1 phút.",
+    "notification": {
+      "english": "Quite well, though he needs more guidance on specs.",
+      "chinese": "挺顺利，但技术规格需要多指导。",
+      "vietnamese": "Khá thuận lợi, chỉ là cần hướng dẫn thêm về thông số."
+    }
   },
   {
     "id": "lesson-085",
@@ -2100,7 +2520,12 @@
       }
     ],
     "note": "Cấu trúc 如果我是你 (nếu tôi là bạn) giúp đưa ra lời khuyên chân thành, lịch sự và không mang tính áp đặt.",
-    "challenge": "Đưa ra lời khuyên cho một người bạn đang phân vân trước quyết định nhảy việc."
+    "challenge": "Đưa ra lời khuyên cho một người bạn đang phân vân trước quyết định nhảy việc.",
+    "notification": {
+      "english": "If I were you, I would check the contract clauses carefully.",
+      "chinese": "如果我是你，我会仔细核对合同条款。",
+      "vietnamese": "Nếu ở vị trí của bạn, tôi sẽ kiểm tra kỹ các điều khoản hợp đồng."
+    }
   },
   {
     "id": "lesson-086",
@@ -2119,7 +2544,12 @@
       }
     ],
     "note": "Mẫu câu cảm ơn trước khi từ chối (谢谢…不过…) là phép lịch sự tối thiểu trong giao tiếp xã hội.",
-    "challenge": "Nhắn tin từ chối một lời mời đi chơi vào phút chót một cách lịch sự."
+    "challenge": "Nhắn tin từ chối một lời mời đi chơi vào phút chót một cách lịch sự.",
+    "notification": {
+      "english": "Thanks for the invite, but I have family plans tonight.",
+      "chinese": "谢谢邀请，今晚我有家事去不了。",
+      "vietnamese": "Cảm ơn lời mời, nhưng tối nay tôi bận việc gia đình."
+    }
   },
   {
     "id": "lesson-087",
@@ -2154,7 +2584,12 @@
       }
     ],
     "note": "Từ 推迟 (hoãn lại) và 老地方 (chỗ cũ/quen thuộc) là các từ vựng cực kỳ tự nhiên khi hẹn hò.",
-    "challenge": "Thực hiện cuộc đối thoại dời lịch hẹn gặp đối tác sang ngày hôm sau."
+    "challenge": "Thực hiện cuộc đối thoại dời lịch hẹn gặp đối tác sang ngày hôm sau.",
+    "notification": {
+      "english": "Can we postpone our dinner to Thursday due to an urgent matter?",
+      "chinese": "有点急事，晚饭能改到周四吗？",
+      "vietnamese": "Có việc gấp, chúng ta có thể hoãn bữa tối sang thứ Tư không?"
+    }
   },
   {
     "id": "lesson-088",
@@ -2173,7 +2608,12 @@
       }
     ],
     "note": "Cấu trúc …是为了… (là để...) nhấn mạnh mục đích rõ ràng đằng sau một hành động cụ thể.",
-    "challenge": "Nói một phút về lý do bạn đang chăm chỉ học ngoại ngữ."
+    "challenge": "Nói một phút về lý do bạn đang chăm chỉ học ngoại ngữ.",
+    "notification": {
+      "english": "I am staying late to finish the quarterly evaluation report.",
+      "chinese": "我加班是为了赶完季度评估报告。",
+      "vietnamese": "Tôi tăng ca để hoàn thành cho xong báo cáo đánh giá quý."
+    }
   },
   {
     "id": "lesson-089",
@@ -2192,7 +2632,12 @@
       }
     ],
     "note": "Cụm 跟你说一声 (nói với bạn một tiếng) tạo sự thân thiện, kết hợp 请您审阅 (xin mời ngài xem qua) giữ sự chuyên nghiệp.",
-    "challenge": "Soạn tin nhắn báo cáo hoàn thành một nhiệm vụ quan trọng cho quản lý."
+    "challenge": "Soạn tin nhắn báo cáo hoàn thành một nhiệm vụ quan trọng cho quản lý.",
+    "notification": {
+      "english": "Just letting you know the first draft is ready for your review.",
+      "chinese": "初稿已准备好，请您审阅。",
+      "vietnamese": "Bản thảo đầu tiên đã sẵn sàng để bạn xem lại."
+    }
   },
   {
     "id": "lesson-090",
@@ -2235,7 +2680,12 @@
       }
     ],
     "note": "Từ 考取 (thi lấy được), 扎实 (vững chắc) và 互相 (lẫn nhau) giúp diễn đạt suy nghĩ chuyên sâu hơn về sự nghiệp.",
-    "challenge": "Thuyết trình 1 phút bằng ngoại ngữ về kế hoạch phát triển bản thân trong 2 năm tới."
+    "challenge": "Thuyết trình 1 phút bằng ngoại ngữ về kế hoạch phát triển bản thân trong 2 năm tới.",
+    "notification": {
+      "english": "Do you plan to take any professional certifications next year?",
+      "chinese": "你打算明年考取专业证书吗？",
+      "vietnamese": "Bạn có dự định thi lấy chứng chỉ chuyên nghiệp vào năm sau không?"
+    }
   },
   {
     "id": "lesson-0091",
@@ -2264,7 +2714,12 @@
     "wish": "Chúc bạn buổi sáng tràn đầy năng lượng, nhìn thấy những bước tiến nhỏ nhưng kiên trì của chính mình mỗi ngày.",
     "nightWish": "Mong rằng giấc ngủ đêm nay sẽ nạp lại đầy đủ năng lượng cho những chặng đường phát triển sắp tới của bạn.",
     "generatedAt": "2026-10-30T21:00:02.011Z",
-    "generator": "gemini-3.5-flash-lite"
+    "generator": "gemini-3.5-flash-lite",
+    "notification": {
+      "english": "You have made remarkable progress since we last worked together.",
+      "chinese": "自从我们上次合作以来，你进步很大。",
+      "vietnamese": "Bạn đã tiến bộ rất nhiều kể từ lần cuối chúng ta làm việc cùng nhau."
+    }
   },
   {
     "id": "lesson-0092",
@@ -2293,7 +2748,12 @@
     "wish": "Chúc bạn một buổi trưa thư thái, mọi việc diễn ra suôn sẻ và đúng nhịp độ bạn mong muốn.",
     "nightWish": "Hy vọng đêm nay mọi lo âu trong công việc sẽ khép lại, nhường chỗ cho sự bình yên.",
     "generatedAt": "2026-10-30T21:00:02.013Z",
-    "generator": "gemini-3.5-flash-lite"
+    "generator": "gemini-3.5-flash-lite",
+    "notification": {
+      "english": "No rush at all, just checking in on your progress.",
+      "chinese": "不急，我只是随便问问进展。",
+      "vietnamese": "Không vội đâu, tôi chỉ hỏi thăm tiến độ thôi."
+    }
   },
   {
     "id": "lesson-0093",
@@ -2340,7 +2800,12 @@
     "wish": "Chúc bạn buổi tối ấm cúng bên những món ăn ngon và những người thân yêu nhất.",
     "nightWish": "Chúc bạn chìm sâu vào giấc ngủ ngọt ngào, mơ thấy những hương vị tuyệt vời và những chuyến đi thú vị.",
     "generatedAt": "2026-10-30T21:00:02.013Z",
-    "generator": "gemini-3.5-flash-lite"
+    "generator": "gemini-3.5-flash-lite",
+    "notification": {
+      "english": "Do you want to try that new hotpot place near the station?",
+      "chinese": "今晚去试试车站附近的新火锅店吗？",
+      "vietnamese": "Tối nay bạn muốn thử quán lẩu mới gần ga không?"
+    }
   },
   {
     "id": "lesson-0094",
@@ -2369,7 +2834,12 @@
     "wish": "Chúc bạn có một buổi sáng tràn đầy năng lượng sáng tạo, luôn nhìn thấy những cơ hội độc đáo từ những góc nhìn mới mẻ nhất.",
     "nightWish": "Khép lại một ngày nhiều ý tưởng hay, chúc bạn chìm vào giấc ngủ thật sâu và thức dậy với tâm trí sảng khoái.",
     "generatedAt": "2026-10-30T21:50:55.453Z",
-    "generator": "gemini-3.5-flash-lite"
+    "generator": "gemini-3.5-flash-lite",
+    "notification": {
+      "english": "That is a brilliant perspective that we completely overlooked.",
+      "chinese": "这个精彩视角我们完全忽略了。",
+      "vietnamese": "Đó là góc nhìn tuyệt vời mà chúng ta đã hoàn toàn bỏ sót."
+    }
   },
   {
     "id": "lesson-0095",
@@ -2398,7 +2868,12 @@
     "wish": "Chúc bạn có một buổi trưa yên bình, ấm áp bên những người thân yêu và nhận được nhiều năng lượng chữa lành.",
     "nightWish": "Đêm nay hãy để mọi lo toan buông xuống, chúc bạn có một giấc ngủ bình yên và cơ thể phục hồi tuyệt đối.",
     "generatedAt": "2026-10-30T21:50:55.454Z",
-    "generator": "gemini-3.5-flash-lite"
+    "generator": "gemini-3.5-flash-lite",
+    "notification": {
+      "english": "Just checking in, let me know if you need any groceries.",
+      "chinese": "问候你的恢复情况，若需买菜随时告诉我。",
+      "vietnamese": "Hỏi thăm tình hình hồi phục, cần mua gì cứ báo mình."
+    }
   },
   {
     "id": "lesson-0096",
@@ -2452,7 +2927,12 @@
     "wish": "Chúc bạn buổi tối giải quyết trọn vẹn mọi công việc tồn đọng và có những phút giây nghỉ ngơi xứng đáng.",
     "nightWish": "Màn đêm buông xuống mang theo sự tĩnh lặng, chúc bạn chìm vào giấc ngủ êm đềm, quên hết mọi áp lực ban ngày.",
     "generatedAt": "2026-10-30T21:50:55.454Z",
-    "generator": "gemini-3.5-flash-lite"
+    "generator": "gemini-3.5-flash-lite",
+    "notification": {
+      "english": "We hit a snag with the database; we need two extra days.",
+      "chinese": "数据库迁移遇到麻烦，我们需要多两天。",
+      "vietnamese": "Chúng ta gặp vướng mắc với cơ sở dữ liệu và cần thêm hai ngày."
+    }
   },
   {
     "id": "lesson-0097",
@@ -2481,7 +2961,12 @@
     "wish": "Chúc bạn buổi sáng tràn đầy năng lượng, đối mặt mọi thử thách với cái đầu lạnh và trái tim kiên định.",
     "nightWish": "Mong rằng hôm nay của bạn khép lại thật trọn vẹn, mọi lo âu đã được để lại phía sau giấc ngủ sâu.",
     "generatedAt": "2026-11-01T15:32:50.577Z",
-    "generator": "gemini-3.5-flash-lite"
+    "generator": "gemini-3.5-flash-lite",
+    "notification": {
+      "english": "No matter how tough it gets, there is no turning back now.",
+      "chinese": "无论情况多艰难，现在都没有退路了。",
+      "vietnamese": "Dù tình hình có khó khăn đến đâu, bây giờ cũng không còn đường lui."
+    }
   },
   {
     "id": "lesson-0098",
@@ -2510,7 +2995,12 @@
     "wish": "Buổi trưa nhẹ nhàng nhé, mong mọi sự cố kỹ thuật đều được giải quyết nhanh gọn và êm đẹp.",
     "nightWish": "Chúc bạn chìm vào giấc ngủ thật êm dịu, không một tiếng chuông báo thức hay tin nhắn công việc làm phiền.",
     "generatedAt": "2026-11-01T15:32:50.579Z",
-    "generator": "gemini-3.5-flash-lite"
+    "generator": "gemini-3.5-flash-lite",
+    "notification": {
+      "english": "My laptop crashed; can we push our meeting back 15 minutes?",
+      "chinese": "电脑突然死机，会议能推迟十五分钟吗？",
+      "vietnamese": "Máy tính bị treo, ta có thể lùi cuộc họp lại mười lăm phút không?"
+    }
   },
   {
     "id": "lesson-0099",
@@ -2555,7 +3045,12 @@
     "wish": "Buổi tối thảnh thơi, chúc bạn tìm thấy sự cân bằng hoàn hảo giữa công việc và cuộc sống riêng.",
     "nightWish": "Khép lại một ngày dài nhiều suy ngẫm, chúc bạn có giấc ngủ sâu và những giấc mơ thật đẹp.",
     "generatedAt": "2026-11-01T15:32:50.579Z",
-    "generator": "gemini-3.5-flash-lite"
+    "generator": "gemini-3.5-flash-lite",
+    "notification": {
+      "english": "Have you considered moving to the suburbs for a quieter life?",
+      "chinese": "你有考虑过搬到郊区去过安静的生活吗？",
+      "vietnamese": "Cậu từng nghĩ chuyển ra ngoại ô để có cuộc sống yên tĩnh hơn chưa?"
+    }
   },
   {
     "id": "lesson-0100",
@@ -2584,7 +3079,12 @@
     "wish": "Chúc bạn buổi sáng tràn đầy cảm hứng, tự tin sắp xếp mọi việc thật trôi chảy và tận hưởng từng khoảnh khắc ý nghĩa.",
     "nightWish": "Khép lại một ngày nhiều suy ngẫm, chúc bạn chìm vào giấc ngủ sâu với tâm hồn thật nhẹ nhàng và bình yên.",
     "generatedAt": "2026-11-01T15:37:20.646Z",
-    "generator": "gemini-3.5-flash-lite"
+    "generator": "gemini-3.5-flash-lite",
+    "notification": {
+      "english": "Balancing career ambitions and personal well-being is an art.",
+      "chinese": "平衡职业追求与个人健康是一门艺术。",
+      "vietnamese": "Cân bằng giữa sự nghiệp và sức khỏe cá nhân là một nghệ thuật."
+    }
   },
   {
     "id": "lesson-0101",
@@ -2613,7 +3113,12 @@
     "wish": "Chúc bạn bữa trưa ngon miệng và giữ vững tinh thần linh hoạt để xử lý mọi tình huống phát sinh thật suôn sẻ.",
     "nightWish": "Mong rằng màn đêm sẽ xua tan mọi mệt mỏi công việc, đưa bạn vào giấc ngủ thật êm đềm và ngon giấc.",
     "generatedAt": "2026-11-01T15:37:20.647Z",
-    "generator": "gemini-3.5-flash-lite"
+    "generator": "gemini-3.5-flash-lite",
+    "notification": {
+      "english": "The main server crashed, so we are rushing to restore data.",
+      "chinese": "主服务器崩溃了，我们正全力恢复数据。",
+      "vietnamese": "Máy chủ chính bị sập, chúng tôi đang nỗ lực khôi phục dữ liệu."
+    }
   },
   {
     "id": "lesson-0102",
@@ -2658,7 +3163,12 @@
     "wish": "Chúc buổi tối của bạn nhẹ tênh vì mọi phần việc đều được san sẻ bằng sự tử tế và thấu hiểu.",
     "nightWish": "Ngủ ngon nhé; mong căn phòng yên ắng giữ hộ bạn những mệt mỏi chưa kịp gọi thành tên.",
     "generatedAt": "2026-11-01T15:37:20.647Z",
-    "generator": "gemini-3.5-flash-lite"
+    "generator": "gemini-3.5-flash-lite",
+    "notification": {
+      "english": "Should we redistribute chores? I've been overwhelmed lately.",
+      "chinese": "我们该重新分配家务吗？我最近有点吃不消。",
+      "vietnamese": "Chúng ta nên phân chia lại việc nhà chứ? Tớ dạo này hơi quá sức."
+    }
   },
   {
     "id": "lesson-0103",
@@ -2687,7 +3197,12 @@
     "wish": "Chúc bạn buổi sáng tràn đầy năng lượng, tự tin xử lý mọi thử thách và biến áp lực thành động lực tiến bước.",
     "nightWish": "Khép lại một ngày bận rộn bằng giấc ngủ thật sâu, để tâm trí được gột sạch mọi lo toan và đón bình minh rạng rỡ.",
     "generatedAt": "2026-11-01T21:15:59.793Z",
-    "generator": "gemini-3.5-flash-lite"
+    "generator": "gemini-3.5-flash-lite",
+    "notification": {
+      "english": "Looking at this endless to-do list, I feel a bit overwhelmed.",
+      "chinese": "面对做不完的清单，我感到有点应接不暇。",
+      "vietnamese": "Nhìn danh sách việc vô tận, tôi thực sự cảm thấy hơi ngợp."
+    }
   },
   {
     "id": "lesson-0104",
@@ -2716,7 +3231,12 @@
     "wish": "Chúc bạn buổi trưa ngon miệng, thư giãn thoải mái và có những quyết định mua sắm thông thái, hiệu quả.",
     "nightWish": "Chúc bạn có những phút giây nghỉ ngơi yên bình vào ban đêm, mơ về những món quà tuyệt vời và tương lai tươi sáng.",
     "generatedAt": "2026-11-01T21:15:59.793Z",
-    "generator": "gemini-3.5-flash-lite"
+    "generator": "gemini-3.5-flash-lite",
+    "notification": {
+      "english": "Prioritize battery and stability over appearance when upgrading.",
+      "chinese": "换电脑时续航和性能比外观更重要。",
+      "vietnamese": "Nên ưu tiên pin và hiệu năng hơn vẻ ngoài khi đổi máy."
+    }
   },
   {
     "id": "lesson-0105",
@@ -2761,7 +3281,12 @@
     "wish": "Chúc bạn buổi tối bình yên, thư giãn trọn vẹn và chuẩn bị một tâm thế vững vàng cho ngày mai.",
     "nightWish": "Chúc bạn ngủ ngon và có những giấc mơ đẹp, mang lại nguồn cảm hứng bất tận cho hành trình ngày mai.",
     "generatedAt": "2026-11-01T21:15:59.793Z",
-    "generator": "gemini-3.5-flash-lite"
+    "generator": "gemini-3.5-flash-lite",
+    "notification": {
+      "english": "I'm switching from late-night gym sessions to morning jogging.",
+      "chinese": "我打算放弃深夜健身，改在清晨跑步。",
+      "vietnamese": "Tôi đổi từ tập gym đêm muộn sang chạy bộ vào sáng sớm."
+    }
   },
   {
     "id": "lesson-0106",
@@ -2790,7 +3315,12 @@
     "wish": "Chúc bạn buổi sáng tràn đầy năng lượng, tự tin khám phá những công nghệ tiện ích mới trong ngày.",
     "nightWish": "Mong rằng giấc ngủ đêm nay sẽ đưa bạn đến những không gian bình yên và thư thái nhất.",
     "generatedAt": "2026-11-01T21:48:34.878Z",
-    "generator": "gemini-3.5-flash-lite"
+    "generator": "gemini-3.5-flash-lite",
+    "notification": {
+      "english": "Using the facial recognition ATM is much faster than cards.",
+      "chinese": "刷脸取款机比插卡快得多。",
+      "vietnamese": "Dùng máy rút tiền nhận diện khuôn mặt nhanh hơn dùng thẻ."
+    }
   },
   {
     "id": "lesson-0107",
@@ -2819,7 +3349,12 @@
     "wish": "Chúc bạn buổi trưa giải quyết xong xuôi mọi thay đổi bất ngờ và có thời gian nghỉ ngơi trọn vẹn.",
     "nightWish": "Khép lại một ngày bận rộn bằng giấc ngủ sâu, để tâm trí được hoàn toàn thả lỏng và phục hồi.",
     "generatedAt": "2026-11-01T21:48:34.878Z",
-    "generator": "gemini-3.5-flash-lite"
+    "generator": "gemini-3.5-flash-lite",
+    "notification": {
+      "english": "Our department meeting has been moved to the second floor.",
+      "chinese": "我们部门会议改到二楼了。",
+      "vietnamese": "Cuộc họp bộ phận của chúng ta đã chuyển sang lầu hai."
+    }
   },
   {
     "id": "lesson-0108",
@@ -2864,7 +3399,12 @@
     "wish": "Chúc bạn buổi tối ấm cúng, tìm thấy niềm vui tĩnh lặng bên những sở thích và đam mê riêng của mình.",
     "nightWish": "Chúc bạn chìm vào giấc ngủ êm đềm, mang theo những hoài niệm đẹp và thức dậy với nụ cười.",
     "generatedAt": "2026-11-01T21:48:34.878Z",
-    "generator": "gemini-3.5-flash-lite"
+    "generator": "gemini-3.5-flash-lite",
+    "notification": {
+      "english": "What makes you so fond of these vintage items?",
+      "chinese": "是什么让你对这些复古物品情有独钟？",
+      "vietnamese": "Điều gì khiến bạn đặc biệt yêu thích những món đồ cổ này thế?"
+    }
   },
   {
     "id": "lesson-0109",
@@ -2893,7 +3433,12 @@
     "wish": "Chúc bạn hôm nay giữ được nhịp độ riêng của mình giữa muôn vàn bận rộn, vững vàng và bình an.",
     "nightWish": "Khép lại một ngày dài bận rộn, mong bạn gác lại mọi lo âu ngoài cửa sổ và chìm vào giấc ngủ thật sâu.",
     "generatedAt": "2026-11-02T02:44:34.542Z",
-    "generator": "gemini-3.5-flash-lite"
+    "generator": "gemini-3.5-flash-lite",
+    "notification": {
+      "english": "Living in a fast-paced city feels like running on a treadmill.",
+      "chinese": "在大都市生活犹如在不停的跑步机上。",
+      "vietnamese": "Sống ở siêu đô thị như đang chạy trên máy chạy bộ không dừng."
+    }
   },
   {
     "id": "lesson-0110",
@@ -2922,7 +3467,12 @@
     "wish": "Ăn trưa ngon nhé; mong một giấc chợp mắt ngắn cũng đủ làm buổi chiều của bạn nhẹ đi.",
     "nightWish": "Cất lịch hẹn sang một bên nhé; đêm nay chỉ cần ngủ sâu và để ngày mai tự tìm đến.",
     "generatedAt": "2026-11-02T02:47:38.544Z",
-    "generator": "gemini-3.5-flash-lite"
+    "generator": "gemini-3.5-flash-lite",
+    "notification": {
+      "english": "I'm grabbing a quick lunch and nap; let's catch up at two.",
+      "chinese": "我吃个午饭歇会儿，两点碰头。",
+      "vietnamese": "Tôi đi ăn trưa và chợp mắt chút nhé, hai giờ gặp lại."
+    }
   },
   {
     "id": "lesson-0111",
@@ -2967,7 +3517,12 @@
     "wish": "Chúc bạn buổi tối tràn đầy cảm hứng, biến từng trang sách nhỏ thành bước tiến lớn cho tương lai.",
     "nightWish": "Khép lại một ngày bận rộn bằng những trang sách dịu êm, chúc bạn chìm vào giấc ngủ sâu và bình yên.",
     "generatedAt": "2026-11-02T02:48:13.328Z",
-    "generator": "gemini-3.5-flash-lite"
+    "generator": "gemini-3.5-flash-lite",
+    "notification": {
+      "english": "Reading a few pages every night builds up significant knowledge.",
+      "chinese": "每天晚上读几页书，日积月累也能掌握不少知识。",
+      "vietnamese": "Đọc vài trang sách mỗi đêm tích lũy được khối kiến thức lớn."
+    }
   },
   {
     "id": "lesson-0112",
@@ -2996,7 +3551,12 @@
     "wish": "Mong bạn nhìn lại mà không tự trách, rồi chọn bước tiếp theo bằng sự bình tĩnh của hôm nay.",
     "nightWish": "Chuyện cũ cứ nằm yên ở đó nhé; đêm nay bạn chỉ cần một giấc ngủ không phải giải thích gì.",
     "generatedAt": "2026-11-02T02:48:41.653Z",
-    "generator": "gemini-3.5-flash-lite"
+    "generator": "gemini-3.5-flash-lite",
+    "notification": {
+      "english": "Looking back, that risk was the turning point of my career.",
+      "chinese": "回想起来，那次冒险是我职业生涯的转折点。",
+      "vietnamese": "Nhìn lại, lần mạo hiểm ấy chính là bước ngoặt sự nghiệp của tôi."
+    }
   },
   {
     "id": "lesson-0113",
@@ -3025,7 +3585,12 @@
     "wish": "Chúc bạn buổi trưa nạp đầy năng lượng, mọi việc suôn sẻ và luôn giữ được tinh thần làm việc tích cực, hăng hái suốt cả ngày.",
     "nightWish": "Đêm nay hãy thả lỏng cơ thể, gác lại mọi lo toan công việc và chìm vào giấc ngủ thật sâu, mơ những giấc mơ thật đẹp bạn nhé.",
     "generatedAt": "2026-11-02T02:56:10.373Z",
-    "generator": "gemini-3.5-flash-lite"
+    "generator": "gemini-3.5-flash-lite",
+    "notification": {
+      "english": "Could you accept a courier delivery for me if it arrives?",
+      "chinese": "如果快递到了能帮我签收一下吗？",
+      "vietnamese": "Nếu bưu phẩm đến, bạn có thể ký nhận hộ tôi không?"
+    }
   },
   {
     "id": "lesson-0114",
@@ -3069,6 +3634,11 @@
     ],
     "wish": "Mong buổi tối của bạn trôi qua thật nhẹ nhàng, mang lại cảm hứng mới mẻ cho những mục tiêu phía trước.",
     "nightWish": "Khép lại một ngày bận rộn, chúc bạn chìm vào giấc ngủ sâu với những giấc mơ êm đềm và thức dậy thật rạng rỡ.",
+    "notification": {
+      "english": "Would you learn a totally different language just for fun?",
+      "chinese": "你会纯粹为好玩学一门完全不同的外语吗？",
+      "vietnamese": "Bạn có học một ngoại ngữ hoàn toàn khác chỉ để vui không?"
+    },
     "generatedAt": "2026-11-02T02:56:16.311Z",
     "generator": "gemini-3.5-flash-lite"
   },
@@ -3100,7 +3670,12 @@
     "wish": "Chúc bạn buổi sáng tràn đầy năng lượng, sẵn sàng tiếp thu những kiến thức thú vị và tự tin vận dụng vào đời sống hàng ngày.",
     "nightWish": "Khép lại một ngày nhiều trải nghiệm, chúc bạn chìm vào giấc ngủ thật sâu và thức dậy với tâm thế hào hứng cho ngày mai.",
     "generatedAt": "2026-11-02T02:56:24.711Z",
-    "generator": "gemini-3.5-flash-lite"
+    "generator": "gemini-3.5-flash-lite",
+    "notification": {
+      "english": "Carrying a physical wallet nowadays feels redundant.",
+      "chinese": "如今随身带实体钱包显得很多余。",
+      "vietnamese": "Ngày nay, mang theo ví tiền bên người dường như rất thừa thãi."
+    }
   },
   {
     "id": "lesson-0116",
@@ -3129,7 +3704,12 @@
     "wish": "Chúc bạn buổi trưa thật thư thái, giải quyết nhanh gọn mọi việc lặt vặt và nạp đầy năng lượng cho buổi chiều.",
     "nightWish": "Mong ánh trăng ngoài cửa sổ dịu dàng ôm ấp giấc mơ của bạn, để ngày mai thức dậy với một tâm hồn thật nhẹ nhõm.",
     "generatedAt": "2026-11-02T02:56:43.255Z",
-    "generator": "gemini-3.5-flash-lite"
+    "generator": "gemini-3.5-flash-lite",
+    "notification": {
+      "english": "Please deliver the package to the side entrance to avoid crowds.",
+      "chinese": "请把包裹送到侧门以避免拥堵。",
+      "vietnamese": "Xin hãy giao bưu phẩm đến cửa hông để tránh ùn tắc."
+    }
   },
   {
     "id": "lesson-0117",
@@ -3174,7 +3754,12 @@
     "wish": "Chúc bạn một buổi tối tràn ngập sự bình yên, để trí tuệ được nghỉ ngơi và năng lượng sáng tạo lại đong đầy cho ngày mai.",
     "nightWish": "Khép lại một ngày nhiều bận rộn, chúc bạn chìm vào giấc ngủ thật sâu và mơ những giấc mơ thật đẹp.",
     "generatedAt": "2026-11-02T02:56:54.016Z",
-    "generator": "gemini-3.5-flash-lite"
+    "generator": "gemini-3.5-flash-lite",
+    "notification": {
+      "english": "How do you manage to stay focused in this bustling office?",
+      "chinese": "在这间嘈杂的开放式办公室里你怎么专注？",
+      "vietnamese": "Làm sao bạn giữ được sự tập trung trong văn phòng ồn ào này?"
+    }
   },
   {
     "id": "lesson-0118",
@@ -3203,7 +3788,12 @@
     "wish": "Chúc bạn buổi sáng tràn đầy cảm hứng, luôn cởi mở đón nhận những ngã rẽ bất ngờ trên hành trình hoàn thiện bản thân mỗi ngày.",
     "nightWish": "Mong rằng giấc ngủ đêm nay sẽ mang đến cho bạn sự bình yên tuyệt đối, khép lại một ngày dài với những giấc mơ đẹp đẽ và nhẹ nhàng nhất.",
     "generatedAt": "2026-11-02T02:56:58.246Z",
-    "generator": "gemini-3.5-flash-lite"
+    "generator": "gemini-3.5-flash-lite",
+    "notification": {
+      "english": "Unforgettable memories often come from our unplanned detours.",
+      "chinese": "最难忘的回忆往往源于计划外的绕路。",
+      "vietnamese": "Những kỷ niệm khó quên thường bắt nguồn từ những đường vòng bất ngờ."
+    }
   },
   {
     "id": "lesson-0119",
@@ -3233,7 +3823,12 @@
     "wish": "Buổi trưa năng lượng nhé! Mong rằng ly cà phê tỉnh táo sẽ giúp bạn xua tan mọi mệt mỏi của nửa ngày đầu.",
     "nightWish": "Khép lại một ngày dài nhiều bận rộn, chúc bạn chìm vào giấc ngủ thật sâu và thức dậy với nụ cười rạng rỡ.",
     "generatedAt": "2026-11-02T02:57:32.371Z",
-    "generator": "gemini-3.5-flash-lite"
+    "generator": "gemini-3.5-flash-lite",
+    "notification": {
+      "english": "Fancy grabbing a quick iced coffee outside with me?",
+      "chinese": "要不要和我去外面买杯冰咖啡？",
+      "vietnamese": "Hay là cùng mình ra ngoài mua một ly cà phê đá nhé?"
+    }
   },
   {
     "id": "lesson-0120",
@@ -3278,7 +3873,12 @@
     "wish": "Mong rằng mọi nỗ lực nhỏ nhặt tích lũy mỗi ngày của bạn vào buổi tối sẽ nở hoa thành những trái ngọt rực rỡ trong tương lai.",
     "nightWish": "Khép lại một ngày dài bận rộn, hãy buông bỏ mọi lo toan để chìm vào giấc ngủ thật sâu và êm đềm bạn nhé.",
     "generatedAt": "2026-11-02T02:57:38.279Z",
-    "generator": "gemini-3.5-flash-lite"
+    "generator": "gemini-3.5-flash-lite",
+    "notification": {
+      "english": "How do you balance learning video editing with a full-time job?",
+      "chinese": "在兼顾全职工作的同时你怎么学剪辑？",
+      "vietnamese": "Làm sao để bạn vừa làm việc toàn thời gian vừa học dựng video?"
+    }
   },
   {
     "id": "lesson-0121",
@@ -3307,6 +3907,11 @@
     "wish": "Chào buổi sáng! Chúc bạn hôm nay có đủ sự dũng cảm để bước qua những vùng an toàn cũ và đón nhận những cơ hội tuyệt vời đang chờ đợi.",
     "nightWish": "Chuyện khó đã có ban ngày lo; tối nay cứ để tâm trí nghỉ ở một nơi thật yên.",
     "generatedAt": "2026-11-02T02:58:03.401Z",
-    "generator": "gemini-3.5-flash-lite"
+    "generator": "gemini-3.5-flash-lite",
+    "notification": {
+      "english": "It takes immense courage to restart after leaving a stable job.",
+      "chinese": "放弃稳定工作重新开始需要极大的勇气。",
+      "vietnamese": "Từ bỏ việc ổn định để bắt đầu lại đòi hỏi lòng dũng cảm lớn."
+    }
   }
 ]

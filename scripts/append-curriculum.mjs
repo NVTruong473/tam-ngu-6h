@@ -64,6 +64,16 @@ const lineSchema = {
   required: ["speaker", "english", "chinese", "pinyin", "vietnameseReading", "vietnamese"],
 };
 
+const notificationSchema = {
+  type: "OBJECT",
+  properties: {
+    english: { type: "STRING" },
+    chinese: { type: "STRING" },
+    vietnamese: { type: "STRING" },
+  },
+  required: ["english", "chinese", "vietnamese"],
+};
+
 const itemSchema = {
   type: "OBJECT",
   properties: {
@@ -79,10 +89,11 @@ const itemSchema = {
     vocabulary: { type: "ARRAY", minItems: 3, maxItems: 7, items: { type: "STRING" } },
     wish: { type: "STRING" },
     nightWish: { type: "STRING" },
+    notification: notificationSchema,
   },
   required: [
     "id", "stage", "kind", "title", "context", "lines", "note", "challenge",
-    "grammarFocus", "vocabulary", "wish", "nightWish",
+    "grammarFocus", "vocabulary", "wish", "nightWish", "notification",
   ],
 };
 
@@ -376,6 +387,7 @@ Tiêu chuẩn bắt buộc:
 - note giải thích cấu trúc/sắc thái và chỉ ra khác biệt Anh–Trung bằng tiếng Việt; challenge là nhiệm vụ nói/viết 1–3 phút, cụ thể và tự làm được.
 - wish là lời chúc riêng cho đúng phase của bài, 12–28 từ, ấm áp, khó đoán, không sáo rỗng.
 - nightWish là lời chúc ngủ ngon bí mật, 12–28 từ, khác hoàn toàn các lời gần đây. Với bài không phải buổi tối vẫn phải tạo một câu dự phòng khác nhau.
+- notification là bản rút gọn tự nhiên, độc lập và tương đương nghĩa của line đầu để hiện trọn trên Màn hình khóa: english tối đa 64, chinese tối đa 26, vietnamese tối đa 68 ký tự; không cắt dở câu hay dùng dấu ba chấm.
 - Chỉ dùng văn bản thuần: tuyệt đối không chứa HTML/XML, Markdown, backtick hoặc các thẻ/ký tự dạng <...>.
 - Không nhận xét ngoài JSON.
 `;
@@ -425,6 +437,17 @@ function validateAndNormalize(items) {
     const expectedLines = plan.kind === "dialogue" ? [3, 4] : [1];
     if (!Array.isArray(item.lines) || !expectedLines.includes(item.lines.length)) throw new Error(`Sai số dòng tại ${plan.id}.`);
     if (!Array.isArray(item.vocabulary) || item.vocabulary.length < 3 || item.vocabulary.length > 7) throw new Error(`Thiếu từ vựng tại ${plan.id}.`);
+    if (!item.notification || typeof item.notification !== "object") throw new Error(`Thiếu notification tại ${plan.id}.`);
+    for (const [field, maximum] of [["english", 64], ["chinese", 26], ["vietnamese", 68]]) {
+      const value = item.notification[field];
+      if (typeof value !== "string" || value.trim().length < 3 || [...value.trim()].length > maximum) {
+        throw new Error(`notification.${field} không gọn tại ${plan.id}.`);
+      }
+      assertPlainText(value, `notification.${field} tại ${plan.id}`);
+    }
+    if (!/\p{Script=Latin}/u.test(item.notification.english) || /\p{Script=Han}/u.test(item.notification.english)) throw new Error(`notification English sai tại ${plan.id}.`);
+    if (!/\p{Script=Han}/u.test(item.notification.chinese) || /[A-Za-z]/u.test(item.notification.chinese)) throw new Error(`notification Chinese sai tại ${plan.id}.`);
+    if (!/\p{Script=Latin}/u.test(item.notification.vietnamese) || /\p{Script=Han}/u.test(item.notification.vietnamese)) throw new Error(`notification Vietnamese sai tại ${plan.id}.`);
 
     for (const field of ["title", "context", "note", "challenge", "grammarFocus", "wish", "nightWish"]) {
       if (typeof item[field] !== "string" || item[field].trim().length < 8) throw new Error(`Thiếu ${field} tại ${plan.id}.`);
@@ -483,7 +506,7 @@ async function reviewGeneratedLessons(items) {
   const reviewPrompt = [
     "Bạn là người phản biện học thuật độc lập cho nội dung micro-learning Anh–Trung dành cho người Việt đã học khoảng một tháng.",
     "Không viết lại bài. Đánh giá từng bài bên dưới một cách nghiêm khắc nhưng công bằng.",
-    "approved chỉ được true khi tất cả đều ổn: ngữ pháp và độ tự nhiên tiếng Anh; tiếng Trung giản thể tự nhiên; ý nghĩa Anh–Trung–Việt tương đương; pinyin hợp lý; vietnameseReading thực sự là gợi âm Việt và khớp các thanh; grammarFocus, vocabulary, note và challenge đúng trọng tâm B1; cấu trúc mà grammarFocus nêu phải thật sự xuất hiện đầy đủ trong line và phần giải thích không được phóng đại nghĩa.",
+    "approved chỉ được true khi tất cả đều ổn: ngữ pháp và độ tự nhiên tiếng Anh; tiếng Trung giản thể tự nhiên; ý nghĩa Anh–Trung–Việt tương đương; notification ngắn nhưng giữ đúng ý line đầu; pinyin hợp lý; vietnameseReading thực sự là gợi âm Việt và khớp các thanh; grammarFocus, vocabulary, note và challenge đúng trọng tâm B1; cấu trúc mà grammarFocus nêu phải thật sự xuất hiện đầy đủ trong line và phần giải thích không được phóng đại nghĩa.",
     "Ứng dụng bắt buộc có cả wish và nightWish. Tuyệt đối không từ chối chỉ vì hai trường này tồn tại. Chỉ báo lỗi khi chính nội dung lời chúc quá sáo rỗng, sai buổi, lặp ý gần đây hoặc lệch ngữ cảnh; hãy nêu chính xác cụm nào có vấn đề.",
     "vocabulary bắt buộc theo thứ tự English · 中文 · nghĩa Việt và ba vế phải tương đương nghĩa trong ngữ cảnh, không chỉ cùng xuất hiện trong một câu.",
     "Nếu có lỗi hoặc nghi ngờ thực chất, approved=false và issues phải nêu ngắn gọn, cụ thể theo đúng bài. Nếu không có lỗi, issues là mảng rỗng. Không nhận xét ngoài JSON.",
