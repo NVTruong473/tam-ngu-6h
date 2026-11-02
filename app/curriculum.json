@@ -2865,5 +2865,137 @@
     "nightWish": "Chúc bạn chìm vào giấc ngủ êm đềm, mang theo những hoài niệm đẹp và thức dậy với nụ cười.",
     "generatedAt": "2026-11-01T21:48:34.878Z",
     "generator": "gemini-3.5-flash-lite"
+  },
+  {
+    "id": "lesson-0109",
+    "stage": "B1 · Phản xạ trong đời sống",
+    "kind": "sentence",
+    "title": "Chia sẻ quan điểm về nhịp sống đô thị",
+    "context": "Trò chuyện với đồng nghiệp về áp lực và nhịp sống bận rộn ở các thành phố lớn.",
+    "lines": [
+      {
+        "speaker": "A",
+        "english": "Living in a fast-paced metropolis feels like running on a treadmill that never stops.",
+        "chinese": "生活在节奏极快的特大城市里，感觉就像在永不停歇的跑步机上奔跑一样。",
+        "pinyin": "shēng huó zài jié zòu jí kuài de tè dà chéng shì lǐ, gǎn jué jiù xiàng zài yǒng bù tíng xiē de pǎo bù jī shàng bēn pǎo yí yàng.",
+        "vietnameseReading": "sâng(1) huó(2) trai(4) ciế(2) dẩu(4) chí(2) khuải(4) tơ thê(4) ta(4) chấng(2) sứ(4) lỉ(3) cản(3) chié(2) chiêu(4) xiang(4) trai(4) yỏng(3) pu(4) thính(2) xiế(1) tơ pao(3) pu(4) chi(1) sang(4) pẩn(1) pao(3) y(2) iang(4)",
+        "vietnamese": "Sống ở một siêu đô thị có nhịp độ cực kỳ nhanh, cảm giác giống như đang chạy trên máy chạy bộ không bao giờ dừng lại."
+      }
+    ],
+    "note": "Cấu trúc '感觉就像...一样' (cảm giác giống như... y hệt) rất hữu ích khi bạn muốn dùng hình ảnh ẩn dụ để diễn tả một trạng thái tâm lý hoặc trải nghiệm xã hội phức tạp trong đời sống hiện đại.",
+    "challenge": "Hãy viết một đoạn ngắn bằng tiếng Trung miêu tả nhịp sống tại thành phố bạn đang sinh sống bằng cách sử dụng cấu trúc ẩn dụ tương tự.",
+    "grammarFocus": "Cấu trúc ẩn dụ '感觉就像...一样' dùng để so sánh sinh động trạng thái trừu tượng.",
+    "vocabulary": [
+      "fast-paced metropolis · 特大城市 · siêu đô thị",
+      "treadmill · 跑步机 · máy chạy bộ",
+      "never stops · 永不停歇 · không bao giờ dừng lại"
+    ],
+    "wish": "Chúc bạn hôm nay giữ được nhịp độ riêng của mình giữa muôn vàn bận rộn, vững vàng và bình an.",
+    "nightWish": "Khép lại một ngày dài bận rộn, mong bạn gác lại mọi lo âu ngoài cửa sổ và chìm vào giấc ngủ thật sâu.",
+    "generatedAt": "2026-11-02T02:44:34.542Z",
+    "generator": "gemini-3.5-flash-lite"
+  },
+  {
+    "id": "lesson-0110",
+    "stage": "B1 · Phản xạ trong đời sống",
+    "kind": "message",
+    "title": "Nhắn tin thông báo giờ nghỉ trưa ngắn để hẹn việc sau",
+    "context": "Buổi trưa, bạn nhắn tin cho đồng nghiệp để báo hiệu thời gian nghỉ ngơi và hẹn trao đổi tiếp vào đầu giờ chiều.",
+    "lines": [
+      {
+        "speaker": "A",
+        "english": "I am stepping away for a quick lunch break and a short nap; let us catch up right after two o'clock.",
+        "chinese": "我先去吃个午饭顺便小憩一会儿，两点整我们准时接着聊吧。",
+        "pinyin": "wǒ xiān qù chī gè wǔfàn shùnbiàn xiǎoqì yīhuìr, liǎng diǎn zhěng wǒmen zhǔnshí jiēzhe liáo ba.",
+        "vietnameseReading": "uổ(3) xiên(1) chiệu(4) chư(1) cợ(4) uổ(3) phan(4) suấn(4) piên(4) xẻo(3) chỉ(4) i(1) huây(4) nhi lảng(3) điển(3) chỏng(3) uổ(3) mần chủn(3) sứ(2) chie(1) chơ lẹo(2) pa",
+        "vietnamese": "Tôi đi ăn trưa và tranh thủ chợp mắt một chút, đúng hai điểm chúng ta sẽ nói chuyện tiếp nhé."
+      }
+    ],
+    "note": "Cấu trúc 顺便... (tiện thể...) rất thông dụng trong văn nói hàng ngày để gắn kết hai hành động diễn ra liên tiếp trong cùng một khoảng thời gian ngắn.",
+    "challenge": "Hãy soạn một tin nhắn ngắn báo hiệu giờ nghỉ trưa của bạn bằng tiếng Trung, sử dụng cấu trúc tiện thể làm gì đó.",
+    "grammarFocus": "Cấu trúc 顺便... dùng để chỉ việc làm thêm một hành động phụ tiện trong lúc thực hiện hành động chính.",
+    "vocabulary": [
+      "午饭 · wǔfàn · bữa trưa",
+      "小憩 · xiǎoqì · nghỉ trưa ngắn",
+      "准时 · zhǔnshí · đúng giờ"
+    ],
+    "wish": "Chúc bạn buổi trưa thưởng thức bữa ăn ngon miệng, nạp đầy năng lượng tươi mới để bứt phá năng suất cho nửa ngày làm việc tiếp theo.",
+    "nightWish": "Khép lại một ngày bận rộn bằng sự bình yên trọn vẹn, chúc bạn chìm vào giấc ngủ sâu và mơ những giấc mơ thật đẹp.",
+    "generatedAt": "2026-11-02T02:47:38.544Z",
+    "generator": "gemini-3.5-flash-lite"
+  },
+  {
+    "id": "lesson-0111",
+    "stage": "B1 · Phản xạ trong đời sống",
+    "kind": "dialogue",
+    "title": "Chia sẻ trải nghiệm đọc sách hiệu quả",
+    "context": "Hai người đồng nghiệp đang trao đổi với nhau về cách sắp xếp thời gian để đọc sách và trau dồi kiến thức trong nhịp sống bận rộn.",
+    "lines": [
+      {
+        "speaker": "A",
+        "english": "Reading a few pages every single night adds up to a substantial amount of knowledge over time.",
+        "chinese": "每天晚上坚持读几页书，日积月累下来也能掌握不少知识。",
+        "pinyin": "měi tiān wǎn shang jiàn chí dú jǐ yè shū, rì jī yuè lěi xià lái yě néng zhǎng wò bù shǎo zhī shi.",
+        "vietnameseReading": "mây(3) thêm(1) uản(3) xang chiên(4) chí(2) tu(2) chỉ(3) yê(4) su(1) rư(4) chi(1) duê(4) lây(3) xia(4) lai(2) iê(3) nẻng(2) chảng(3) uổ(4) pu(4) sáo(3) trư(1) sứ",
+        "vietnamese": "Mỗi tối kiên trì đọc vài trang sách, tích tiểu thành đại thì cuối cùng cũng nắm vững được không ít kiến thức."
+      },
+      {
+        "speaker": "B",
+        "english": "That is very true, provided that we can sustain the habit without burning out.",
+        "chinese": "确实如此，前提是我们要能持之以恒，而不是三天打鱼两天晒网。",
+        "pinyin": "què shí rú cǐ, qián tí shì wǒ men yào néng chí zhī yǐ héng, ér bú shì sān tiān dǎ yú liǎng tiān shài wǎng.",
+        "vietnameseReading": "chiết(4) sứ(2) rú(2) cứ(3) chién(2) thí(2) sứ(4) uổ(3) mần yao(4) nẻng(2) chí(2) trư(1) ỉ(3) hẻng(2) ơ(2) pu(2) sứ(4) san(1) thêm(1) tả(3) ý(2) lảng(3) thêm(1) sai(4) uảng(3)",
+        "vietnamese": "Quả đúng là như vậy, điều kiện tiên quyết là chúng ta phải kiên trì bền bỉ, chứ không phải dăm bữa nửa tháng lại bỏ cuộc."
+      },
+      {
+        "speaker": "A",
+        "english": "I completely agree. Setting realistic daily goals is the key to making real progress.",
+        "chinese": "完全同意，设定切合实际的每日目标才是真正取得进步的关键。",
+        "pinyin": "wán quán tóng yì, shè dìng qiē hé shí jì de měi rì mù biāo cái shì zhēn zhèng qǔ dé jìn bù de guān jiàn.",
+        "vietnameseReading": "oản(2) chuán(2) thúng(2) i(4) sơ(4) tìng(4) chỉê(1) hứa(2) sứ(2) chi(4) tơ mây(3) rư(4) mu(4) piao(1) thái(2) sứ(4) chên(1) chấng(4) chủ(3) tơ(2) cin(4) pu(4) tơ cuan(1) chiên(4)",
+        "vietnamese": "Hoàn toàn đồng ý, việc đặt ra mục tiêu hằng ngày sát thực tế mới là chìa khóa để đạt được tiến bộ thực sự."
+      }
+    ],
+    "note": "Cấu trúc '日积月累' diễn tả quá trình tích lũy dần dần theo thời gian; '前提是' dùng để nêu điều kiện tiên quyết trong tranh luận hoặc bàn bạc.",
+    "challenge": "Hãy thu âm đoạn hội thoại trên bằng tốc độ tự nhiên, chú ý phát âm chuẩn các cụm từ chỉ sự kiên trì.",
+    "grammarFocus": "Cụm từ 日积月累 kết hợp với tiền đề 前提是 giúp diễn đạt tư duy lập luận logic ở cấp độ B1.",
+    "vocabulary": [
+      "substantial amount · 日积月累 · tích lũy dần dần",
+      "sustainable habit · 持之以恒 · kiên trì bền bỉ",
+      "realistic goals · 切合实际 · sát thực tế"
+    ],
+    "wish": "Chúc bạn buổi tối tràn đầy cảm hứng, biến từng trang sách nhỏ thành bước tiến lớn cho tương lai.",
+    "nightWish": "Khép lại một ngày bận rộn bằng những trang sách dịu êm, chúc bạn chìm vào giấc ngủ sâu và bình yên.",
+    "generatedAt": "2026-11-02T02:48:13.328Z",
+    "generator": "gemini-3.5-flash-lite"
+  },
+  {
+    "id": "lesson-0112",
+    "stage": "B1 · Phản xạ trong đời sống",
+    "kind": "sentence",
+    "title": "Nhìn nhận lại một quyết định trong quá khứ",
+    "context": "Một người bạn đang chiêm nghiệm về những ngã rẽ sự nghiệp đã qua và rút ra bài học cho hiện tại.",
+    "lines": [
+      {
+        "speaker": "A",
+        "english": "Looking back, taking that risk was the turning point that reshaped my entire career path.",
+        "chinese": "回想起来，当年冒那个险是我职业生涯轨迹发生重塑的转折点。",
+        "pinyin": "huí xiǎng qǐ lái, dāng nián mào nà gè xiǎn shì wǒ zhí yè shēng yá guǐ jì fā shēng zhòng sù de zhuǎn zhé diǎn.",
+        "vietnameseReading": "huây(2) xiảng(3) chỉ(3) lai(2) tang(1) niản(2) mao(4) na(4) cợ(4) xiển(3) sứ(4) uổ(3) chí(2) yê(4) sâng(1) ia(2) cuy(3) chi(4) pha(1) sâng(1) trung(4) su(4) tơ chuản(3) trế(2) điển(3)",
+        "vietnamese": "Nhìn lại, việc liều lĩnh năm ấy chính là bước ngoặt định hình lại toàn bộ quỹ đạo sự nghiệp của tôi."
+      }
+    ],
+    "note": "Cấu trúc 回想起来 (hồi tưởng lại / nhìn lại) kết hợp với 职业生涯 (sự nghiệp) giúp nâng tầm biểu đạt khi chia sẻ những suy ngẫm mang tính chiêm nghiệm sâu sắc ở cấp độ B1.",
+    "challenge": "Hãy viết hoặc nói một câu bằng tiếng Trung kể về một quyết định trong quá khứ đã thay đổi cuộc sống của bạn.",
+    "grammarFocus": "Cụm từ 回想起来 dùng ở đầu câu để mở ra dòng suy ngẫm, kết hợp các danh từ trừu tượng như 轨迹 (quỹ đạo) và 转折点 (bước ngoặt).",
+    "vocabulary": [
+      "Look back · 回想起来 · Hồi tưởng lại",
+      "Risk · 冒风险 · Liều lĩnh",
+      "Turning point · 转折点 · Bước ngoặt"
+    ],
+    "wish": "Chúc bạn buổi sáng tràn đầy năng lượng, luôn dũng cảm nhìn lại hành trình đã qua để vững bước tiến xa hơn.",
+    "nightWish": "Khép lại một ngày với những hoài niệm đẹp, chúc bạn chìm vào giấc ngủ bình yên và thức giấc với nhiều hoài bão mới.",
+    "generatedAt": "2026-11-02T02:48:41.653Z",
+    "generator": "gemini-3.5-flash-lite"
   }
 ]
