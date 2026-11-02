@@ -46,7 +46,7 @@ const DEFAULT_SCHEDULE = ["06:00", "12:00", "18:00"];
 const STORAGE = {
   routine: "tamngu6h.routine",
   routineStart: "tamngu6h.routineStart",
-  invite: "tamngu6h.invite",
+  lookupClient: "tamngu6h.lookup-client.v1",
   schedule: "tamngu6h.schedule.v1",
 };
 
@@ -112,24 +112,13 @@ function urlBase64ToUint8Array(value: string) {
   return Uint8Array.from([...raw].map((character) => character.charCodeAt(0)));
 }
 
-function inviteCodeFromInput(value: string) {
-  const candidate = value.trim();
-  if (!candidate) return "";
-  try {
-    const url = new URL(candidate);
-    const hashParams = new URLSearchParams(url.hash.replace(/^#/, ""));
-    return (hashParams.get("invite") || url.searchParams.get("invite") || "").trim();
-  } catch {
-    const embeddedInvite = candidate.match(/(?:^|[#?&])invite=([^&#]+)/i)?.[1];
-    if (embeddedInvite) {
-      try {
-        return decodeURIComponent(embeddedInvite).trim();
-      } catch {
-        return embeddedInvite.trim();
-      }
-    }
-    return candidate.replace(/[\s-]+/g, "");
-  }
+function ensureLookupClientId() {
+  const stored = localStorage.getItem(STORAGE.lookupClient) || "";
+  if (/^tg6h_[a-f0-9]{36}$/.test(stored)) return stored;
+  const bytes = crypto.getRandomValues(new Uint8Array(18));
+  const clientId = `tg6h_${[...bytes].map((byte) => byte.toString(16).padStart(2, "0")).join("")}`;
+  localStorage.setItem(STORAGE.lookupClient, clientId);
+  return clientId;
 }
 
 function containsChinese(value: string) {
@@ -284,9 +273,6 @@ export default function Home() {
   const [showInstall, setShowInstall] = useState(false);
   const [pushState, setPushState] = useState<PushState>("idle");
   const [pushMessage, setPushMessage] = useState("");
-  const [inviteReady, setInviteReady] = useState(false);
-  const [inviteDraft, setInviteDraft] = useState("");
-  const [savingInvite, setSavingInvite] = useState(false);
   const [lookupQuery, setLookupQuery] = useState("");
   const [lookupState, setLookupState] = useState<LookupState>("idle");
   const [lookupMessage, setLookupMessage] = useState("");
@@ -352,16 +338,11 @@ export default function Home() {
       }
     }
 
+    ensureLookupClientId();
+    localStorage.removeItem("tamngu6h.invite");
     const hashParams = new URLSearchParams(window.location.hash.replace(/^#/, ""));
-    const invite = hashParams.get("invite")?.trim();
-    if (invite) {
-      localStorage.setItem(STORAGE.invite, invite);
-      window.history.replaceState(null, "", `${window.location.pathname}${window.location.search}`);
-    }
-    const hasInvite = Boolean(invite || localStorage.getItem(STORAGE.invite));
+    if (hashParams.has("invite")) window.history.replaceState(null, "", `${window.location.pathname}${window.location.search}`);
     queueMicrotask(() => {
-      setInviteReady(hasInvite);
-      if (invite) setPushMessage("Đã mở Tra nhanh AI trên thiết bị này.");
       try {
         const cached = JSON.parse(localStorage.getItem(LOOKUP_CACHE_KEY) || "[]");
         if (Array.isArray(cached)) setLookupCache(cached.filter((entry): entry is LookupCacheEntry => Boolean(entry?.key && validLookupResult(entry?.result))).slice(0, 30));
@@ -531,39 +512,6 @@ export default function Home() {
     }
   }
 
-  async function saveInviteCode() {
-    const code = inviteCodeFromInput(inviteDraft);
-    if (code.length < 8) {
-      setPushState("error");
-      setPushMessage("Mã mở Tra nhanh phải có đủ 8 số.");
-      return;
-    }
-    setSavingInvite(true);
-    try {
-      if (PUSH_API_URL) {
-        const response = await fetch(`${PUSH_API_URL}/verify-invite`, {
-          method: "POST",
-          headers: { "x-invite-code": code },
-        });
-        if (!response.ok) throw new Error("Mã mở Tra nhanh chưa đúng.");
-      }
-      localStorage.setItem(STORAGE.invite, code);
-      setInviteDraft("");
-      setInviteReady(true);
-      if ("serviceWorker" in navigator && PUSH_API_URL) {
-        const registration = await navigator.serviceWorker.ready;
-        const subscription = await registration.pushManager.getSubscription();
-        setPushState(subscription ? "enabled" : "idle");
-      }
-      setPushMessage("Đã mở Tra nhanh AI trên iPhone này.");
-    } catch (error) {
-      setPushState("error");
-      setPushMessage(error instanceof Error ? error.message : "Chưa kiểm tra được mã mở Tra nhanh.");
-    } finally {
-      setSavingInvite(false);
-    }
-  }
-
   async function disableLockScreen() {
     if (!("serviceWorker" in navigator)) return;
     try {
@@ -605,11 +553,10 @@ export default function Home() {
       setLookupState("success");
       return;
     }
-    const inviteCode = localStorage.getItem(STORAGE.invite) || "";
-    if (!PUSH_API_URL || !inviteCode) {
+    if (!PUSH_API_URL) {
       setLookupResult(null);
       setLookupState("error");
-      setLookupMessage("Tra nhanh chưa được mở. Vào Cài đặt và nhập mã 8 số một lần nhé.");
+      setLookupMessage("Tra nhanh chưa sẵn sàng trên bản này.");
       return;
     }
 
@@ -619,21 +566,20 @@ export default function Home() {
     try {
       const response = await fetch(`${PUSH_API_URL}/lookup`, {
         method: "POST",
-        headers: { "content-type": "application/json", "x-invite-code": inviteCode },
+        headers: { "content-type": "application/json", "x-client-id": ensureLookupClientId() },
         body: JSON.stringify({ query }),
       });
-      const body = await response.json().catch(() => ({})) as { error?: string; result?: unknown };
-      if (response.status === 401) {
-        localStorage.removeItem(STORAGE.invite);
-        setInviteReady(false);
-        throw new Error("Mã đã đổi hoặc hết hạn. Vào Cài đặt và nhập mã 8 số mới nhé.");
-      }
+      const body = await response.json().catch(() => ({})) as { error?: string; result?: unknown; retryAfterSeconds?: number; quota?: { dailyRemaining?: number } };
+      if (response.status === 429) throw new Error(body.error || "Cậu tra hơi nhanh rồi. Nghỉ một chút rồi thử lại nhé.");
       if (!response.ok || !validLookupResult(body.result)) throw new Error(body.error || "Chưa tra được lúc này.");
       const nextCache = [{ key: cacheKey, result: body.result }, ...lookupCache.filter((entry) => entry.key !== cacheKey)].slice(0, 30);
       setLookupCache(nextCache);
       localStorage.setItem(LOOKUP_CACHE_KEY, JSON.stringify(nextCache));
       setLookupResult(body.result);
-      setLookupMessage("Đã lưu kết quả tra cứu trên máy này.");
+      const remaining = body.quota?.dailyRemaining;
+      setLookupMessage(typeof remaining === "number" && remaining < 20
+        ? `Đã lưu trên máy · còn ${remaining} lượt AI trong 24 giờ.`
+        : "Đã lưu kết quả tra cứu trên máy này.");
       setLookupState("success");
     } catch (error) {
       setLookupState("error");
@@ -845,12 +791,6 @@ export default function Home() {
             </div>
             <button className="schedule-save" type="button" disabled={savingSchedule} onClick={() => void saveSchedule()}>{savingSchedule ? "Đang lưu…" : "Lưu lịch thông báo"}</button>
           </article>
-          {PUSH_API_URL && !inviteReady && (
-            <div className="pairing-box">
-              <label htmlFor="pairing-code"><strong>Mở Tra nhanh AI (tùy chọn)</strong><small>Nhập mã 8 số một lần. Không cần mã này để nhận bài trên Màn hình khóa.</small></label>
-              <div><input id="pairing-code" value={inviteDraft} onChange={(event) => setInviteDraft(event.target.value.replace(/\D/g, "").slice(0, 8))} placeholder="Mã 8 số" inputMode="numeric" pattern="[0-9]*" maxLength={8} autoComplete="one-time-code" /><button disabled={savingInvite} onClick={saveInviteCode}>{savingInvite ? "Đang kiểm tra…" : "Mở Tra nhanh"}</button></div>
-            </div>
-          )}
           {pushMessage && <p className={`settings-message ${pushState === "error" ? "error-note" : ""}`}>{pushMessage}</p>}
           {FEEDBACK_FORM_URL && (
             <a className="feedback-card" href={FEEDBACK_FORM_URL} target="_blank" rel="noreferrer" aria-label="Mở form nhắn cho dev">
@@ -867,7 +807,7 @@ export default function Home() {
               <h3>Màn hình khóa</h3>
               <p>Thông báo vẫn đến khi app đã đóng. Vuốt để xóa sau khi đọc; âm lượng và cách hiển thị do điện thoại quyết định. Với lịch rất dày, app có thể xen lại bài cũ để ôn thay vì gửi nội dung AI chưa được kiểm tra.</p>
               <h3>Dữ liệu và Tra nhanh</h3>
-              <p>Tiến độ được lưu trên thiết bị. Tra nhanh gửi từ cần tra tới máy chủ bảo mật; API key không nằm trong app.</p>
+              <p>Tiến độ được lưu trên thiết bị. Tra nhanh dùng ngay, không cần nhập mã; API key chỉ nằm trên máy chủ và có giới hạn rộng để ngăn spam.</p>
             </div>
           </details>
           <button className="secondary-button" onClick={resetLearningProgress}>Đặt lại tiến độ học</button>

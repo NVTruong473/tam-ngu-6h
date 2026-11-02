@@ -123,7 +123,7 @@ function cors(origin: string | null) {
   const allowedOrigin = origin && allowedOrigins.has(origin) ? origin : "https://nvtruong473.github.io";
   return {
     "access-control-allow-origin": allowedOrigin,
-    "access-control-allow-headers": "authorization, content-type, x-invite-code, x-cron-secret",
+    "access-control-allow-headers": "authorization, content-type, x-client-id, x-cron-secret",
     "access-control-allow-methods": "GET, POST, DELETE, OPTIONS",
     "cache-control": "no-store",
     vary: "Origin",
@@ -143,7 +143,7 @@ function constantTimeEqual(first: string, second: string) {
   return difference === 0;
 }
 
-function authorized(request: Request, header: "x-invite-code" | "x-cron-secret", expected: string | undefined) {
+function authorized(request: Request, header: "x-cron-secret", expected: string | undefined) {
   const provided = request.headers.get(header) || "";
   return Boolean(expected && provided && constantTimeEqual(provided, expected));
 }
@@ -274,13 +274,6 @@ async function unsubscribe(request: Request, origin: string | null) {
   return json({ ok: true }, 200, origin);
 }
 
-function verifyInvite(request: Request, origin: string | null) {
-  if (!authorized(request, "x-invite-code", Deno.env.get("TAM_NGU_INVITE_CODE"))) {
-    return json({ error: "Mã mở Tra nhanh không hợp lệ." }, 401, origin);
-  }
-  return json({ ok: true }, 200, origin);
-}
-
 function localClock(date: Date, timezone: string) {
   const parts = new Intl.DateTimeFormat("en-CA", {
     timeZone: timezone,
@@ -308,9 +301,15 @@ async function dispatch(request: Request, origin: string | null) {
   const isDueRun = body?.mode === "due";
   if (!isDueRun && (!body?.phase || !(body.phase in slotByPhase))) return json({ error: "Chế độ gửi không hợp lệ." }, 400, origin);
 
+  let subscriptionsQuery = supabaseAdmin()
+    .from("tam_ngu_push_subscriptions")
+    .select("endpoint, subscription, timezone, routine_start_sequence, schedule_times, lesson_cursor, last_dispatch_key")
+    .eq("enabled", true);
+  if (body?.preview) subscriptionsQuery = subscriptionsQuery.order("updated_at", { ascending: false }).limit(1);
+
   const [curriculumResponse, subscriptionsResult] = await Promise.all([
     fetch(curriculumUrl, { cache: "no-store", headers: { accept: "application/json" } }),
-    supabaseAdmin().from("tam_ngu_push_subscriptions").select("endpoint, subscription, timezone, routine_start_sequence, schedule_times, lesson_cursor, last_dispatch_key").eq("enabled", true),
+    subscriptionsQuery,
   ]);
   if (!curriculumResponse.ok) throw new Error(`Không tải được kho bài: ${curriculumResponse.status}`);
   if (subscriptionsResult.error) throw subscriptionsResult.error;
@@ -363,7 +362,7 @@ async function dispatch(request: Request, origin: string | null) {
       await supabaseAdmin().from("tam_ngu_push_subscriptions").update({
         last_sent_at: new Date().toISOString(),
         last_error: null,
-        lesson_cursor: rawCursor + 1,
+        lesson_cursor: body?.preview ? row.lesson_cursor ?? rawCursor : rawCursor + 1,
         last_dispatch_key: isDueRun ? clock.dispatchKey : row.last_dispatch_key,
       }).eq("endpoint", row.endpoint);
     } catch (error) {
@@ -596,15 +595,43 @@ async function askGeminiForLookup(query: string) {
 }
 
 async function lookup(request: Request, origin: string | null) {
-  if (!authorized(request, "x-invite-code", Deno.env.get("TAM_NGU_INVITE_CODE"))) {
-    return json({ error: "Mã mở Tra nhanh không hợp lệ." }, 401, origin);
-  }
+  if (!isTrustedAppOrigin(origin)) return json({ error: "Yêu cầu không đến từ Tam Ngữ 6H." }, 403, origin);
   const body = await request.json().catch(() => null) as null | { query?: unknown };
   const query = typeof body?.query === "string" ? body.query.replace(/\s+/g, " ").trim() : "";
   if (query.length < 1) return json({ error: "Hãy nhập một từ, câu hoặc đoạn hội thoại ngắn." }, 400, origin);
   if (query.length > LOOKUP_QUERY_MAXIMUM) return json({ error: `Nội dung tối đa ${LOOKUP_QUERY_MAXIMUM} ký tự.` }, 400, origin);
-  const result = await askGeminiForLookup(query);
-  return json({ ok: true, result }, 200, origin);
+  const clientId = request.headers.get("x-client-id") || "";
+  if (!/^tg6h_[a-f0-9]{36}$/.test(clientId)) return json({ error: "Thiết bị chưa sẵn sàng. Hãy đóng và mở lại app." }, 400, origin);
+  const salt = Deno.env.get("TAM_NGU_RATE_LIMIT_SALT");
+  if (!salt) throw new Error("Lookup rate-limit salt is not configured.");
+
+  const forwarded = (request.headers.get("cf-connecting-ip") || request.headers.get("x-forwarded-for")?.split(",")[0] || "unknown").trim().slice(0, 80);
+  const digest = async (value: string) => {
+    const bytes = await crypto.subtle.digest("SHA-256", new TextEncoder().encode(`${salt}:${value}`));
+    return [...new Uint8Array(bytes)].map((byte) => byte.toString(16).padStart(2, "0")).join("");
+  };
+  const requestId = crypto.randomUUID();
+  const admin = supabaseAdmin();
+  const [deviceHash, networkHash] = await Promise.all([digest(`device:${clientId}`), digest(`network:${forwarded}`)]);
+  const { data: quota, error: quotaError } = await admin.rpc("tam_ngu_take_lookup_quota", {
+    p_request_id: requestId,
+    p_device_hash: deviceHash,
+    p_network_hash: networkHash,
+  });
+  if (quotaError) throw quotaError;
+  if (!quota?.allowed) {
+    return json({
+      error: "Cậu tra hơi nhanh rồi. Nghỉ một chút rồi thử lại nhé.",
+      retryAfterSeconds: Number(quota?.retry_after_seconds || 60),
+    }, 429, origin);
+  }
+  try {
+    const result = await askGeminiForLookup(query);
+    return json({ ok: true, result, quota: { dailyRemaining: Number(quota?.daily_remaining || 0) } }, 200, origin);
+  } catch (error) {
+    await admin.from("tam_ngu_lookup_usage").delete().eq("request_id", requestId);
+    throw error;
+  }
 }
 
 Deno.serve(async (request) => {
@@ -618,10 +645,10 @@ Deno.serve(async (request) => {
         service: "tam-ngu-api",
         pushConfigured: Boolean(Deno.env.get("VAPID_PUBLIC_KEY") && Deno.env.get("VAPID_PRIVATE_KEY")),
         lookupConfigured: geminiKeys().length > 0,
+        lookupProtectionConfigured: Boolean(Deno.env.get("TAM_NGU_RATE_LIMIT_SALT")),
       }, 200, origin);
     }
     if (request.method === "GET" && action === "vapid-key") return json({ publicKey: Deno.env.get("VAPID_PUBLIC_KEY") || null }, 200, origin);
-    if (request.method === "POST" && action === "verify-invite") return verifyInvite(request, origin);
     if (request.method === "POST" && action === "subscribe") return await subscribe(request, origin);
     if (request.method === "DELETE" && action === "subscribe") return await unsubscribe(request, origin);
     if (request.method === "POST" && action === "schedule") return await updateSchedule(request, origin);

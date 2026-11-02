@@ -1,9 +1,11 @@
 import { execFileSync } from "node:child_process";
+import { readFileSync } from "node:fs";
 
 const ref = process.env.SUPABASE_PROJECT_REF;
 if (!ref) throw new Error("Thiếu SUPABASE_PROJECT_REF.");
 
 const token = execFileSync("security", ["find-generic-password", "-s", "Supabase CLI", "-w"], { encoding: "utf8" }).trim();
+const lookupRateLimitMigration = readFileSync(new URL("../supabase/migrations/20261102090000_lookup_rate_limit.sql", import.meta.url), "utf8");
 const statements = [
   `create table if not exists public.tam_ngu_push_subscriptions (
     endpoint text primary key,
@@ -27,6 +29,7 @@ const statements = [
   "alter table public.tam_ngu_push_subscriptions enable row level security",
   "revoke all on table public.tam_ngu_push_subscriptions from anon, authenticated",
   "grant all on table public.tam_ngu_push_subscriptions to service_role",
+  lookupRateLimitMigration,
   "notify pgrst, 'reload schema'",
 ];
 
@@ -42,4 +45,4 @@ for (const [index, query] of statements.entries()) {
   }
 }
 
-process.stdout.write("Đã cập nhật bảng Web Push, lịch tùy chỉnh và schema cache.\n");
+process.stdout.write("Đã cập nhật Web Push, lịch tùy chỉnh và giới hạn Tra nhanh.\n");

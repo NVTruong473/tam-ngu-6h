@@ -1,4 +1,4 @@
-import { execFileSync } from "node:child_process";
+import { randomBytes } from "node:crypto";
 
 const ref = process.env.SUPABASE_PROJECT_REF;
 if (!ref) throw new Error("Thiếu SUPABASE_PROJECT_REF.");
@@ -6,8 +6,8 @@ if (!ref) throw new Error("Thiếu SUPABASE_PROJECT_REF.");
 const apiUrl = `https://${ref}.supabase.co/functions/v1/tam-ngu-api`;
 const healthResponse = await fetch(`${apiUrl}/health`);
 const health = await healthResponse.json().catch(() => null);
-if (!healthResponse.ok || !health?.ok || !health.pushConfigured || !health.lookupConfigured) {
-  throw new Error("Health check chưa xác nhận được Push và Gemini lookup.");
+if (!healthResponse.ok || !health?.ok || !health.pushConfigured || !health.lookupConfigured || !health.lookupProtectionConfigured) {
+  throw new Error("Health check chưa xác nhận được Push, Gemini và bảo vệ Tra nhanh.");
 }
 
 const publicPushProbe = await fetch(`${apiUrl}/subscribe`, {
@@ -26,15 +26,7 @@ if (publicPushProbe.status !== 400) {
   throw new Error("Đăng ký Push một chạm chưa hoạt động đúng hoặc đang bị chặn bởi mã mời.");
 }
 
-const privateInvite = execFileSync("security", ["find-generic-password", "-s", "TamNgu6H Invite", "-w"], { encoding: "utf8" }).trim();
-let inviteCode = privateInvite;
-try {
-  inviteCode = new URL(privateInvite).hash.match(/(?:^#|[&#])invite=([^&]+)/)?.[1] || "";
-  inviteCode = decodeURIComponent(inviteCode);
-} catch {
-  // The Keychain item may deliberately hold only the invite code.
-}
-if (!inviteCode) throw new Error("Không đọc được mã ghép đôi riêng từ Keychain.");
+const testClientId = `tg6h_${randomBytes(18).toString("hex")}`;
 
 const HAN = /\p{Script=Han}/u;
 const LATIN = /\p{Script=Latin}/u;
@@ -91,7 +83,11 @@ function isValidLookupResult(result) {
 async function verifyLookup(query) {
   const lookupResponse = await fetch(`${apiUrl}/lookup`, {
     method: "POST",
-    headers: { "content-type": "application/json", "x-invite-code": inviteCode },
+    headers: {
+      "content-type": "application/json",
+      "x-client-id": testClientId,
+      origin: "https://nvtruong473.github.io",
+    },
     body: JSON.stringify({ query }),
   });
   const lookup = await lookupResponse.json().catch(() => null);
@@ -104,4 +100,4 @@ await verifyLookup("take it easy");
 await verifyLookup("慢一点");
 await verifyLookup("Kỷ luật");
 await verifyLookup("お疲れ様はどういう意味ですか？");
-process.stdout.write("Health, Push một chạm và bốn lượt tra Gemini đa ngữ đã đạt. Không in mã mời hoặc API key.\n");
+process.stdout.write("Health, Push một chạm và bốn lượt tra Gemini đa ngữ đã đạt. Không in API key.\n");

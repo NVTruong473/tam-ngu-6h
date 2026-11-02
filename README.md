@@ -76,4 +76,4 @@ npm run build:github
 npx --yes serve@14 -s dist/client -l 3002
 ```
 
-GitHub Pages phát hành tại <https://nvtruong473.github.io/tam-ngu-6h/>. Để test thật trên iPhone: mở link ghép đôi riêng trong Safari → Chia sẻ → **Thêm vào Màn hình chính** → mở icon mới → Bật nhịp → **Hiện bài trên Màn hình khóa** → Allow. Thử Push thật cần một iPhone đã subscribe; desktop/static preview chỉ kiểm được giao diện và luồng setup.
+GitHub Pages phát hành tại <https://nvtruong473.github.io/tam-ngu-6h/>. Để test thật trên iPhone: mở link này trong Safari → Chia sẻ → **Thêm vào Màn hình chính** → mở icon mới → Bật nhịp → **Hiện bài trên Màn hình khóa** → Allow. Tra nhanh Gemini dùng ngay, không cần nhập mã; khóa API chỉ nằm trong Supabase Edge Function. Thử Push thật cần một iPhone đã subscribe; desktop/static preview chỉ kiểm được giao diện và luồng setup.

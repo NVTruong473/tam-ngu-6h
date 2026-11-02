@@ -58,7 +58,7 @@ test("ships a growing progressive curriculum with balanced seed formats", async 
 });
 
 test("keeps Gemini credentials server-only while shipping push and quick lookup", async () => {
-  const [page, generator, appendGenerator, pronunciationEnricher, pronunciationRepairer, curriculumVerifier, edgeWorker, workflow, secretConfigurer, deployer, verifier] = await Promise.all([
+  const [page, generator, appendGenerator, pronunciationEnricher, pronunciationRepairer, curriculumVerifier, edgeWorker, workflow, secretConfigurer, deployer, verifier, rateLimitMigration] = await Promise.all([
     readFile(new URL("app/page.tsx", root), "utf8"),
     readFile(new URL("scripts/generate-curriculum.mjs", root), "utf8"),
     readFile(new URL("scripts/append-curriculum.mjs", root), "utf8"),
@@ -70,6 +70,7 @@ test("keeps Gemini credentials server-only while shipping push and quick lookup"
     readFile(new URL("scripts/configure-supabase-lookup.mjs", root), "utf8"),
     readFile(new URL("scripts/deploy-supabase-function.mjs", root), "utf8"),
     readFile(new URL("scripts/verify-supabase-api.mjs", root), "utf8"),
+    readFile(new URL("supabase/migrations/20261102090000_lookup_rate_limit.sql", root), "utf8"),
   ]);
   const source = `${page}\n${generator}\n${appendGenerator}\n${pronunciationEnricher}\n${pronunciationRepairer}\n${curriculumVerifier}\n${edgeWorker}\n${workflow}\n${secretConfigurer}\n${deployer}\n${verifier}`;
 
@@ -101,10 +102,9 @@ test("keeps Gemini credentials server-only while shipping push and quick lookup"
   assert.match(page, /\/schedule/);
   assert.match(page, /LOOKUP_CACHE_KEY/);
   assert.match(page, /subscription\.unsubscribe/);
-  assert.match(page, /inviteCodeFromInput/);
-  assert.match(page, /Mở Tra nhanh AI \(tùy chọn\)/);
-  assert.match(page, /Nhập mã 8 số một lần/);
-  assert.match(page, /autoComplete="one-time-code"/);
+  assert.match(page, /ensureLookupClientId/);
+  assert.match(page, /"x-client-id": ensureLookupClientId\(\)/);
+  assert.doesNotMatch(page, /x-invite-code|Mã 8 số|Mở Tra nhanh AI \(tùy chọn\)/);
   assert.match(appendGenerator, /generateValidatedLessons/);
   assert.match(appendGenerator, /reviewGeneratedLessons/);
   assert.match(appendGenerator, /GENERATION_ATTEMPTS/);
@@ -125,7 +125,7 @@ test("keeps Gemini credentials server-only while shipping push and quick lookup"
   assert.match(edgeWorker, /mode\?: "due"/);
   assert.match(edgeWorker, /last_dispatch_key/);
   assert.match(edgeWorker, /rawCursor % curriculum\.length/);
-  assert.match(edgeWorker, /lesson_cursor: rawCursor \+ 1/);
+  assert.match(edgeWorker, /lesson_cursor: body\?\.preview \? row\.lesson_cursor \?\? rawCursor : rawCursor \+ 1/);
   assert.match(edgeWorker, /normalizeLookupExample/);
   assert.match(edgeWorker, /hasToneGuidance/);
   assert.match(edgeWorker, /minItems: 2/);
@@ -133,8 +133,12 @@ test("keeps Gemini credentials server-only while shipping push and quick lookup"
   assert.match(edgeWorker, /constantTimeEqual/);
   assert.match(edgeWorker, /isApplePushEndpoint/);
   assert.match(edgeWorker, /isTrustedAppOrigin/);
+  assert.match(edgeWorker, /tam_ngu_take_lookup_quota/);
+  assert.match(edgeWorker, /TAM_NGU_RATE_LIMIT_SALT/);
+  assert.match(edgeWorker, /lookupProtectionConfigured/);
+  assert.doesNotMatch(edgeWorker, /x-invite-code|verify-invite|TAM_NGU_INVITE_CODE/);
   const subscribeSource = edgeWorker.slice(edgeWorker.indexOf("async function subscribe"), edgeWorker.indexOf("async function unsubscribe"));
-  const unsubscribeSource = edgeWorker.slice(edgeWorker.indexOf("async function unsubscribe"), edgeWorker.indexOf("function verifyInvite"));
+  const unsubscribeSource = edgeWorker.slice(edgeWorker.indexOf("async function unsubscribe"), edgeWorker.indexOf("function localClock"));
   assert.doesNotMatch(subscribeSource, /x-invite-code/);
   assert.doesNotMatch(unsubscribeSource, /x-invite-code/);
   assert.match(subscribeSource, /count: "exact"/);
@@ -146,4 +150,7 @@ test("keeps Gemini credentials server-only while shipping push and quick lookup"
   assert.match(verifier, /慢一点/);
   assert.match(verifier, /Kỷ luật/);
   assert.match(verifier, /お疲れ様/);
+  assert.match(rateLimitMigration, /v_device_minute >= 8/);
+  assert.match(rateLimitMigration, /v_device_day >= 120/);
+  assert.match(rateLimitMigration, /v_network_day >= 600/);
 });
