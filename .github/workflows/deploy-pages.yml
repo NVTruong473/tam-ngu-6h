@@ -40,13 +40,20 @@ jobs:
         env:
           GEMINI_API_KEYS: ${{ secrets.GEMINI_API_KEYS }}
           GEMINI_MODEL: gemini-3.5-flash-lite
-          APPEND_LESSON_COUNT: 3
-          GENERATION_ATTEMPTS: 8
+          APPEND_LESSON_COUNT: 1
+          GENERATION_ATTEMPTS: 4
         run: |
-          for batch in 1 2 3 4 5 6 7 8; do
-            echo "Generating reviewed lesson batch $batch/8"
-            npm run append:curriculum
+          accepted=0
+          for candidate in $(seq 1 24); do
+            echo "Generating reviewed lesson candidate $candidate/24"
+            if npm run append:curriculum; then
+              accepted=$((accepted + 1))
+            else
+              echo "Candidate $candidate was rejected; continuing without it."
+            fi
           done
+          echo "Accepted $accepted/24 new lessons."
+          test "$accepted" -gt 0
       - name: Verify generated curriculum before publishing
         id: verify_curriculum
         if: steps.grow.outcome == 'success'
