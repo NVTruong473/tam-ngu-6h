@@ -12,6 +12,8 @@ const allowedOrigins = new Set([
   "http://127.0.0.1:3001",
 ]);
 
+const supportedPushProviders = ["apple", "fcm", "mozilla", "wns"] as const;
+
 const curriculumUrl = "https://raw.githubusercontent.com/NVTruong473/tam-ngu-6h/main/app/curriculum.json";
 const publicAppUrl = "https://nvtruong473.github.io/tam-ngu-6h/";
 const geminiModel = "gemini-3.5-flash-lite";
@@ -171,13 +173,29 @@ function fallbackWish(phase: Phase, sequence: number) {
   return choices[Math.abs(sequence) % choices.length];
 }
 
-function isApplePushEndpoint(endpoint: string) {
+function isSupportedPushEndpoint(endpoint: string) {
   try {
     const url = new URL(endpoint);
-    return url.protocol === "https:" && (url.hostname === "web.push.apple.com" || url.hostname.endsWith(".push.apple.com"));
+    if (url.protocol !== "https:" || url.username || url.password || url.port || endpoint.length > 2048) return false;
+    const hostname = url.hostname.toLowerCase();
+    const path = url.pathname;
+    // PushSubscription endpoints are opaque capabilities, but accepting every
+    // HTTPS URL would turn this server into an authenticated-request proxy.
+    // Keep the complete URL while limiting delivery to established browser
+    // push services used by iOS/Safari, Chromium/Android, Firefox and Edge.
+    return (hostname === "web.push.apple.com" || hostname.endsWith(".push.apple.com"))
+      || (hostname === "fcm.googleapis.com" && path.startsWith("/fcm/send/"))
+      || (hostname === "updates.push.services.mozilla.com" && path.startsWith("/wpush/"))
+      || (hostname.endsWith(".notify.windows.com") && path.startsWith("/w/"));
   } catch {
     return false;
   }
+}
+
+function hasValidPushKeys(subscription: WebPushSubscription | undefined) {
+  return Boolean(subscription
+    && /^[A-Za-z0-9_-]{40,180}$/.test(subscription.keys?.p256dh || "")
+    && /^[A-Za-z0-9_-]{12,80}$/.test(subscription.keys?.auth || ""));
 }
 
 function isTrustedAppOrigin(origin: string | null) {
@@ -225,7 +243,9 @@ async function subscribe(request: Request, origin: string | null) {
     clientId?: string;
   };
   const endpoint = body?.subscription?.endpoint || "";
-  if (!isApplePushEndpoint(endpoint)) return json({ error: "Hãy mở Tam Ngữ từ icon đã cài trên iPhone, rồi thử lại." }, 400, origin);
+  if (!isSupportedPushEndpoint(endpoint) || !hasValidPushKeys(body?.subscription)) {
+    return json({ error: "Đăng ký thông báo của trình duyệt chưa hợp lệ. Hãy mở Tam Ngữ từ icon đã cài rồi thử lại." }, 400, origin);
+  }
   if (!Number.isFinite(body?.routineStartSequence)) return json({ error: "Chưa xác định được nhịp học. Hãy mở lại app rồi thử lại nhé." }, 400, origin);
   const scheduleTimes = validScheduleTimes(body?.scheduleTimes || ["06:00", "12:00", "18:00"]);
   if (!scheduleTimes) return json({ error: "Lịch cần từ 1 đến 24 mốc giờ hợp lệ." }, 400, origin);
@@ -272,7 +292,7 @@ async function updateSchedule(request: Request, origin: string | null) {
   if (!isTrustedAppOrigin(origin)) return json({ error: "Yêu cầu không đến từ Tam Ngữ 6H." }, 403, origin);
   const body = await request.json().catch(() => null) as null | { endpoint?: string; timezone?: string; scheduleTimes?: string[] };
   const scheduleTimes = validScheduleTimes(body?.scheduleTimes);
-  if (!body?.endpoint || !isApplePushEndpoint(body.endpoint) || !scheduleTimes) {
+  if (!body?.endpoint || !isSupportedPushEndpoint(body.endpoint) || !scheduleTimes) {
     return json({ error: "Lịch thông báo chưa hợp lệ." }, 400, origin);
   }
   const { data, error } = await supabaseAdmin().from("tam_ngu_push_subscriptions").update({
@@ -289,7 +309,7 @@ async function updateSchedule(request: Request, origin: string | null) {
 async function unsubscribe(request: Request, origin: string | null) {
   if (!isTrustedAppOrigin(origin)) return json({ error: "Yêu cầu không đến từ Tam Ngữ 6H." }, 403, origin);
   const body = await request.json().catch(() => null) as null | { endpoint?: string };
-  if (!body?.endpoint || !isApplePushEndpoint(body.endpoint)) return json({ error: "Endpoint không hợp lệ." }, 400, origin);
+  if (!body?.endpoint || !isSupportedPushEndpoint(body.endpoint)) return json({ error: "Endpoint không hợp lệ." }, 400, origin);
   const { error } = await supabaseAdmin().from("tam_ngu_push_subscriptions").delete().eq("endpoint", body.endpoint);
   if (error) throw error;
   return json({ ok: true }, 200, origin);
@@ -383,7 +403,14 @@ async function dispatch(request: Request, origin: string | null) {
       timestamp: Date.now(),
     });
     try {
-      await webpush.sendNotification(row.subscription, payload, { TTL: 21_600, urgency: "normal" });
+      await webpush.sendNotification(row.subscription, payload, {
+        TTL: 21_600,
+        urgency: "normal",
+        // The Web Push Topic header lets the push service replace an older
+        // undelivered lesson before the device reconnects. The service worker's
+        // stable notification tag performs the same replacement after delivery.
+        topic: "tam-ngu-current-lesson",
+      });
       sent += 1;
       await supabaseAdmin().from("tam_ngu_push_subscriptions").update({
         last_sent_at: new Date().toISOString(),
@@ -697,6 +724,7 @@ Deno.serve(async (request) => {
         ok: true,
         service: "tam-ngu-api",
         pushConfigured: Boolean(Deno.env.get("VAPID_PUBLIC_KEY") && Deno.env.get("VAPID_PRIVATE_KEY")),
+        pushProviders: supportedPushProviders,
         lookupConfigured: geminiKeys().length > 0,
         lookupProtectionConfigured: Boolean(Deno.env.get("TAM_NGU_RATE_LIMIT_SALT")),
       }, 200, origin);

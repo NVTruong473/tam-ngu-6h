@@ -10,6 +10,7 @@ import {
 
 type Tab = "today" | "library" | "settings";
 type PushState = "idle" | "enabling" | "enabled" | "unsupported" | "error";
+type DevicePlatform = "ios" | "android" | "other";
 type LookupState = "idle" | "loading" | "success" | "error";
 type LookupIntent = "Vocabulary" | "Translation" | "Grammar" | "Correction" | "Conversation" | "Explanation";
 type StudyLine = { speaker: string; english: string; chinese: string; pinyin: string; vietnameseReading: string; vietnamese: string };
@@ -130,6 +131,13 @@ function ensureLookupClientId() {
   const clientId = `tg6h_${[...bytes].map((byte) => byte.toString(16).padStart(2, "0")).join("")}`;
   localStorage.setItem(STORAGE.lookupClient, clientId);
   return clientId;
+}
+
+function detectDevicePlatform(): DevicePlatform {
+  const userAgent = navigator.userAgent || "";
+  if (/Android/i.test(userAgent)) return "android";
+  if (/iPhone|iPad|iPod/i.test(userAgent)) return "ios";
+  return "other";
 }
 
 function containsChinese(value: string) {
@@ -293,6 +301,7 @@ export default function Home() {
   const [scheduleTimes, setScheduleTimes] = useState(DEFAULT_SCHEDULE);
   const [scheduleTimeDraft, setScheduleTimeDraft] = useState("09:00");
   const [savingSchedule, setSavingSchedule] = useState(false);
+  const [devicePlatform, setDevicePlatform] = useState<DevicePlatform>("ios");
 
   const schedule = scheduleAt(now, scheduleTimes);
   const unlockedIndex = routineStartSequence === null ? 0 : Math.max(0, schedule.sequence - routineStartSequence);
@@ -324,6 +333,7 @@ export default function Home() {
     try { storedSchedule = normalizeScheduleTimes(JSON.parse(localStorage.getItem(STORAGE.schedule) || "null")); } catch {}
     queueMicrotask(() => {
       const currentTime = Date.now();
+      setDevicePlatform(detectDevicePlatform());
       setScheduleTimes(storedSchedule);
       setRoutineEnabled(storedRoutine);
       if (Number.isFinite(storedStart) && storedStart > 0) setRoutineStartSequence(storedStart);
@@ -464,7 +474,7 @@ export default function Home() {
     setPushMessage("");
     try {
       const permission = await Notification.requestPermission();
-      if (permission !== "granted") throw new Error("Cậu chưa cho phép thông báo trong iPhone.");
+      if (permission !== "granted") throw new Error("Cậu chưa cho phép thông báo cho Tam Ngữ 6H.");
       const registration = await navigator.serviceWorker.ready;
       const keyResponse = await fetch(`${PUSH_API_URL}/vapid-key`);
       if (!keyResponse.ok) throw new Error("Chưa thể bật thông báo lúc này.");
@@ -860,7 +870,7 @@ export default function Home() {
             <div className="setting-row"><span className="setting-icon">⌂</span><div><strong>Cài lên Màn hình chính</strong><small>Mở toàn màn hình với icon như một app.</small></div><button onClick={() => setShowInstall(true)}>Xem</button></div>
             <div className="setting-row"><span className="setting-icon">✓</span><div><strong>Tự động lưu</strong><small>Tiến độ và nhịp hằng ngày được lưu trên máy.</small></div><span className="status-pill">Đang bật</span></div>
             <div className="setting-row"><span className="setting-icon">◷</span><div><strong>{scheduleTimes.length} mốc mỗi ngày</strong><small>{scheduleTimes.join(" · ")}</small></div><span className="status-pill">Tùy chỉnh</span></div>
-            <div className="setting-row"><span className="setting-icon">▣</span><div><strong>Bài học trên Màn hình khóa</strong><small>Hoạt động khi app đã đóng; bài mới thay bài cũ để màn hình luôn gọn.</small></div>{pushState === "unsupported" ? <span className="status-pill">Cần iOS 16.4+</span> : pushState === "enabled" ? <button onClick={disableLockScreen}>Tắt</button> : <button onClick={enableLockScreen}>Bật</button>}</div>
+            <div className="setting-row"><span className="setting-icon">▣</span><div><strong>Bài học trên Màn hình khóa</strong><small>Hoạt động khi app đã đóng; bài mới thay bài cũ để màn hình luôn gọn.</small></div>{pushState === "unsupported" ? <span className="status-pill">{devicePlatform === "ios" ? "Cần iOS 16.4+" : "Trình duyệt chưa hỗ trợ"}</span> : pushState === "enabled" ? <button onClick={disableLockScreen}>Tắt</button> : <button onClick={enableLockScreen}>Bật</button>}</div>
           </article>
           <article className="schedule-card" aria-labelledby="schedule-title">
             <div className="schedule-card-heading">
@@ -890,7 +900,7 @@ export default function Home() {
               <h3>Cách học</h3>
               <p>Mặc định có bài mới lúc 06:00, 12:00 và 18:00. Có thể chọn từ 1 đến 24 mốc riêng mỗi ngày. Kho bài được bổ sung tự động và tăng dần từ B1 đến C1.</p>
               <h3>Màn hình khóa</h3>
-              <p>Thông báo vẫn đến khi app đã đóng. Mỗi thẻ có đủ câu Anh, Trung và Việt; chạm thẻ mới mở đúng bài để xem phát âm, ngữ pháp và ví dụ. Muốn đọc nội dung trước Face ID: vào Cài đặt iPhone → Thông báo → Hiển thị bản xem trước → Luôn luôn. Vuốt để xóa sau khi đọc; âm lượng và cách hiển thị do điện thoại quyết định.</p>
+              <p>Thông báo vẫn đến khi app đã đóng. Mỗi thẻ có đủ câu Anh, Trung và Việt; chạm thẻ mới mở đúng bài để xem phát âm, ngữ pháp và ví dụ. Muốn đọc nội dung trước khi mở khóa, hãy cho phép hiện toàn bộ bản xem trước trong cài đặt thông báo của điện thoại. Vuốt để xóa sau khi đọc; âm lượng và cách hiển thị do điện thoại quyết định.</p>
               <h3>Dữ liệu và Tra nhanh</h3>
               <p>Tiến độ được lưu trên thiết bị. Tra nhanh dùng ngay, không cần nhập mã; API key chỉ nằm trên máy chủ và có giới hạn rộng để ngăn spam.</p>
             </div>
@@ -911,13 +921,22 @@ export default function Home() {
             <div className="sheet-handle" />
             <div className="install-icon">语</div>
             <p className="eyebrow">CHỈ MẤT KHOẢNG 20 GIÂY</p>
-            <h2 id="install-title">Đưa Tam Ngữ lên iPhone</h2>
-            <ol>
-              <li><span>1</span><p>Mở đường link bằng <strong>Safari</strong>.</p></li>
-              <li><span>2</span><p>Chạm nút <strong>Chia sẻ</strong> ở thanh công cụ.</p></li>
-              <li><span>3</span><p>Chọn <strong>Thêm vào Màn hình chính</strong>. Nếu iPhone hiện “Mở dưới dạng ứng dụng”, hãy để tùy chọn đó bật.</p></li>
-              <li><span>4</span><p>Mở icon vừa tạo và chạm <strong>Cho phép &amp; hoàn tất</strong>. Không cần cài thêm ứng dụng nào.</p></li>
-            </ol>
+            <h2 id="install-title">Đưa Tam Ngữ lên {devicePlatform === "android" ? "Android" : "iPhone"}</h2>
+            {devicePlatform === "android" ? (
+              <ol>
+                <li><span>1</span><p>Mở đường link bằng <strong>Chrome</strong>.</p></li>
+                <li><span>2</span><p>Chạm menu <strong>⋮</strong> ở góc trình duyệt.</p></li>
+                <li><span>3</span><p>Chọn <strong>Cài đặt ứng dụng</strong> hoặc <strong>Thêm vào Màn hình chính</strong>.</p></li>
+                <li><span>4</span><p>Mở icon vừa tạo và chạm <strong>Cho phép &amp; hoàn tất</strong>.</p></li>
+              </ol>
+            ) : (
+              <ol>
+                <li><span>1</span><p>Mở đường link bằng <strong>Safari</strong>.</p></li>
+                <li><span>2</span><p>Chạm nút <strong>Chia sẻ</strong> ở thanh công cụ.</p></li>
+                <li><span>3</span><p>Chọn <strong>Thêm vào Màn hình chính</strong>. Nếu iPhone hiện “Mở dưới dạng ứng dụng”, hãy để tùy chọn đó bật.</p></li>
+                <li><span>4</span><p>Mở icon vừa tạo và chạm <strong>Cho phép &amp; hoàn tất</strong>. Không cần cài thêm ứng dụng nào.</p></li>
+              </ol>
+            )}
             <button className="primary-button wide" onClick={() => setShowInstall(false)}>Mình hiểu rồi</button>
           </section>
         </div>
@@ -933,7 +952,7 @@ export default function Home() {
             </div>
             <p className="eyebrow">CHỈ CÒN MỘT XÁC NHẬN</p>
             <h2 id="activation-title">Bật bài học trên Màn hình khóa</h2>
-            <p className="activation-copy">iPhone sẽ hỏi quyền thông báo một lần. Sau đó Tam Ngữ tự gửi bài theo lịch, kể cả khi app đã đóng.</p>
+            <p className="activation-copy">{devicePlatform === "android" ? "Android" : "iPhone"} sẽ hỏi quyền thông báo một lần. Sau đó Tam Ngữ tự gửi bài theo lịch, kể cả khi app đã đóng.</p>
             <div className="activation-points" aria-label="Thiết lập tự động">
               <span>✓ Không app phụ</span><span>✓ Không nhập mã</span><span>✓ Tự lưu lịch</span>
             </div>

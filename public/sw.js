@@ -1,4 +1,4 @@
-const CACHE_VERSION = "tam-ngu-6h-v13";
+const CACHE_VERSION = "tam-ngu-6h-v14";
 const NOTIFICATION_CACHE = "tam-ngu-notifications-v1";
 const seenNotificationIds = new Set();
 

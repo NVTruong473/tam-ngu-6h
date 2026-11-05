@@ -6,11 +6,11 @@ Xem [lộ trình phát hành native](docs/native-release.md) trước khi ký b�
 
 ## Trải nghiệm người dùng
 
-- Mặc định có bài mới lúc 06:00, 12:00, 18:00; mỗi iPhone có thể chọn từ 1 đến 24 mốc riêng theo múi giờ của thiết bị.
+- Mặc định có bài mới lúc 06:00, 12:00, 18:00; mỗi thiết bị có thể chọn từ 1 đến 24 mốc riêng theo múi giờ của mình.
 - Kho bài đệm A2.1 → B1 có sẵn ngoại tuyến. GitHub Actions thử nối tiếp tối đa 3 bài đã kiểm định mỗi ngày; từng ứng viên được kiểm tra và hoàn tác riêng nên Gemini hết quota hay trả bài lỗi cũng không làm hỏng bản đang chạy. Lộ trình tiếp tục B1+ → B2 → B2+ → C1, không phải một “cuốn sách” cố định.
 - Nội dung gồm câu ứng dụng, thông điệp và hội thoại ngắn; không quay lại nhóm chào hỏi/số đếm nhập môn.
-- Mỗi câu Trung có pinyin, **Đọc gần Việt** và nút phát âm dùng giọng iPhone. “Đọc gần Việt” chỉ là cầu nối, không thay thế nghe giọng Quan thoại chuẩn.
-- Tra nhanh Anh/Trung trả nghĩa, sắc thái và hai ví dụ song ngữ. API key Gemini chỉ ở Supabase Edge Function; iPhone chỉ nhận kết quả đã lọc và tự lưu tối đa 30 lần tra gần nhất.
+- Mỗi câu Trung có pinyin, **Đọc gần Việt** và nút phát âm dùng giọng hệ thống. “Đọc gần Việt” chỉ là cầu nối, không thay thế nghe giọng Quan thoại chuẩn.
+- Tra nhanh Anh/Trung trả nghĩa, sắc thái và hai ví dụ song ngữ. API key Gemini chỉ ở Supabase Edge Function; thiết bị chỉ nhận kết quả đã lọc và tự lưu tối đa 30 lần tra gần nhất.
 - Trong Cài đặt có **Nhắn cho dev**, mở Google Form phản hồi công khai trong tab mới. Form chỉ hỏi lời nhắn bắt buộc, một lựa chọn quà vui tùy chọn và cách liên hệ tùy chọn; email thông báo phản hồi mới được bật ở Google Forms.
 
 ## Điều có thể và không thể làm trên iPhone
@@ -34,7 +34,7 @@ Sau khi người dùng cài PWA vào Màn hình chính, mở icon và đồng ý
 ## Kiến trúc và ranh giới riêng tư
 
 - GitHub Pages: giao diện PWA và kho bài công khai, miễn phí.
-- Supabase Edge Function `tam-ngu-api`: giữ VAPID, cron secret và Gemini keys; cung cấp đăng ký Push, gửi Push và `/lookup`. Người dùng không nhập mã hay API key; Gemini key không nằm trong PWA.
+- Supabase Edge Function `tam-ngu-api`: giữ VAPID, cron secret và Gemini keys; cung cấp đăng ký Push, gửi Push và `/lookup`. Web Push chấp nhận đúng các dịch vụ trình duyệt đã biết của Apple, Chromium/Android (FCM), Firefox và Edge; URL tùy ý bị từ chối. Người dùng không nhập mã hay API key; Gemini key không nằm trong PWA.
 - `API_KEYS_FILE=/path/secret.rtfd SUPABASE_PROJECT_REF=... GITHUB_REPOSITORY=NVTruong473/tam-ngu-6h npm run supabase:lookup-secrets` nạp Gemini keys từ RTFD vào Supabase và GitHub Secrets mà không đưa key vào source hoặc log.
 - Supabase Cron: gọi bộ điều phối mỗi phút; Edge Function chỉ gửi cho thiết bị có giờ địa phương trùng lịch đã lưu và chống gửi lặp trong cùng phút.
 - `tam_ngu_push_subscriptions`: RLS bật; `anon`/`authenticated` không có quyền đọc/ghi, chỉ service role của Edge Function được dùng.
@@ -82,4 +82,4 @@ npm run build:github
 npx --yes serve@14 -s dist/client -l 3002
 ```
 
-GitHub Pages phát hành tại <https://nvtruong473.github.io/tam-ngu-6h/>. Để test thật trên iPhone: mở link này trong Safari → Chia sẻ → **Thêm vào Màn hình chính** → mở icon mới → Bật nhịp → **Hiện bài trên Màn hình khóa** → Allow. Tra nhanh Gemini dùng ngay, không cần nhập mã; khóa API chỉ nằm trong Supabase Edge Function. Thử Push thật cần một iPhone đã subscribe; desktop/static preview chỉ kiểm được giao diện và luồng setup.
+GitHub Pages phát hành tại <https://nvtruong473.github.io/tam-ngu-6h/>. Trên iPhone: mở bằng Safari → Chia sẻ → **Thêm vào Màn hình chính**. Trên Android: mở bằng Chrome → menu ⋮ → **Cài đặt ứng dụng**. Sau đó mở icon mới → Bật nhịp → **Hiện bài trên Màn hình khóa** → cho phép. Tra nhanh Gemini dùng ngay, không cần nhập mã; khóa API chỉ nằm trong Supabase Edge Function. Thử Push thật cần một thiết bị đã đăng ký; desktop/static preview chỉ kiểm được giao diện và luồng setup.

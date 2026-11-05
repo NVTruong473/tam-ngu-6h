@@ -21,7 +21,7 @@ test("exports an installable PWA with one replaceable lock-screen card", async (
   assert.ok(manifest.icons.some((icon) => icon.sizes === "1024x1024" && icon.purpose === "maskable"));
   assert.equal(highResolutionIcon.readUInt32BE(16), 1024);
   assert.equal(highResolutionIcon.readUInt32BE(20), 1024);
-  assert.match(serviceWorker, /tam-ngu-6h-v13/);
+  assert.match(serviceWorker, /tam-ngu-6h-v14/);
   assert.match(serviceWorker, /html\.matchAll/);
   assert.match(serviceWorker, /skipWaiting/);
   assert.match(serviceWorker, /clients\.claim/);
@@ -140,7 +140,7 @@ test("keeps Gemini credentials server-only while shipping push and quick lookup"
   assert.match(page, /Thẻ tam ngữ mẫu vừa được gửi/);
   assert.match(page, /Bài tam ngữ mẫu/);
   assert.match(page, /`中  \$\{preview\?\.chinese/);
-  assert.match(page, /Hiển thị bản xem trước → Luôn luôn/);
+  assert.match(page, /cho phép hiện toàn bộ bản xem trước/);
   assert.match(page, /icon-v2-192\.png/);
   assert.match(page, /NEXT_PUBLIC_PUSH_API_URL/);
   assert.match(page, /NEXT_PUBLIC_FEEDBACK_FORM_URL/);
@@ -200,7 +200,13 @@ test("keeps Gemini credentials server-only while shipping push and quick lookup"
   assert.match(edgeWorker, /minItems: 2/);
   assert.match(edgeWorker, /GEMINI_API_KEYS/);
   assert.match(edgeWorker, /constantTimeEqual/);
-  assert.match(edgeWorker, /isApplePushEndpoint/);
+  assert.match(edgeWorker, /isSupportedPushEndpoint/);
+  assert.match(edgeWorker, /supportedPushProviders = \["apple", "fcm", "mozilla", "wns"\]/);
+  assert.match(edgeWorker, /hostname === "fcm\.googleapis\.com" && path\.startsWith\("\/fcm\/send\/"\)/);
+  assert.match(edgeWorker, /hostname === "updates\.push\.services\.mozilla\.com" && path\.startsWith\("\/wpush\/"\)/);
+  assert.match(edgeWorker, /hostname\.endsWith\("\.notify\.windows\.com"\) && path\.startsWith\("\/w\/"\)/);
+  assert.match(edgeWorker, /hasValidPushKeys/);
+  assert.match(edgeWorker, /topic: "tam-ngu-current-lesson"/);
   assert.match(edgeWorker, /isTrustedAppOrigin/);
   assert.match(edgeWorker, /tam_ngu_take_lookup_quota/);
   assert.match(edgeWorker, /TAM_NGU_RATE_LIMIT_SALT/);
@@ -211,6 +217,8 @@ test("keeps Gemini credentials server-only while shipping push and quick lookup"
   assert.doesNotMatch(subscribeSource, /x-invite-code/);
   assert.doesNotMatch(unsubscribeSource, /x-invite-code/);
   assert.match(subscribeSource, /count: "exact"/);
+  assert.match(page, /Đưa Tam Ngữ lên \{devicePlatform === "android" \? "Android" : "iPhone"\}/);
+  assert.match(page, /Mở đường link bằng <strong>Chrome<\/strong>/);
   assert.doesNotMatch(edgeWorker, /mode: "silent"/);
   assert.match(secretConfigurer, /mkdtempSync/);
   assert.match(secretConfigurer, /GEMINI_API_KEYS/);
