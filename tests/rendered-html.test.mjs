@@ -86,7 +86,7 @@ test("keeps setup inside Tam Ngữ with one explicit iOS permission", async () =
   assert.doesNotMatch(packageText, /build-widget-data|generate:widget-data/);
 });
 test("keeps Gemini credentials server-only while shipping push and quick lookup", async () => {
-  const [page, generator, appendGenerator, pronunciationEnricher, pronunciationRepairer, curriculumVerifier, edgeWorker, workflow, monitorWorkflow, secretConfigurer, deployer, verifier, rateLimitMigration] = await Promise.all([
+  const [page, generator, appendGenerator, pronunciationEnricher, pronunciationRepairer, curriculumVerifier, edgeWorker, workflow, monitorWorkflow, backendDeployWorkflow, secretConfigurer, deployer, verifier, rateLimitMigration] = await Promise.all([
     readFile(new URL("app/page.tsx", root), "utf8"),
     readFile(new URL("scripts/generate-curriculum.mjs", root), "utf8"),
     readFile(new URL("scripts/append-curriculum.mjs", root), "utf8"),
@@ -96,12 +96,13 @@ test("keeps Gemini credentials server-only while shipping push and quick lookup"
     readFile(new URL("supabase/functions/tam-ngu-api/index.ts", root), "utf8"),
     readFile(new URL(".github/workflows/deploy-pages.yml", root), "utf8"),
     readFile(new URL(".github/workflows/production-monitor.yml", root), "utf8"),
+    readFile(new URL(".github/workflows/deploy-supabase.yml", root), "utf8"),
     readFile(new URL("scripts/configure-supabase-lookup.mjs", root), "utf8"),
     readFile(new URL("scripts/deploy-supabase-function.mjs", root), "utf8"),
     readFile(new URL("scripts/verify-supabase-api.mjs", root), "utf8"),
     readFile(new URL("supabase/migrations/20261102090000_lookup_rate_limit.sql", root), "utf8"),
   ]);
-  const source = `${page}\n${generator}\n${appendGenerator}\n${pronunciationEnricher}\n${pronunciationRepairer}\n${curriculumVerifier}\n${edgeWorker}\n${workflow}\n${monitorWorkflow}\n${secretConfigurer}\n${deployer}\n${verifier}`;
+  const source = `${page}\n${generator}\n${appendGenerator}\n${pronunciationEnricher}\n${pronunciationRepairer}\n${curriculumVerifier}\n${edgeWorker}\n${workflow}\n${monitorWorkflow}\n${backendDeployWorkflow}\n${secretConfigurer}\n${deployer}\n${verifier}`;
 
   assert.doesNotMatch(source, /(?:AQ\.|sk-proj-|sk-or-v1-|gsk_|nvapi-)[A-Za-z0-9_-]{8,}/);
   assert.match(generator, /process\.env\.GEMINI_API_KEY/);
@@ -119,6 +120,15 @@ test("keeps Gemini credentials server-only while shipping push and quick lookup"
   assert.match(monitorWorkflow, /SMOKE_DEEP_LOOKUP/);
   assert.match(monitorWorkflow, /npm run smoke:production/);
   assert.match(monitorWorkflow, /permissions:\s+contents: read/);
+  assert.match(backendDeployWorkflow, /permissions:\s+contents: read/);
+  assert.match(backendDeployWorkflow, /secrets\.SUPABASE_ACCESS_TOKEN/);
+  assert.match(backendDeployWorkflow, /supabase\/setup-cli@3c2f5e2ae34c34e428e8e206e2c4d21fa2d20fbf/);
+  assert.match(backendDeployWorkflow, /--remote="\$SUPABASE_PROJECT_REF"/);
+  assert.match(backendDeployWorkflow, /--no-verify-jwt/);
+  assert.match(backendDeployWorkflow, /--use-api/);
+  assert.match(backendDeployWorkflow, /--yes/);
+  assert.match(backendDeployWorkflow, /SMOKE_DEEP_LOOKUP: "1"/);
+  assert.match(backendDeployWorkflow, /npm run smoke:production/);
   assert.match(page, /Thư viện bài học/);
   assert.doesNotMatch(page, /Gemini tạo thêm theo lộ trình/);
   assert.match(page, /Đọc gần Việt/);

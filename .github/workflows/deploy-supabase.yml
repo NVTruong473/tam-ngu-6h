@@ -1,0 +1,69 @@
+name: Deploy Tam Ngữ API to Supabase
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - "supabase/functions/tam-ngu-api/**"
+      - "supabase/config.toml"
+      - "scripts/smoke-production.mjs"
+      - ".github/workflows/deploy-supabase.yml"
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: tam-ngu-supabase-production
+  cancel-in-progress: false
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v6
+      - uses: actions/setup-node@v6
+        with:
+          node-version: 22
+          cache: npm
+      - run: npm ci
+      - name: Verify curriculum, privacy contract and production build
+        run: npm test
+
+  deploy:
+    needs: test
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    env:
+      SUPABASE_ACCESS_TOKEN: ${{ secrets.SUPABASE_ACCESS_TOKEN }}
+      SUPABASE_PROJECT_REF: fcsuldrerhbynwotcvyn
+    steps:
+      - uses: actions/checkout@v6
+      # Pin the official action to a reviewed commit instead of a mutable tag.
+      - uses: supabase/setup-cli@3c2f5e2ae34c34e428e8e206e2c4d21fa2d20fbf # v2.1.1
+        with:
+          version: latest
+      - name: Deploy the public API without exposing server secrets
+        run: >-
+          supabase functions deploy tam-ngu-api
+          --remote="$SUPABASE_PROJECT_REF"
+          --no-verify-jwt
+          --use-api
+          --yes
+
+  verify-production:
+    needs: deploy
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      - uses: actions/checkout@v6
+      - uses: actions/setup-node@v6
+        with:
+          node-version: 22
+      - name: Exercise the deployed Gemini lookup end to end
+        env:
+          SMOKE_URL: https://${{ github.repository_owner }}.github.io/${{ github.event.repository.name }}/
+          SMOKE_API_URL: ${{ vars.NEXT_PUBLIC_PUSH_API_URL }}
+          SMOKE_DEEP_LOOKUP: "1"
+        run: npm run smoke:production

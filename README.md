@@ -64,6 +64,8 @@ Trên GitHub, Secret `GEMINI_API_KEYS` chứa các key phân tách bằng xuốn
 
 Workflow giám sát chạy lúc phút 17 mỗi giờ, kiểm tra trang cài PWA, manifest/icon, Service Worker Web Push và trạng thái backend. Nó không gửi nội dung tra cứu hay dữ liệu người dùng; lỗi sẽ hiện thành workflow thất bại trong GitHub Actions.
 
+Mọi thay đổi trong `supabase/functions/tam-ngu-api` được workflow riêng kiểm thử rồi tự triển khai lên đúng project Supabase. GitHub Secret `SUPABASE_ACCESS_TOKEN` là token phạm vi hẹp: chỉ project `caseflow-store`, chỉ quyền đọc/ghi Edge Functions, hết hạn sau 90 ngày; nó không được gửi xuống PWA và không có quyền đọc database, Auth, API keys hoặc Edge Function secrets. Sau deploy, workflow bắt buộc chạy một tra cứu Gemini thật trước khi được coi là thành công.
+
 ## Kiểm thử và phát hành
 
 ```bash
