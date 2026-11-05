@@ -111,6 +111,8 @@ test("keeps Gemini credentials server-only while shipping push and quick lookup"
   assert.match(workflow, /cp "\$backup" app\/curriculum\.json/);
   assert.match(workflow, /npm run append:curriculum && npm run verify:curriculum/);
   assert.match(workflow, /npm run smoke:production/);
+  assert.match(workflow, /if: always\(\) && needs\.build\.result == 'success'/);
+  assert.match(workflow, /if: always\(\) && needs\.deploy\.result == 'success'/);
   assert.match(page, /Thư viện bài học/);
   assert.doesNotMatch(page, /Gemini tạo thêm theo lộ trình/);
   assert.match(page, /Đọc gần Việt/);
