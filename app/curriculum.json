@@ -2563,7 +2563,7 @@
         "english": "Something urgent came up. Can we postpone our dinner to Thursday?",
         "chinese": "有点急事，我们能把晚饭推迟到周四吗？",
         "pinyin": "Yǒudiǎn jíshì, wǒmen néng bǎ wǎnfàn tuīchí dào zhōusì ma?",
-      "vietnamese": "Có việc gấp một chút, chúng ta có thể hoãn bữa tối sang thứ Năm không?",
+        "vietnamese": "Có việc gấp một chút, chúng ta có thể hoãn bữa tối sang thứ Năm không?",
         "vietnameseReading": "yởu(3) điển(3) chí(2) sứ(4), uổ(3) mần nấng(2) bả(3) uản(3) phàn(4) thuy(1) chứ(2) tao(4) chô(1) sứ(4) ma"
       },
       {
@@ -3913,5 +3913,91 @@
       "chinese": "重新开始需要勇气。",
       "vietnamese": "Bắt đầu lại đòi hỏi sự dũng cảm."
     }
+  },
+  {
+    "id": "lesson-0122",
+    "stage": "B1+ · Diễn đạt linh hoạt",
+    "kind": "message",
+    "title": "Nhắn tin xin lỗi vì đến muộn do kẹt xe bất ngờ",
+    "context": "Bạn đang trên đường đến buổi gặp gỡ đối tác nhưng bị kẹt xe nghiêm trọng và nhắn tin báo trước.",
+    "lines": [
+      {
+        "speaker": "A",
+        "english": "I am terribly sorry, but an unexpected traffic jam has completely blocked my way; I might be ten minutes late.",
+        "chinese": "实在抱歉，前方突然堵车堵得水泄不通，我可能会迟到十分钟左右。",
+        "pinyin": "shí zài bào qiàn, qián fāng tū rán dǔ chē dǔ de shuǐ xiè bù tōng, wǒ kě néng huì chí dào shí fēn zhōng zuǒ yòu.",
+        "vietnameseReading": "sứ(2) trai(4) pao(4) chiên(4) chién(2) phang(1) thu(1) ran(2) đụ(3) chơ(1) đụ(3) tơ suấy(3) xiè(4) pu(4) thong(1) uổ(3) khể(3) nẻng(2) huây(4) chí(2) tao(4) sứ(2) phân(1) trung(1) cuốc(3) iêu(4)",
+        "vietnamese": "Thật sự xin lỗi, phía trước đột nhiên kẹt xe tắc nghẽn hoàn toàn, tôi có thể sẽ đến muộn khoảng mười phút."
+      }
+    ],
+    "note": "Cấu trúc '堵得水泄不通' (tắc nghẽn nước chảy không lọt) là cách nói hình tượng rất phổ biến trong tiếng Trung để miêu tả tình trạng kẹt xe nghiêm trọng.",
+    "challenge": "Hãy thu âm một đoạn tin nhắn thoại ngắn bằng tiếng Trung báo cáo việc bạn đến muộn và đưa ra giờ dự kiến.",
+    "grammarFocus": "Sử dụng bổ ngữ trạng thái kết hợp với cụm thành ngữ hình tượng để nhấn mạnh mức độ của sự việc.",
+    "vocabulary": [
+      "traffic jam · 堵车 · kẹt xe",
+      "ten minutes · 十分钟 · mười phút",
+      "terribly sorry · 实在抱歉 · thật sự xin lỗi"
+    ],
+    "wish": "Buổi trưa nay chúc bạn giải quyết mọi việc suôn sẻ, dù có chút trở ngại nhỏ cũng nhanh chóng vượt qua.",
+    "nightWish": "Khép lại một ngày bận rộn với nhiều tình huống phát sinh, chúc bạn có giấc ngủ thật sâu và bình yên.",
+    "notification": {
+      "english": "Traffic jam delay update",
+      "chinese": "路上堵车，我会迟到十分钟",
+      "vietnamese": "Kẹt xe trên đường, tôi đến muộn 10 phút"
+    },
+    "generatedAt": "2026-11-05T22:47:47.236Z",
+    "generator": "gemini-3.5-flash-lite"
+  },
+  {
+    "id": "lesson-0123",
+    "stage": "B1+ · Diễn đạt linh hoạt",
+    "kind": "dialogue",
+    "title": "Nhìn nhận lại mục tiêu dài hạn sau một khoảng thời gian nỗ lực",
+    "context": "Hai đồng nghiệp trò chuyện vào buổi tối tại sảnh văn phòng khi chuẩn bị ra về sau một ngày dài.",
+    "lines": [
+      {
+        "speaker": "A",
+        "english": "Looking back at the past few months, do you feel we are any closer to our original career goals?",
+        "chinese": "回过头来看看过去这几个月，你觉得我们离最初的职业目标更近了吗？",
+        "pinyin": "huí guò tóu lái kàn kàn guò qù zhè jǐ gè yuè, nǐ jué de wǒ men lí zuì chū de zhí yè mù biāo gèng jìn le ma?",
+        "vietnameseReading": "huây(2) cuô(4) thâu(2) lai(2) khan(4) khan(4) cuô(4) chiệu(4) chè(4) chỉ(3) cợ(4) duê(4) nỉ(3) chié(2) tơ uổ(3) mần lí(2) chuây(4) chu(1) tơ chí(2) yê(4) mu(4) piao(1) cêng(4) cin(4) lơ ma",
+        "vietnamese": "Nhìn lại mấy tháng qua, bạn có thấy chúng ta đã đến gần hơn với mục tiêu nghề nghiệp ban đầu chưa?"
+      },
+      {
+        "speaker": "B",
+        "english": "In terms of concrete achievements, we certainly made progress; however, the vision itself has evolved.",
+        "chinese": "就具体成果而言，我们确实取得了进展；不过，愿景本身也在不断演变。",
+        "pinyin": "jiù jù tǐ chéng guǒ ér yán, wǒ men què shí qǔ dé le jìn zhǎn; bú guò, yuàn jǐng běn shēn yě zài bú duàn yǎn biàn.",
+        "vietnameseReading": "chiêu(4) chu(4) thí(3) chấng(2) cuổ(3) ơ(2) yan(2) uổ(3) mần chiết(4) sứ(2) chủ(3) tơ(2) lơ cin(4) chản(3) pu(2) cuô(4) uản(4) ỉng(3) pẩn(3) sên(1) iê(3) trai(4) pu(2) toan(4) dản(3) piên(4)",
+        "vietnamese": "Xét về thành quả cụ thể, chúng ta chắc chắn đã tiến bộ; tuy nhiên, bản thân tầm nhìn cũng đang phát triển."
+      },
+      {
+        "speaker": "A",
+        "english": "That is very true. Adapting our plans along the way is far more practical than sticking rigidly to the old blueprint.",
+        "chinese": "确实如此。在过程中调整计划，远比死板地坚持旧蓝图要务实得多。",
+        "pinyin": "què shí rú cǐ. zài guò chéng zhōng tiáo zhěng jì huà, yuǎn bǐ sǐ bǎn de jiān chí jiù lán tú yào wù shí de duō.",
+        "vietnameseReading": "chiết(4) sứ(2) rú(2) cứ(3) trai(4) cuô(4) chấng(2) trung(1) thiáo(2) chẩng(3) chi(4) hua(4) iuển(3) pỉ(3) sư(3) pản(3) tơ chiên(1) chí(2) chiêu(4) lán(2) thu(2) yao(4) uô(4) sứ(2) tơ tuô(1)",
+        "vietnamese": "Quả thực là vậy. Việc điều chỉnh kế hoạch trên đường đi thực tế hơn nhiều so với việc bám cứng lấy bản vẽ cũ."
+      }
+    ],
+    "note": "Bài học sử dụng cấu trúc '就...而言' (xét về...) để khoanh vùng khía cạnh đánh giá, kết hợp với cụm từ '远比...要...' để so sánh mức độ, giúp sắc thái diễn đạt mang tính chiêm nghiệm và chuyên nghiệp hơn ở cấp độ B1+.",
+    "challenge": "Hãy tự ghi âm một đoạn ngắn 1 phút bằng tiếng Anh và tiếng Trung chia sẻ về một thay đổi trong mục tiêu cá nhân của bạn năm nay.",
+    "grammarFocus": "Cấu trúc 就...而言 dùng để giới hạn phạm vi thảo luận và 远比...要... dùng trong câu so sánh mức độ.",
+    "vocabulary": [
+      "career goals · 职业目标 · mục tiêu nghề nghiệp",
+      "concrete achievements · 具体成果 · thành quả cụ thể",
+      "evolve · 演变 · diễn biến/phát triển",
+      "blueprint · 蓝图 · bản thiết kế/kế hoạch lớn",
+      "practical · 务实 · thiết thực/thực tế"
+    ],
+    "wish": "Mong buổi tối nay mang lại cho bạn những khoảng lặng bình yên để sắp xếp lại những dự định đẹp đẽ cho ngày mai.",
+    "nightWish": "Khép lại một ngày dài bận rộn, chúc bạn chìm vào giấc ngủ thật sâu với những giấc mơ nhẹ nhàng và êm dịu.",
+    "notification": {
+      "english": "Are we closer to our career goals?",
+      "chinese": "离最初的职业目标更近了吗？",
+      "vietnamese": "Chúng ta đã gần tới mục tiêu chưa?"
+    },
+    "generatedAt": "2026-11-05T22:49:20.355Z",
+    "generator": "gemini-3.5-flash-lite"
   }
 ]
