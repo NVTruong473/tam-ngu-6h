@@ -1,6 +1,7 @@
 const siteUrl = new URL(process.env.SMOKE_URL || "https://nvtruong473.github.io/tam-ngu-6h/");
 const apiUrl = (process.env.SMOKE_API_URL || "https://fcsuldrerhbynwotcvyn.supabase.co/functions/v1/tam-ngu-api").replace(/\/$/, "");
 const deepLookup = process.env.SMOKE_DEEP_LOOKUP === "1";
+const requireSchedulerHeartbeat = process.env.SMOKE_REQUIRE_SCHEDULER !== "0";
 const pinyinToneMarks = new Set([..."āáǎàēéěèīíǐìōóǒòūúǔùǖǘǚǜĀÁǍÀĒÉĚÈĪÍǏÌŌÓǑÒŪÚǓÙǕǗǙǛ"]);
 
 const wait = (milliseconds) => new Promise((resolve) => setTimeout(resolve, milliseconds));
@@ -100,6 +101,10 @@ if (!["apple", "fcm", "mozilla", "wns"].every((provider) => health?.pushProvider
 if (health?.dispatchReliability?.graceMinutes !== 10
   || health?.dispatchReliability?.concurrency !== 8
   || health?.dispatchReliability?.attempts !== 2) failures.push("backend chưa bật cơ chế bù lịch và retry Push");
+if (requireSchedulerHeartbeat && (!health?.scheduler?.fresh
+  || health?.scheduler?.maximumAgeSeconds !== 300
+  || !Number.isFinite(health?.scheduler?.ageSeconds))) failures.push("bộ lập lịch Push không có nhịp tim mới");
+if (requireSchedulerHeartbeat && !health?.delivery?.healthy) failures.push("bộ lập lịch còn lỗi giao bài chưa phục hồi");
 
 if (failures.length > 0) throw new Error(`Bản production chưa đạt: ${failures.join(", ")}.`);
 if (deepLookup) await verifyLookupWithRetry();

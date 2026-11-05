@@ -7,6 +7,7 @@ import {
   pushRetryDelayMs,
 } from "./dispatch-reliability.mjs";
 import { hasValidPushKeys, isSupportedPushEndpoint } from "./push-endpoints.mjs";
+import { schedulerFreshnessSeconds, schedulerHealth } from "./service-health.mjs";
 
 const allowedOrigins = new Set([
   "https://nvtruong473.github.io",
@@ -516,14 +517,74 @@ async function dispatch(request: Request, origin: string | null) {
     claimErrors: total.claimErrors + outcome.claimErrors,
     storageErrors: total.storageErrors + outcome.storageErrors,
   }), { due: 0, sent: 0, removed: 0, failed: 0, claimErrors: 0, storageErrors: 0 });
-  const databaseHealthy = totals.claimErrors === 0 && totals.storageErrors === 0;
+  let heartbeatError = false;
+  if (isDueRun) {
+    const heartbeatAt = new Date().toISOString();
+    const deliveryFailed = totals.failed > 0 || totals.claimErrors > 0 || totals.storageErrors > 0;
+    const deliverySucceeded = totals.due > 0 && !deliveryFailed;
+    const heartbeat: Record<string, unknown> = {
+      name: "dispatch-cron",
+      last_seen_at: heartbeatAt,
+      details: {
+        checked: subscriptions.length,
+        due: totals.due,
+        sent: totals.sent,
+        removed: totals.removed,
+        failed: totals.failed,
+        claimErrors: totals.claimErrors,
+        storageErrors: totals.storageErrors,
+      },
+    };
+    // Empty minute scans prove the scheduler is alive, but they must never hide
+    // a real delivery failure. Only a later due delivery can clear that alarm.
+    if (deliveryFailed) heartbeat.last_delivery_failure_at = heartbeatAt;
+    if (deliverySucceeded) {
+      heartbeat.last_delivery_success_at = heartbeatAt;
+      heartbeat.last_delivery_failure_at = null;
+    }
+    const { error } = await admin.from("tam_ngu_service_health").upsert(heartbeat, { onConflict: "name" });
+    heartbeatError = Boolean(error);
+  }
+  const databaseHealthy = totals.claimErrors === 0 && totals.storageErrors === 0 && !heartbeatError;
   return json({
     ok: databaseHealthy,
     mode: isDueRun ? "due" : "manual",
     phase: body?.phase || null,
     checked: subscriptions.length,
     ...totals,
+    heartbeatError,
   }, databaseHealthy ? 200 : 503, origin);
+}
+
+async function health(origin: string | null) {
+  const { data, error } = await supabaseAdmin()
+    .from("tam_ngu_service_health")
+    .select("last_seen_at, last_delivery_failure_at")
+    .eq("name", "dispatch-cron")
+    .maybeSingle();
+  const scheduler = schedulerHealth(data?.last_seen_at);
+  const deliveryHealthy = !data?.last_delivery_failure_at;
+  const healthy = !error && scheduler.fresh && deliveryHealthy;
+
+  return json({
+    ok: healthy,
+    service: "tam-ngu-api",
+    pushConfigured: Boolean(Deno.env.get("VAPID_PUBLIC_KEY") && Deno.env.get("VAPID_PRIVATE_KEY")),
+    pushProviders: supportedPushProviders,
+    dispatchReliability: {
+      graceMinutes: dispatchGraceMinutes,
+      concurrency: dispatchConcurrency,
+      attempts: pushAttemptLimit,
+    },
+    scheduler: {
+      fresh: scheduler.fresh,
+      ageSeconds: scheduler.ageSeconds,
+      maximumAgeSeconds: schedulerFreshnessSeconds,
+    },
+    delivery: { healthy: deliveryHealthy },
+    lookupConfigured: geminiKeys().length > 0,
+    lookupProtectionConfigured: Boolean(Deno.env.get("TAM_NGU_RATE_LIMIT_SALT")),
+  }, healthy ? 200 : 503, origin);
 }
 
 function trimText(value: unknown, maximum: number) {
@@ -813,19 +874,7 @@ Deno.serve(async (request) => {
   const action = new URL(request.url).pathname.split("/").filter(Boolean).at(-1) || "health";
   try {
     if (request.method === "GET" && action === "health") {
-      return json({
-        ok: true,
-        service: "tam-ngu-api",
-        pushConfigured: Boolean(Deno.env.get("VAPID_PUBLIC_KEY") && Deno.env.get("VAPID_PRIVATE_KEY")),
-        pushProviders: supportedPushProviders,
-        dispatchReliability: {
-          graceMinutes: dispatchGraceMinutes,
-          concurrency: dispatchConcurrency,
-          attempts: pushAttemptLimit,
-        },
-        lookupConfigured: geminiKeys().length > 0,
-        lookupProtectionConfigured: Boolean(Deno.env.get("TAM_NGU_RATE_LIMIT_SALT")),
-      }, 200, origin);
+      return await health(origin);
     }
     if (request.method === "GET" && action === "vapid-key") return json({ publicKey: Deno.env.get("VAPID_PUBLIC_KEY") || null }, 200, origin);
     if (request.method === "POST" && action === "subscribe") return await subscribe(request, origin);

@@ -129,6 +129,7 @@ test("keeps Gemini credentials server-only while shipping push and quick lookup"
   assert.match(monitorWorkflow, /npm run smoke:production/);
   assert.match(monitorWorkflow, /permissions:\s+contents: read/);
   assert.match(monitorWorkflow, /report-health:/);
+  assert.match(backendDeployWorkflow, /npm run supabase:apply/);
   assert.match(monitorWorkflow, /issues: write/);
   assert.match(monitorWorkflow, /needs\.monitor\.result/);
   assert.match(monitorWorkflow, /gh issue create/);
@@ -151,6 +152,8 @@ test("keeps Gemini credentials server-only while shipping push and quick lookup"
   assert.match(page, /EN  \$\{preview\?\.english/);
   assert.match(edgeWorker, /EN  \$\{notification\.english/);
   assert.match(edgeWorker, /encodeURIComponent\(lesson\.id\)/);
+  assert.match(edgeWorker, /Only a later due delivery can clear that alarm/);
+  assert.match(edgeWorker, /last_delivery_failure_at/);
   assert.match(page, /Thẻ tam ngữ mẫu vừa được gửi/);
   assert.match(page, /Bài tam ngữ mẫu/);
   assert.match(page, /`中  \$\{preview\?\.chinese/);

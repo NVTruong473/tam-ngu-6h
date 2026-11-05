@@ -24,6 +24,7 @@
     "api-keys:audit": "node scripts/audit-api-key-file.mjs",
     "supabase:deploy": "node scripts/deploy-supabase-function.mjs",
     "supabase:verify": "node scripts/verify-supabase-api.mjs",
+    "supabase:cron:audit": "node scripts/audit-supabase-cron.mjs",
     "smoke:production": "node scripts/smoke-production.mjs",
     "start": "WRANGLER_LOG_PATH=.wrangler/wrangler.log vinext start",
     "test": "npm run verify:curriculum && npm run build:github && node --test tests/*.test.mjs",
