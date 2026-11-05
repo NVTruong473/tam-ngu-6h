@@ -1,6 +1,7 @@
 const siteUrl = new URL(process.env.SMOKE_URL || "https://nvtruong473.github.io/tam-ngu-6h/");
 const apiUrl = (process.env.SMOKE_API_URL || "https://fcsuldrerhbynwotcvyn.supabase.co/functions/v1/tam-ngu-api").replace(/\/$/, "");
 const deepLookup = process.env.SMOKE_DEEP_LOOKUP === "1";
+const pinyinToneMarks = new Set([..."āáǎàēéěèīíǐìōóǒòūúǔùǖǘǚǜĀÁǍÀĒÉĚÈĪÍǏÌŌÓǑÒŪÚǓÙǕǗǙǛ"]);
 
 const wait = (milliseconds) => new Promise((resolve) => setTimeout(resolve, milliseconds));
 
@@ -41,11 +42,22 @@ async function verifyLookup() {
   const payload = await response.json().catch(() => null);
   if (!response.ok) throw new Error(`Tra cứu thật HTTP ${response.status}`);
   const result = payload?.result;
+  const hasAlignedToneGuides = (example) => {
+    const expected = [...String(example?.pinyin || "")].filter((character) => pinyinToneMarks.has(character)).length;
+    const reading = String(example?.vietnameseReading || "");
+    const supplied = (reading.match(/\([1-4]\)/g) || []).length;
+    return expected === supplied && !/\([1-4]\)\s+\([1-4]\)/.test(reading);
+  };
   if (!payload?.ok
     || !result?.meaning
     || !Array.isArray(result?.examples)
     || result.examples.length !== 2
-    || !result.examples.every((example) => example?.english && example?.chinese && example?.pinyin && example?.vietnameseReading && example?.vietnamese)) {
+    || !result.examples.every((example) => example?.english
+      && example?.chinese
+      && example?.pinyin
+      && example?.vietnameseReading
+      && example?.vietnamese
+      && hasAlignedToneGuides(example))) {
     throw new Error("Tra cứu thật trả dữ liệu chưa hợp lệ");
   }
 }

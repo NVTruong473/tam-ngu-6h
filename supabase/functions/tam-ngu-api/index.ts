@@ -481,10 +481,10 @@ function applyToneGuides(value: string, pinyin: string) {
       return syllable.replace(/([,.;:!?，。！？；：]*)$/u, `(${tone})$1`);
     }).join(" ");
   }
-  // Rare model formatting mismatch: retain the reading and visible tone data
-  // instead of guessing which unequal syllables correspond to each other.
-  const tones = pinyinToneSequence(pinyin);
-  return `${cleanReading} ${tones.map((tone) => `(${tone})`).join(" ")}`.trim();
+  // Unequal syllable counts cannot be aligned safely. Reject this candidate so
+  // failover can request another verified answer instead of showing a misleading
+  // block of tone numbers at the end of the sentence.
+  return "";
 }
 
 function normalizeVietnameseReading(value: unknown, maximum: number, pinyin = "") {

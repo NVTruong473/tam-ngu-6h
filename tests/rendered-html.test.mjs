@@ -179,6 +179,7 @@ test("keeps Gemini credentials server-only while shipping push and quick lookup"
   assert.match(edgeWorker, /hasToneGuidance/);
   assert.match(edgeWorker, /applyToneGuides/);
   assert.match(edgeWorker, /pinyinToneForSyllable/);
+  assert.match(edgeWorker, /Unequal syllable counts cannot be aligned safely/);
   assert.match(edgeWorker, /Đặt từng marker \(1\)–\(4\) ngay sau đúng âm tiết/);
   assert.match(edgeWorker, /geminiAttemptTimeoutMs = 12_000/);
   assert.match(edgeWorker, /geminiLookupBudgetMs = 72_000/);
@@ -204,6 +205,7 @@ test("keeps Gemini credentials server-only while shipping push and quick lookup"
   assert.match(deployer, /functions", "deploy", "tam-ngu-api/);
   assert.match(deployer, /`--remote=\$\{ref\}`/);
   assert.match(deployer, /"--yes"/);
+  assert.match(await readFile(new URL("scripts/smoke-production.mjs", root), "utf8"), /hasAlignedToneGuides/);
   assert.match(verifier, /\/lookup/);
   assert.match(verifier, /慢一点/);
   assert.match(verifier, /Kỷ luật/);
