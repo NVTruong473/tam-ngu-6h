@@ -122,7 +122,7 @@ test("keeps Gemini credentials server-only while shipping push and quick lookup"
   assert.match(monitorWorkflow, /permissions:\s+contents: read/);
   assert.match(backendDeployWorkflow, /permissions:\s+contents: read/);
   assert.match(backendDeployWorkflow, /secrets\.SUPABASE_ACCESS_TOKEN/);
-  assert.match(backendDeployWorkflow, /supabase\/setup-cli@3c2f5e2ae34c34e428e8e206e2c4d21fa2d20fbf/);
+  assert.match(backendDeployWorkflow, /supabase\/setup-cli@689adcfb80d947100a1eab127289b97d1fb07b13/);
   assert.match(backendDeployWorkflow, /--remote="\$SUPABASE_PROJECT_REF"/);
   assert.match(backendDeployWorkflow, /--no-verify-jwt/);
   assert.match(backendDeployWorkflow, /--use-api/);
