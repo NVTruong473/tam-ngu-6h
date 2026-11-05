@@ -133,6 +133,30 @@ function ensureLookupClientId() {
   return clientId;
 }
 
+async function syncWebPushSubscription(
+  subscription: PushSubscription,
+  scheduleTimes: string[],
+  routineStartSequence: number,
+  lessonCursor: number,
+) {
+  const response = await fetch(`${PUSH_API_URL}/subscribe`, {
+    method: "POST",
+    headers: { "content-type": "application/json" },
+    body: JSON.stringify({
+      subscription: subscription.toJSON(),
+      timezone: Intl.DateTimeFormat().resolvedOptions().timeZone || "Asia/Ho_Chi_Minh",
+      routineStartSequence,
+      scheduleTimes,
+      lessonCursor,
+      clientId: ensureLookupClientId(),
+    }),
+  });
+  if (!response.ok) {
+    const result = await response.json().catch(() => ({})) as { error?: string };
+    throw new Error(result.error || "Không đồng bộ được thông báo.");
+  }
+}
+
 function detectDevicePlatform(): DevicePlatform {
   const userAgent = navigator.userAgent || "";
   if (/Android/i.test(userAgent)) return "android";
@@ -396,9 +420,26 @@ export default function Home() {
     } else if (PUSH_API_URL) {
       navigator.serviceWorker.ready
         .then((registration) => registration.pushManager.getSubscription())
-        .then((subscription) => {
+        .then(async (subscription) => {
           setPushState(subscription ? "enabled" : "idle");
-          if (subscription) localStorage.setItem(STORAGE.activationPrompt, "completed");
+          if (subscription) {
+            localStorage.setItem(STORAGE.activationPrompt, "completed");
+            // pushsubscriptionchange is not available in every browser. Repair
+            // the server copy whenever an opted-in user opens the installed app,
+            // which also reconciles timezone and schedule changes made offline.
+            if (storedRoutine && Notification.permission === "granted") {
+              const currentSequence = scheduleAt(Date.now(), storedSchedule).sequence;
+              const syncStart = Number.isFinite(storedStart) && storedStart > 0 ? storedStart : currentSequence;
+              try {
+                await syncWebPushSubscription(subscription, storedSchedule, syncStart, Math.max(0, currentSequence - syncStart));
+              } catch (error) {
+                if (navigator.onLine) {
+                  setPushState("error");
+                  setPushMessage(error instanceof Error ? error.message : "Thông báo cần được bật lại.");
+                }
+              }
+            }
+          }
           else if (standalone && Notification.permission !== "denied" && localStorage.getItem(STORAGE.activationPrompt) !== "dismissed") setShowActivation(true);
         })
         .catch(() => setPushState("idle"));
@@ -485,22 +526,7 @@ export default function Home() {
         applicationServerKey: urlBase64ToUint8Array(publicKey),
       });
       const startSequence = routineStartSequence ?? scheduleAt(Date.now(), scheduleTimes).sequence;
-      const response = await fetch(`${PUSH_API_URL}/subscribe`, {
-        method: "POST",
-        headers: { "content-type": "application/json" },
-        body: JSON.stringify({
-          subscription: subscription.toJSON(),
-          timezone: Intl.DateTimeFormat().resolvedOptions().timeZone || "Asia/Ho_Chi_Minh",
-          routineStartSequence: startSequence,
-          scheduleTimes,
-          lessonCursor: unlockedIndex,
-          clientId: ensureLookupClientId(),
-        }),
-      });
-      if (!response.ok) {
-        const result = await response.json().catch(() => ({})) as { error?: string };
-        throw new Error(result.error || "Không đăng ký được thông báo.");
-      }
+      await syncWebPushSubscription(subscription, scheduleTimes, startSequence, unlockedIndex);
       try {
         const appRoot = new URL("./", window.location.href).href;
         const previewLine = studyModule.lines[0];

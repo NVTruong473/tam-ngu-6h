@@ -21,7 +21,7 @@ test("exports an installable PWA with one replaceable lock-screen card", async (
   assert.ok(manifest.icons.some((icon) => icon.sizes === "1024x1024" && icon.purpose === "maskable"));
   assert.equal(highResolutionIcon.readUInt32BE(16), 1024);
   assert.equal(highResolutionIcon.readUInt32BE(20), 1024);
-  assert.match(serviceWorker, /tam-ngu-6h-v14/);
+  assert.match(serviceWorker, /tam-ngu-6h-v15/);
   assert.match(serviceWorker, /html\.matchAll/);
   assert.match(serviceWorker, /skipWaiting/);
   assert.match(serviceWorker, /clients\.claim/);
@@ -35,6 +35,12 @@ test("exports an installable PWA with one replaceable lock-screen card", async (
   assert.match(serviceWorker, /icon-v2-192\.png/);
   assert.doesNotMatch(serviceWorker, /badge:/);
   assert.match(serviceWorker, /notificationclick/);
+  assert.match(serviceWorker, /pushsubscriptionchange/);
+  assert.match(serviceWorker, /refresh-subscription/);
+  assert.match(serviceWorker, /clients\.matchAll\(\{ type: "window", includeUncontrolled: true \}\)/);
+  assert.match(serviceWorker, /NOTIFICATION_CACHE_MAX_ENTRIES = 96/);
+  assert.match(serviceWorker, /cache\.put\(root\.href, copy\)/);
+  assert.match(serviceWorker, /catch\(\(\) => Response\.error\(\)\)/);
 });
 
 test("ships a growing progressive curriculum with balanced seed formats", async () => {
@@ -86,7 +92,7 @@ test("keeps setup inside Tam Ngữ with one explicit iOS permission", async () =
   assert.doesNotMatch(packageText, /build-widget-data|generate:widget-data/);
 });
 test("keeps Gemini credentials server-only while shipping push and quick lookup", async () => {
-  const [page, generator, appendGenerator, pronunciationEnricher, pronunciationRepairer, curriculumVerifier, edgeWorker, workflow, monitorWorkflow, backendDeployWorkflow, secretConfigurer, deployer, verifier, rateLimitMigration] = await Promise.all([
+  const [page, generator, appendGenerator, pronunciationEnricher, pronunciationRepairer, curriculumVerifier, edgeWorker, pushEndpoints, workflow, monitorWorkflow, backendDeployWorkflow, secretConfigurer, deployer, verifier, rateLimitMigration] = await Promise.all([
     readFile(new URL("app/page.tsx", root), "utf8"),
     readFile(new URL("scripts/generate-curriculum.mjs", root), "utf8"),
     readFile(new URL("scripts/append-curriculum.mjs", root), "utf8"),
@@ -94,6 +100,7 @@ test("keeps Gemini credentials server-only while shipping push and quick lookup"
     readFile(new URL("scripts/repair-vietnamese-readings.mjs", root), "utf8"),
     readFile(new URL("scripts/verify-curriculum.mjs", root), "utf8"),
     readFile(new URL("supabase/functions/tam-ngu-api/index.ts", root), "utf8"),
+    readFile(new URL("supabase/functions/tam-ngu-api/push-endpoints.mjs", root), "utf8"),
     readFile(new URL(".github/workflows/deploy-pages.yml", root), "utf8"),
     readFile(new URL(".github/workflows/production-monitor.yml", root), "utf8"),
     readFile(new URL(".github/workflows/deploy-supabase.yml", root), "utf8"),
@@ -102,7 +109,7 @@ test("keeps Gemini credentials server-only while shipping push and quick lookup"
     readFile(new URL("scripts/verify-supabase-api.mjs", root), "utf8"),
     readFile(new URL("supabase/migrations/20261102090000_lookup_rate_limit.sql", root), "utf8"),
   ]);
-  const source = `${page}\n${generator}\n${appendGenerator}\n${pronunciationEnricher}\n${pronunciationRepairer}\n${curriculumVerifier}\n${edgeWorker}\n${workflow}\n${monitorWorkflow}\n${backendDeployWorkflow}\n${secretConfigurer}\n${deployer}\n${verifier}`;
+  const source = `${page}\n${generator}\n${appendGenerator}\n${pronunciationEnricher}\n${pronunciationRepairer}\n${curriculumVerifier}\n${edgeWorker}\n${pushEndpoints}\n${workflow}\n${monitorWorkflow}\n${backendDeployWorkflow}\n${secretConfigurer}\n${deployer}\n${verifier}`;
 
   assert.doesNotMatch(source, /(?:AQ\.|sk-proj-|sk-or-v1-|gsk_|nvapi-)[A-Za-z0-9_-]{8,}/);
   assert.match(generator, /process\.env\.GEMINI_API_KEY/);
@@ -202,10 +209,14 @@ test("keeps Gemini credentials server-only while shipping push and quick lookup"
   assert.match(edgeWorker, /constantTimeEqual/);
   assert.match(edgeWorker, /isSupportedPushEndpoint/);
   assert.match(edgeWorker, /supportedPushProviders = \["apple", "fcm", "mozilla", "wns"\]/);
-  assert.match(edgeWorker, /hostname === "fcm\.googleapis\.com" && path\.startsWith\("\/fcm\/send\/"\)/);
-  assert.match(edgeWorker, /hostname === "updates\.push\.services\.mozilla\.com" && path\.startsWith\("\/wpush\/"\)/);
-  assert.match(edgeWorker, /hostname\.endsWith\("\.notify\.windows\.com"\) && path\.startsWith\("\/w\/"\)/);
+  assert.match(pushEndpoints, /hostname === "fcm\.googleapis\.com" && path\.startsWith\("\/fcm\/send\/"\)/);
+  assert.match(pushEndpoints, /hostname === "updates\.push\.services\.mozilla\.com" && path\.startsWith\("\/wpush\/"\)/);
+  assert.match(pushEndpoints, /hostname\.endsWith\("\.notify\.windows\.com"\) && path\.startsWith\("\/w\/"\)/);
   assert.match(edgeWorker, /hasValidPushKeys/);
+  assert.match(edgeWorker, /async function refreshSubscription/);
+  assert.match(edgeWorker, /action === "refresh-subscription"/);
+  assert.match(edgeWorker, /body!\.oldSubscription!\.keys\.p256dh/);
+  assert.match(edgeWorker, /Không thể xác minh đăng ký thông báo cũ/);
   assert.match(edgeWorker, /topic: "tam-ngu-current-lesson"/);
   assert.match(edgeWorker, /isTrustedAppOrigin/);
   assert.match(edgeWorker, /tam_ngu_take_lookup_quota/);
@@ -219,6 +230,8 @@ test("keeps Gemini credentials server-only while shipping push and quick lookup"
   assert.match(subscribeSource, /count: "exact"/);
   assert.match(page, /Đưa Tam Ngữ lên \{devicePlatform === "android" \? "Android" : "iPhone"\}/);
   assert.match(page, /Mở đường link bằng <strong>Chrome<\/strong>/);
+  assert.match(page, /syncWebPushSubscription/);
+  assert.match(page, /pushsubscriptionchange is not available in every browser/);
   assert.doesNotMatch(edgeWorker, /mode: "silent"/);
   assert.match(secretConfigurer, /mkdtempSync/);
   assert.match(secretConfigurer, /GEMINI_API_KEYS/);

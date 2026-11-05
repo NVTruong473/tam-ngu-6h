@@ -1,5 +1,7 @@
-const CACHE_VERSION = "tam-ngu-6h-v14";
+const CACHE_VERSION = "tam-ngu-6h-v15";
 const NOTIFICATION_CACHE = "tam-ngu-notifications-v1";
+const NOTIFICATION_CACHE_MAX_ENTRIES = 96;
+const PUSH_API_URL = "https://fcsuldrerhbynwotcvyn.supabase.co/functions/v1/tam-ngu-api";
 const seenNotificationIds = new Set();
 
 self.addEventListener("install", (event) => {
@@ -49,14 +51,19 @@ self.addEventListener("fetch", (event) => {
   if (isPageNavigation) {
     event.respondWith(
       fetch(event.request, { cache: "no-store" })
-        .then((response) => {
+        .then(async (response) => {
           if (response.ok) {
             const copy = response.clone();
-            caches.open(CACHE_VERSION).then((cache) => cache.put(event.request, copy));
+            // Every lesson query renders the same static app shell. Cache it
+            // once under the canonical root instead of storing an HTML copy for
+            // every ?lesson=… notification URL.
+            const root = new URL("./", self.registration.scope);
+            const cache = await caches.open(CACHE_VERSION);
+            await cache.put(root.href, copy);
           }
           return response;
         })
-        .catch(() => caches.match(event.request).then((cached) => cached || caches.match(new URL("./", self.registration.scope).href))),
+        .catch(() => caches.match(new URL("./", self.registration.scope).href).then((cached) => cached || Response.error())),
     );
     return;
   }
@@ -65,27 +72,47 @@ self.addEventListener("fetch", (event) => {
     caches.match(event.request).then((cached) => {
       if (cached) return cached;
       return fetch(event.request)
-        .then((response) => {
+        .then(async (response) => {
           if (response.ok && requestUrl.origin === self.location.origin) {
             const copy = response.clone();
-            caches.open(CACHE_VERSION).then((cache) => cache.put(event.request, copy));
+            const cache = await caches.open(CACHE_VERSION);
+            await cache.put(event.request, copy);
           }
           return response;
         })
-        .catch(() => caches.match(new URL("./", self.registration.scope).href));
+        // Never return app-shell HTML for a missing JS, CSS or image request.
+        // A typed network error lets the browser fail that resource correctly.
+        .catch(() => Response.error());
     }),
   );
 });
+
+async function pruneNotificationMarkers(cache) {
+  const keys = await cache.keys();
+  if (keys.length <= NOTIFICATION_CACHE_MAX_ENTRIES) return;
+  const datedKeys = await Promise.all(keys.map(async (request) => {
+    const response = await cache.match(request);
+    return { request, createdAt: Number(response?.headers.get("x-created-at") || 0) };
+  }));
+  datedKeys.sort((first, second) => first.createdAt - second.createdAt);
+  await Promise.all(datedKeys
+    .slice(0, Math.max(0, datedKeys.length - NOTIFICATION_CACHE_MAX_ENTRIES))
+    .map(({ request }) => cache.delete(request)));
+}
 
 async function displayPush(payload) {
   const notificationId = String(payload.notificationId || `${payload.title}:${payload.body}`).slice(0, 240);
   if (seenNotificationIds.has(notificationId)) return;
   seenNotificationIds.add(notificationId);
+  while (seenNotificationIds.size > NOTIFICATION_CACHE_MAX_ENTRIES) {
+    seenNotificationIds.delete(seenNotificationIds.values().next().value);
+  }
 
   const cache = await caches.open(NOTIFICATION_CACHE);
   const marker = new Request(new URL(`.notification/${encodeURIComponent(notificationId)}`, self.registration.scope).href);
   if (await cache.match(marker)) return;
   await cache.put(marker, new Response("seen", { headers: { "x-created-at": String(Date.now()) } }));
+  await pruneNotificationMarkers(cache);
 
   const existing = await self.registration.getNotifications().catch(() => []);
   existing.forEach((notification) => notification.close());
@@ -108,7 +135,53 @@ self.addEventListener("push", (event) => {
   event.waitUntil(displayPush(payload));
 });
 
+self.addEventListener("pushsubscriptionchange", (event) => {
+  event.waitUntil((async () => {
+    const oldSubscription = event.oldSubscription;
+    if (!oldSubscription || Notification.permission !== "granted") return;
+    const subscription = event.newSubscription
+      || await self.registration.pushManager.subscribe(oldSubscription.options);
+    const response = await fetch(`${PUSH_API_URL}/refresh-subscription`, {
+      method: "POST",
+      headers: { "content-type": "application/json" },
+      body: JSON.stringify({
+        oldSubscription: oldSubscription.toJSON(),
+        subscription: subscription.toJSON(),
+      }),
+    });
+    if (!response.ok) throw new Error("Không đồng bộ được đăng ký Push mới.");
+  })());
+});
+
+async function openNotificationTarget(rawUrl) {
+  const scope = self.registration.scope;
+  let target;
+  try {
+    target = new URL(rawUrl || scope, scope);
+    if (!target.href.startsWith(scope)) target = new URL(scope);
+  } catch {
+    target = new URL(scope);
+  }
+
+  const windowClients = await clients.matchAll({ type: "window", includeUncontrolled: true });
+  const exactClient = windowClients.find((client) => client.url === target.href);
+  if (exactClient) return exactClient.focus();
+
+  const appClient = windowClients.find((client) => client.url.startsWith(scope));
+  if (appClient) {
+    try {
+      const navigated = await appClient.navigate(target.href);
+      return (navigated || appClient).focus();
+    } catch {
+      return appClient.focus();
+    }
+  }
+
+  const opened = await clients.openWindow(target.href);
+  return opened?.focus();
+}
+
 self.addEventListener("notificationclick", (event) => {
   event.notification.close();
-  event.waitUntil(clients.openWindow(event.notification.data?.url || self.registration.scope));
+  event.waitUntil(openNotificationTarget(event.notification.data?.url));
 });

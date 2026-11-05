@@ -1,5 +1,6 @@
 import { createClient } from "npm:@supabase/supabase-js@2";
 import webpush from "npm:web-push@3.6.7";
+import { hasValidPushKeys, isSupportedPushEndpoint } from "./push-endpoints.mjs";
 
 const allowedOrigins = new Set([
   "https://nvtruong473.github.io",
@@ -173,31 +174,6 @@ function fallbackWish(phase: Phase, sequence: number) {
   return choices[Math.abs(sequence) % choices.length];
 }
 
-function isSupportedPushEndpoint(endpoint: string) {
-  try {
-    const url = new URL(endpoint);
-    if (url.protocol !== "https:" || url.username || url.password || url.port || endpoint.length > 2048) return false;
-    const hostname = url.hostname.toLowerCase();
-    const path = url.pathname;
-    // PushSubscription endpoints are opaque capabilities, but accepting every
-    // HTTPS URL would turn this server into an authenticated-request proxy.
-    // Keep the complete URL while limiting delivery to established browser
-    // push services used by iOS/Safari, Chromium/Android, Firefox and Edge.
-    return (hostname === "web.push.apple.com" || hostname.endsWith(".push.apple.com"))
-      || (hostname === "fcm.googleapis.com" && path.startsWith("/fcm/send/"))
-      || (hostname === "updates.push.services.mozilla.com" && path.startsWith("/wpush/"))
-      || (hostname.endsWith(".notify.windows.com") && path.startsWith("/w/"));
-  } catch {
-    return false;
-  }
-}
-
-function hasValidPushKeys(subscription: WebPushSubscription | undefined) {
-  return Boolean(subscription
-    && /^[A-Za-z0-9_-]{40,180}$/.test(subscription.keys?.p256dh || "")
-    && /^[A-Za-z0-9_-]{12,80}$/.test(subscription.keys?.auth || ""));
-}
-
 function isTrustedAppOrigin(origin: string | null) {
   return Boolean(origin && allowedOrigins.has(origin));
 }
@@ -286,6 +262,43 @@ async function subscribe(request: Request, origin: string | null) {
   }, { onConflict: "endpoint" });
   if (error) throw error;
   return json({ ok: true }, 201, origin);
+}
+
+async function refreshSubscription(request: Request, origin: string | null) {
+  if (!isTrustedAppOrigin(origin)) return json({ error: "Yêu cầu không đến từ Tam Ngữ 6H." }, 403, origin);
+  const body = await request.json().catch(() => null) as null | {
+    oldSubscription?: WebPushSubscription;
+    subscription?: WebPushSubscription;
+  };
+  const oldEndpoint = body?.oldSubscription?.endpoint || "";
+  const newEndpoint = body?.subscription?.endpoint || "";
+  if (!isSupportedPushEndpoint(oldEndpoint)
+    || !isSupportedPushEndpoint(newEndpoint)
+    || !hasValidPushKeys(body?.oldSubscription)
+    || !hasValidPushKeys(body?.subscription)) {
+    return json({ error: "Không thể làm mới đăng ký thông báo." }, 400, origin);
+  }
+
+  const admin = supabaseAdmin();
+  const { data: current, error: currentError } = await admin.from("tam_ngu_push_subscriptions")
+    .select("subscription").eq("endpoint", oldEndpoint).maybeSingle();
+  if (currentError) throw currentError;
+  if (!current) return json({ error: "Đăng ký cũ không còn trên máy chủ." }, 404, origin);
+  const stored = current.subscription as WebPushSubscription;
+  if (!constantTimeEqual(stored.keys?.p256dh || "", body!.oldSubscription!.keys.p256dh)
+    || !constantTimeEqual(stored.keys?.auth || "", body!.oldSubscription!.keys.auth)) {
+    return json({ error: "Không thể xác minh đăng ký thông báo cũ." }, 409, origin);
+  }
+
+  const { data, error } = await admin.from("tam_ngu_push_subscriptions").update({
+    endpoint: newEndpoint,
+    subscription: body?.subscription,
+    updated_at: new Date().toISOString(),
+    last_error: null,
+  }).eq("endpoint", oldEndpoint).select("endpoint").maybeSingle();
+  if (error) throw error;
+  if (!data) return json({ error: "Đăng ký vừa thay đổi. App sẽ tự đối soát khi mở lại." }, 409, origin);
+  return json({ ok: true }, 200, origin);
 }
 
 async function updateSchedule(request: Request, origin: string | null) {
@@ -731,6 +744,7 @@ Deno.serve(async (request) => {
     }
     if (request.method === "GET" && action === "vapid-key") return json({ publicKey: Deno.env.get("VAPID_PUBLIC_KEY") || null }, 200, origin);
     if (request.method === "POST" && action === "subscribe") return await subscribe(request, origin);
+    if (request.method === "POST" && action === "refresh-subscription") return await refreshSubscription(request, origin);
     if (request.method === "DELETE" && action === "subscribe") return await unsubscribe(request, origin);
     if (request.method === "POST" && action === "schedule") return await updateSchedule(request, origin);
     if (request.method === "POST" && action === "dispatch") return await dispatch(request, origin);

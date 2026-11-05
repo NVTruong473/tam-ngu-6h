@@ -37,6 +37,8 @@ Sau khi người dùng cài PWA vào Màn hình chính, mở icon và đồng ý
 - Supabase Edge Function `tam-ngu-api`: giữ VAPID, cron secret và Gemini keys; cung cấp đăng ký Push, gửi Push và `/lookup`. Web Push chấp nhận đúng các dịch vụ trình duyệt đã biết của Apple, Chromium/Android (FCM), Firefox và Edge; URL tùy ý bị từ chối. Người dùng không nhập mã hay API key; Gemini key không nằm trong PWA.
 - `API_KEYS_FILE=/path/secret.rtfd SUPABASE_PROJECT_REF=... GITHUB_REPOSITORY=NVTruong473/tam-ngu-6h npm run supabase:lookup-secrets` nạp Gemini keys từ RTFD vào Supabase và GitHub Secrets mà không đưa key vào source hoặc log.
 - Supabase Cron: gọi bộ điều phối mỗi phút; Edge Function chỉ gửi cho thiết bị có giờ địa phương trùng lịch đã lưu và chống gửi lặp trong cùng phút.
+- Vòng đời Push được tự sửa ở hai lớp: Service Worker chuyển đăng ký mới khi trình duyệt phát sự kiện `pushsubscriptionchange`; mỗi lần người đã bật nhịp mở app, PWA đối soát lại endpoint, múi giờ và lịch để bù cho các trình duyệt không hỗ trợ sự kiện này.
+- Service Worker chỉ giữ một app shell chuẩn cho mọi link `?lesson=…`, giới hạn 96 dấu chống trùng gần nhất và ưu tiên điều hướng cửa sổ app đang mở thay vì tạo cửa sổ thứ hai.
 - `tam_ngu_push_subscriptions`: RLS bật; `anon`/`authenticated` không có quyền đọc/ghi, chỉ service role của Edge Function được dùng.
 
 Điểm phải nói thật: GitHub Pages là **website công khai**. Backend chỉ giới hạn lượt tra và xác minh nguồn gọi; nó không biến bundle tĩnh thành app có đăng nhập. Không đặt thông tin riêng tư trong nội dung bài học. Nếu sau này cần kiểm soát truy cập thật sự, cần bổ sung Supabase Auth hoặc lớp phiên đăng nhập.
