@@ -1,5 +1,6 @@
 const siteUrl = new URL(process.env.SMOKE_URL || "https://nvtruong473.github.io/tam-ngu-6h/");
 const apiUrl = (process.env.SMOKE_API_URL || "https://fcsuldrerhbynwotcvyn.supabase.co/functions/v1/tam-ngu-api").replace(/\/$/, "");
+const deepLookup = process.env.SMOKE_DEEP_LOOKUP === "1";
 
 const wait = (milliseconds) => new Promise((resolve) => setTimeout(resolve, milliseconds));
 
@@ -20,6 +21,33 @@ async function fetchWithRetry(url, label, attempts = 6) {
     }
   }
   throw lastError || new Error(`${label} không phản hồi.`);
+}
+
+async function verifyLookup() {
+  const clientBytes = crypto.getRandomValues(new Uint8Array(18));
+  const clientId = `tg6h_${[...clientBytes].map((byte) => byte.toString(16).padStart(2, "0")).join("")}`;
+  const response = await fetch(`${apiUrl}/lookup`, {
+    method: "POST",
+    headers: {
+      "cache-control": "no-cache",
+      "content-type": "application/json",
+      origin: siteUrl.origin,
+      "user-agent": "tam-ngu-production-deep-smoke-test",
+      "x-client-id": clientId,
+    },
+    body: JSON.stringify({ query: "take it easy" }),
+    signal: AbortSignal.timeout(90_000),
+  });
+  const payload = await response.json().catch(() => null);
+  if (!response.ok) throw new Error(`Tra cứu thật HTTP ${response.status}`);
+  const result = payload?.result;
+  if (!payload?.ok
+    || !result?.meaning
+    || !Array.isArray(result?.examples)
+    || result.examples.length !== 2
+    || !result.examples.every((example) => example?.english && example?.chinese && example?.pinyin && example?.vietnameseReading && example?.vietnamese)) {
+    throw new Error("Tra cứu thật trả dữ liệu chưa hợp lệ");
+  }
 }
 
 const [pageResponse, manifestResponse, workerResponse, healthResponse] = await Promise.all([
@@ -44,4 +72,5 @@ if (!worker.includes('addEventListener("push"') || !worker.includes("showNotific
 if (!health?.ok || !health?.pushConfigured || !health?.lookupConfigured || !health?.lookupProtectionConfigured) failures.push("backend chưa cấu hình đủ");
 
 if (failures.length > 0) throw new Error(`Bản production chưa đạt: ${failures.join(", ")}.`);
-process.stdout.write(`Production OK: ${siteUrl.href}\n`);
+if (deepLookup) await verifyLookup();
+process.stdout.write(`Production OK${deepLookup ? " + Gemini lookup" : ""}: ${siteUrl.href}\n`);

@@ -4,6 +4,9 @@ on:
   schedule:
     # Chạy lệch đầu giờ để giảm khả năng GitHub trì hoãn cron.
     - cron: "17 * * * *"
+    # Một tra cứu thật mỗi ngày phát hiện lỗi model/quota mà health-check không thấy.
+    # 22:37 UTC tương ứng 05:37 tại Việt Nam (UTC+7).
+    - cron: "37 22 * * *"
   workflow_dispatch:
 
 permissions:
@@ -26,4 +29,5 @@ jobs:
         env:
           SMOKE_URL: https://${{ github.repository_owner }}.github.io/${{ github.event.repository.name }}/
           SMOKE_API_URL: ${{ vars.NEXT_PUBLIC_PUSH_API_URL }}
+          SMOKE_DEEP_LOOKUP: ${{ github.event.schedule == '37 22 * * *' && '1' || '0' }}
         run: npm run smoke:production

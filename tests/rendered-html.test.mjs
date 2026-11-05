@@ -115,6 +115,8 @@ test("keeps Gemini credentials server-only while shipping push and quick lookup"
   assert.match(workflow, /if: always\(\) && needs\.build\.result == 'success'/);
   assert.match(workflow, /if: always\(\) && needs\.deploy\.result == 'success'/);
   assert.match(monitorWorkflow, /cron: "17 \* \* \* \*"/);
+  assert.match(monitorWorkflow, /cron: "37 22 \* \* \*"/);
+  assert.match(monitorWorkflow, /SMOKE_DEEP_LOOKUP/);
   assert.match(monitorWorkflow, /npm run smoke:production/);
   assert.match(monitorWorkflow, /permissions:\s+contents: read/);
   assert.match(page, /Thư viện bài học/);
@@ -174,6 +176,10 @@ test("keeps Gemini credentials server-only while shipping push and quick lookup"
   assert.match(edgeWorker, /lesson_cursor: body\?\.preview \? row\.lesson_cursor \?\? rawCursor : rawCursor \+ 1/);
   assert.match(edgeWorker, /normalizeLookupExample/);
   assert.match(edgeWorker, /hasToneGuidance/);
+  assert.match(edgeWorker, /geminiAttemptTimeoutMs = 12_000/);
+  assert.match(edgeWorker, /geminiLookupBudgetMs = 72_000/);
+  assert.match(edgeWorker, /for \(const \[index, key\] of keys\.entries\(\)\)/);
+  assert.doesNotMatch(edgeWorker, /keys\.slice\(0, 3\)/);
   assert.match(edgeWorker, /minItems: 2/);
   assert.match(edgeWorker, /GEMINI_API_KEYS/);
   assert.match(edgeWorker, /constantTimeEqual/);
@@ -192,6 +198,8 @@ test("keeps Gemini credentials server-only while shipping push and quick lookup"
   assert.match(secretConfigurer, /mkdtempSync/);
   assert.match(secretConfigurer, /GEMINI_API_KEYS/);
   assert.match(deployer, /functions", "deploy", "tam-ngu-api/);
+  assert.match(deployer, /`--remote=\$\{ref\}`/);
+  assert.match(deployer, /"--yes"/);
   assert.match(verifier, /\/lookup/);
   assert.match(verifier, /慢一点/);
   assert.match(verifier, /Kỷ luật/);
