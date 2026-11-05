@@ -340,7 +340,10 @@ function localClock(date: Date, timezone: string) {
   }).formatToParts(date);
   const value = (type: Intl.DateTimeFormatPartTypes) => parts.find((part) => part.type === type)?.value || "00";
   const time = `${value("hour")}:${value("minute")}`;
-  return { time, hour: Number(value("hour")), dispatchKey: `${value("year")}-${value("month")}-${value("day")}T${time}` };
+  // Digits-only makes this server-generated value safe inside a PostgREST OR
+  // filter used for the atomic compare-and-set claim below.
+  const dispatchKey = `${value("year")}${value("month")}${value("day")}${value("hour")}${value("minute")}`;
+  return { time, hour: Number(value("hour")), dispatchKey };
 }
 
 function phaseAtHour(hour: number): Phase {
@@ -355,7 +358,8 @@ async function dispatch(request: Request, origin: string | null) {
   const isDueRun = body?.mode === "due";
   if (!isDueRun && (!body?.phase || !(body.phase in slotByPhase))) return json({ error: "Chế độ gửi không hợp lệ." }, 400, origin);
 
-  let subscriptionsQuery = supabaseAdmin()
+  const admin = supabaseAdmin();
+  let subscriptionsQuery = admin
     .from("tam_ngu_push_subscriptions")
     .select("endpoint, subscription, timezone, routine_start_sequence, schedule_times, lesson_cursor, last_dispatch_key")
     .eq("enabled", true);
@@ -381,10 +385,29 @@ async function dispatch(request: Request, origin: string | null) {
   let sent = 0;
   let removed = 0;
   let due = 0;
+  let claimErrors = 0;
   for (const row of subscriptions) {
     const clock = localClock(now, validTimezone(row.timezone));
     const times = validScheduleTimes(row.schedule_times) || ["06:00", "12:00", "18:00"];
-    if (isDueRun && (!times.includes(clock.time) || row.last_dispatch_key === clock.dispatchKey)) continue;
+    if (isDueRun) {
+      if (!times.includes(clock.time) || row.last_dispatch_key === clock.dispatchKey) continue;
+      // Conditional UPDATE is one database statement: concurrent cron/webhook
+      // calls cannot both claim the same device+minute. This prevents duplicate
+      // cards and, more importantly, prevents advancing lesson_cursor twice.
+      const { data: claimed, error: claimError } = await admin.from("tam_ngu_push_subscriptions").update({
+        last_dispatch_key: clock.dispatchKey,
+        updated_at: new Date().toISOString(),
+      }).eq("endpoint", row.endpoint)
+        .eq("enabled", true)
+        .or(`last_dispatch_key.is.null,last_dispatch_key.neq.${clock.dispatchKey}`)
+        .select("endpoint")
+        .maybeSingle();
+      if (claimError) {
+        claimErrors += 1;
+        continue;
+      }
+      if (!claimed) continue;
+    }
     due += 1;
     const phase = isDueRun ? phaseAtHour(clock.hour) : body!.phase!;
     const currentSequence = sequenceAt(now, phase);
@@ -425,7 +448,7 @@ async function dispatch(request: Request, origin: string | null) {
         topic: "tam-ngu-current-lesson",
       });
       sent += 1;
-      await supabaseAdmin().from("tam_ngu_push_subscriptions").update({
+      await admin.from("tam_ngu_push_subscriptions").update({
         last_sent_at: new Date().toISOString(),
         last_error: null,
         lesson_cursor: body?.preview ? row.lesson_cursor ?? rawCursor : rawCursor + 1,
@@ -435,15 +458,24 @@ async function dispatch(request: Request, origin: string | null) {
       const statusCode = Number((error as { statusCode?: number }).statusCode || 0);
       if (statusCode === 404 || statusCode === 410) {
         removed += 1;
-        await supabaseAdmin().from("tam_ngu_push_subscriptions").delete().eq("endpoint", row.endpoint);
+        await admin.from("tam_ngu_push_subscriptions").delete().eq("endpoint", row.endpoint);
       } else {
-        await supabaseAdmin().from("tam_ngu_push_subscriptions").update({
+        await admin.from("tam_ngu_push_subscriptions").update({
           last_error: String((error as Error).message || error).slice(0, 300),
         }).eq("endpoint", row.endpoint);
       }
     }
   }
-  return json({ ok: true, mode: isDueRun ? "due" : "manual", phase: body?.phase || null, checked: subscriptions.length, due, sent, removed }, 200, origin);
+  return json({
+    ok: claimErrors === 0,
+    mode: isDueRun ? "due" : "manual",
+    phase: body?.phase || null,
+    checked: subscriptions.length,
+    due,
+    sent,
+    removed,
+    claimErrors,
+  }, claimErrors === 0 ? 200 : 503, origin);
 }
 
 function trimText(value: unknown, maximum: number) {

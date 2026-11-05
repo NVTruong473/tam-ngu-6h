@@ -218,6 +218,8 @@ test("keeps Gemini credentials server-only while shipping push and quick lookup"
   assert.match(edgeWorker, /body!\.oldSubscription!\.keys\.p256dh/);
   assert.match(edgeWorker, /Không thể xác minh đăng ký thông báo cũ/);
   assert.match(edgeWorker, /topic: "tam-ngu-current-lesson"/);
+  assert.match(edgeWorker, /last_dispatch_key\.is\.null,last_dispatch_key\.neq\.\$\{clock\.dispatchKey\}/);
+  assert.match(edgeWorker, /claimErrors === 0 \? 200 : 503/);
   assert.match(edgeWorker, /isTrustedAppOrigin/);
   assert.match(edgeWorker, /tam_ngu_take_lookup_quota/);
   assert.match(edgeWorker, /TAM_NGU_RATE_LIMIT_SALT/);
