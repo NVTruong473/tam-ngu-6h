@@ -387,7 +387,7 @@ Tiêu chuẩn bắt buộc:
 - note giải thích cấu trúc/sắc thái và chỉ ra khác biệt Anh–Trung bằng tiếng Việt; challenge là nhiệm vụ nói/viết 1–3 phút, cụ thể và tự làm được.
 - wish là lời chúc riêng cho đúng phase của bài, 12–28 từ, ấm áp, khó đoán, không sáo rỗng.
 - nightWish là lời chúc ngủ ngon bí mật, 12–28 từ, khác hoàn toàn các lời gần đây. Với bài không phải buổi tối vẫn phải tạo một câu dự phòng khác nhau.
-- notification là bản rút gọn tự nhiên, độc lập và tương đương nghĩa của line đầu để hiện trọn trên Màn hình khóa: english tối đa 64, chinese tối đa 26, vietnamese tối đa 68 ký tự; không cắt dở câu hay dùng dấu ba chấm.
+- notification là bản rút gọn tự nhiên, độc lập và tương đương nghĩa của line đầu để hiện trọn trên Màn hình khóa: english tối đa 39, chinese tối đa 16, vietnamese tối đa 42 ký tự; không cắt dở câu hay dùng dấu ba chấm.
 - Chỉ dùng văn bản thuần: tuyệt đối không chứa HTML/XML, Markdown, backtick hoặc các thẻ/ký tự dạng <...>.
 - Không nhận xét ngoài JSON.
 `;
@@ -438,7 +438,7 @@ function validateAndNormalize(items) {
     if (!Array.isArray(item.lines) || !expectedLines.includes(item.lines.length)) throw new Error(`Sai số dòng tại ${plan.id}.`);
     if (!Array.isArray(item.vocabulary) || item.vocabulary.length < 3 || item.vocabulary.length > 7) throw new Error(`Thiếu từ vựng tại ${plan.id}.`);
     if (!item.notification || typeof item.notification !== "object") throw new Error(`Thiếu notification tại ${plan.id}.`);
-    for (const [field, maximum] of [["english", 64], ["chinese", 26], ["vietnamese", 68]]) {
+    for (const [field, maximum] of [["english", 39], ["chinese", 16], ["vietnamese", 42]]) {
       const value = item.notification[field];
       if (typeof value !== "string" || value.trim().length < 3 || [...value.trim()].length > maximum) {
         throw new Error(`notification.${field} không gọn tại ${plan.id}.`);

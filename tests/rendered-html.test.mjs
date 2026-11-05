@@ -105,9 +105,12 @@ test("keeps Gemini credentials server-only while shipping push and quick lookup"
   assert.doesNotMatch(source, /(?:AQ\.|sk-proj-|sk-or-v1-|gsk_|nvapi-)[A-Za-z0-9_-]{8,}/);
   assert.match(generator, /process\.env\.GEMINI_API_KEY/);
   assert.match(workflow, /secrets\.GEMINI_API_KEYS/);
-  assert.match(workflow, /Append 24 reviewed lessons/);
-  assert.match(workflow, /for candidate in \$\(seq 1 24\)/);
-  assert.match(workflow, /Accepted \$accepted\/24 new lessons/);
+  assert.match(workflow, /Append up to 3 independently verified lessons/);
+  assert.match(workflow, /for candidate in \$\(seq 1 8\)/);
+  assert.match(workflow, /Accepted \$accepted\/3 new lessons/);
+  assert.match(workflow, /cp "\$backup" app\/curriculum\.json/);
+  assert.match(workflow, /npm run append:curriculum && npm run verify:curriculum/);
+  assert.match(workflow, /npm run smoke:production/);
   assert.match(page, /Thư viện bài học/);
   assert.doesNotMatch(page, /Gemini tạo thêm theo lộ trình/);
   assert.match(page, /Đọc gần Việt/);
