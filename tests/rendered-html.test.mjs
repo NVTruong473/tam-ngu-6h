@@ -86,7 +86,7 @@ test("keeps setup inside Tam Ngữ with one explicit iOS permission", async () =
   assert.doesNotMatch(packageText, /build-widget-data|generate:widget-data/);
 });
 test("keeps Gemini credentials server-only while shipping push and quick lookup", async () => {
-  const [page, generator, appendGenerator, pronunciationEnricher, pronunciationRepairer, curriculumVerifier, edgeWorker, workflow, secretConfigurer, deployer, verifier, rateLimitMigration] = await Promise.all([
+  const [page, generator, appendGenerator, pronunciationEnricher, pronunciationRepairer, curriculumVerifier, edgeWorker, workflow, monitorWorkflow, secretConfigurer, deployer, verifier, rateLimitMigration] = await Promise.all([
     readFile(new URL("app/page.tsx", root), "utf8"),
     readFile(new URL("scripts/generate-curriculum.mjs", root), "utf8"),
     readFile(new URL("scripts/append-curriculum.mjs", root), "utf8"),
@@ -95,12 +95,13 @@ test("keeps Gemini credentials server-only while shipping push and quick lookup"
     readFile(new URL("scripts/verify-curriculum.mjs", root), "utf8"),
     readFile(new URL("supabase/functions/tam-ngu-api/index.ts", root), "utf8"),
     readFile(new URL(".github/workflows/deploy-pages.yml", root), "utf8"),
+    readFile(new URL(".github/workflows/production-monitor.yml", root), "utf8"),
     readFile(new URL("scripts/configure-supabase-lookup.mjs", root), "utf8"),
     readFile(new URL("scripts/deploy-supabase-function.mjs", root), "utf8"),
     readFile(new URL("scripts/verify-supabase-api.mjs", root), "utf8"),
     readFile(new URL("supabase/migrations/20261102090000_lookup_rate_limit.sql", root), "utf8"),
   ]);
-  const source = `${page}\n${generator}\n${appendGenerator}\n${pronunciationEnricher}\n${pronunciationRepairer}\n${curriculumVerifier}\n${edgeWorker}\n${workflow}\n${secretConfigurer}\n${deployer}\n${verifier}`;
+  const source = `${page}\n${generator}\n${appendGenerator}\n${pronunciationEnricher}\n${pronunciationRepairer}\n${curriculumVerifier}\n${edgeWorker}\n${workflow}\n${monitorWorkflow}\n${secretConfigurer}\n${deployer}\n${verifier}`;
 
   assert.doesNotMatch(source, /(?:AQ\.|sk-proj-|sk-or-v1-|gsk_|nvapi-)[A-Za-z0-9_-]{8,}/);
   assert.match(generator, /process\.env\.GEMINI_API_KEY/);
@@ -113,6 +114,9 @@ test("keeps Gemini credentials server-only while shipping push and quick lookup"
   assert.match(workflow, /npm run smoke:production/);
   assert.match(workflow, /if: always\(\) && needs\.build\.result == 'success'/);
   assert.match(workflow, /if: always\(\) && needs\.deploy\.result == 'success'/);
+  assert.match(monitorWorkflow, /cron: "17 \* \* \* \*"/);
+  assert.match(monitorWorkflow, /npm run smoke:production/);
+  assert.match(monitorWorkflow, /permissions:\s+contents: read/);
   assert.match(page, /Thư viện bài học/);
   assert.doesNotMatch(page, /Gemini tạo thêm theo lộ trình/);
   assert.match(page, /Đọc gần Việt/);

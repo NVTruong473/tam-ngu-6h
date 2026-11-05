@@ -7,7 +7,7 @@ Xem [lộ trình phát hành native](docs/native-release.md) trước khi ký b�
 ## Trải nghiệm người dùng
 
 - Mặc định có bài mới lúc 06:00, 12:00, 18:00; mỗi iPhone có thể chọn từ 1 đến 24 mốc riêng theo múi giờ của thiết bị.
-- Kho bài đệm A2.1 → B1 có sẵn ngoại tuyến. GitHub Actions thử nối tiếp tối đa 24 bài đã kiểm tra bằng Gemini mỗi ngày; từng bài được duyệt độc lập nên bài lỗi bị bỏ mà không làm mất các bài đạt. Lộ trình tiếp tục B1+ → B2 → B2+ → C1, không phải một “cuốn sách” cố định.
+- Kho bài đệm A2.1 → B1 có sẵn ngoại tuyến. GitHub Actions thử nối tiếp tối đa 3 bài đã kiểm định mỗi ngày; từng ứng viên được kiểm tra và hoàn tác riêng nên Gemini hết quota hay trả bài lỗi cũng không làm hỏng bản đang chạy. Lộ trình tiếp tục B1+ → B2 → B2+ → C1, không phải một “cuốn sách” cố định.
 - Nội dung gồm câu ứng dụng, thông điệp và hội thoại ngắn; không quay lại nhóm chào hỏi/số đếm nhập môn.
 - Mỗi câu Trung có pinyin, **Đọc gần Việt** và nút phát âm dùng giọng iPhone. “Đọc gần Việt” chỉ là cầu nối, không thay thế nghe giọng Quan thoại chuẩn.
 - Tra nhanh Anh/Trung trả nghĩa, sắc thái và hai ví dụ song ngữ. API key Gemini chỉ ở Supabase Edge Function; iPhone chỉ nhận kết quả đã lọc và tự lưu tối đa 30 lần tra gần nhất.
@@ -34,14 +34,14 @@ Sau khi người dùng cài PWA vào Màn hình chính, mở icon và đồng ý
 ## Kiến trúc và ranh giới riêng tư
 
 - GitHub Pages: giao diện PWA và kho bài công khai, miễn phí.
-- Supabase Edge Function `tam-ngu-api`: giữ VAPID, mã mở Tra nhanh 8 số, cron secret và Gemini keys; cung cấp đăng ký Push, gửi Push và `/lookup`. Người dùng nhập mã một lần; Gemini key không nằm trong PWA.
+- Supabase Edge Function `tam-ngu-api`: giữ VAPID, cron secret và Gemini keys; cung cấp đăng ký Push, gửi Push và `/lookup`. Người dùng không nhập mã hay API key; Gemini key không nằm trong PWA.
 - `API_KEYS_FILE=/path/secret.rtfd SUPABASE_PROJECT_REF=... GITHUB_REPOSITORY=NVTruong473/tam-ngu-6h npm run supabase:lookup-secrets` nạp Gemini keys từ RTFD vào Supabase và GitHub Secrets mà không đưa key vào source hoặc log.
 - Supabase Cron: gọi bộ điều phối mỗi phút; Edge Function chỉ gửi cho thiết bị có giờ địa phương trùng lịch đã lưu và chống gửi lặp trong cùng phút.
 - `tam_ngu_push_subscriptions`: RLS bật; `anon`/`authenticated` không có quyền đọc/ghi, chỉ service role của Edge Function được dùng.
 
-Điểm phải nói thật: GitHub Pages là **website công khai**. Link ghép đôi/mã mời bảo vệ việc đăng ký Push và dùng Gemini, không biến bundle tĩnh thành app có đăng nhập. Không đặt thông tin riêng tư trong nội dung bài học. Nếu cần kiểm soát truy cập thật sự, cần bổ sung Supabase Auth hoặc backend có lớp phiên đăng nhập.
+Điểm phải nói thật: GitHub Pages là **website công khai**. Backend chỉ giới hạn lượt tra và xác minh nguồn gọi; nó không biến bundle tĩnh thành app có đăng nhập. Không đặt thông tin riêng tư trong nội dung bài học. Nếu sau này cần kiểm soát truy cập thật sự, cần bổ sung Supabase Auth hoặc lớp phiên đăng nhập.
 
-Gemini free tier cũng không đồng nghĩa “vô hạn tuyệt đối”: quota/mô hình có thể thay đổi. Ứng dụng có 96 bài offline và cache 30 lần tra để không hỏng trải nghiệm khi Gemini hay mạng tạm thời không sẵn sàng.
+Gemini free tier cũng không đồng nghĩa “vô hạn tuyệt đối”: quota/mô hình có thể thay đổi. Ứng dụng luôn mang theo kho bài offline đã kiểm định và cache 30 lần tra để không hỏng trải nghiệm khi Gemini hay mạng tạm thời không sẵn sàng.
 
 ## Vận hành server an toàn
 
@@ -60,7 +60,9 @@ SUPABASE_PROJECT_REF="fcsuldrerhbynwotcvyn" npm run supabase:verify
 
 `supabase:verify` chỉ in trạng thái đạt/không đạt; nó không in API key hoặc mã mời. Nó dùng một truy vấn Gemini mẫu để kiểm tra luồng tra cứu thật.
 
-Trên GitHub, Secret `GEMINI_API_KEYS` chứa các key phân tách bằng xuống dòng. Workflow thử tạo và phản biện riêng tối đa 24 bài vào 00:23 giờ Việt Nam; chỉ bài đạt mới được nối vào kho. Các Variable công khai `NEXT_PUBLIC_PUSH_API_URL` và `NEXT_PUBLIC_FEEDBACK_FORM_URL` lần lượt chỉ chứa URL Edge Function và URL Form người trả lời, không chứa bí mật. Không đưa link chỉnh sửa Google Form vào repo hoặc bundle.
+Trên GitHub, Secret `GEMINI_API_KEYS` chứa các key phân tách bằng xuống dòng. Workflow thử tạo và phản biện riêng tối đa 3 bài vào 00:23 giờ Việt Nam; chỉ bài đạt mới được nối vào kho. Các Variable công khai `NEXT_PUBLIC_PUSH_API_URL` và `NEXT_PUBLIC_FEEDBACK_FORM_URL` lần lượt chỉ chứa URL Edge Function và URL Form người trả lời, không chứa bí mật. Không đưa link chỉnh sửa Google Form vào repo hoặc bundle.
+
+Workflow giám sát chạy lúc phút 17 mỗi giờ, kiểm tra trang cài PWA, manifest/icon, Service Worker Web Push và trạng thái backend. Nó không gửi nội dung tra cứu hay dữ liệu người dùng; lỗi sẽ hiện thành workflow thất bại trong GitHub Actions.
 
 ## Kiểm thử và phát hành
 
