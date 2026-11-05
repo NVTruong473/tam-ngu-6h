@@ -3,6 +3,11 @@ import webpush from "npm:web-push@3.6.7";
 
 const allowedOrigins = new Set([
   "https://nvtruong473.github.io",
+  // Origin of the reviewed bundle when it runs inside the native Capacitor
+  // shell.  These are not arbitrary web origins and let Gemini lookup keep
+  // working without ever shipping its server key in the binary.
+  "capacitor://localhost",
+  "https://localhost",
   "http://localhost:3001",
   "http://127.0.0.1:3001",
 ]);

@@ -21,6 +21,9 @@
 # misc
 .DS_Store
 *.pem
+android/app/google-services.json
+ios/App/App/GoogleService-Info.plist
+ios/fastlane/AuthKey_*.p8
 
 # debug
 npm-debug.log*

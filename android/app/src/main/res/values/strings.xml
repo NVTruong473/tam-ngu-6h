@@ -1,0 +1,7 @@
+<?xml version='1.0' encoding='utf-8'?>
+<resources>
+    <string name="app_name">Tam Ngữ 6H</string>
+    <string name="title_activity_main">Tam Ngữ 6H</string>
+    <string name="package_name">com.nvtruong.tamngu6h</string>
+    <string name="custom_url_scheme">com.nvtruong.tamngu6h</string>
+</resources>

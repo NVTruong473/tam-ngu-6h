@@ -2,6 +2,11 @@
 
 import { useEffect, useMemo, useState } from "react";
 import curriculumData from "./curriculum.json";
+import {
+  disableNativeLessonNotifications,
+  isNativeTamNguApp,
+  scheduleNativeLessonWindow,
+} from "./native-notifications";
 
 type Tab = "today" | "library" | "settings";
 type PushState = "idle" | "enabling" | "enabled" | "unsupported" | "error";
@@ -38,7 +43,11 @@ type StudyModule = {
 };
 
 const curriculum = curriculumData as StudyModule[];
-const PUSH_API_URL = (process.env.NEXT_PUBLIC_PUSH_API_URL || "").replace(/\/$/, "");
+// This is a public Edge Function URL, not a credential.  Keeping the fallback
+// lets the signed offline bundle use Gemini lookup after installation even
+// though it isn't built by the GitHub Pages workflow that injects env vars.
+const DEFAULT_API_URL = "https://fcsuldrerhbynwotcvyn.supabase.co/functions/v1/tam-ngu-api";
+const PUSH_API_URL = (process.env.NEXT_PUBLIC_PUSH_API_URL || DEFAULT_API_URL).replace(/\/$/, "");
 const FEEDBACK_FORM_URL = (process.env.NEXT_PUBLIC_FEEDBACK_FORM_URL || "").trim();
 const LOOKUP_CACHE_KEY = "tamngu6h.lookup-cache.v2";
 const LOOKUP_QUERY_MAXIMUM = 240;
@@ -309,7 +318,8 @@ export default function Home() {
   useEffect(() => {
     const storedRoutine = localStorage.getItem(STORAGE.routine) === "true";
     const storedStart = Number(localStorage.getItem(STORAGE.routineStart));
-    const standalone = window.matchMedia("(display-mode: standalone)").matches || (navigator as Navigator & { standalone?: boolean }).standalone === true;
+    const nativeApp = isNativeTamNguApp();
+    const standalone = nativeApp || window.matchMedia("(display-mode: standalone)").matches || (navigator as Navigator & { standalone?: boolean }).standalone === true;
     let storedSchedule = DEFAULT_SCHEDULE;
     try { storedSchedule = normalizeScheduleTimes(JSON.parse(localStorage.getItem(STORAGE.schedule) || "null")); } catch {}
     queueMicrotask(() => {
@@ -321,7 +331,7 @@ export default function Home() {
       setNow(currentTime);
       setReady(true);
     });
-    if ("serviceWorker" in navigator) {
+    if (!nativeApp && "serviceWorker" in navigator) {
       const isLocalPreview = ["localhost", "127.0.0.1", "::1"].includes(window.location.hostname);
       if (isLocalPreview) {
         navigator.serviceWorker.getRegistrations().then((registrations) => {
@@ -366,7 +376,12 @@ export default function Home() {
       });
     }
 
-    if (!("serviceWorker" in navigator) || !("PushManager" in window) || !("Notification" in window)) {
+    if (nativeApp) {
+      queueMicrotask(() => {
+        setPushState("idle");
+        if (standalone && localStorage.getItem(STORAGE.activationPrompt) !== "dismissed") setShowActivation(true);
+      });
+    } else if (!("serviceWorker" in navigator) || !("PushManager" in window) || !("Notification" in window)) {
       queueMicrotask(() => setPushState("unsupported"));
     } else if (PUSH_API_URL) {
       navigator.serviceWorker.ready
@@ -398,7 +413,7 @@ export default function Home() {
     setRoutineEnabled(true);
     setRoutineStartSequence((current) => current ?? scheduleAt(Date.now(), scheduleTimes).sequence);
     setViewingScheduled(true);
-    const standalone = window.matchMedia("(display-mode: standalone)").matches || (navigator as Navigator & { standalone?: boolean }).standalone === true;
+    const standalone = isNativeTamNguApp() || window.matchMedia("(display-mode: standalone)").matches || (navigator as Navigator & { standalone?: boolean }).standalone === true;
     if (standalone && pushState !== "enabled" && pushState !== "unsupported") setShowActivation(true);
   }
 
@@ -408,6 +423,32 @@ export default function Home() {
   }
 
   async function enableLockScreen() {
+    const nativeApp = isNativeTamNguApp();
+    if (nativeApp) {
+      setPushState("enabling");
+      setPushMessage("");
+      try {
+        const result = await scheduleNativeLessonWindow({
+          lessons: curriculum,
+          scheduleTimes,
+          lessonCursor: unlockedIndex,
+        });
+        const startSequence = routineStartSequence ?? scheduleAt(Date.now(), scheduleTimes).sequence;
+        setRoutineEnabled(true);
+        setRoutineStartSequence(startSequence);
+        setPushState("enabled");
+        localStorage.setItem(STORAGE.activationPrompt, "completed");
+        setShowActivation(false);
+        const end = result.finalDate
+          ? new Intl.DateTimeFormat("vi-VN", { day: "2-digit", month: "2-digit", hour: "2-digit", minute: "2-digit" }).format(result.finalDate)
+          : "";
+        setPushMessage(`Đã đặt ${result.scheduled} bài kế tiếp trên máy${end ? ` đến ${end}` : ""}. Mở app bất kỳ lúc nào để làm mới lịch.`);
+      } catch (error) {
+        setPushState("error");
+        setPushMessage(error instanceof Error ? error.message : "Không bật được thông báo.");
+      }
+      return;
+    }
     if (!PUSH_API_URL) {
       setPushState("error");
       setPushMessage("Tính năng thông báo chưa sẵn sàng. Hãy thử lại sau nhé.");
@@ -514,7 +555,14 @@ export default function Home() {
       localStorage.setItem(STORAGE.routineStart, String(nextStart));
       setScheduleTimes(normalized);
       setRoutineStartSequence(nextStart);
-      if (pushState === "enabled" && PUSH_API_URL) {
+      if (pushState === "enabled" && isNativeTamNguApp()) {
+        const result = await scheduleNativeLessonWindow({
+          lessons: curriculum,
+          scheduleTimes: normalized,
+          lessonCursor: currentUnlocked,
+        });
+        setPushMessage(`Đã lưu ${normalized.length} mốc/ngày và đặt ${result.scheduled} bài kế tiếp trên máy.`);
+      } else if (pushState === "enabled" && PUSH_API_URL) {
         const registration = await navigator.serviceWorker.ready;
         const subscription = await registration.pushManager.getSubscription();
         if (!subscription) throw new Error("Không tìm thấy đăng ký thông báo trên máy này.");
@@ -530,7 +578,7 @@ export default function Home() {
         const body = await response.json().catch(() => ({})) as { error?: string };
         if (!response.ok) throw new Error(body.error || "Chưa lưu được lịch trên máy chủ.");
       }
-      setPushMessage(`Đã lưu ${normalized.length} mốc thông báo mỗi ngày.`);
+      if (!(pushState === "enabled" && isNativeTamNguApp())) setPushMessage(`Đã lưu ${normalized.length} mốc thông báo mỗi ngày.`);
     } catch (error) {
       setPushMessage(error instanceof Error ? error.message : "Chưa lưu được lịch thông báo.");
     } finally {
@@ -539,6 +587,17 @@ export default function Home() {
   }
 
   async function disableLockScreen() {
+    if (isNativeTamNguApp()) {
+      try {
+        await disableNativeLessonNotifications();
+        setPushState("idle");
+        setPushMessage("Đã tắt các bài học đang chờ trên Màn hình khóa ở thiết bị này.");
+      } catch {
+        setPushState("error");
+        setPushMessage("Chưa tắt được thông báo. Hãy thử lại nhé.");
+      }
+      return;
+    }
     if (!("serviceWorker" in navigator)) return;
     try {
       const registration = await navigator.serviceWorker.ready;

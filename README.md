@@ -1,6 +1,8 @@
-# Tam Ngữ 6H — PWA học Anh–Trung cho iPhone
+# Tam Ngữ 6H — học Anh–Trung cho iPhone và Android
 
-Tam Ngữ 6H là một PWA cài từ Safari lên Màn hình chính. Nó có icon, chạy toàn màn hình, lưu tiến độ/tra cứu đã xem trên chính iPhone và vẫn mở được sau khi mất mạng (sau lần tải đầu).
+Tam Ngữ 6H hiện có PWA cài từ Safari/Chrome và nền native Capacitor cho iPhone/Android. Cả hai giữ tiến độ/tra cứu trên chính thiết bị và vẫn mở được khi mất mạng sau lần tải đầu. PWA là bản truy cập nhanh; bản native là lộ trình để có Widget Lock Screen, notification extension và cài đặt tin cậy từ App Store/Google Play.
+
+Xem [lộ trình phát hành native](docs/native-release.md) trước khi ký bản iPhone hoặc Android.
 
 ## Trải nghiệm người dùng
 
