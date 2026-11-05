@@ -146,6 +146,7 @@ test("keeps Gemini credentials server-only while shipping push and quick lookup"
   assert.match(page, /Mỗi ngày tối đa 24 mốc thông báo/);
   assert.match(page, /\/schedule/);
   assert.match(page, /LOOKUP_CACHE_KEY/);
+  assert.match(page, /tamngu6h\.lookup-cache\.v3/);
   assert.match(page, /subscription\.unsubscribe/);
   assert.match(page, /ensureLookupClientId/);
   assert.match(page, /"x-client-id": ensureLookupClientId\(\)/);
@@ -176,6 +177,9 @@ test("keeps Gemini credentials server-only while shipping push and quick lookup"
   assert.match(edgeWorker, /lesson_cursor: body\?\.preview \? row\.lesson_cursor \?\? rawCursor : rawCursor \+ 1/);
   assert.match(edgeWorker, /normalizeLookupExample/);
   assert.match(edgeWorker, /hasToneGuidance/);
+  assert.match(edgeWorker, /applyToneGuides/);
+  assert.match(edgeWorker, /pinyinToneForSyllable/);
+  assert.match(edgeWorker, /Đặt từng marker \(1\)–\(4\) ngay sau đúng âm tiết/);
   assert.match(edgeWorker, /geminiAttemptTimeoutMs = 12_000/);
   assert.match(edgeWorker, /geminiLookupBudgetMs = 72_000/);
   assert.match(edgeWorker, /for \(const \[index, key\] of keys\.entries\(\)\)/);

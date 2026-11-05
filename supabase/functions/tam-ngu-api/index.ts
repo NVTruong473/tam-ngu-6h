@@ -466,6 +466,27 @@ function pinyinToneSequence(value: string) {
   });
 }
 
+function pinyinToneForSyllable(value: string) {
+  return pinyinToneSequence(value)[0] || null;
+}
+
+function applyToneGuides(value: string, pinyin: string) {
+  const cleanReading = value.replace(/\s*\([1-4]\)/g, "").replace(/\s+/g, " ").trim();
+  const readingSyllables = cleanReading.split(/\s+/).filter(Boolean);
+  const pinyinSyllables = pinyin.split(/\s+/).filter(Boolean);
+  if (readingSyllables.length === pinyinSyllables.length) {
+    return readingSyllables.map((syllable, index) => {
+      const tone = pinyinToneForSyllable(pinyinSyllables[index]);
+      if (!tone) return syllable;
+      return syllable.replace(/([,.;:!?，。！？；：]*)$/u, `(${tone})$1`);
+    }).join(" ");
+  }
+  // Rare model formatting mismatch: retain the reading and visible tone data
+  // instead of guessing which unequal syllables correspond to each other.
+  const tones = pinyinToneSequence(pinyin);
+  return `${cleanReading} ${tones.map((tone) => `(${tone})`).join(" ")}`.trim();
+}
+
 function normalizeVietnameseReading(value: unknown, maximum: number, pinyin = "") {
   let normalized = trimText(value, maximum)
     .replace(/\(\s*[05]\s*\)/g, "")
@@ -479,11 +500,7 @@ function normalizeVietnameseReading(value: unknown, maximum: number, pinyin = ""
     .replace(/(^|[\s,;:('"-])f/giu, "$1ph")
     .replace(/\s+/g, " ")
     .trim();
-  const tones = pinyinToneSequence(pinyin);
-  if (tones.length > 0 && toneGuideCount(normalized) !== tones.length) {
-    normalized = normalized.replace(/\s*\([1-4]\)/g, "").trim();
-    normalized = `${normalized} ${tones.map((tone) => `(${tone})`).join(" ")}`.trim();
-  }
+  if (pinyinToneSequence(pinyin).length > 0) normalized = applyToneGuides(normalized, pinyin);
   return normalized.length <= maximum ? normalized : "";
 }
 
@@ -581,7 +598,7 @@ async function askGeminiForLookup(query: string) {
     "Chỉ khi sourceLanguage là Chinese: pinyin và vietnameseReading phải có. vietnameseReading là cách đọc gần tiếng Việt, dùng (1)-(4) cho thanh Quan thoại; không phải âm Hán-Việt hoặc pinyin viết lại. Với mọi ngôn ngữ khác, hai trường này để chuỗi rỗng.",
     "meaning phải trả lời trực tiếp ý định bằng tiếng Việt, đồng thời nêu cách diễn đạt tương đương tự nhiên bằng tiếng Anh và tiếng Trung giản thể khi phù hợp. note giải thích ngắn về ngữ pháp, lỗi sai, sắc thái hoặc tình huống sử dụng.",
     "Luôn cho đúng 2 ví dụ ứng dụng tự nhiên: mỗi ví dụ gồm English, Chinese, pinyin, vietnameseReading, Vietnamese. Với các câu Trung, vietnameseReading luôn dùng số thanh.",
-    "VietnameseReading phải thực sự là gợi âm người Việt dễ đọc: dùng chữ/dấu Việt như ă, â, đ, ê, ô, ơ, ư hoặc dấu thanh Việt khi hợp lý. Không trả pinyin/Anh viết lại; cấm f, j, w, z, các cụm pinyin sh.../zh... và (0)/(5). Số marker (1)–(4) phải đúng bằng số dấu thanh trong pinyin; âm nhẹ không thêm marker. Ví dụ wǒmen nên gần “uổ(3) mần”, không phải “wo mern”.",
+    "VietnameseReading phải thực sự là gợi âm người Việt dễ đọc: dùng chữ/dấu Việt như ă, â, đ, ê, ô, ơ, ư hoặc dấu thanh Việt khi hợp lý. Không trả pinyin/Anh viết lại; cấm f, j, w, z, các cụm pinyin sh.../zh... và (0)/(5). Đặt từng marker (1)–(4) ngay sau đúng âm tiết; tổng số marker phải đúng bằng số dấu thanh trong pinyin; âm nhẹ không thêm marker. Ví dụ wǒmen nên gần “uổ(3) mần”, không phải “wo mern”.",
     "Trước khi trả về, tự soát ngữ pháp, chính tả, sắc thái và tính tự nhiên của cả hai câu ví dụ; nếu không chắc, dùng cấu trúc phổ biến thay vì suy diễn.",
     "Nêu nghĩa phổ biến nhất, từ loại/cấu trúc và một ghi chú ngắn về sắc thái/cách dùng. Nếu truy vấn mơ hồ, nói rõ nghĩa thường gặp thay vì bịa ngữ cảnh.",
     `Từ khóa người dùng cần tra: ${JSON.stringify(query)}`,
