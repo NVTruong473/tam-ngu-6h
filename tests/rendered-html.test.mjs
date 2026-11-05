@@ -183,6 +183,8 @@ test("keeps Gemini credentials server-only while shipping push and quick lookup"
   assert.match(edgeWorker, /Đặt từng marker \(1\)–\(4\) ngay sau đúng âm tiết/);
   assert.match(edgeWorker, /geminiAttemptTimeoutMs = 12_000/);
   assert.match(edgeWorker, /geminiLookupBudgetMs = 72_000/);
+  assert.match(edgeWorker, /geminiRetryDelayMs = 4_000/);
+  assert.match(edgeWorker, /round < 2/);
   assert.match(edgeWorker, /for \(const \[index, key\] of keys\.entries\(\)\)/);
   assert.doesNotMatch(edgeWorker, /keys\.slice\(0, 3\)/);
   assert.match(edgeWorker, /minItems: 2/);

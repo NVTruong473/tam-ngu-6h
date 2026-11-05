@@ -17,6 +17,7 @@ const publicAppUrl = "https://nvtruong473.github.io/tam-ngu-6h/";
 const geminiModel = "gemini-3.5-flash-lite";
 const geminiAttemptTimeoutMs = 12_000;
 const geminiLookupBudgetMs = 72_000;
+const geminiRetryDelayMs = 4_000;
 const slotByPhase = { morning: 0, noon: 1, evening: 2 } as const;
 
 type Phase = keyof typeof slotByPhase;
@@ -609,40 +610,44 @@ async function askGeminiForLookup(query: string) {
   let lastError: Error | undefined;
   // Keys are only failover credentials; they are not treated as a way to evade
   // a Gemini project's quota. A short per-attempt timeout prevents one unhealthy
-  // credential from hiding later healthy ones, while the shared budget keeps the
-  // request inside the Edge Function wall-clock limit.
-  for (const [index, key] of keys.entries()) {
-    const remainingMs = geminiLookupBudgetMs - (Date.now() - startedAt);
-    if (remainingMs < 1_000) {
-      failures.push("global-budget-exhausted");
-      break;
-    }
-    try {
-      const response = await fetch(`https://generativelanguage.googleapis.com/v1beta/models/${encodeURIComponent(geminiModel)}:generateContent`, {
-        method: "POST",
-        signal: AbortSignal.timeout(Math.min(geminiAttemptTimeoutMs, remainingMs)),
-        headers: { "content-type": "application/json", "x-goog-api-key": key },
-        body: JSON.stringify({
-          contents: [{ role: "user", parts: [{ text: prompt }] }],
-          generationConfig: {
-            temperature: 0.15,
-            responseMimeType: "application/json",
-            responseSchema: lookupSchema,
-          },
-        }),
-      });
-      if (!response.ok) throw new Error(`Gemini HTTP ${response.status}`);
-      const data = await response.json();
-      const text = data.candidates?.[0]?.content?.parts?.[0]?.text;
-      const result = normalizeLookup(text ? JSON.parse(text) : null);
-      if (!result) throw new Error("Gemini trả về kết quả từ điển chưa hợp lệ.");
-      return result;
-    } catch (error) {
-      lastError = error instanceof Error ? error : new Error("Gemini không phản hồi.");
-      const category = lastError.name === "TimeoutError"
-        ? "timeout"
-        : /HTTP (\d{3})/.exec(lastError.message)?.[1] || "invalid-output";
-      failures.push(`attempt-${index + 1}:${category}`);
+  // credential from hiding later healthy ones. One bounded retry round follows a
+  // real backoff because Gemini documents 429/503 as transient conditions.
+  lookupRounds:
+  for (let round = 0; round < 2; round += 1) {
+    if (round > 0) await new Promise((resolve) => setTimeout(resolve, geminiRetryDelayMs));
+    for (const [index, key] of keys.entries()) {
+      const remainingMs = geminiLookupBudgetMs - (Date.now() - startedAt);
+      if (remainingMs < 1_000) {
+        failures.push("global-budget-exhausted");
+        break lookupRounds;
+      }
+      try {
+        const response = await fetch(`https://generativelanguage.googleapis.com/v1beta/models/${encodeURIComponent(geminiModel)}:generateContent`, {
+          method: "POST",
+          signal: AbortSignal.timeout(Math.min(geminiAttemptTimeoutMs, remainingMs)),
+          headers: { "content-type": "application/json", "x-goog-api-key": key },
+          body: JSON.stringify({
+            contents: [{ role: "user", parts: [{ text: prompt }] }],
+            generationConfig: {
+              temperature: 0.15,
+              responseMimeType: "application/json",
+              responseSchema: lookupSchema,
+            },
+          }),
+        });
+        if (!response.ok) throw new Error(`Gemini HTTP ${response.status}`);
+        const data = await response.json();
+        const text = data.candidates?.[0]?.content?.parts?.[0]?.text;
+        const result = normalizeLookup(text ? JSON.parse(text) : null);
+        if (!result) throw new Error("Gemini trả về kết quả từ điển chưa hợp lệ.");
+        return result;
+      } catch (error) {
+        lastError = error instanceof Error ? error : new Error("Gemini không phản hồi.");
+        const category = lastError.name === "TimeoutError"
+          ? "timeout"
+          : /HTTP (\d{3})/.exec(lastError.message)?.[1] || "invalid-output";
+        failures.push(`round-${round + 1}-attempt-${index + 1}:${category}`);
+      }
     }
   }
   console.error(`Gemini lookup failed (${failures.join(",") || "no-attempt"}).`);
