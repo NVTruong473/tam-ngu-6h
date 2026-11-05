@@ -40,13 +40,12 @@ jobs:
       SUPABASE_PROJECT_REF: fcsuldrerhbynwotcvyn
     steps:
       - uses: actions/checkout@v6
-      # Pin the official action to a reviewed commit instead of a mutable tag.
-      - uses: supabase/setup-cli@689adcfb80d947100a1eab127289b97d1fb07b13 # v3.2.0
+      - uses: actions/setup-node@v6
         with:
-          version: latest
+          node-version: 22
       - name: Deploy the public API without exposing server secrets
         run: >-
-          supabase functions deploy tam-ngu-api
+          npx --yes supabase@3.0.0 functions deploy tam-ngu-api
           --remote="$SUPABASE_PROJECT_REF"
           --no-verify-jwt
           --use-api
