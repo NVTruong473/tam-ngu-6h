@@ -240,7 +240,10 @@ test("keeps Gemini credentials server-only while shipping push and quick lookup"
   assert.match(deployer, /functions", "deploy", "tam-ngu-api/);
   assert.match(deployer, /`--remote=\$\{ref\}`/);
   assert.match(deployer, /"--yes"/);
-  assert.match(await readFile(new URL("scripts/smoke-production.mjs", root), "utf8"), /hasAlignedToneGuides/);
+  const productionSmoke = await readFile(new URL("scripts/smoke-production.mjs", root), "utf8");
+  assert.match(productionSmoke, /hasAlignedToneGuides/);
+  assert.match(productionSmoke, /verifyLookupWithRetry/);
+  assert.match(productionSmoke, /await wait\(6_000\)/);
   assert.match(verifier, /\/lookup/);
   assert.match(verifier, /慢一点/);
   assert.match(verifier, /Kỷ luật/);

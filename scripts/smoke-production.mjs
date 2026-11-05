@@ -62,6 +62,20 @@ async function verifyLookup() {
   }
 }
 
+async function verifyLookupWithRetry(attempts = 2) {
+  let lastError;
+  for (let attempt = 1; attempt <= attempts; attempt += 1) {
+    try {
+      await verifyLookup();
+      return;
+    } catch (error) {
+      lastError = error;
+      if (attempt < attempts) await wait(6_000);
+    }
+  }
+  throw lastError || new Error("Tra cứu thật không phản hồi.");
+}
+
 const [pageResponse, manifestResponse, workerResponse, healthResponse] = await Promise.all([
   fetchWithRetry(siteUrl, "Trang chính"),
   fetchWithRetry(new URL("manifest.webmanifest", siteUrl), "Web App Manifest"),
@@ -85,5 +99,5 @@ if (!health?.ok || !health?.pushConfigured || !health?.lookupConfigured || !heal
 if (!["apple", "fcm", "mozilla", "wns"].every((provider) => health?.pushProviders?.includes(provider))) failures.push("backend chưa công bố đủ dịch vụ Push");
 
 if (failures.length > 0) throw new Error(`Bản production chưa đạt: ${failures.join(", ")}.`);
-if (deepLookup) await verifyLookup();
+if (deepLookup) await verifyLookupWithRetry();
 process.stdout.write(`Production OK${deepLookup ? " + Gemini lookup" : ""}: ${siteUrl.href}\n`);
