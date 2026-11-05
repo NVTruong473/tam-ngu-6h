@@ -31,3 +31,30 @@ jobs:
           SMOKE_API_URL: ${{ vars.NEXT_PUBLIC_PUSH_API_URL }}
           SMOKE_DEEP_LOOKUP: ${{ github.event.schedule == '37 22 * * *' && '1' || '0' }}
         run: npm run smoke:production
+
+  report-health:
+    needs: monitor
+    if: ${{ always() && !cancelled() }}
+    runs-on: ubuntu-latest
+    timeout-minutes: 2
+    permissions:
+      contents: read
+      issues: write
+    env:
+      GH_TOKEN: ${{ github.token }}
+      MONITOR_RESULT: ${{ needs.monitor.result }}
+      ALERT_TITLE: "[Tam Ngữ 6H] Production cần kiểm tra"
+    steps:
+      - name: Open one alert on failure and close it after recovery
+        shell: bash
+        run: |
+          issue_number="$(gh issue list --repo "$GITHUB_REPOSITORY" --state open --limit 100 --json number,title --jq '.[] | select(.title == "[Tam Ngữ 6H] Production cần kiểm tra") | .number' | sed -n '1p')"
+          run_url="$GITHUB_SERVER_URL/$GITHUB_REPOSITORY/actions/runs/$GITHUB_RUN_ID"
+
+          if [[ "$MONITOR_RESULT" != "success" ]]; then
+            if [[ -z "$issue_number" ]]; then
+              gh issue create --repo "$GITHUB_REPOSITORY" --title "$ALERT_TITLE" --body "Giám sát tự động phát hiện app, Web Push hoặc Gemini production không đạt. Xem lần chạy: $run_url\n\nIssue này sẽ tự đóng khi lượt kiểm tra sau thành công."
+            fi
+          elif [[ -n "$issue_number" ]]; then
+            gh issue close "$issue_number" --repo "$GITHUB_REPOSITORY" --reason completed --comment "Production đã vượt qua hậu kiểm và tự phục hồi. Lần chạy xác nhận: $run_url"
+          fi

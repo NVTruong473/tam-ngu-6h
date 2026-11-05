@@ -64,7 +64,7 @@ SUPABASE_PROJECT_REF="fcsuldrerhbynwotcvyn" npm run supabase:verify
 
 Trên GitHub, Secret `GEMINI_API_KEYS` chứa các key phân tách bằng xuống dòng. Workflow thử tạo và phản biện riêng tối đa 3 bài vào 00:23 giờ Việt Nam; chỉ bài đạt mới được nối vào kho. Các Variable công khai `NEXT_PUBLIC_PUSH_API_URL` và `NEXT_PUBLIC_FEEDBACK_FORM_URL` lần lượt chỉ chứa URL Edge Function và URL Form người trả lời, không chứa bí mật. Không đưa link chỉnh sửa Google Form vào repo hoặc bundle.
 
-Workflow giám sát chạy lúc phút 17 mỗi giờ, kiểm tra trang cài PWA, manifest/icon, Service Worker Web Push và trạng thái backend. Nó không gửi nội dung tra cứu hay dữ liệu người dùng; lỗi sẽ hiện thành workflow thất bại trong GitHub Actions.
+Workflow giám sát chạy lúc phút 17 mỗi giờ, kiểm tra trang cài PWA, manifest/icon, Service Worker Web Push và trạng thái backend. Nó không gửi nội dung tra cứu hay dữ liệu người dùng. Khi production lỗi, workflow mở đúng một GitHub issue cảnh báo; các lượt lỗi tiếp theo không tạo thêm issue và lượt kiểm tra thành công sẽ tự đóng cảnh báo.
 
 Mọi thay đổi trong `supabase/functions/tam-ngu-api` được workflow riêng kiểm thử rồi tự triển khai lên đúng project Supabase. GitHub Secret `SUPABASE_ACCESS_TOKEN` là token phạm vi hẹp: chỉ project `caseflow-store`, chỉ quyền đọc/ghi Edge Functions, hết hạn sau 90 ngày; nó không được gửi xuống PWA và không có quyền đọc database, Auth, API keys hoặc Edge Function secrets. Sau deploy, workflow bắt buộc chạy một tra cứu Gemini thật trước khi được coi là thành công.
 

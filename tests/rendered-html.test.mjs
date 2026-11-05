@@ -128,6 +128,12 @@ test("keeps Gemini credentials server-only while shipping push and quick lookup"
   assert.match(monitorWorkflow, /SMOKE_DEEP_LOOKUP/);
   assert.match(monitorWorkflow, /npm run smoke:production/);
   assert.match(monitorWorkflow, /permissions:\s+contents: read/);
+  assert.match(monitorWorkflow, /report-health:/);
+  assert.match(monitorWorkflow, /issues: write/);
+  assert.match(monitorWorkflow, /needs\.monitor\.result/);
+  assert.match(monitorWorkflow, /gh issue create/);
+  assert.match(monitorWorkflow, /gh issue close/);
+  assert.match(monitorWorkflow, /Issue này sẽ tự đóng/);
   assert.match(backendDeployWorkflow, /permissions:\s+contents: read/);
   assert.match(backendDeployWorkflow, /secrets\.SUPABASE_ACCESS_TOKEN/);
   assert.match(backendDeployWorkflow, /npx --yes supabase@3\.0\.0 functions deploy tam-ngu-api/);
