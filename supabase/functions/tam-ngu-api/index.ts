@@ -1,5 +1,11 @@
 import { createClient } from "npm:@supabase/supabase-js@2";
 import webpush from "npm:web-push@3.6.7";
+import {
+  isRetryablePushFailure,
+  latestDueSchedule,
+  mapWithConcurrency,
+  pushRetryDelayMs,
+} from "./dispatch-reliability.mjs";
 import { hasValidPushKeys, isSupportedPushEndpoint } from "./push-endpoints.mjs";
 
 const allowedOrigins = new Set([
@@ -22,6 +28,9 @@ const geminiAttemptTimeoutMs = 12_000;
 const geminiLookupBudgetMs = 72_000;
 const geminiRetryDelayMs = 4_000;
 const slotByPhase = { morning: 0, noon: 1, evening: 2 } as const;
+const dispatchGraceMinutes = 10;
+const dispatchConcurrency = 8;
+const pushAttemptLimit = 2;
 
 type Phase = keyof typeof slotByPhase;
 type WebPushSubscription = {
@@ -45,6 +54,14 @@ type StudyModule = {
   nightWish?: string;
   notification?: { english: string; chinese: string; vietnamese: string };
   lines: Array<{ english: string; chinese: string; pinyin?: string; vietnamese?: string }>;
+};
+type DispatchOutcome = {
+  due: number;
+  sent: number;
+  removed: number;
+  failed: number;
+  claimErrors: number;
+  storageErrors: number;
 };
 
 type LookupExample = {
@@ -339,15 +356,43 @@ function localClock(date: Date, timezone: string) {
     hourCycle: "h23",
   }).formatToParts(date);
   const value = (type: Intl.DateTimeFormatPartTypes) => parts.find((part) => part.type === type)?.value || "00";
-  const time = `${value("hour")}:${value("minute")}`;
-  // Digits-only makes this server-generated value safe inside a PostgREST OR
-  // filter used for the atomic compare-and-set claim below.
-  const dispatchKey = `${value("year")}${value("month")}${value("day")}${value("hour")}${value("minute")}`;
-  return { time, hour: Number(value("hour")), dispatchKey };
+  const hour = Number(value("hour"));
+  const minute = Number(value("minute"));
+  return {
+    time: `${value("hour")}:${value("minute")}`,
+    hour,
+    minuteOfDay: hour * 60 + minute,
+    dateKey: `${value("year")}${value("month")}${value("day")}`,
+  };
 }
 
 function phaseAtHour(hour: number): Phase {
   return hour < 12 ? "morning" : hour < 18 ? "noon" : "evening";
+}
+
+async function sendWebPushWithRetry(subscription: WebPushSubscription, payload: string) {
+  let lastError: unknown;
+  for (let attempt = 0; attempt < pushAttemptLimit; attempt += 1) {
+    try {
+      await webpush.sendNotification(subscription, payload, {
+        TTL: 21_600,
+        urgency: "normal",
+        // The provider and the service worker both replace an older lesson.
+        // Reusing this topic also makes a retry safe after an ambiguous network
+        // failure where the provider accepted the first request but its response
+        // never reached this function.
+        topic: "tam-ngu-current-lesson",
+      });
+      return;
+    } catch (error) {
+      lastError = error;
+      const pushError = error as { statusCode?: number; headers?: unknown };
+      const delayMs = pushRetryDelayMs(pushError.statusCode, pushError.headers, attempt);
+      if (attempt + 1 >= pushAttemptLimit || delayMs === null) throw error;
+      await new Promise((resolve) => setTimeout(resolve, delayMs));
+    }
+  }
+  throw lastError;
 }
 
 async function dispatch(request: Request, origin: string | null) {
@@ -382,34 +427,30 @@ async function dispatch(request: Request, origin: string | null) {
   if (!publicKey || !privateKey) throw new Error("Thiếu VAPID keys.");
   webpush.setVapidDetails(subject, publicKey, privateKey);
 
-  let sent = 0;
-  let removed = 0;
-  let due = 0;
-  let claimErrors = 0;
-  for (const row of subscriptions) {
+  const outcomes = await mapWithConcurrency(subscriptions, dispatchConcurrency, async (row: PushSubscriptionRow): Promise<DispatchOutcome> => {
     const clock = localClock(now, validTimezone(row.timezone));
     const times = validScheduleTimes(row.schedule_times) || ["06:00", "12:00", "18:00"];
+    const scheduled = isDueRun ? latestDueSchedule(clock, times, dispatchGraceMinutes) : null;
+    const deliveryTime = scheduled?.time || clock.time;
+    const idle = { due: 0, sent: 0, removed: 0, failed: 0, claimErrors: 0, storageErrors: 0 };
     if (isDueRun) {
-      if (!times.includes(clock.time) || row.last_dispatch_key === clock.dispatchKey) continue;
+      if (!scheduled || row.last_dispatch_key === scheduled.dispatchKey) return idle;
       // Conditional UPDATE is one database statement: concurrent cron/webhook
       // calls cannot both claim the same device+minute. This prevents duplicate
-      // cards and, more importantly, prevents advancing lesson_cursor twice.
+      // cards and lesson advancement. A failed transient delivery restores the
+      // previous key, allowing the next minute inside the grace window to retry.
       const { data: claimed, error: claimError } = await admin.from("tam_ngu_push_subscriptions").update({
-        last_dispatch_key: clock.dispatchKey,
+        last_dispatch_key: scheduled.dispatchKey,
         updated_at: new Date().toISOString(),
       }).eq("endpoint", row.endpoint)
         .eq("enabled", true)
-        .or(`last_dispatch_key.is.null,last_dispatch_key.neq.${clock.dispatchKey}`)
+        .or(`last_dispatch_key.is.null,last_dispatch_key.neq.${scheduled.dispatchKey}`)
         .select("endpoint")
         .maybeSingle();
-      if (claimError) {
-        claimErrors += 1;
-        continue;
-      }
-      if (!claimed) continue;
+      if (claimError) return { ...idle, claimErrors: 1 };
+      if (!claimed) return idle;
     }
-    due += 1;
-    const phase = isDueRun ? phaseAtHour(clock.hour) : body!.phase!;
+    const phase = isDueRun ? phaseAtHour(scheduled.hour) : body!.phase!;
     const currentSequence = sequenceAt(now, phase);
     const fallbackCursor = Math.max(0, currentSequence - Number(row.routine_start_sequence));
     const rawCursor = Math.max(0, Number.isInteger(row.lesson_cursor) ? Number(row.lesson_cursor) : fallbackCursor);
@@ -431,51 +472,58 @@ async function dispatch(request: Request, origin: string | null) {
     const payload = JSON.stringify({
       title: body?.preview
         ? "🧪 Bản xem thử"
-        : `${symbol} ${clock.time} · Bài mới`,
+        : `${symbol} ${deliveryTime} · Bài mới`,
       body: notificationBody,
-      notificationId: isDueRun ? `due:${clock.dispatchKey}` : `manual:${dispatchId}`,
+      notificationId: isDueRun ? `due:${scheduled.dispatchKey}` : `manual:${dispatchId}`,
       tag: "tam-ngu-current-lesson",
       url: lessonUrl,
       timestamp: Date.now(),
     });
     try {
-      await webpush.sendNotification(row.subscription, payload, {
-        TTL: 21_600,
-        urgency: "normal",
-        // The Web Push Topic header lets the push service replace an older
-        // undelivered lesson before the device reconnects. The service worker's
-        // stable notification tag performs the same replacement after delivery.
-        topic: "tam-ngu-current-lesson",
-      });
-      sent += 1;
-      await admin.from("tam_ngu_push_subscriptions").update({
+      await sendWebPushWithRetry(row.subscription, payload);
+      const { error: storageError } = await admin.from("tam_ngu_push_subscriptions").update({
         last_sent_at: new Date().toISOString(),
         last_error: null,
         lesson_cursor: body?.preview ? row.lesson_cursor ?? rawCursor : rawCursor + 1,
-        last_dispatch_key: isDueRun ? clock.dispatchKey : row.last_dispatch_key,
+        last_dispatch_key: isDueRun ? scheduled.dispatchKey : row.last_dispatch_key,
       }).eq("endpoint", row.endpoint);
+      return { ...idle, due: 1, sent: 1, storageErrors: storageError ? 1 : 0 };
     } catch (error) {
       const statusCode = Number((error as { statusCode?: number }).statusCode || 0);
       if (statusCode === 404 || statusCode === 410) {
-        removed += 1;
-        await admin.from("tam_ngu_push_subscriptions").delete().eq("endpoint", row.endpoint);
-      } else {
-        await admin.from("tam_ngu_push_subscriptions").update({
-          last_error: String((error as Error).message || error).slice(0, 300),
-        }).eq("endpoint", row.endpoint);
+        const { error: storageError } = await admin.from("tam_ngu_push_subscriptions").delete().eq("endpoint", row.endpoint);
+        return { ...idle, due: 1, removed: 1, storageErrors: storageError ? 1 : 0 };
       }
+
+      const retryable = isDueRun && isRetryablePushFailure(statusCode);
+      const failureState: { last_error: string; last_dispatch_key?: string | null } = {
+        last_error: String((error as Error).message || error).slice(0, 300),
+      };
+      if (retryable) failureState.last_dispatch_key = row.last_dispatch_key;
+      let failureUpdate = admin.from("tam_ngu_push_subscriptions").update(failureState).eq("endpoint", row.endpoint);
+      // Never let a late failure from an older invocation undo a newer claim.
+      if (retryable) failureUpdate = failureUpdate.eq("last_dispatch_key", scheduled.dispatchKey);
+      const { error: storageError } = await failureUpdate;
+      return { ...idle, due: 1, failed: 1, storageErrors: storageError ? 1 : 0 };
     }
-  }
+  }) as DispatchOutcome[];
+
+  const totals = outcomes.reduce((total, outcome) => ({
+    due: total.due + outcome.due,
+    sent: total.sent + outcome.sent,
+    removed: total.removed + outcome.removed,
+    failed: total.failed + outcome.failed,
+    claimErrors: total.claimErrors + outcome.claimErrors,
+    storageErrors: total.storageErrors + outcome.storageErrors,
+  }), { due: 0, sent: 0, removed: 0, failed: 0, claimErrors: 0, storageErrors: 0 });
+  const databaseHealthy = totals.claimErrors === 0 && totals.storageErrors === 0;
   return json({
-    ok: claimErrors === 0,
+    ok: databaseHealthy,
     mode: isDueRun ? "due" : "manual",
     phase: body?.phase || null,
     checked: subscriptions.length,
-    due,
-    sent,
-    removed,
-    claimErrors,
-  }, claimErrors === 0 ? 200 : 503, origin);
+    ...totals,
+  }, databaseHealthy ? 200 : 503, origin);
 }
 
 function trimText(value: unknown, maximum: number) {
@@ -770,6 +818,11 @@ Deno.serve(async (request) => {
         service: "tam-ngu-api",
         pushConfigured: Boolean(Deno.env.get("VAPID_PUBLIC_KEY") && Deno.env.get("VAPID_PRIVATE_KEY")),
         pushProviders: supportedPushProviders,
+        dispatchReliability: {
+          graceMinutes: dispatchGraceMinutes,
+          concurrency: dispatchConcurrency,
+          attempts: pushAttemptLimit,
+        },
         lookupConfigured: geminiKeys().length > 0,
         lookupProtectionConfigured: Boolean(Deno.env.get("TAM_NGU_RATE_LIMIT_SALT")),
       }, 200, origin);

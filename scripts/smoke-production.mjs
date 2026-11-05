@@ -97,6 +97,9 @@ if (!Array.isArray(manifest?.icons) || !manifest.icons.some((icon) => icon.sizes
 if (!worker.includes('addEventListener("push"') || !worker.includes("showNotification")) failures.push("service worker thiếu Web Push");
 if (!health?.ok || !health?.pushConfigured || !health?.lookupConfigured || !health?.lookupProtectionConfigured) failures.push("backend chưa cấu hình đủ");
 if (!["apple", "fcm", "mozilla", "wns"].every((provider) => health?.pushProviders?.includes(provider))) failures.push("backend chưa công bố đủ dịch vụ Push");
+if (health?.dispatchReliability?.graceMinutes !== 10
+  || health?.dispatchReliability?.concurrency !== 8
+  || health?.dispatchReliability?.attempts !== 2) failures.push("backend chưa bật cơ chế bù lịch và retry Push");
 
 if (failures.length > 0) throw new Error(`Bản production chưa đạt: ${failures.join(", ")}.`);
 if (deepLookup) await verifyLookupWithRetry();
