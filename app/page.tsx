@@ -157,6 +157,18 @@ async function syncWebPushSubscription(
   }
 }
 
+async function sendRemoteTestPush(subscription: PushSubscription) {
+  const response = await fetch(`${PUSH_API_URL}/test-push`, {
+    method: "POST",
+    headers: { "content-type": "application/json" },
+    body: JSON.stringify({ subscription: subscription.toJSON() }),
+  });
+  const result = await response.json().catch(() => ({})) as { error?: string };
+  if (response.status === 429) return "cooldown" as const;
+  if (!response.ok) throw new Error(result.error || "Chưa gửi được thẻ kiểm tra.");
+  return "sent" as const;
+}
+
 function detectDevicePlatform(): DevicePlatform {
   const userAgent = navigator.userAgent || "";
   if (/Android/i.test(userAgent)) return "android";
@@ -325,6 +337,7 @@ export default function Home() {
   const [scheduleTimes, setScheduleTimes] = useState(DEFAULT_SCHEDULE);
   const [scheduleTimeDraft, setScheduleTimeDraft] = useState("09:00");
   const [savingSchedule, setSavingSchedule] = useState(false);
+  const [testingPush, setTestingPush] = useState(false);
   const [devicePlatform, setDevicePlatform] = useState<DevicePlatform>("ios");
 
   const schedule = scheduleAt(now, scheduleTimes);
@@ -527,35 +540,44 @@ export default function Home() {
       });
       const startSequence = routineStartSequence ?? scheduleAt(Date.now(), scheduleTimes).sequence;
       await syncWebPushSubscription(subscription, scheduleTimes, startSequence, unlockedIndex);
+      let testCardSent = false;
       try {
-        const appRoot = new URL("./", window.location.href).href;
-        const previewLine = studyModule.lines[0];
-        const preview = studyModule.notification || previewLine;
-        const existing = await registration.getNotifications();
-        existing.forEach((notification) => notification.close());
-        await registration.showNotification("✨ Bài tam ngữ mẫu", {
-          body: [
-            `EN  ${preview?.english || "A new lesson is waiting."}`,
-            `中  ${preview?.chinese || "新的一课在等你。"}`,
-            `VI  ${preview?.vietnamese || "Một bài học mới đang chờ cậu."}`,
-          ].join("\n"),
-          icon: new URL("./icons/icon-v2-192.png", window.location.href).href,
-          tag: "tam-ngu-current-lesson",
-          renotify: false,
-          data: { url: new URL(`?lesson=${encodeURIComponent(studyModule.id)}`, appRoot).href },
-        });
+        await sendRemoteTestPush(subscription);
+        testCardSent = true;
       } catch {
-        // Subscription remains valid even if iOS delays the local confirmation.
+        // The scheduled subscription remains valid even if the optional remote
+        // confirmation is temporarily unavailable.
       }
       setRoutineEnabled(true);
       setRoutineStartSequence(startSequence);
       setPushState("enabled");
       localStorage.setItem(STORAGE.activationPrompt, "completed");
       setShowActivation(false);
-      setPushMessage(`Đã bật. Thẻ tam ngữ mẫu vừa được gửi; lịch có ${scheduleTimes.length} mốc mỗi ngày.`);
+      setPushMessage(testCardSent
+        ? `Đã bật. Bài kiểm tra thật đang được gửi qua máy chủ; lịch có ${scheduleTimes.length} mốc mỗi ngày.`
+        : `Đã bật lịch ${scheduleTimes.length} mốc/ngày. Thẻ kiểm tra chưa đến được, nhưng app sẽ tự thử lại ở mốc kế tiếp.`);
     } catch (error) {
       setPushState("error");
       setPushMessage(error instanceof Error ? error.message : "Không bật được thông báo.");
+    }
+  }
+
+  async function testLockScreenNow() {
+    if (testingPush || isNativeTamNguApp()) return;
+    setTestingPush(true);
+    setPushMessage("");
+    try {
+      const registration = await navigator.serviceWorker.ready;
+      const subscription = await registration.pushManager.getSubscription();
+      if (!subscription) throw new Error("Thiết bị chưa có đăng ký thông báo. Hãy bật lại Màn hình khóa.");
+      const result = await sendRemoteTestPush(subscription);
+      setPushMessage(result === "cooldown"
+        ? "Một thẻ vừa được gửi. Hãy chờ một phút trước khi thử lại."
+        : "Đã gửi thẻ kiểm tra thật. Hãy khóa màn hình để xem.");
+    } catch (error) {
+      setPushMessage(error instanceof Error ? error.message : "Chưa gửi được thẻ kiểm tra.");
+    } finally {
+      setTestingPush(false);
     }
   }
 
@@ -911,6 +933,11 @@ export default function Home() {
               <button type="button" onClick={addScheduleTime}>Thêm giờ</button>
             </div>
             <button className="schedule-save" type="button" disabled={savingSchedule} onClick={() => void saveSchedule()}>{savingSchedule ? "Đang lưu…" : "Lưu lịch thông báo"}</button>
+            {pushState === "enabled" && !isNativeTamNguApp() && (
+              <button className="test-push-button" type="button" disabled={testingPush} onClick={() => void testLockScreenNow()}>
+                {testingPush ? "Đang gửi thẻ thật…" : "Gửi thẻ kiểm tra ngay"}
+              </button>
+            )}
           </article>
           {pushMessage && <p className={`settings-message ${pushState === "error" ? "error-note" : ""}`}>{pushMessage}</p>}
           {FEEDBACK_FORM_URL && (

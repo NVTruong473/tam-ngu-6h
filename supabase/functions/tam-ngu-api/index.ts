@@ -7,6 +7,7 @@ import {
   pushRetryDelayMs,
 } from "./dispatch-reliability.mjs";
 import { hasValidPushKeys, isSupportedPushEndpoint } from "./push-endpoints.mjs";
+import { buildDeclarativePushPayload, declarativeWebPushVersion } from "./push-payload.mjs";
 import { createReceiptProof, verifyReceiptProof } from "./receipt-proof.mjs";
 import { schedulerFreshnessSeconds, schedulerHealth } from "./service-health.mjs";
 
@@ -33,6 +34,8 @@ const slotByPhase = { morning: 0, noon: 1, evening: 2 } as const;
 const dispatchGraceMinutes = 10;
 const dispatchConcurrency = 8;
 const pushAttemptLimit = 2;
+const testPushCooldownMs = 60_000;
+const testPushRequestMaximumBytes = 16_384;
 const dispatchHeartbeatEndpoint = "tam-ngu-internal://dispatch-cron";
 const deviceReceiptEndpoint = "tam-ngu-internal://device-receipt";
 
@@ -375,13 +378,17 @@ function phaseAtHour(hour: number): Phase {
   return hour < 12 ? "morning" : hour < 18 ? "noon" : "evening";
 }
 
-async function sendWebPushWithRetry(subscription: WebPushSubscription, payload: string) {
+async function sendWebPushWithRetry(
+  subscription: WebPushSubscription,
+  payload: string,
+  options: { ttl?: number; urgency?: "very-low" | "low" | "normal" | "high" } = {},
+) {
   let lastError: unknown;
   for (let attempt = 0; attempt < pushAttemptLimit; attempt += 1) {
     try {
       await webpush.sendNotification(subscription, payload, {
-        TTL: 21_600,
-        urgency: "normal",
+        TTL: options.ttl ?? 21_600,
+        urgency: options.urgency ?? "normal",
         // The provider and the service worker both replace an older lesson.
         // Reusing this topic also makes a retry safe after an ambiguous network
         // failure where the provider accepted the first request but its response
@@ -398,6 +405,121 @@ async function sendWebPushWithRetry(subscription: WebPushSubscription, payload: 
     }
   }
   throw lastError;
+}
+
+async function readBoundedJson<T>(request: Request, maximumBytes: number) {
+  const declaredLength = Number(request.headers.get("content-length") || 0);
+  if (Number.isFinite(declaredLength) && declaredLength > maximumBytes) {
+    return { body: null as T | null, tooLarge: true };
+  }
+  if (!request.body) return { body: null as T | null, tooLarge: false };
+
+  const reader = request.body.getReader();
+  const chunks: Uint8Array[] = [];
+  let size = 0;
+  while (true) {
+    const { done, value } = await reader.read();
+    if (done) break;
+    size += value.byteLength;
+    if (size > maximumBytes) {
+      await reader.cancel().catch(() => undefined);
+      return { body: null as T | null, tooLarge: true };
+    }
+    chunks.push(value);
+  }
+
+  const bytes = new Uint8Array(size);
+  let offset = 0;
+  for (const chunk of chunks) {
+    bytes.set(chunk, offset);
+    offset += chunk.byteLength;
+  }
+  try {
+    return { body: JSON.parse(new TextDecoder().decode(bytes)) as T, tooLarge: false };
+  } catch {
+    return { body: null as T | null, tooLarge: false };
+  }
+}
+
+async function testPush(request: Request, origin: string | null) {
+  if (!isTrustedAppOrigin(origin)) return json({ error: "Yêu cầu không đến từ Tam Ngữ 6H." }, 403, origin);
+  const parsed = await readBoundedJson<{ subscription?: WebPushSubscription }>(request, testPushRequestMaximumBytes);
+  if (parsed.tooLarge) return json({ error: "Dữ liệu kiểm tra quá lớn." }, 413, origin);
+  const body = parsed.body;
+  const endpoint = body?.subscription?.endpoint || "";
+  if (!isSupportedPushEndpoint(endpoint) || !hasValidPushKeys(body?.subscription)) {
+    return json({ error: "Đăng ký thông báo chưa hợp lệ." }, 400, origin);
+  }
+
+  const admin = supabaseAdmin();
+  const { data: stored, error: readError } = await admin.from("tam_ngu_push_subscriptions")
+    .select("subscription, lesson_cursor, last_sent_at")
+    .eq("endpoint", endpoint)
+    .eq("enabled", true)
+    .maybeSingle();
+  if (readError) throw readError;
+  const storedSubscription = stored?.subscription as WebPushSubscription | undefined;
+  if (!storedSubscription
+    || !constantTimeEqual(storedSubscription.keys?.p256dh || "", body!.subscription!.keys.p256dh)
+    || !constantTimeEqual(storedSubscription.keys?.auth || "", body!.subscription!.keys.auth)) {
+    return json({ error: "Không xác minh được thiết bị vừa bật." }, 403, origin);
+  }
+
+  const claimedAt = new Date().toISOString();
+  const cutoff = new Date(Date.now() - testPushCooldownMs).toISOString();
+  const { data: claimed, error: claimError } = await admin.from("tam_ngu_push_subscriptions")
+    .update({ last_sent_at: claimedAt, updated_at: claimedAt })
+    .eq("endpoint", endpoint)
+    .eq("enabled", true)
+    .or(`last_sent_at.is.null,last_sent_at.lt.${cutoff}`)
+    .select("endpoint")
+    .maybeSingle();
+  if (claimError) throw claimError;
+  if (!claimed) return json({ error: "Thẻ kiểm tra vừa được gửi rồi. Hãy chờ một phút nhé." }, 429, origin);
+
+  try {
+    const curriculumResponse = await fetch(curriculumUrl, { cache: "no-store", headers: { accept: "application/json" } });
+    if (!curriculumResponse.ok) throw new Error(`Không tải được kho bài: ${curriculumResponse.status}`);
+    const curriculum = await curriculumResponse.json() as StudyModule[];
+    const lessonIndex = curriculum.length > 0 ? Math.max(0, Number(stored.lesson_cursor) || 0) % curriculum.length : 0;
+    const lesson = curriculum[lessonIndex];
+    const notification = lesson?.notification || lesson?.lines?.[0];
+    const lessonUrl = lesson?.id
+      ? new URL(`?lesson=${encodeURIComponent(lesson.id)}`, publicAppUrl).href
+      : publicAppUrl;
+    const payload = buildDeclarativePushPayload({
+      title: "🧪 Tam Ngữ đã kết nối",
+      body: [
+        notification?.english ? `EN  ${notification.english}` : "",
+        notification?.chinese ? `中  ${notification.chinese}` : "",
+        notification?.vietnamese ? `VI  ${notification.vietnamese}` : "",
+      ].filter(Boolean).join("\n") || "Một bài học nhỏ đang chờ cậu.",
+      notificationId: `test:${crypto.randomUUID()}`,
+      navigate: lessonUrl,
+      icon: new URL("icons/icon-v2-192.png", publicAppUrl).href,
+      timestamp: Date.now(),
+    });
+    const publicKey = Deno.env.get("VAPID_PUBLIC_KEY");
+    const privateKey = Deno.env.get("VAPID_PRIVATE_KEY");
+    if (!publicKey || !privateKey) throw new Error("Thiếu VAPID keys.");
+    webpush.setVapidDetails(Deno.env.get("VAPID_SUBJECT") || "mailto:owner@example.com", publicKey, privateKey);
+    await sendWebPushWithRetry(body!.subscription!, payload, { ttl: 300, urgency: "high" });
+    return json({ ok: true }, 202, origin);
+  } catch (error) {
+    const statusCode = Number((error as { statusCode?: number }).statusCode || 0);
+    if (statusCode === 404 || statusCode === 410) {
+      await admin.from("tam_ngu_push_subscriptions").delete().eq("endpoint", endpoint);
+    } else {
+      // Release the atomic cooldown claim so a genuine transient failure can be
+      // retried immediately. Restore the previous successful delivery time and
+      // never overwrite a later delivery that won the race after this request.
+      await admin.from("tam_ngu_push_subscriptions")
+        .update({ last_sent_at: stored.last_sent_at || null })
+        .eq("endpoint", endpoint)
+        .eq("last_sent_at", claimedAt);
+    }
+    throw error;
+  }
 }
 
 async function dispatch(request: Request, origin: string | null) {
@@ -480,14 +602,14 @@ async function dispatch(request: Request, origin: string | null) {
     const lessonUrl = lesson?.id
       ? new URL(`?lesson=${encodeURIComponent(lesson.id)}`, publicAppUrl).href
       : publicAppUrl;
-    const payload = JSON.stringify({
+    const payload = buildDeclarativePushPayload({
       title: body?.preview
         ? "🧪 Bản xem thử"
         : `${symbol} ${deliveryTime} · Bài mới`,
       body: notificationBody,
       notificationId: isDueRun ? `due:${scheduled.dispatchKey}` : `manual:${dispatchId}`,
-      tag: "tam-ngu-current-lesson",
-      url: lessonUrl,
+      navigate: lessonUrl,
+      icon: new URL("icons/icon-v2-192.png", publicAppUrl).href,
       timestamp: Date.now(),
       receipt: receiptToken ? { id: receiptId, timestamp: receiptTimestamp, token: receiptToken } : null,
     });
@@ -656,6 +778,10 @@ async function health(origin: string | null) {
       graceMinutes: dispatchGraceMinutes,
       concurrency: dispatchConcurrency,
       attempts: pushAttemptLimit,
+    },
+    declarativeWebPush: {
+      version: declarativeWebPushVersion,
+      serviceWorkerFallback: true,
     },
     scheduler: {
       fresh: scheduler.fresh,
@@ -967,6 +1093,7 @@ Deno.serve(async (request) => {
     if (request.method === "POST" && action === "refresh-subscription") return await refreshSubscription(request, origin);
     if (request.method === "DELETE" && action === "subscribe") return await unsubscribe(request, origin);
     if (request.method === "POST" && action === "schedule") return await updateSchedule(request, origin);
+    if (request.method === "POST" && action === "test-push") return await testPush(request, origin);
     if (request.method === "POST" && action === "dispatch") return await dispatch(request, origin);
     if (request.method === "POST" && action === "receipt") return await acknowledgeReceipt(request, origin);
     if (request.method === "POST" && action === "lookup") return await lookup(request, origin);

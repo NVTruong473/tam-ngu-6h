@@ -2,6 +2,7 @@ const siteUrl = new URL(process.env.SMOKE_URL || "https://nvtruong473.github.io/
 const apiUrl = (process.env.SMOKE_API_URL || "https://fcsuldrerhbynwotcvyn.supabase.co/functions/v1/tam-ngu-api").replace(/\/$/, "");
 const deepLookup = process.env.SMOKE_DEEP_LOOKUP === "1";
 const requireSchedulerHeartbeat = process.env.SMOKE_REQUIRE_SCHEDULER !== "0";
+const requireDeclarativeWorker = process.env.SMOKE_REQUIRE_DECLARATIVE_WORKER !== "0";
 const pinyinToneMarks = new Set([..."āáǎàēéěèīíǐìōóǒòūúǔùǖǘǚǜĀÁǍÀĒÉĚÈĪÍǏÌŌÓǑÒŪÚǓÙǕǗǙǛ"]);
 
 const wait = (milliseconds) => new Promise((resolve) => setTimeout(resolve, milliseconds));
@@ -103,6 +104,8 @@ if (!html.includes("<title>Tam Ngữ 6H</title>")) failures.push("trang chính s
 if (manifest?.display !== "standalone") failures.push("manifest không chạy standalone");
 if (!Array.isArray(manifest?.icons) || !manifest.icons.some((icon) => icon.sizes === "512x512")) failures.push("manifest thiếu icon 512");
 if (!worker.includes('addEventListener("push"') || !worker.includes("showNotification")) failures.push("service worker thiếu Web Push");
+if (requireDeclarativeWorker
+  && (!worker.includes("payload?.web_push === 8030") || !worker.includes("normalizePushPayload"))) failures.push("service worker thiếu Declarative Web Push fallback");
 if (!health?.ok || !health?.pushConfigured || !health?.lookupConfigured || !health?.lookupProtectionConfigured) failures.push("backend chưa cấu hình đủ");
 if (!["apple", "fcm", "mozilla", "wns"].every((provider) => health?.pushProviders?.includes(provider))) failures.push("backend chưa công bố đủ dịch vụ Push");
 if (health?.dispatchReliability?.graceMinutes !== 10
@@ -114,6 +117,9 @@ if (requireSchedulerHeartbeat && (!health?.scheduler?.fresh
 if (requireSchedulerHeartbeat && !health?.delivery?.healthy) failures.push("bộ lập lịch còn lỗi giao bài chưa phục hồi");
 if (requireSchedulerHeartbeat
   && (!health?.deviceReceipt?.configured || !health?.deviceReceipt?.storageHealthy)) failures.push("biên nhận thiết bị chưa sẵn sàng");
+if (requireSchedulerHeartbeat
+  && (health?.declarativeWebPush?.version !== 8030
+    || health?.declarativeWebPush?.serviceWorkerFallback !== true)) failures.push("backend chưa bật Declarative Web Push");
 
 if (failures.length > 0) throw new Error(`Bản production chưa đạt: ${failures.join(", ")}.`);
 if (deepLookup) await verifyLookupWithRetry();

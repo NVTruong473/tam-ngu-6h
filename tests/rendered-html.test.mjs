@@ -21,12 +21,14 @@ test("exports an installable PWA with one replaceable lock-screen card", async (
   assert.ok(manifest.icons.some((icon) => icon.sizes === "1024x1024" && icon.purpose === "maskable"));
   assert.equal(highResolutionIcon.readUInt32BE(16), 1024);
   assert.equal(highResolutionIcon.readUInt32BE(20), 1024);
-  assert.match(serviceWorker, /tam-ngu-6h-v16/);
+  assert.match(serviceWorker, /tam-ngu-6h-v17/);
   assert.match(serviceWorker, /html\.matchAll/);
   assert.match(serviceWorker, /skipWaiting/);
   assert.match(serviceWorker, /clients\.claim/);
   assert.match(serviceWorker, /addEventListener\("push"/);
   assert.match(serviceWorker, /showNotification/);
+  assert.match(serviceWorker, /payload\?\.web_push === 8030/);
+  assert.match(serviceWorker, /normalizePushPayload/);
   assert.match(serviceWorker, /acknowledgePush/);
   assert.match(serviceWorker, /\/receipt/);
   assert.match(serviceWorker, /Persist deduplication only after display succeeds/);
@@ -106,7 +108,7 @@ test("consumes smoke-test responses before their timeout signal expires", async 
 });
 
 test("keeps Gemini credentials server-only while shipping push and quick lookup", async () => {
-  const [page, generator, appendGenerator, pronunciationEnricher, pronunciationRepairer, curriculumVerifier, edgeWorker, pushEndpoints, dispatchReliability, workflow, monitorWorkflow, backendDeployWorkflow, secretConfigurer, deployer, verifier, rateLimitMigration] = await Promise.all([
+  const [page, generator, appendGenerator, pronunciationEnricher, pronunciationRepairer, curriculumVerifier, edgeWorker, pushEndpoints, dispatchReliability, pushPayload, workflow, monitorWorkflow, backendDeployWorkflow, secretConfigurer, deployer, verifier, rateLimitMigration] = await Promise.all([
     readFile(new URL("app/page.tsx", root), "utf8"),
     readFile(new URL("scripts/generate-curriculum.mjs", root), "utf8"),
     readFile(new URL("scripts/append-curriculum.mjs", root), "utf8"),
@@ -116,6 +118,7 @@ test("keeps Gemini credentials server-only while shipping push and quick lookup"
     readFile(new URL("supabase/functions/tam-ngu-api/index.ts", root), "utf8"),
     readFile(new URL("supabase/functions/tam-ngu-api/push-endpoints.mjs", root), "utf8"),
     readFile(new URL("supabase/functions/tam-ngu-api/dispatch-reliability.mjs", root), "utf8"),
+    readFile(new URL("supabase/functions/tam-ngu-api/push-payload.mjs", root), "utf8"),
     readFile(new URL(".github/workflows/deploy-pages.yml", root), "utf8"),
     readFile(new URL(".github/workflows/production-monitor.yml", root), "utf8"),
     readFile(new URL(".github/workflows/deploy-supabase.yml", root), "utf8"),
@@ -124,7 +127,7 @@ test("keeps Gemini credentials server-only while shipping push and quick lookup"
     readFile(new URL("scripts/verify-supabase-api.mjs", root), "utf8"),
     readFile(new URL("supabase/migrations/20261102090000_lookup_rate_limit.sql", root), "utf8"),
   ]);
-  const source = `${page}\n${generator}\n${appendGenerator}\n${pronunciationEnricher}\n${pronunciationRepairer}\n${curriculumVerifier}\n${edgeWorker}\n${pushEndpoints}\n${dispatchReliability}\n${workflow}\n${monitorWorkflow}\n${backendDeployWorkflow}\n${secretConfigurer}\n${deployer}\n${verifier}`;
+  const source = `${page}\n${generator}\n${appendGenerator}\n${pronunciationEnricher}\n${pronunciationRepairer}\n${curriculumVerifier}\n${edgeWorker}\n${pushEndpoints}\n${dispatchReliability}\n${pushPayload}\n${workflow}\n${monitorWorkflow}\n${backendDeployWorkflow}\n${secretConfigurer}\n${deployer}\n${verifier}`;
 
   assert.doesNotMatch(source, /(?:AQ\.|sk-proj-|sk-or-v1-|gsk_|nvapi-)[A-Za-z0-9_-]{8,}/);
   assert.match(generator, /process\.env\.GEMINI_API_KEY/);
@@ -156,22 +159,30 @@ test("keeps Gemini credentials server-only while shipping push and quick lookup"
   assert.match(backendDeployWorkflow, /--use-api/);
   assert.match(backendDeployWorkflow, /--yes/);
   assert.match(backendDeployWorkflow, /SMOKE_DEEP_LOOKUP: "1"/);
+  assert.match(backendDeployWorkflow, /SMOKE_REQUIRE_DECLARATIVE_WORKER: "0"/);
   assert.match(backendDeployWorkflow, /npm run smoke:production/);
   assert.match(page, /Thư viện bài học/);
   assert.doesNotMatch(page, /Gemini tạo thêm theo lộ trình/);
   assert.match(page, /Đọc gần Việt/);
   assert.match(page, /Notification\.requestPermission/);
-  assert.match(page, /registration\.showNotification/);
-  assert.match(page, /EN  \$\{preview\?\.english/);
+  assert.doesNotMatch(page, /registration\.showNotification/);
+  assert.match(page, /\/test-push/);
+  assert.match(page, /Bài kiểm tra thật đang được gửi qua máy chủ/);
+  assert.match(page, /Gửi thẻ kiểm tra ngay/);
+  assert.match(page, /sendRemoteTestPush/);
   assert.match(edgeWorker, /EN  \$\{notification\.english/);
   assert.match(edgeWorker, /encodeURIComponent\(lesson\.id\)/);
   assert.match(edgeWorker, /Only a later due delivery can clear that alarm/);
   assert.match(edgeWorker, /tam-ngu-internal:\/\/dispatch-cron/);
-  assert.match(page, /Thẻ tam ngữ mẫu vừa được gửi/);
-  assert.match(page, /Bài tam ngữ mẫu/);
-  assert.match(page, /`中  \$\{preview\?\.chinese/);
+  assert.match(edgeWorker, /"🧪 Tam Ngữ đã kết nối"/);
+  assert.match(edgeWorker, /readBoundedJson/);
+  assert.match(edgeWorker, /testPushRequestMaximumBytes = 16_384/);
+  assert.match(edgeWorker, /last_sent_at: stored\.last_sent_at \|\| null/);
+  assert.match(pushPayload, /declarativeWebPushVersion = 8030/);
+  assert.match(pushPayload, /mutable: true/);
+  assert.match(pushPayload, /maximumWebPushPayloadBytes = 3_993/);
   assert.match(page, /cho phép hiện toàn bộ bản xem trước/);
-  assert.match(page, /icon-v2-192\.png/);
+  assert.match(edgeWorker, /icon-v2-192\.png/);
   assert.match(page, /NEXT_PUBLIC_PUSH_API_URL/);
   assert.match(page, /NEXT_PUBLIC_FEEDBACK_FORM_URL/);
   assert.match(page, /Nhắn cho dev/);
@@ -206,6 +217,11 @@ test("keeps Gemini credentials server-only while shipping push and quick lookup"
   assert.match(edgeWorker, /`中  \$\{notification\.chinese/);
   assert.match(edgeWorker, /`VI  \$\{notification\.vietnamese/);
   assert.match(edgeWorker, /notificationId: isDueRun/);
+  assert.match(edgeWorker, /async function testPush/);
+  assert.match(edgeWorker, /action === "test-push"/);
+  assert.match(edgeWorker, /testPushCooldownMs = 60_000/);
+  assert.match(edgeWorker, /urgency: "high"/);
+  assert.match(edgeWorker, /constantTimeEqual\(storedSubscription\.keys\?\.p256dh/);
   assert.match(edgeWorker, /install_hash/);
   assert.match(edgeWorker, /askGeminiForLookup/);
   assert.match(edgeWorker, /Japanese, Korean/);

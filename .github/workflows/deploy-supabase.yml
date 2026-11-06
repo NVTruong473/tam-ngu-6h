@@ -65,4 +65,7 @@ jobs:
           SMOKE_URL: https://${{ github.repository_owner }}.github.io/${{ github.event.repository.name }}/
           SMOKE_API_URL: ${{ vars.NEXT_PUBLIC_PUSH_API_URL }}
           SMOKE_DEEP_LOOKUP: "1"
+          # Pages deploys independently. The Pages workflow and hourly monitor
+          # verify the new worker after propagation, avoiding a cross-job race.
+          SMOKE_REQUIRE_DECLARATIVE_WORKER: "0"
         run: npm run smoke:production

@@ -1,4 +1,4 @@
-const CACHE_VERSION = "tam-ngu-6h-v16";
+const CACHE_VERSION = "tam-ngu-6h-v17";
 const NOTIFICATION_CACHE = "tam-ngu-notifications-v1";
 const NOTIFICATION_CACHE_MAX_ENTRIES = 96;
 const PUSH_API_URL = "https://fcsuldrerhbynwotcvyn.supabase.co/functions/v1/tam-ngu-api";
@@ -100,8 +100,24 @@ async function pruneNotificationMarkers(cache) {
     .map(({ request }) => cache.delete(request)));
 }
 
-async function displayPush(payload) {
-  const notificationId = String(payload.notificationId || `${payload.title}:${payload.body}`).slice(0, 240);
+function normalizePushPayload(payload) {
+  const declarative = payload?.web_push === 8030 && payload?.notification && typeof payload.notification === "object";
+  const notification = declarative ? payload.notification : payload;
+  const metadata = notification?.data && typeof notification.data === "object" ? notification.data : {};
+  return {
+    title: String(notification?.title || "Tam Ngữ 6H"),
+    body: String(notification?.body || "Một bài học nhỏ đang chờ cậu."),
+    notificationId: String(metadata.notificationId || payload?.notificationId || "tam-ngu-fallback").slice(0, 240),
+    receipt: metadata.receipt || payload?.receipt || null,
+    url: notification?.navigate || metadata.url || payload?.url || self.registration.scope,
+    icon: notification?.icon || "icons/icon-v2-192.png",
+    timestamp: Number.isSafeInteger(notification?.timestamp) ? notification.timestamp : payload?.timestamp || Date.now(),
+  };
+}
+
+async function displayPush(rawPayload) {
+  const payload = normalizePushPayload(rawPayload);
+  const notificationId = payload.notificationId || `${payload.title}:${payload.body}`;
   const cache = await caches.open(NOTIFICATION_CACHE);
   const marker = new Request(new URL(`.notification/${encodeURIComponent(notificationId)}`, self.registration.scope).href);
   if (seenNotificationIds.has(notificationId) || await cache.match(marker)) {
@@ -118,7 +134,7 @@ async function displayPush(payload) {
     existing.forEach((notification) => notification.close());
     await self.registration.showNotification(payload.title, {
       body: payload.body,
-      icon: new URL("icons/icon-v2-192.png", self.registration.scope).href,
+      icon: new URL(payload.icon, self.registration.scope).href,
       // iOS owns the card layout; one stable tag plus explicit closing above
       // guarantees that a new lesson replaces the previous lesson card.
       tag: "tam-ngu-current-lesson",

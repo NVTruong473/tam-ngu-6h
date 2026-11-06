@@ -179,6 +179,8 @@ button { -webkit-tap-highlight-color: transparent; }
 .schedule-add button { padding: 0 14px; }
 .schedule-save { width: 100%; margin-top: 10px; padding: 12px; }
 .schedule-save:disabled { opacity: .65; }
+.test-push-button { width: 100%; margin-top: 8px; padding: 11px; border: 1px solid rgba(189,83,106,.18); border-radius: 12px; color: var(--rose-dark); background: #fff0f2; font-size: 11px; font-weight: 800; }
+.test-push-button:disabled { opacity: .65; }
 .about-card { margin-top: 16px; border: 1px solid var(--line); border-radius: 18px; background: rgba(255,255,255,.72); }
 .about-card summary { display: flex; align-items: center; justify-content: space-between; padding: 14px 16px; cursor: pointer; list-style: none; font-size: 12px; font-weight: 750; }
 .about-card summary::-webkit-details-marker { display: none; }
