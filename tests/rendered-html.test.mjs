@@ -108,7 +108,7 @@ test("consumes smoke-test responses before their timeout signal expires", async 
 });
 
 test("keeps Gemini credentials server-only while shipping push and quick lookup", async () => {
-  const [page, generator, appendGenerator, pronunciationEnricher, pronunciationRepairer, curriculumVerifier, edgeWorker, pushEndpoints, dispatchReliability, pushPayload, workflow, monitorWorkflow, backendDeployWorkflow, secretConfigurer, deployer, verifier, rateLimitMigration] = await Promise.all([
+  const [page, generator, appendGenerator, pronunciationEnricher, pronunciationRepairer, curriculumVerifier, edgeWorker, pushEndpoints, dispatchReliability, pushPayload, subscriptionAuth, workflow, monitorWorkflow, backendDeployWorkflow, secretConfigurer, deployer, verifier, rateLimitMigration] = await Promise.all([
     readFile(new URL("app/page.tsx", root), "utf8"),
     readFile(new URL("scripts/generate-curriculum.mjs", root), "utf8"),
     readFile(new URL("scripts/append-curriculum.mjs", root), "utf8"),
@@ -119,6 +119,7 @@ test("keeps Gemini credentials server-only while shipping push and quick lookup"
     readFile(new URL("supabase/functions/tam-ngu-api/push-endpoints.mjs", root), "utf8"),
     readFile(new URL("supabase/functions/tam-ngu-api/dispatch-reliability.mjs", root), "utf8"),
     readFile(new URL("supabase/functions/tam-ngu-api/push-payload.mjs", root), "utf8"),
+    readFile(new URL("supabase/functions/tam-ngu-api/subscription-auth.mjs", root), "utf8"),
     readFile(new URL(".github/workflows/deploy-pages.yml", root), "utf8"),
     readFile(new URL(".github/workflows/production-monitor.yml", root), "utf8"),
     readFile(new URL(".github/workflows/deploy-supabase.yml", root), "utf8"),
@@ -127,7 +128,7 @@ test("keeps Gemini credentials server-only while shipping push and quick lookup"
     readFile(new URL("scripts/verify-supabase-api.mjs", root), "utf8"),
     readFile(new URL("supabase/migrations/20261102090000_lookup_rate_limit.sql", root), "utf8"),
   ]);
-  const source = `${page}\n${generator}\n${appendGenerator}\n${pronunciationEnricher}\n${pronunciationRepairer}\n${curriculumVerifier}\n${edgeWorker}\n${pushEndpoints}\n${dispatchReliability}\n${pushPayload}\n${workflow}\n${monitorWorkflow}\n${backendDeployWorkflow}\n${secretConfigurer}\n${deployer}\n${verifier}`;
+  const source = `${page}\n${generator}\n${appendGenerator}\n${pronunciationEnricher}\n${pronunciationRepairer}\n${curriculumVerifier}\n${edgeWorker}\n${pushEndpoints}\n${dispatchReliability}\n${pushPayload}\n${subscriptionAuth}\n${workflow}\n${monitorWorkflow}\n${backendDeployWorkflow}\n${secretConfigurer}\n${deployer}\n${verifier}`;
 
   assert.doesNotMatch(source, /(?:AQ\.|sk-proj-|sk-or-v1-|gsk_|nvapi-)[A-Za-z0-9_-]{8,}/);
   assert.match(generator, /process\.env\.GEMINI_API_KEY/);
@@ -176,7 +177,10 @@ test("keeps Gemini credentials server-only while shipping push and quick lookup"
   assert.match(edgeWorker, /tam-ngu-internal:\/\/dispatch-cron/);
   assert.match(edgeWorker, /"🧪 Tam Ngữ đã kết nối"/);
   assert.match(edgeWorker, /readBoundedJson/);
-  assert.match(edgeWorker, /testPushRequestMaximumBytes = 16_384/);
+  assert.match(edgeWorker, /pushRequestMaximumBytes = 16_384/);
+  assert.match(edgeWorker, /lookupRequestMaximumBytes = 4_096/);
+  assert.match(edgeWorker, /keyAuthenticatedMutations: true/);
+  assert.match(edgeWorker, /appOpenReconciliation: true/);
   assert.match(edgeWorker, /last_sent_at: stored\.last_sent_at \|\| null/);
   assert.match(pushPayload, /declarativeWebPushVersion = 8030/);
   assert.match(pushPayload, /mutable: true/);
@@ -196,6 +200,9 @@ test("keeps Gemini credentials server-only while shipping push and quick lookup"
   assert.match(page, /DEFAULT_SCHEDULE = \["06:00", "12:00", "18:00"\]/);
   assert.match(page, /Mỗi ngày tối đa 24 mốc thông báo/);
   assert.match(page, /\/schedule/);
+  assert.match(page, /\/subscription-status/);
+  assert.match(page, /rotateExpiredSubscription/);
+  assert.match(page, /subscription: subscription\.toJSON\(\)/);
   assert.match(page, /LOOKUP_CACHE_KEY/);
   assert.match(page, /tamngu6h\.lookup-cache\.v3/);
   assert.match(page, /subscription\.unsubscribe/);
@@ -221,7 +228,7 @@ test("keeps Gemini credentials server-only while shipping push and quick lookup"
   assert.match(edgeWorker, /action === "test-push"/);
   assert.match(edgeWorker, /testPushCooldownMs = 60_000/);
   assert.match(edgeWorker, /urgency: "high"/);
-  assert.match(edgeWorker, /constantTimeEqual\(storedSubscription\.keys\?\.p256dh/);
+  assert.match(edgeWorker, /subscriptionKeysMatch\(storedSubscription, body!\.subscription!\)/);
   assert.match(edgeWorker, /install_hash/);
   assert.match(edgeWorker, /askGeminiForLookup/);
   assert.match(edgeWorker, /Japanese, Korean/);
@@ -256,8 +263,13 @@ test("keeps Gemini credentials server-only while shipping push and quick lookup"
   assert.match(edgeWorker, /hasValidPushKeys/);
   assert.match(edgeWorker, /async function refreshSubscription/);
   assert.match(edgeWorker, /action === "refresh-subscription"/);
-  assert.match(edgeWorker, /body!\.oldSubscription!\.keys\.p256dh/);
+  assert.match(edgeWorker, /async function subscriptionStatus/);
+  assert.match(edgeWorker, /action === "subscription-status"/);
+  assert.match(edgeWorker, /subscriptionKeysMatch\(stored, body!\.oldSubscription!\)/);
   assert.match(edgeWorker, /Không thể xác minh đăng ký thông báo cũ/);
+  assert.match(edgeWorker, /Không thể ghi đè đăng ký của thiết bị khác/);
+  assert.match(subscriptionAuth, /constantTimeEqual/);
+  assert.match(subscriptionAuth, /subscriptionKeysMatch/);
   assert.match(edgeWorker, /topic: "tam-ngu-current-lesson"/);
   assert.match(edgeWorker, /last_dispatch_key\.is\.null,last_dispatch_key\.neq\.\$\{scheduled\.dispatchKey\}/);
   assert.match(edgeWorker, /databaseHealthy \? 200 : 503/);
@@ -280,6 +292,8 @@ test("keeps Gemini credentials server-only while shipping push and quick lookup"
   assert.doesNotMatch(unsubscribeSource, /x-invite-code/);
   assert.match(subscribeSource, /count: "exact"/);
   assert.match(subscribeSource, /count: "exact", head: true \}\)\s*\.eq\("enabled", true\)/);
+  assert.match(subscribeSource, /subscriptionKeysMatch/);
+  assert.match(unsubscribeSource, /subscriptionKeysMatch/);
   assert.match(page, /Đưa Tam Ngữ lên \{devicePlatform === "android" \? "Android" : "iPhone"\}/);
   assert.match(page, /Mở đường link bằng <strong>Chrome<\/strong>/);
   assert.match(page, /syncWebPushSubscription/);

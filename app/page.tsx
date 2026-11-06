@@ -157,6 +157,36 @@ async function syncWebPushSubscription(
   }
 }
 
+async function remoteSubscriptionIsRegistered(subscription: PushSubscription) {
+  const response = await fetch(`${PUSH_API_URL}/subscription-status`, {
+    method: "POST",
+    headers: { "content-type": "application/json" },
+    body: JSON.stringify({ subscription: subscription.toJSON() }),
+  });
+  const result = await response.json().catch(() => ({})) as { error?: string; registered?: boolean };
+  if (!response.ok) throw new Error(result.error || "Chưa đối soát được thông báo.");
+  return result.registered === true;
+}
+
+async function subscribeWithCurrentVapidKey(registration: ServiceWorkerRegistration) {
+  const keyResponse = await fetch(`${PUSH_API_URL}/vapid-key`);
+  if (!keyResponse.ok) throw new Error("Chưa thể bật thông báo lúc này.");
+  const { publicKey } = await keyResponse.json() as { publicKey?: string };
+  if (!publicKey) throw new Error("Chưa thể bật thông báo lúc này.");
+  return await registration.pushManager.subscribe({
+    userVisibleOnly: true,
+    applicationServerKey: urlBase64ToUint8Array(publicKey),
+  });
+}
+
+async function rotateExpiredSubscription(
+  registration: ServiceWorkerRegistration,
+  subscription: PushSubscription,
+) {
+  await subscription.unsubscribe();
+  return await subscribeWithCurrentVapidKey(registration);
+}
+
 async function sendRemoteTestPush(subscription: PushSubscription) {
   const response = await fetch(`${PUSH_API_URL}/test-push`, {
     method: "POST",
@@ -432,19 +462,25 @@ export default function Home() {
       queueMicrotask(() => setPushState("unsupported"));
     } else if (PUSH_API_URL) {
       navigator.serviceWorker.ready
-        .then((registration) => registration.pushManager.getSubscription())
-        .then(async (subscription) => {
+        .then(async (registration) => {
+          let subscription = await registration.pushManager.getSubscription();
           setPushState(subscription ? "enabled" : "idle");
           if (subscription) {
-            localStorage.setItem(STORAGE.activationPrompt, "completed");
             // pushsubscriptionchange is not available in every browser. Repair
-            // the server copy whenever an opted-in user opens the installed app,
-            // which also reconciles timezone and schedule changes made offline.
+            // the server copy whenever an opted-in user opens the installed app.
+            // A provider-expired endpoint is deleted server-side after 404/410;
+            // rotate instead of accidentally registering that dead URL again.
             if (storedRoutine && Notification.permission === "granted") {
               const currentSequence = scheduleAt(Date.now(), storedSchedule).sequence;
               const syncStart = Number.isFinite(storedStart) && storedStart > 0 ? storedStart : currentSequence;
               try {
+                const wasActivated = localStorage.getItem(STORAGE.activationPrompt) === "completed";
+                if (wasActivated && !await remoteSubscriptionIsRegistered(subscription)) {
+                  subscription = await rotateExpiredSubscription(registration, subscription);
+                }
                 await syncWebPushSubscription(subscription, storedSchedule, syncStart, Math.max(0, currentSequence - syncStart));
+                localStorage.setItem(STORAGE.activationPrompt, "completed");
+                setPushState("enabled");
               } catch (error) {
                 if (navigator.onLine) {
                   setPushState("error");
@@ -452,8 +488,7 @@ export default function Home() {
                 }
               }
             }
-          }
-          else if (standalone && Notification.permission !== "denied" && localStorage.getItem(STORAGE.activationPrompt) !== "dismissed") setShowActivation(true);
+          } else if (standalone && Notification.permission !== "denied" && localStorage.getItem(STORAGE.activationPrompt) !== "dismissed") setShowActivation(true);
         })
         .catch(() => setPushState("idle"));
     }
@@ -530,14 +565,12 @@ export default function Home() {
       const permission = await Notification.requestPermission();
       if (permission !== "granted") throw new Error("Cậu chưa cho phép thông báo cho Tam Ngữ 6H.");
       const registration = await navigator.serviceWorker.ready;
-      const keyResponse = await fetch(`${PUSH_API_URL}/vapid-key`);
-      if (!keyResponse.ok) throw new Error("Chưa thể bật thông báo lúc này.");
-      const { publicKey } = await keyResponse.json() as { publicKey?: string };
-      if (!publicKey) throw new Error("Chưa thể bật thông báo lúc này.");
-      const subscription = await registration.pushManager.getSubscription() || await registration.pushManager.subscribe({
-        userVisibleOnly: true,
-        applicationServerKey: urlBase64ToUint8Array(publicKey),
-      });
+      let subscription = await registration.pushManager.getSubscription();
+      if (subscription && localStorage.getItem(STORAGE.activationPrompt) === "completed"
+        && !await remoteSubscriptionIsRegistered(subscription)) {
+        subscription = await rotateExpiredSubscription(registration, subscription);
+      }
+      subscription ||= await subscribeWithCurrentVapidKey(registration);
       const startSequence = routineStartSequence ?? scheduleAt(Date.now(), scheduleTimes).sequence;
       await syncWebPushSubscription(subscription, scheduleTimes, startSequence, unlockedIndex);
       let testCardSent = false;
@@ -628,7 +661,7 @@ export default function Home() {
           method: "POST",
           headers: { "content-type": "application/json" },
           body: JSON.stringify({
-            endpoint: subscription.endpoint,
+            subscription: subscription.toJSON(),
             timezone: Intl.DateTimeFormat().resolvedOptions().timeZone || "Asia/Ho_Chi_Minh",
             scheduleTimes: normalized,
           }),
@@ -660,16 +693,25 @@ export default function Home() {
     try {
       const registration = await navigator.serviceWorker.ready;
       const subscription = await registration.pushManager.getSubscription();
+      let removedFromServer = true;
       if (subscription && PUSH_API_URL) {
-        await fetch(`${PUSH_API_URL}/subscribe`, {
-          method: "DELETE",
-          headers: { "content-type": "application/json" },
-          body: JSON.stringify({ endpoint: subscription.endpoint }),
-        });
+        try {
+          const response = await fetch(`${PUSH_API_URL}/subscribe`, {
+            method: "DELETE",
+            headers: { "content-type": "application/json" },
+            body: JSON.stringify({ subscription: subscription.toJSON() }),
+          });
+          removedFromServer = response.ok;
+        } catch {
+          removedFromServer = false;
+        }
       }
       if (subscription) await subscription.unsubscribe();
       setPushState("idle");
-      setPushMessage("Đã tắt thẻ bài học trên Màn hình khóa ở thiết bị này.");
+      localStorage.removeItem(STORAGE.activationPrompt);
+      setPushMessage(removedFromServer
+        ? "Đã tắt thẻ bài học trên Màn hình khóa ở thiết bị này."
+        : "Đã tắt trên iPhone. Máy chủ sẽ tự dọn endpoint cũ ở lần gửi kế tiếp.");
     } catch {
       setPushState("error");
       setPushMessage("Chưa tắt được thông báo. Hãy thử lại khi có mạng.");

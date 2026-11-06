@@ -10,6 +10,7 @@ import { hasValidPushKeys, isSupportedPushEndpoint } from "./push-endpoints.mjs"
 import { buildDeclarativePushPayload, declarativeWebPushVersion } from "./push-payload.mjs";
 import { createReceiptProof, verifyReceiptProof } from "./receipt-proof.mjs";
 import { schedulerFreshnessSeconds, schedulerHealth } from "./service-health.mjs";
+import { constantTimeEqual, subscriptionKeysMatch } from "./subscription-auth.mjs";
 
 const allowedOrigins = new Set([
   "https://nvtruong473.github.io",
@@ -35,7 +36,8 @@ const dispatchGraceMinutes = 10;
 const dispatchConcurrency = 8;
 const pushAttemptLimit = 2;
 const testPushCooldownMs = 60_000;
-const testPushRequestMaximumBytes = 16_384;
+const pushRequestMaximumBytes = 16_384;
+const lookupRequestMaximumBytes = 4_096;
 const dispatchHeartbeatEndpoint = "tam-ngu-internal://dispatch-cron";
 const deviceReceiptEndpoint = "tam-ngu-internal://device-receipt";
 
@@ -166,15 +168,6 @@ function json(data: unknown, status = 200, origin: string | null = null) {
   return Response.json(data, { status, headers: cors(origin) });
 }
 
-function constantTimeEqual(first: string, second: string) {
-  const firstBytes = new TextEncoder().encode(first);
-  const secondBytes = new TextEncoder().encode(second);
-  if (firstBytes.length !== secondBytes.length) return false;
-  let difference = 0;
-  for (let index = 0; index < firstBytes.length; index += 1) difference |= firstBytes[index] ^ secondBytes[index];
-  return difference === 0;
-}
-
 function authorized(request: Request, header: "x-cron-secret", expected: string | undefined) {
   const provided = request.headers.get(header) || "";
   return Boolean(expected && provided && constantTimeEqual(provided, expected));
@@ -234,14 +227,16 @@ function geminiKeys() {
 
 async function subscribe(request: Request, origin: string | null) {
   if (!isTrustedAppOrigin(origin)) return json({ error: "Yêu cầu không đến từ Tam Ngữ 6H." }, 403, origin);
-  const body = await request.json().catch(() => null) as null | {
+  const parsed = await readBoundedJson<{
     subscription?: WebPushSubscription;
     timezone?: string;
     routineStartSequence?: number;
     scheduleTimes?: string[];
     lessonCursor?: number;
     clientId?: string;
-  };
+  }>(request, pushRequestMaximumBytes);
+  if (parsed.tooLarge) return json({ error: "Dữ liệu đăng ký quá lớn." }, 413, origin);
+  const body = parsed.body;
   const endpoint = body?.subscription?.endpoint || "";
   if (!isSupportedPushEndpoint(endpoint) || !hasValidPushKeys(body?.subscription)) {
     return json({ error: "Đăng ký thông báo của trình duyệt chưa hợp lệ. Hãy mở Tam Ngữ từ icon đã cài rồi thử lại." }, 400, origin);
@@ -253,17 +248,22 @@ async function subscribe(request: Request, origin: string | null) {
   const installHash = clientId ? await saltedDigest("install", clientId) : null;
 
   const admin = supabaseAdmin();
+  const { data: existing, error: existingError } = await admin
+    .from("tam_ngu_push_subscriptions")
+    .select("endpoint, subscription")
+    .eq("endpoint", endpoint)
+    .maybeSingle();
+  if (existingError) throw existingError;
+  if (existing && !subscriptionKeysMatch(existing.subscription as WebPushSubscription, body!.subscription!)) {
+    return json({ error: "Không thể ghi đè đăng ký của thiết bị khác." }, 403, origin);
+  }
+  // Validate a possible endpoint collision before removing this installation's
+  // previous row. A rejected registration must never disable the real device.
   if (installHash) {
     const { error: replacementError } = await admin.from("tam_ngu_push_subscriptions")
       .delete().eq("install_hash", installHash).neq("endpoint", endpoint);
     if (replacementError) throw replacementError;
   }
-  const { data: existing, error: existingError } = await admin
-    .from("tam_ngu_push_subscriptions")
-    .select("endpoint")
-    .eq("endpoint", endpoint)
-    .maybeSingle();
-  if (existingError) throw existingError;
   if (!existing) {
     const { count, error: countError } = await admin
       .from("tam_ngu_push_subscriptions")
@@ -291,10 +291,12 @@ async function subscribe(request: Request, origin: string | null) {
 
 async function refreshSubscription(request: Request, origin: string | null) {
   if (!isTrustedAppOrigin(origin)) return json({ error: "Yêu cầu không đến từ Tam Ngữ 6H." }, 403, origin);
-  const body = await request.json().catch(() => null) as null | {
+  const parsed = await readBoundedJson<{
     oldSubscription?: WebPushSubscription;
     subscription?: WebPushSubscription;
-  };
+  }>(request, pushRequestMaximumBytes);
+  if (parsed.tooLarge) return json({ error: "Dữ liệu làm mới quá lớn." }, 413, origin);
+  const body = parsed.body;
   const oldEndpoint = body?.oldSubscription?.endpoint || "";
   const newEndpoint = body?.subscription?.endpoint || "";
   if (!isSupportedPushEndpoint(oldEndpoint)
@@ -310,14 +312,14 @@ async function refreshSubscription(request: Request, origin: string | null) {
   if (currentError) throw currentError;
   if (!current) return json({ error: "Đăng ký cũ không còn trên máy chủ." }, 404, origin);
   const stored = current.subscription as WebPushSubscription;
-  if (!constantTimeEqual(stored.keys?.p256dh || "", body!.oldSubscription!.keys.p256dh)
-    || !constantTimeEqual(stored.keys?.auth || "", body!.oldSubscription!.keys.auth)) {
+  if (!subscriptionKeysMatch(stored, body!.oldSubscription!)) {
     return json({ error: "Không thể xác minh đăng ký thông báo cũ." }, 409, origin);
   }
 
   const { data, error } = await admin.from("tam_ngu_push_subscriptions").update({
     endpoint: newEndpoint,
     subscription: body?.subscription,
+    enabled: true,
     updated_at: new Date().toISOString(),
     last_error: null,
   }).eq("endpoint", oldEndpoint).select("endpoint").maybeSingle();
@@ -326,19 +328,57 @@ async function refreshSubscription(request: Request, origin: string | null) {
   return json({ ok: true }, 200, origin);
 }
 
+async function subscriptionStatus(request: Request, origin: string | null) {
+  if (!isTrustedAppOrigin(origin)) return json({ error: "Yêu cầu không đến từ Tam Ngữ 6H." }, 403, origin);
+  const parsed = await readBoundedJson<{ subscription?: WebPushSubscription }>(request, pushRequestMaximumBytes);
+  if (parsed.tooLarge) return json({ error: "Dữ liệu đối soát quá lớn." }, 413, origin);
+  const subscription = parsed.body?.subscription;
+  if (!isSupportedPushEndpoint(subscription?.endpoint || "") || !hasValidPushKeys(subscription)) {
+    return json({ error: "Đăng ký thông báo chưa hợp lệ." }, 400, origin);
+  }
+
+  const { data, error } = await supabaseAdmin().from("tam_ngu_push_subscriptions")
+    .select("subscription, enabled")
+    .eq("endpoint", subscription!.endpoint)
+    .maybeSingle();
+  if (error) throw error;
+  if (!data) return json({ ok: true, registered: false }, 200, origin);
+  if (!subscriptionKeysMatch(data.subscription as WebPushSubscription, subscription!)) {
+    return json({ error: "Không thể xác minh thiết bị này." }, 403, origin);
+  }
+  return json({ ok: true, registered: data.enabled === true }, 200, origin);
+}
+
 async function updateSchedule(request: Request, origin: string | null) {
   if (!isTrustedAppOrigin(origin)) return json({ error: "Yêu cầu không đến từ Tam Ngữ 6H." }, 403, origin);
-  const body = await request.json().catch(() => null) as null | { endpoint?: string; timezone?: string; scheduleTimes?: string[] };
+  const parsed = await readBoundedJson<{
+    subscription?: WebPushSubscription;
+    timezone?: string;
+    scheduleTimes?: string[];
+  }>(request, pushRequestMaximumBytes);
+  if (parsed.tooLarge) return json({ error: "Dữ liệu lịch quá lớn." }, 413, origin);
+  const body = parsed.body;
+  const subscription = body?.subscription;
   const scheduleTimes = validScheduleTimes(body?.scheduleTimes);
-  if (!body?.endpoint || !isSupportedPushEndpoint(body.endpoint) || !scheduleTimes) {
+  if (!isSupportedPushEndpoint(subscription?.endpoint || "") || !hasValidPushKeys(subscription) || !scheduleTimes) {
     return json({ error: "Lịch thông báo chưa hợp lệ." }, 400, origin);
   }
-  const { data, error } = await supabaseAdmin().from("tam_ngu_push_subscriptions").update({
+  const admin = supabaseAdmin();
+  const { data: current, error: readError } = await admin.from("tam_ngu_push_subscriptions")
+    .select("subscription")
+    .eq("endpoint", subscription!.endpoint)
+    .maybeSingle();
+  if (readError) throw readError;
+  if (!current) return json({ error: "Thiết bị chưa bật thông báo." }, 404, origin);
+  if (!subscriptionKeysMatch(current.subscription as WebPushSubscription, subscription!)) {
+    return json({ error: "Không thể xác minh thiết bị này." }, 403, origin);
+  }
+  const { data, error } = await admin.from("tam_ngu_push_subscriptions").update({
     schedule_times: scheduleTimes,
     timezone: validTimezone(body.timezone),
     last_dispatch_key: null,
     updated_at: new Date().toISOString(),
-  }).eq("endpoint", body.endpoint).select("endpoint").maybeSingle();
+  }).eq("endpoint", subscription!.endpoint).select("endpoint").maybeSingle();
   if (error) throw error;
   if (!data) return json({ error: "Thiết bị chưa bật thông báo." }, 404, origin);
   return json({ ok: true, scheduleTimes }, 200, origin);
@@ -346,9 +386,23 @@ async function updateSchedule(request: Request, origin: string | null) {
 
 async function unsubscribe(request: Request, origin: string | null) {
   if (!isTrustedAppOrigin(origin)) return json({ error: "Yêu cầu không đến từ Tam Ngữ 6H." }, 403, origin);
-  const body = await request.json().catch(() => null) as null | { endpoint?: string };
-  if (!body?.endpoint || !isSupportedPushEndpoint(body.endpoint)) return json({ error: "Endpoint không hợp lệ." }, 400, origin);
-  const { error } = await supabaseAdmin().from("tam_ngu_push_subscriptions").delete().eq("endpoint", body.endpoint);
+  const parsed = await readBoundedJson<{ subscription?: WebPushSubscription }>(request, pushRequestMaximumBytes);
+  if (parsed.tooLarge) return json({ error: "Dữ liệu tắt thông báo quá lớn." }, 413, origin);
+  const subscription = parsed.body?.subscription;
+  if (!isSupportedPushEndpoint(subscription?.endpoint || "") || !hasValidPushKeys(subscription)) {
+    return json({ error: "Đăng ký thông báo chưa hợp lệ." }, 400, origin);
+  }
+  const admin = supabaseAdmin();
+  const { data: current, error: readError } = await admin.from("tam_ngu_push_subscriptions")
+    .select("subscription")
+    .eq("endpoint", subscription!.endpoint)
+    .maybeSingle();
+  if (readError) throw readError;
+  if (!current) return json({ ok: true, missing: true }, 200, origin);
+  if (!subscriptionKeysMatch(current.subscription as WebPushSubscription, subscription!)) {
+    return json({ error: "Không thể xác minh thiết bị này." }, 403, origin);
+  }
+  const { error } = await admin.from("tam_ngu_push_subscriptions").delete().eq("endpoint", subscription!.endpoint);
   if (error) throw error;
   return json({ ok: true }, 200, origin);
 }
@@ -443,7 +497,7 @@ async function readBoundedJson<T>(request: Request, maximumBytes: number) {
 
 async function testPush(request: Request, origin: string | null) {
   if (!isTrustedAppOrigin(origin)) return json({ error: "Yêu cầu không đến từ Tam Ngữ 6H." }, 403, origin);
-  const parsed = await readBoundedJson<{ subscription?: WebPushSubscription }>(request, testPushRequestMaximumBytes);
+  const parsed = await readBoundedJson<{ subscription?: WebPushSubscription }>(request, pushRequestMaximumBytes);
   if (parsed.tooLarge) return json({ error: "Dữ liệu kiểm tra quá lớn." }, 413, origin);
   const body = parsed.body;
   const endpoint = body?.subscription?.endpoint || "";
@@ -459,9 +513,7 @@ async function testPush(request: Request, origin: string | null) {
     .maybeSingle();
   if (readError) throw readError;
   const storedSubscription = stored?.subscription as WebPushSubscription | undefined;
-  if (!storedSubscription
-    || !constantTimeEqual(storedSubscription.keys?.p256dh || "", body!.subscription!.keys.p256dh)
-    || !constantTimeEqual(storedSubscription.keys?.auth || "", body!.subscription!.keys.auth)) {
+  if (!storedSubscription || !subscriptionKeysMatch(storedSubscription, body!.subscription!)) {
     return json({ error: "Không xác minh được thiết bị vừa bật." }, 403, origin);
   }
 
@@ -783,6 +835,10 @@ async function health(origin: string | null) {
       version: declarativeWebPushVersion,
       serviceWorkerFallback: true,
     },
+    subscriptionLifecycle: {
+      keyAuthenticatedMutations: true,
+      appOpenReconciliation: true,
+    },
     scheduler: {
       fresh: scheduler.fresh,
       ageSeconds: scheduler.ageSeconds,
@@ -1049,7 +1105,9 @@ async function askGeminiForLookup(query: string) {
 
 async function lookup(request: Request, origin: string | null) {
   if (!isTrustedAppOrigin(origin)) return json({ error: "Yêu cầu không đến từ Tam Ngữ 6H." }, 403, origin);
-  const body = await request.json().catch(() => null) as null | { query?: unknown };
+  const parsed = await readBoundedJson<{ query?: unknown }>(request, lookupRequestMaximumBytes);
+  if (parsed.tooLarge) return json({ error: `Nội dung tối đa ${LOOKUP_QUERY_MAXIMUM} ký tự.` }, 413, origin);
+  const body = parsed.body;
   const query = typeof body?.query === "string" ? body.query.replace(/\s+/g, " ").trim() : "";
   if (query.length < 1) return json({ error: "Hãy nhập một từ, câu hoặc đoạn hội thoại ngắn." }, 400, origin);
   if (query.length > LOOKUP_QUERY_MAXIMUM) return json({ error: `Nội dung tối đa ${LOOKUP_QUERY_MAXIMUM} ký tự.` }, 400, origin);
@@ -1091,6 +1149,7 @@ Deno.serve(async (request) => {
     if (request.method === "GET" && action === "vapid-key") return json({ publicKey: Deno.env.get("VAPID_PUBLIC_KEY") || null }, 200, origin);
     if (request.method === "POST" && action === "subscribe") return await subscribe(request, origin);
     if (request.method === "POST" && action === "refresh-subscription") return await refreshSubscription(request, origin);
+    if (request.method === "POST" && action === "subscription-status") return await subscriptionStatus(request, origin);
     if (request.method === "DELETE" && action === "subscribe") return await unsubscribe(request, origin);
     if (request.method === "POST" && action === "schedule") return await updateSchedule(request, origin);
     if (request.method === "POST" && action === "test-push") return await testPush(request, origin);

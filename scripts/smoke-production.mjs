@@ -120,6 +120,9 @@ if (requireSchedulerHeartbeat
 if (requireSchedulerHeartbeat
   && (health?.declarativeWebPush?.version !== 8030
     || health?.declarativeWebPush?.serviceWorkerFallback !== true)) failures.push("backend chưa bật Declarative Web Push");
+if (requireSchedulerHeartbeat
+  && (health?.subscriptionLifecycle?.keyAuthenticatedMutations !== true
+    || health?.subscriptionLifecycle?.appOpenReconciliation !== true)) failures.push("backend chưa bật tự sửa và xác thực đăng ký Push");
 
 if (failures.length > 0) throw new Error(`Bản production chưa đạt: ${failures.join(", ")}.`);
 if (deepLookup) await verifyLookupWithRetry();
