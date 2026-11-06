@@ -81,7 +81,10 @@ const [pageResponse, manifestResponse, workerResponse, healthResponse] = await P
   fetchWithRetry(siteUrl, "Trang chính"),
   fetchWithRetry(new URL("manifest.webmanifest", siteUrl), "Web App Manifest"),
   fetchWithRetry(new URL("sw.js", siteUrl), "Service Worker"),
-  fetchWithRetry(`${apiUrl}/health`, "API Tam Ngữ"),
+  // A fresh backend rollout may wait almost one minute for the first Supabase
+  // Cron tick to create its private heartbeat. Keep this bounded below CI's
+  // timeout while avoiding a false failed deployment at second 59.
+  fetchWithRetry(`${apiUrl}/health`, "API Tam Ngữ", 18),
 ]);
 
 const [html, manifest, worker, health] = await Promise.all([

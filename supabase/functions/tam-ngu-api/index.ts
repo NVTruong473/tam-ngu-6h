@@ -32,6 +32,7 @@ const slotByPhase = { morning: 0, noon: 1, evening: 2 } as const;
 const dispatchGraceMinutes = 10;
 const dispatchConcurrency = 8;
 const pushAttemptLimit = 2;
+const dispatchHeartbeatEndpoint = "tam-ngu-internal://dispatch-cron";
 
 type Phase = keyof typeof slotByPhase;
 type WebPushSubscription = {
@@ -522,28 +523,29 @@ async function dispatch(request: Request, origin: string | null) {
     const heartbeatAt = new Date().toISOString();
     const deliveryFailed = totals.failed > 0 || totals.claimErrors > 0 || totals.storageErrors > 0;
     const deliverySucceeded = totals.due > 0 && !deliveryFailed;
-    const heartbeat: Record<string, unknown> = {
-      name: "dispatch-cron",
-      last_seen_at: heartbeatAt,
-      details: {
-        checked: subscriptions.length,
-        due: totals.due,
-        sent: totals.sent,
-        removed: totals.removed,
-        failed: totals.failed,
-        claimErrors: totals.claimErrors,
-        storageErrors: totals.storageErrors,
-      },
-    };
+    const { data: previousHeartbeat, error: heartbeatReadError } = await admin
+      .from("tam_ngu_push_subscriptions")
+      .select("last_error")
+      .eq("endpoint", dispatchHeartbeatEndpoint)
+      .maybeSingle();
+    let deliveryError = previousHeartbeat?.last_error || null;
     // Empty minute scans prove the scheduler is alive, but they must never hide
     // a real delivery failure. Only a later due delivery can clear that alarm.
-    if (deliveryFailed) heartbeat.last_delivery_failure_at = heartbeatAt;
-    if (deliverySucceeded) {
-      heartbeat.last_delivery_success_at = heartbeatAt;
-      heartbeat.last_delivery_failure_at = null;
-    }
-    const { error } = await admin.from("tam_ngu_service_health").upsert(heartbeat, { onConflict: "name" });
-    heartbeatError = Boolean(error);
+    if (deliveryFailed) {
+      deliveryError = `delivery:${totals.failed};claim:${totals.claimErrors};storage:${totals.storageErrors}`;
+    } else if (deliverySucceeded) deliveryError = null;
+    const { error } = await admin.from("tam_ngu_push_subscriptions").upsert({
+      endpoint: dispatchHeartbeatEndpoint,
+      subscription: { kind: "service-heartbeat" },
+      timezone: "UTC",
+      routine_start_sequence: 0,
+      schedule_times: [],
+      enabled: false,
+      updated_at: heartbeatAt,
+      last_sent_at: heartbeatAt,
+      last_error: deliveryError,
+    }, { onConflict: "endpoint" });
+    heartbeatError = Boolean(heartbeatReadError || error);
   }
   const databaseHealthy = totals.claimErrors === 0 && totals.storageErrors === 0 && !heartbeatError;
   return json({
@@ -558,12 +560,12 @@ async function dispatch(request: Request, origin: string | null) {
 
 async function health(origin: string | null) {
   const { data, error } = await supabaseAdmin()
-    .from("tam_ngu_service_health")
-    .select("last_seen_at, last_delivery_failure_at")
-    .eq("name", "dispatch-cron")
+    .from("tam_ngu_push_subscriptions")
+    .select("last_sent_at, last_error")
+    .eq("endpoint", dispatchHeartbeatEndpoint)
     .maybeSingle();
-  const scheduler = schedulerHealth(data?.last_seen_at);
-  const deliveryHealthy = !data?.last_delivery_failure_at;
+  const scheduler = schedulerHealth(data?.last_sent_at);
+  const deliveryHealthy = !data?.last_error;
   const healthy = !error && scheduler.fresh && deliveryHealthy;
 
   return json({

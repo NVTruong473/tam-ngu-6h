@@ -5,9 +5,7 @@ on:
     branches: [main]
     paths:
       - "supabase/functions/tam-ngu-api/**"
-      - "supabase/migrations/**"
       - "supabase/config.toml"
-      - "scripts/apply-supabase-migration.mjs"
       - "scripts/smoke-production.mjs"
       - ".github/workflows/deploy-supabase.yml"
   workflow_dispatch:
@@ -45,8 +43,6 @@ jobs:
       - uses: actions/setup-node@v6
         with:
           node-version: 22
-      - name: Apply private database migrations
-        run: npm run supabase:apply
       - name: Deploy the public API without exposing server secrets
         run: >-
           npx --yes supabase@3.0.0 functions deploy tam-ngu-api
