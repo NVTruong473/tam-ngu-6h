@@ -7,6 +7,7 @@ import {
   pushRetryDelayMs,
 } from "./dispatch-reliability.mjs";
 import { deliveryPhaseAtHour, symbolForDeliveryPhase } from "./delivery-phase.mjs";
+import { lessonSelectionForCursor } from "../_shared/lesson-selection.mjs";
 import { hasValidPushKeys, isSupportedPushEndpoint } from "./push-endpoints.mjs";
 import { buildDeclarativePushPayload, declarativeWebPushVersion } from "./push-payload.mjs";
 import { createReceiptProof, verifyReceiptProof } from "./receipt-proof.mjs";
@@ -648,8 +649,8 @@ async function dispatch(request: Request, origin: string | null) {
     const rawCursor = Math.max(0, Number.isInteger(row.lesson_cursor) ? Number(row.lesson_cursor) : fallbackCursor);
     // Keep a dense custom schedule useful even if free AI generation is delayed:
     // cycle through reviewed lessons instead of repeating the final item forever.
-    const lessonIndex = curriculum.length > 0 ? rawCursor % curriculum.length : 0;
-    const lesson = curriculum[lessonIndex];
+    const lessonSelection = lessonSelectionForCursor(rawCursor, curriculum.length);
+    const lesson = curriculum[lessonSelection.index];
     const firstLine = lesson?.lines?.[0];
     const notification = lesson?.notification || firstLine;
     const symbol = symbolForDeliveryPhase(phase);
@@ -666,7 +667,7 @@ async function dispatch(request: Request, origin: string | null) {
     const payload = buildDeclarativePushPayload({
       title: body?.preview
         ? "🧪 Bản xem thử"
-        : `${symbol} ${deliveryTime} · Bài mới`,
+        : `${symbol} ${deliveryTime} · ${lessonSelection.isReview ? `Ôn tập vòng ${lessonSelection.round}` : "Bài mới"}`,
       body: notificationBody,
       notificationId: isDueRun ? `due:${scheduled.dispatchKey}` : `manual:${dispatchId}`,
       navigate: lessonUrl,

@@ -182,6 +182,8 @@ test("keeps Gemini credentials server-only while shipping push and quick lookup"
   assert.match(edgeWorker, /encodeURIComponent\(lesson\.id\)/);
   assert.match(edgeWorker, /Only a later due delivery can clear that alarm/);
   assert.match(edgeWorker, /deliveryPhaseAtHour/);
+  assert.match(edgeWorker, /lessonSelectionForCursor/);
+  assert.match(edgeWorker, /Ôn tập vòng/);
   assert.match(edgeWorker, /phase === "night" \? lesson\?\.nightWish/);
   assert.match(edgeWorker, /tam-ngu-internal:\/\/dispatch-cron/);
   assert.match(edgeWorker, /"🧪 Tam Ngữ đã kết nối"/);
@@ -230,7 +232,7 @@ test("keeps Gemini credentials server-only while shipping push and quick lookup"
   assert.match(edgeWorker, /webpush/);
   assert.match(edgeWorker, /lesson\?\.notification \|\| firstLine/);
   assert.match(edgeWorker, /"🧪 Bản xem thử"/);
-  assert.match(edgeWorker, /`\$\{symbol\} \$\{deliveryTime\} · Bài mới`/);
+  assert.match(edgeWorker, /lessonSelection\.isReview \? `Ôn tập vòng \$\{lessonSelection\.round\}` : "Bài mới"/);
   assert.match(edgeWorker, /`中  \$\{notification\.chinese/);
   assert.match(edgeWorker, /`VI  \$\{notification\.vietnamese/);
   assert.match(edgeWorker, /notificationId: isDueRun/);
@@ -246,7 +248,8 @@ test("keeps Gemini credentials server-only while shipping push and quick lookup"
   assert.match(edgeWorker, /validScheduleTimes/);
   assert.match(edgeWorker, /mode\?: "due"/);
   assert.match(edgeWorker, /last_dispatch_key/);
-  assert.match(edgeWorker, /rawCursor % curriculum\.length/);
+  assert.doesNotMatch(page, /Math\.min\(unlockedIndex, curriculum\.length - 1\)/);
+  assert.match(page, /scheduledLesson\.index/);
   assert.match(edgeWorker, /lesson_cursor: body\?\.preview \? row\.lesson_cursor \?\? rawCursor : rawCursor \+ 1/);
   assert.match(edgeWorker, /normalizeLookupExample/);
   assert.match(edgeWorker, /hasToneGuidance/);

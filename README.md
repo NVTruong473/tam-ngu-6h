@@ -8,6 +8,7 @@ Xem [lộ trình phát hành native](docs/native-release.md) trước khi ký b�
 
 - Mặc định có bài mới lúc 06:00, 12:00, 18:00; mỗi thiết bị có thể chọn từ 1 đến 24 mốc riêng theo múi giờ của mình.
 - Kho bài đệm A2.1 → B1 có sẵn ngoại tuyến. GitHub Actions thử nối tiếp tối đa 3 bài đã kiểm định mỗi ngày; từng ứng viên được kiểm tra và hoàn tác riêng nên Gemini hết quota hay trả bài lỗi cũng không làm hỏng bản đang chạy. Lộ trình tiếp tục B1+ → B2 → B2+ → C1, không phải một “cuốn sách” cố định.
+- Nếu lịch cá nhân chạy nhanh hơn tốc độ tăng kho, Push và màn hình Hôm nay cùng chuyển sang vòng ôn tập có nhãn rõ ràng. Mỗi bài trong kho được đi qua trước khi vòng mới bắt đầu; app không kẹt ở bài cuối và không gọi bài ôn là “bài mới”.
 - Nội dung gồm câu ứng dụng, thông điệp và hội thoại ngắn; không quay lại nhóm chào hỏi/số đếm nhập môn.
 - Mỗi câu Trung có pinyin, **Đọc gần Việt** và nút phát âm dùng giọng hệ thống. “Đọc gần Việt” chỉ là cầu nối, không thay thế nghe giọng Quan thoại chuẩn.
 - Tra nhanh Anh/Trung trả nghĩa, sắc thái và hai ví dụ song ngữ. API key Gemini chỉ ở Supabase Edge Function; thiết bị chỉ nhận kết quả đã lọc và tự lưu tối đa 30 lần tra gần nhất.

@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect, useMemo, useState } from "react";
+import { lessonSelectionForCursor } from "../supabase/functions/_shared/lesson-selection.mjs";
 import curriculumData from "./curriculum.json";
 import {
   disableNativeLessonNotifications,
@@ -378,7 +379,8 @@ export default function Home() {
 
   const schedule = scheduleAt(now, scheduleTimes);
   const unlockedIndex = routineStartSequence === null ? 0 : Math.max(0, schedule.sequence - routineStartSequence);
-  const moduleIndex = viewingScheduled ? Math.min(unlockedIndex, curriculum.length - 1) : selectedModuleIndex;
+  const scheduledLesson = lessonSelectionForCursor(unlockedIndex, curriculum.length);
+  const moduleIndex = viewingScheduled ? scheduledLesson.index : selectedModuleIndex;
   const studyModule = curriculum[moduleIndex] ?? curriculum[0];
   const currentWish = schedule.phase === "night"
     ? studyModule.nightWish ?? schedule.wish
@@ -827,7 +829,7 @@ export default function Home() {
         <section className="screen" aria-label="Bài học hôm nay">
           <article className={`session-card ${routineEnabled ? "active" : ""}`}>
             <div className="session-copy">
-              <p className="eyebrow">{routineEnabled ? schedule.label : "MỘT BÀI · MỘT LỜI NHẮN"}</p>
+              <p className="eyebrow">{routineEnabled ? `${schedule.label}${scheduledLesson.isReview ? ` · ÔN VÒNG ${scheduledLesson.round}` : ""}` : "MỘT BÀI · MỘT LỜI NHẮN"}</p>
               <h2>{routineEnabled ? currentWish : "Hẹn nhau theo nhịp riêng"}</h2>
               <p>{routineEnabled ? `Bài tiếp theo lúc ${schedule.nextTime}, sau ${formatRemaining(remaining)}.` : "Chọn giờ nhận những thẻ bài học phù hợp với ngày của cậu."}</p>
             </div>
@@ -907,7 +909,7 @@ export default function Home() {
 
           <div className="section-heading">
             <div>
-              <p className="eyebrow">{studyModule.stage} · BÀI {moduleIndex + 1}</p>
+              <p className="eyebrow">{studyModule.stage} · {viewingScheduled && scheduledLesson.isReview ? `ÔN VÒNG ${scheduledLesson.round} · ` : ""}BÀI {moduleIndex + 1}</p>
               <h2>{studyModule.title}</h2>
             </div>
           </div>
@@ -980,7 +982,7 @@ export default function Home() {
           </article>
           <article className="schedule-card" aria-labelledby="schedule-title">
             <div className="schedule-card-heading">
-              <div><strong id="schedule-title">Giờ báo bài mới</strong><small>Thêm tối đa 24 mốc; mỗi mốc chỉ nhận một thẻ.</small></div>
+              <div><strong id="schedule-title">Giờ báo bài mới</strong><small>Thêm tối đa 24 mốc. Nếu học nhanh hơn kho bài mới, app tự xen vòng ôn tập có nhãn rõ ràng.</small></div>
               <span>{scheduleTimes.length}/24</span>
             </div>
             <div className="schedule-times">
