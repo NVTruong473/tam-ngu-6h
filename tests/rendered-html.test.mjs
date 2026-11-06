@@ -91,6 +91,13 @@ test("keeps setup inside Tam Ngữ with one explicit iOS permission", async () =
   assert.doesNotMatch(page, /Scriptable|scriptable:\/\/\/|showWidgetInstall|navigator\.clipboard/);
   assert.doesNotMatch(packageText, /build-widget-data|generate:widget-data/);
 });
+
+test("consumes smoke-test responses before their timeout signal expires", async () => {
+  const smoke = await readFile(new URL("scripts/smoke-production.mjs", root), "utf8");
+  assert.match(smoke, /return await response\.text\(\)/);
+  assert.doesNotMatch(smoke, /return response;/);
+});
+
 test("keeps Gemini credentials server-only while shipping push and quick lookup", async () => {
   const [page, generator, appendGenerator, pronunciationEnricher, pronunciationRepairer, curriculumVerifier, edgeWorker, pushEndpoints, dispatchReliability, workflow, monitorWorkflow, backendDeployWorkflow, secretConfigurer, deployer, verifier, rateLimitMigration] = await Promise.all([
     readFile(new URL("app/page.tsx", root), "utf8"),

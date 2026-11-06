@@ -16,7 +16,10 @@ async function fetchWithRetry(url, label, attempts = 6) {
         signal: AbortSignal.timeout(15_000),
       });
       if (!response.ok) throw new Error(`${label} HTTP ${response.status}`);
-      return response;
+      // Consume the body before AbortSignal.timeout expires. Returning a live
+      // Response and reading it much later can abort an otherwise successful
+      // request when another parallel check is still retrying.
+      return await response.text();
     } catch (error) {
       lastError = error;
       if (attempt < attempts) await wait(5_000);
@@ -77,7 +80,7 @@ async function verifyLookupWithRetry(attempts = 2) {
   throw lastError || new Error("Tra cứu thật không phản hồi.");
 }
 
-const [pageResponse, manifestResponse, workerResponse, healthResponse] = await Promise.all([
+const [html, manifestText, worker, healthText] = await Promise.all([
   fetchWithRetry(siteUrl, "Trang chính"),
   fetchWithRetry(new URL("manifest.webmanifest", siteUrl), "Web App Manifest"),
   fetchWithRetry(new URL("sw.js", siteUrl), "Service Worker"),
@@ -87,12 +90,8 @@ const [pageResponse, manifestResponse, workerResponse, healthResponse] = await P
   fetchWithRetry(`${apiUrl}/health`, "API Tam Ngữ", 18),
 ]);
 
-const [html, manifest, worker, health] = await Promise.all([
-  pageResponse.text(),
-  manifestResponse.json(),
-  workerResponse.text(),
-  healthResponse.json(),
-]);
+const manifest = JSON.parse(manifestText);
+const health = JSON.parse(healthText);
 
 const failures = [];
 if (!html.includes("<title>Tam Ngữ 6H</title>")) failures.push("trang chính sai tiêu đề");
