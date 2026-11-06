@@ -261,6 +261,7 @@ test("keeps Gemini credentials server-only while shipping push and quick lookup"
   assert.doesNotMatch(subscribeSource, /x-invite-code/);
   assert.doesNotMatch(unsubscribeSource, /x-invite-code/);
   assert.match(subscribeSource, /count: "exact"/);
+  assert.match(subscribeSource, /count: "exact", head: true \}\)\s*\.eq\("enabled", true\)/);
   assert.match(page, /Đưa Tam Ngữ lên \{devicePlatform === "android" \? "Android" : "iPhone"\}/);
   assert.match(page, /Mở đường link bằng <strong>Chrome<\/strong>/);
   assert.match(page, /syncWebPushSubscription/);

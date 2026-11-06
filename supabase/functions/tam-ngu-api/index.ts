@@ -264,7 +264,8 @@ async function subscribe(request: Request, origin: string | null) {
   if (!existing) {
     const { count, error: countError } = await admin
       .from("tam_ngu_push_subscriptions")
-      .select("endpoint", { count: "exact", head: true });
+      .select("endpoint", { count: "exact", head: true })
+      .eq("enabled", true);
     if (countError) throw countError;
     if ((count || 0) >= 100) return json({ error: "Danh sách thiết bị đang đầy. Hãy nhắn cho người gửi app nhé." }, 429, origin);
   }
