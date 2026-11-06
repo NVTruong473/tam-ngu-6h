@@ -131,7 +131,7 @@ test("consumes smoke-test responses before their timeout signal expires", async 
 });
 
 test("keeps Gemini credentials server-only while shipping push and quick lookup", async () => {
-  const [page, generator, appendGenerator, pronunciationEnricher, pronunciationRepairer, curriculumVerifier, edgeWorker, lookupCache, pushEndpoints, dispatchReliability, pushPayload, subscriptionAuth, workflow, monitorWorkflow, backendDeployWorkflow, secretConfigurer, deployer, verifier, rateLimitMigration, cacheMigration, migrationRunner] = await Promise.all([
+  const [page, generator, appendGenerator, pronunciationEnricher, pronunciationRepairer, curriculumVerifier, edgeWorker, lookupCache, pushEndpoints, dispatchReliability, pushPayload, subscriptionAuth, workflow, monitorWorkflow, backendDeployWorkflow, secretConfigurer, deployer, verifier, rateLimitMigration, migrationRunner] = await Promise.all([
     readFile(new URL("app/page.tsx", root), "utf8"),
     readFile(new URL("scripts/generate-curriculum.mjs", root), "utf8"),
     readFile(new URL("scripts/append-curriculum.mjs", root), "utf8"),
@@ -151,7 +151,6 @@ test("keeps Gemini credentials server-only while shipping push and quick lookup"
     readFile(new URL("scripts/deploy-supabase-function.mjs", root), "utf8"),
     readFile(new URL("scripts/verify-supabase-api.mjs", root), "utf8"),
     readFile(new URL("supabase/migrations/20261102090000_lookup_rate_limit.sql", root), "utf8"),
-    readFile(new URL("supabase/migrations/20261106160000_private_lookup_cache.sql", root), "utf8"),
     readFile(new URL("scripts/apply-supabase-migration.mjs", root), "utf8"),
   ]);
   const source = `${page}\n${generator}\n${appendGenerator}\n${pronunciationEnricher}\n${pronunciationRepairer}\n${curriculumVerifier}\n${edgeWorker}\n${lookupCache}\n${pushEndpoints}\n${dispatchReliability}\n${pushPayload}\n${subscriptionAuth}\n${workflow}\n${monitorWorkflow}\n${backendDeployWorkflow}\n${secretConfigurer}\n${deployer}\n${verifier}`;
@@ -181,7 +180,7 @@ test("keeps Gemini credentials server-only while shipping push and quick lookup"
   assert.match(monitorWorkflow, /Issue này sẽ tự đóng/);
   assert.match(backendDeployWorkflow, /permissions:\s+contents: read/);
   assert.match(backendDeployWorkflow, /secrets\.SUPABASE_ACCESS_TOKEN/);
-  assert.match(backendDeployWorkflow, /npm run supabase:apply/);
+  assert.doesNotMatch(backendDeployWorkflow, /npm run supabase:apply/);
   assert.match(backendDeployWorkflow, /npx --yes supabase@3\.0\.0 functions deploy tam-ngu-api/);
   assert.match(backendDeployWorkflow, /--remote="\$SUPABASE_PROJECT_REF"/);
   assert.match(backendDeployWorkflow, /--no-verify-jwt/);
@@ -268,19 +267,15 @@ test("keeps Gemini credentials server-only while shipping push and quick lookup"
   assert.match(edgeWorker, /subscriptionKeysMatch\(storedSubscription, body!\.subscription!\)/);
   assert.match(edgeWorker, /install_hash/);
   assert.match(edgeWorker, /askGeminiForLookup/);
-  assert.match(edgeWorker, /tam_ngu_get_lookup_cache/);
-  assert.match(edgeWorker, /tam_ngu_put_lookup_cache/);
+  assert.match(edgeWorker, /lookupCacheEndpointPrefix = "tam-ngu-cache:\/\/"/);
+  assert.match(edgeWorker, /kind: "lookup-cache-v1"/);
+  assert.match(edgeWorker, /\.range\(lookupCacheMaximumEntries, lookupCacheMaximumEntries \+ 499\)/);
   assert.match(edgeWorker, /Lookup cache read unavailable; using Gemini fallback/);
   assert.match(edgeWorker, /plaintextQueriesStored: false/);
   assert.match(page, /Đã dùng lại kết quả được bảo vệ/);
   assert.match(lookupCache, /AES-GCM/);
   assert.match(lookupCache, /name: "HMAC", hash: "SHA-256"/);
   assert.match(lookupCache, /crypto\.getRandomValues\(new Uint8Array\(12\)\)/);
-  assert.match(cacheMigration, /interval '7 days'/);
-  assert.match(cacheMigration, /offset 2000/);
-  assert.match(cacheMigration, /enable row level security/);
-  assert.match(cacheMigration, /revoke all on table public\.tam_ngu_lookup_cache from public, anon, authenticated/);
-  assert.doesNotMatch(cacheMigration, /query_(?:text|raw)|plaintext_result/);
   assert.match(migrationRunner, /readdirSync/);
   assert.match(migrationRunner, /SUPABASE_ACCESS_TOKEN/);
   assert.match(edgeWorker, /Japanese, Korean/);

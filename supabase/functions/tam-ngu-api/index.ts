@@ -51,6 +51,7 @@ const pushRequestMaximumBytes = 16_384;
 const lookupRequestMaximumBytes = 4_096;
 const dispatchHeartbeatEndpoint = "tam-ngu-internal://dispatch-cron";
 const deviceReceiptEndpoint = "tam-ngu-internal://device-receipt";
+const lookupCacheEndpointPrefix = "tam-ngu-cache://";
 
 type Phase = keyof typeof slotByPhase;
 type DeliveryPhase = Phase | "night";
@@ -822,7 +823,7 @@ async function acknowledgeReceipt(request: Request, origin: string | null) {
 
 async function health(origin: string | null) {
   const admin = supabaseAdmin();
-  const [{ data, error }, { data: receipt, error: receiptError }, { data: cache, error: cacheError }] = await Promise.all([
+  const [{ data, error }, { data: receipt, error: receiptError }, { count: cacheEntries, error: cacheError }] = await Promise.all([
     admin.from("tam_ngu_push_subscriptions")
       .select("last_sent_at, last_error, last_dispatch_key")
       .eq("endpoint", dispatchHeartbeatEndpoint)
@@ -831,7 +832,10 @@ async function health(origin: string | null) {
       .select("last_sent_at, last_dispatch_key")
       .eq("endpoint", deviceReceiptEndpoint)
       .maybeSingle(),
-    admin.rpc("tam_ngu_lookup_cache_health"),
+    admin.from("tam_ngu_push_subscriptions")
+      .select("endpoint", { count: "exact", head: true })
+      .like("endpoint", `${lookupCacheEndpointPrefix}%`)
+      .gte("created_at", new Date(Date.now() - lookupCacheTtlDays * 86_400_000).toISOString()),
   ]);
   const scheduler = schedulerHealth(data?.last_sent_at);
   const deliveryHealthy = !data?.last_error;
@@ -880,9 +884,7 @@ async function health(origin: string | null) {
       plaintextQueriesStored: false,
       ttlDays: lookupCacheTtlDays,
       maximumEntries: lookupCacheMaximumEntries,
-      entries: Number(cache?.entries || 0),
-      activeEntries: Number(cache?.active_entries || 0),
-      totalHits: Number(cache?.total_hits || 0),
+      entries: Number(cacheEntries || 0),
     },
   }, healthy ? 200 : 503, origin);
 }
@@ -1163,16 +1165,27 @@ async function lookup(request: Request, origin: string | null) {
   try {
     const cacheSecret = Deno.env.get("TAM_NGU_RATE_LIMIT_SALT") || "";
     const cacheKey = await lookupCacheKey(cacheSecret, query);
+    const cacheEndpoint = `${lookupCacheEndpointPrefix}${cacheKey}`;
     let cacheReadHealthy = true;
     try {
-      const { data: encryptedResult, error: cacheError } = await admin.rpc("tam_ngu_get_lookup_cache", {
-        p_query_hash: cacheKey,
-      });
+      const { data: cacheRow, error: cacheError } = await admin
+        .from("tam_ngu_push_subscriptions")
+        .select("subscription, created_at")
+        .eq("endpoint", cacheEndpoint)
+        .maybeSingle();
       if (cacheError) throw cacheError;
-      if (typeof encryptedResult === "string" && encryptedResult) {
+      const cached = cacheRow?.subscription as { kind?: unknown; ciphertext?: unknown; expiresAt?: unknown; hits?: unknown } | undefined;
+      if (cached?.kind === "lookup-cache-v1" && typeof cached.ciphertext === "string" && typeof cached.expiresAt === "string") {
         try {
-          const cachedResult = normalizeLookup(await decryptLookupCacheValue(cacheSecret, encryptedResult));
+          if (Date.parse(cached.expiresAt) <= Date.now()) throw new Error("Cached lookup result expired.");
+          const cachedResult = normalizeLookup(await decryptLookupCacheValue(cacheSecret, cached.ciphertext));
           if (!cachedResult) throw new Error("Cached lookup result failed validation.");
+          const accessedAt = new Date().toISOString();
+          await admin.from("tam_ngu_push_subscriptions").update({
+            subscription: { ...cached, hits: Number(cached.hits || 0) + 1 },
+            updated_at: accessedAt,
+            last_sent_at: accessedAt,
+          }).eq("endpoint", cacheEndpoint);
           return json({
             ok: true,
             result: cachedResult,
@@ -1180,7 +1193,7 @@ async function lookup(request: Request, origin: string | null) {
             quota: { dailyRemaining: Number(quota?.daily_remaining || 0) },
           }, 200, origin);
         } catch {
-          await admin.from("tam_ngu_lookup_cache").delete().eq("query_hash", cacheKey);
+          await admin.from("tam_ngu_push_subscriptions").delete().eq("endpoint", cacheEndpoint);
         }
       }
     } catch (cacheError) {
@@ -1192,11 +1205,36 @@ async function lookup(request: Request, origin: string | null) {
     let cacheStored = false;
     try {
       const encryptedResult = await encryptLookupCacheValue(cacheSecret, result);
-      const { error: cacheWriteError } = await admin.rpc("tam_ngu_put_lookup_cache", {
-        p_query_hash: cacheKey,
-        p_encrypted_result: encryptedResult,
-      });
+      const now = new Date();
+      const createdAt = now.toISOString();
+      const expiresAt = new Date(now.getTime() + lookupCacheTtlDays * 86_400_000).toISOString();
+      const { error: cacheWriteError } = await admin.from("tam_ngu_push_subscriptions").upsert({
+        endpoint: cacheEndpoint,
+        subscription: { kind: "lookup-cache-v1", ciphertext: encryptedResult, expiresAt, hits: 0 },
+        timezone: "UTC",
+        routine_start_sequence: 0,
+        schedule_times: [],
+        enabled: false,
+        created_at: createdAt,
+        updated_at: createdAt,
+        last_sent_at: createdAt,
+        last_error: null,
+        last_dispatch_key: null,
+      }, { onConflict: "endpoint" });
       if (cacheWriteError) throw cacheWriteError;
+      const expiryBoundary = new Date(now.getTime() - lookupCacheTtlDays * 86_400_000).toISOString();
+      await admin.from("tam_ngu_push_subscriptions")
+        .delete()
+        .like("endpoint", `${lookupCacheEndpointPrefix}%`)
+        .lt("created_at", expiryBoundary);
+      const { data: overflow } = await admin.from("tam_ngu_push_subscriptions")
+        .select("endpoint")
+        .like("endpoint", `${lookupCacheEndpointPrefix}%`)
+        .order("last_sent_at", { ascending: false })
+        .range(lookupCacheMaximumEntries, lookupCacheMaximumEntries + 499);
+      if (overflow?.length) {
+        await admin.from("tam_ngu_push_subscriptions").delete().in("endpoint", overflow.map((row) => row.endpoint));
+      }
       cacheStored = true;
     } catch (cacheError) {
       console.error("Lookup cache write unavailable; returning fresh Gemini result.", cacheError instanceof Error ? cacheError.message : "unknown");
