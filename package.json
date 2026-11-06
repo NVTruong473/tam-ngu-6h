@@ -28,6 +28,8 @@
     "start": "WRANGLER_LOG_PATH=.wrangler/wrangler.log vinext start",
     "test": "npm run verify:curriculum && npm run build:github && node --test tests/*.test.mjs",
     "lint": "eslint . --ignore-pattern dist --ignore-pattern .next",
+    "quality:gate": "npm test && npm run lint",
+    "release:gate": "npm run quality:gate && SMOKE_DEEP_LOOKUP=1 npm run smoke:production",
     "db:generate": "drizzle-kit generate"
   },
   "dependencies": {

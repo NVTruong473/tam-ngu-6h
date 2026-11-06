@@ -3,6 +3,7 @@
 import { useEffect, useMemo, useState } from "react";
 import { lessonSelectionForCursor } from "../supabase/functions/_shared/lesson-selection.mjs";
 import curriculumData from "./curriculum.json";
+import { userFacingError } from "./user-facing-error.mjs";
 import {
   disableNativeLessonNotifications,
   isNativeTamNguApp,
@@ -13,6 +14,10 @@ type Tab = "today" | "library" | "settings";
 type PushState = "idle" | "enabling" | "enabled" | "unsupported" | "error";
 type DevicePlatform = "ios" | "android" | "other";
 type LookupState = "idle" | "loading" | "success" | "error";
+type DeferredInstallPrompt = Event & {
+  prompt: () => Promise<void>;
+  userChoice: Promise<{ outcome: "accepted" | "dismissed" }>;
+};
 type LookupIntent = "Vocabulary" | "Translation" | "Grammar" | "Correction" | "Conversation" | "Explanation";
 type StudyLine = { speaker: string; english: string; chinese: string; pinyin: string; vietnameseReading: string; vietnamese: string };
 type LookupExample = { english: string; chinese: string; pinyin: string; vietnameseReading: string; vietnamese: string };
@@ -376,6 +381,7 @@ export default function Home() {
   const [savingSchedule, setSavingSchedule] = useState(false);
   const [testingPush, setTestingPush] = useState(false);
   const [devicePlatform, setDevicePlatform] = useState<DevicePlatform>("ios");
+  const [installPrompt, setInstallPrompt] = useState<DeferredInstallPrompt | null>(null);
 
   const schedule = scheduleAt(now, scheduleTimes);
   const unlockedIndex = routineStartSequence === null ? 0 : Math.max(0, schedule.sequence - routineStartSequence);
@@ -407,9 +413,20 @@ export default function Home() {
     const clearBadgeWhenVisible = () => {
       if (document.visibilityState === "visible") clearUnreadAppBadge();
     };
+    const captureInstallPrompt = (event: Event) => {
+      event.preventDefault();
+      setInstallPrompt(event as DeferredInstallPrompt);
+    };
+    const markInstalled = () => {
+      setInstallPrompt(null);
+      setShowInstall(false);
+      setPushMessage("Đã cài Tam Ngữ. Mở icon trên Màn hình chính để bật bài học bằng một chạm.");
+    };
     clearBadgeWhenVisible();
     document.addEventListener("visibilitychange", clearBadgeWhenVisible);
     window.addEventListener("focus", clearBadgeWhenVisible);
+    window.addEventListener("beforeinstallprompt", captureInstallPrompt);
+    window.addEventListener("appinstalled", markInstalled);
     let storedSchedule = DEFAULT_SCHEDULE;
     try { storedSchedule = normalizeScheduleTimes(JSON.parse(localStorage.getItem(STORAGE.schedule) || "null")); } catch {}
     queueMicrotask(() => {
@@ -498,7 +515,7 @@ export default function Home() {
               } catch (error) {
                 if (navigator.onLine) {
                   setPushState("error");
-                  setPushMessage(error instanceof Error ? error.message : "Thông báo cần được bật lại.");
+                  setPushMessage(userFacingError(error, "Thông báo cần được bật lại."));
                 }
               }
             }
@@ -509,6 +526,8 @@ export default function Home() {
     return () => {
       document.removeEventListener("visibilitychange", clearBadgeWhenVisible);
       window.removeEventListener("focus", clearBadgeWhenVisible);
+      window.removeEventListener("beforeinstallprompt", captureInstallPrompt);
+      window.removeEventListener("appinstalled", markInstalled);
     };
   }, []);
 
@@ -526,12 +545,25 @@ export default function Home() {
     return () => window.clearInterval(timer);
   }, []);
 
-  function startRoutine() {
-    setRoutineEnabled(true);
-    setRoutineStartSequence((current) => current ?? scheduleAt(Date.now(), scheduleTimes).sequence);
-    setViewingScheduled(true);
-    const standalone = isNativeTamNguApp() || window.matchMedia("(display-mode: standalone)").matches || (navigator as Navigator & { standalone?: boolean }).standalone === true;
-    if (standalone && pushState !== "enabled" && pushState !== "unsupported") setShowActivation(true);
+  async function beginOneTapSetup() {
+    const standalone = isNativeTamNguApp()
+      || window.matchMedia("(display-mode: standalone)").matches
+      || (navigator as Navigator & { standalone?: boolean }).standalone === true;
+    if (standalone) {
+      if (pushState !== "enabled" && pushState !== "enabling") await enableLockScreen();
+      return;
+    }
+    if (installPrompt) {
+      await installPrompt.prompt();
+      const choice = await installPrompt.userChoice;
+      setInstallPrompt(null);
+      if (choice.outcome === "accepted") {
+        setShowInstall(false);
+        setPushMessage("Đã cài Tam Ngữ. Mở icon trên Màn hình chính để bật bài học bằng một chạm.");
+      }
+      return;
+    }
+    setShowInstall(true);
   }
 
   function stopRoutine() {
@@ -562,7 +594,7 @@ export default function Home() {
         setPushMessage(`Đã đặt ${result.scheduled} bài kế tiếp trên máy${end ? ` đến ${end}` : ""}. Mở app bất kỳ lúc nào để làm mới lịch.`);
       } catch (error) {
         setPushState("error");
-        setPushMessage(error instanceof Error ? error.message : "Không bật được thông báo.");
+        setPushMessage(userFacingError(error, "Không bật được thông báo."));
       }
       return;
     }
@@ -609,7 +641,7 @@ export default function Home() {
         : `Đã bật lịch ${scheduleTimes.length} mốc/ngày. Thẻ kiểm tra chưa đến được, nhưng app sẽ tự thử lại ở mốc kế tiếp.`);
     } catch (error) {
       setPushState("error");
-      setPushMessage(error instanceof Error ? error.message : "Không bật được thông báo.");
+      setPushMessage(userFacingError(error, "Không bật được thông báo."));
     }
   }
 
@@ -626,13 +658,14 @@ export default function Home() {
         ? "Một thẻ vừa được gửi. Hãy chờ một phút trước khi thử lại."
         : "Đã gửi thẻ kiểm tra thật. Hãy khóa màn hình để xem.");
     } catch (error) {
-      setPushMessage(error instanceof Error ? error.message : "Chưa gửi được thẻ kiểm tra.");
+      setPushMessage(userFacingError(error, "Chưa gửi được thẻ kiểm tra."));
     } finally {
       setTestingPush(false);
     }
   }
 
-  function addScheduleTime() {
+  async function addScheduleTime() {
+    if (savingSchedule) return;
     const next = normalizeScheduleTimes([...scheduleTimes, scheduleTimeDraft]);
     if (scheduleTimes.includes(scheduleTimeDraft)) {
       setPushMessage("Giờ này đã có trong lịch.");
@@ -642,35 +675,32 @@ export default function Home() {
       setPushMessage("Mỗi ngày tối đa 24 mốc thông báo.");
       return;
     }
-    setScheduleTimes(next);
-    setPushMessage("");
+    await persistSchedule(next);
   }
 
-  function removeScheduleTime(time: string) {
+  async function removeScheduleTime(time: string) {
+    if (savingSchedule) return;
     if (scheduleTimes.length === 1) {
       setPushMessage("Lịch cần ít nhất một mốc mỗi ngày.");
       return;
     }
-    setScheduleTimes(scheduleTimes.filter((item) => item !== time));
+    await persistSchedule(scheduleTimes.filter((item) => item !== time));
   }
 
-  async function saveSchedule() {
-    const normalized = normalizeScheduleTimes(scheduleTimes);
+  async function persistSchedule(nextSchedule: string[]) {
+    const normalized = normalizeScheduleTimes(nextSchedule);
     setSavingSchedule(true);
     try {
       const currentUnlocked = unlockedIndex;
       const nextStart = scheduleAt(Date.now(), normalized).sequence - currentUnlocked;
-      localStorage.setItem(STORAGE.schedule, JSON.stringify(normalized));
-      localStorage.setItem(STORAGE.routineStart, String(nextStart));
-      setScheduleTimes(normalized);
-      setRoutineStartSequence(nextStart);
+      let successMessage = `Đã tự lưu ${normalized.length} mốc thông báo mỗi ngày.`;
       if (pushState === "enabled" && isNativeTamNguApp()) {
         const result = await scheduleNativeLessonWindow({
           lessons: curriculum,
           scheduleTimes: normalized,
           lessonCursor: currentUnlocked,
         });
-        setPushMessage(`Đã lưu ${normalized.length} mốc/ngày và đặt ${result.scheduled} bài kế tiếp trên máy.`);
+        successMessage = `Đã tự lưu ${normalized.length} mốc/ngày và đặt ${result.scheduled} bài kế tiếp trên máy.`;
       } else if (pushState === "enabled" && PUSH_API_URL) {
         const registration = await navigator.serviceWorker.ready;
         const subscription = await registration.pushManager.getSubscription();
@@ -687,9 +717,13 @@ export default function Home() {
         const body = await response.json().catch(() => ({})) as { error?: string };
         if (!response.ok) throw new Error(body.error || "Chưa lưu được lịch trên máy chủ.");
       }
-      if (!(pushState === "enabled" && isNativeTamNguApp())) setPushMessage(`Đã lưu ${normalized.length} mốc thông báo mỗi ngày.`);
+      localStorage.setItem(STORAGE.schedule, JSON.stringify(normalized));
+      localStorage.setItem(STORAGE.routineStart, String(nextStart));
+      setScheduleTimes(normalized);
+      setRoutineStartSequence(nextStart);
+      setPushMessage(successMessage);
     } catch (error) {
-      setPushMessage(error instanceof Error ? error.message : "Chưa lưu được lịch thông báo.");
+      setPushMessage(userFacingError(error, "Chưa tự lưu được lịch thông báo."));
     } finally {
       setSavingSchedule(false);
     }
@@ -772,7 +806,13 @@ export default function Home() {
         headers: { "content-type": "application/json", "x-client-id": ensureLookupClientId() },
         body: JSON.stringify({ query }),
       });
-      const body = await response.json().catch(() => ({})) as { error?: string; result?: unknown; retryAfterSeconds?: number; quota?: { dailyRemaining?: number } };
+      const body = await response.json().catch(() => ({})) as {
+        error?: string;
+        result?: unknown;
+        retryAfterSeconds?: number;
+        quota?: { dailyRemaining?: number };
+        cache?: { hit?: boolean; stored?: boolean };
+      };
       if (response.status === 429) throw new Error(body.error || "Cậu tra hơi nhanh rồi. Nghỉ một chút rồi thử lại nhé.");
       if (!response.ok || !validLookupResult(body.result)) throw new Error(body.error || "Chưa tra được lúc này.");
       const nextCache = [{ key: cacheKey, result: body.result }, ...lookupCache.filter((entry) => entry.key !== cacheKey)].slice(0, 30);
@@ -780,13 +820,15 @@ export default function Home() {
       localStorage.setItem(LOOKUP_CACHE_KEY, JSON.stringify(nextCache));
       setLookupResult(body.result);
       const remaining = body.quota?.dailyRemaining;
-      setLookupMessage(typeof remaining === "number" && remaining < 20
-        ? `Đã lưu trên máy · còn ${remaining} lượt AI trong 24 giờ.`
-        : "Đã lưu kết quả tra cứu trên máy này.");
+      setLookupMessage(body.cache?.hit
+        ? "Đã dùng lại kết quả được bảo vệ và lưu thêm trên máy này."
+        : typeof remaining === "number" && remaining < 20
+          ? `Đã lưu trên máy · còn ${remaining} lượt AI trong 24 giờ.`
+          : "Đã lưu kết quả tra cứu trên máy này.");
       setLookupState("success");
     } catch (error) {
       setLookupState("error");
-      setLookupMessage(error instanceof Error ? error.message : "Chưa tra được lúc này.");
+      setLookupMessage(userFacingError(error, "Chưa tra được lúc này."));
     }
   }
 
@@ -846,10 +888,14 @@ export default function Home() {
                   </button>
                   <button className="text-button danger" onClick={stopRoutine}>Tắt nhịp</button>
                 </div>
-                {pushMessage && <p className={`honest-note ${pushState === "error" ? "error-note" : ""}`}>{pushMessage}</p>}
+                {pushMessage && <p role="status" aria-live="polite" className={`honest-note ${pushState === "error" ? "error-note" : ""}`}>{pushMessage}</p>}
               </>
             ) : (
-              <button className="primary-button wide" onClick={startRoutine}>Bật nhịp hằng ngày</button>
+              <button className="primary-button wide" onClick={() => void beginOneTapSetup()}>
+                {isNativeTamNguApp() || (ready && (window.matchMedia("(display-mode: standalone)").matches || (navigator as Navigator & { standalone?: boolean }).standalone === true))
+                  ? "Bật bài học trên Màn hình khóa"
+                  : installPrompt ? "Cài Tam Ngữ ngay" : `Cài Tam Ngữ lên ${devicePlatform === "android" ? "Android" : "iPhone"}`}
+              </button>
             )}
           </article>
 
@@ -873,7 +919,7 @@ export default function Home() {
               <button disabled={lookupState === "loading"} type="submit">{lookupState === "loading" ? "Đang tra…" : "Tra"}</button>
             </form>
             <p className="lookup-limit">Từ, câu hoặc hội thoại ngắn · {lookupQuery.length}/{LOOKUP_QUERY_MAXIMUM}</p>
-            {lookupMessage && <p className={`lookup-message ${lookupState === "error" ? "error-note" : ""}`}>{lookupMessage}</p>}
+            {lookupMessage && <p role="status" aria-live="polite" className={`lookup-message ${lookupState === "error" ? "error-note" : ""}`}>{lookupMessage}</p>}
             {lookupResult && (
               <article className="lookup-result" aria-live="polite">
                 <div className="lookup-term-row">
@@ -957,7 +1003,7 @@ export default function Home() {
           <div className="page-title"><h2>Thư viện bài học</h2></div>
           <label className="search-box">
             <span aria-hidden="true">⌕</span>
-            <input value={query} onChange={(event) => setQuery(event.target.value)} placeholder="Tìm tiếng Anh, Trung hoặc Việt…" />
+            <input value={query} onChange={(event) => setQuery(event.target.value)} placeholder="Tìm tiếng Anh, Trung hoặc Việt…" aria-label="Tìm trong thư viện bài học" />
           </label>
           <div className="lesson-list">
             {filteredModules.map((item) => (
@@ -982,24 +1028,23 @@ export default function Home() {
           </article>
           <article className="schedule-card" aria-labelledby="schedule-title">
             <div className="schedule-card-heading">
-              <div><strong id="schedule-title">Giờ báo bài mới</strong><small>Thêm tối đa 24 mốc. Nếu học nhanh hơn kho bài mới, app tự xen vòng ôn tập có nhãn rõ ràng.</small></div>
+              <div><strong id="schedule-title">Giờ báo bài mới</strong><small>Chạm một mốc để xóa; mọi thay đổi tự lưu. Tối đa 24 mốc/ngày.</small></div>
               <span>{scheduleTimes.length}/24</span>
             </div>
             <div className="schedule-times">
-              {scheduleTimes.map((time) => <button key={time} type="button" onClick={() => removeScheduleTime(time)} aria-label={`Xóa mốc ${time}`}>{time}<span>×</span></button>)}
+              {scheduleTimes.map((time) => <button key={time} type="button" disabled={savingSchedule} onClick={() => void removeScheduleTime(time)} aria-label={`Xóa và tự lưu mốc ${time}`}>{time}<span>×</span></button>)}
             </div>
             <div className="schedule-add">
               <input type="time" value={scheduleTimeDraft} onChange={(event) => setScheduleTimeDraft(event.target.value)} aria-label="Giờ muốn thêm" />
-              <button type="button" onClick={addScheduleTime}>Thêm giờ</button>
+              <button type="button" disabled={savingSchedule} onClick={() => void addScheduleTime()}>{savingSchedule ? "Đang lưu…" : "Thêm & lưu"}</button>
             </div>
-            <button className="schedule-save" type="button" disabled={savingSchedule} onClick={() => void saveSchedule()}>{savingSchedule ? "Đang lưu…" : "Lưu lịch thông báo"}</button>
             {pushState === "enabled" && !isNativeTamNguApp() && (
               <button className="test-push-button" type="button" disabled={testingPush} onClick={() => void testLockScreenNow()}>
                 {testingPush ? "Đang gửi thẻ thật…" : "Gửi thẻ kiểm tra ngay"}
               </button>
             )}
           </article>
-          {pushMessage && <p className={`settings-message ${pushState === "error" ? "error-note" : ""}`}>{pushMessage}</p>}
+          {pushMessage && <p role="status" aria-live="polite" className={`settings-message ${pushState === "error" ? "error-note" : ""}`}>{pushMessage}</p>}
           {FEEDBACK_FORM_URL && (
             <a className="feedback-card" href={FEEDBACK_FORM_URL} target="_blank" rel="noreferrer" aria-label="Mở form nhắn cho dev">
               <span className="setting-icon" aria-hidden="true">✉</span>
@@ -1050,7 +1095,11 @@ export default function Home() {
                 <li><span>4</span><p>Mở icon vừa tạo và chạm <strong>Cho phép &amp; hoàn tất</strong>. Không cần cài thêm ứng dụng nào.</p></li>
               </ol>
             )}
-            <button className="primary-button wide" onClick={() => setShowInstall(false)}>Mình hiểu rồi</button>
+            {installPrompt ? (
+              <button className="primary-button wide" onClick={() => void beginOneTapSetup()}>Cài ngay</button>
+            ) : (
+              <button className="primary-button wide" onClick={() => setShowInstall(false)}>Đóng hướng dẫn</button>
+            )}
           </section>
         </div>
       )}
@@ -1072,7 +1121,7 @@ export default function Home() {
             <button className="primary-button wide" disabled={pushState === "enabling"} onClick={() => void enableLockScreen()}>
               {pushState === "enabling" ? "Đang hoàn tất…" : "Cho phép & hoàn tất"}
             </button>
-            {pushMessage && <p className={`activation-message ${pushState === "error" ? "error-note" : ""}`}>{pushMessage}</p>}
+            {pushMessage && <p role="status" aria-live="polite" className={`activation-message ${pushState === "error" ? "error-note" : ""}`}>{pushMessage}</p>}
             <button className="text-button activation-close" onClick={() => { localStorage.setItem(STORAGE.activationPrompt, "dismissed"); setShowActivation(false); }}>Để sau</button>
           </section>
         </div>

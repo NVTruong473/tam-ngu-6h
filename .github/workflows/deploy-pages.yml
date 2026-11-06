@@ -85,7 +85,7 @@ jobs:
       - uses: actions/configure-pages@v5
       - run: npm ci
       - name: Verify curriculum, PWA shell, privacy and production build
-        run: npm test
+        run: npm run quality:gate
         env:
           NEXT_PUBLIC_SITE_URL: https://${{ github.repository_owner }}.github.io/${{ github.event.repository.name }}/
           NEXT_PUBLIC_PUSH_API_URL: ${{ vars.NEXT_PUBLIC_PUSH_API_URL }}

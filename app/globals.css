@@ -15,8 +15,10 @@
 * { box-sizing: border-box; }
 html { background: #f8eee9; }
 body { margin: 0; color: var(--ink); background: #f8eee9; font-family: -apple-system, BlinkMacSystemFont, "SF Pro Display", "Helvetica Neue", Arial, sans-serif; }
-button, input { font: inherit; }
-button { -webkit-tap-highlight-color: transparent; }
+button, input, textarea { font: inherit; }
+button { min-width: 44px; min-height: 44px; touch-action: manipulation; -webkit-tap-highlight-color: transparent; }
+input, textarea, select { min-height: 44px; }
+button:focus-visible, a:focus-visible, input:focus-visible, textarea:focus-visible, summary:focus-visible { outline: 3px solid rgba(102, 86, 145, .4); outline-offset: 3px; }
 
 .app-shell { min-height: 100dvh; max-width: 560px; margin: 0 auto; padding: max(18px, env(safe-area-inset-top)) 18px calc(104px + env(safe-area-inset-bottom)); position: relative; overflow: hidden; background: linear-gradient(180deg, #fffaf7 0%, #fff 42%, #fff8f3 100%); opacity: .01; transition: opacity .4s ease; }
 .app-shell.is-ready { opacity: 1; }

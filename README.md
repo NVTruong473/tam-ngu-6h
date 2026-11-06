@@ -11,7 +11,7 @@ Xem [lộ trình phát hành native](docs/native-release.md) trước khi ký b�
 - Nếu lịch cá nhân chạy nhanh hơn tốc độ tăng kho, Push và màn hình Hôm nay cùng chuyển sang vòng ôn tập có nhãn rõ ràng. Mỗi bài trong kho được đi qua trước khi vòng mới bắt đầu; app không kẹt ở bài cuối và không gọi bài ôn là “bài mới”.
 - Nội dung gồm câu ứng dụng, thông điệp và hội thoại ngắn; không quay lại nhóm chào hỏi/số đếm nhập môn.
 - Mỗi câu Trung có pinyin, **Đọc gần Việt** và nút phát âm dùng giọng hệ thống. “Đọc gần Việt” chỉ là cầu nối, không thay thế nghe giọng Quan thoại chuẩn.
-- Tra nhanh Anh/Trung trả nghĩa, sắc thái và hai ví dụ song ngữ. API key Gemini chỉ ở Supabase Edge Function; thiết bị chỉ nhận kết quả đã lọc và tự lưu tối đa 30 lần tra gần nhất.
+- Tra nhanh đa ngữ trả nghĩa, sắc thái và hai ví dụ song ngữ. API key Gemini chỉ ở Supabase Edge Function; thiết bị tự lưu tối đa 30 lần tra gần nhất. Máy chủ dùng lại truy vấn tương đương trong tối đa 7 ngày để tiết kiệm Gemini nhưng không lưu câu hỏi/kết quả dạng đọc được.
 - Trong Cài đặt có **Nhắn cho dev**, mở Google Form phản hồi công khai trong tab mới. Form chỉ hỏi lời nhắn bắt buộc, một lựa chọn quà vui tùy chọn và cách liên hệ tùy chọn; email thông báo phản hồi mới được bật ở Google Forms.
 
 ## Điều có thể và không thể làm trên iPhone
@@ -41,6 +41,8 @@ Sau khi người dùng cài PWA vào Màn hình chính, mở icon và đồng ý
 - Vòng đời Push được tự sửa ở hai lớp: Service Worker chuyển đăng ký mới khi trình duyệt phát sự kiện `pushsubscriptionchange`; mỗi lần người đã bật nhịp mở app, PWA đối soát bản ghi server và tự thay endpoint đã bị nhà cung cấp thu hồi. Các thao tác đổi lịch, kiểm tra hoặc xóa đăng ký phải chứng minh đồng thời endpoint và hai khóa Web Push; chỉ biết URL endpoint không đủ để sửa dữ liệu thiết bị.
 - Service Worker chỉ giữ một app shell chuẩn cho mọi link `?lesson=…`, giới hạn 96 dấu chống trùng gần nhất và ưu tiên điều hướng cửa sổ app đang mở thay vì tạo cửa sổ thứ hai.
 - `tam_ngu_push_subscriptions`: RLS bật; `anon`/`authenticated` không có quyền đọc/ghi, chỉ service role của Edge Function được dùng.
+- `tam_ngu_lookup_cache`: khóa tra là HMAC-SHA-256 từ truy vấn đã chuẩn hóa; kết quả được mã hóa xác thực AES-GCM với IV ngẫu nhiên. Khóa được suy ra theo miền riêng từ secret server, không nằm trong database hay PWA. Bảng bật RLS, thu hồi toàn bộ quyền `anon`/`authenticated`, giữ tối đa 2.000 mục và tự xóa mục quá 7 ngày/LRU khi ghi mới. Cache lỗi sẽ tự bỏ qua để Gemini tiếp tục phục vụ.
+- Cache hit vẫn đi qua quota theo thiết bị/mạng. Đây là chủ ý chống spam và chống dò xem người khác từng tra gì; cache tiết kiệm lượt Gemini chứ không vô hiệu hóa kiểm soát lạm dụng.
 
 Điểm phải nói thật: GitHub Pages là **website công khai**. Backend chỉ giới hạn lượt tra và xác minh nguồn gọi; nó không biến bundle tĩnh thành app có đăng nhập. Không đặt thông tin riêng tư trong nội dung bài học. Nếu sau này cần kiểm soát truy cập thật sự, cần bổ sung Supabase Auth hoặc lớp phiên đăng nhập.
 
@@ -61,13 +63,15 @@ SUPABASE_PROJECT_REF="fcsuldrerhbynwotcvyn" node scripts/configure-supabase-cron
 SUPABASE_PROJECT_REF="fcsuldrerhbynwotcvyn" npm run supabase:verify
 ```
 
-`supabase:verify` chỉ in trạng thái đạt/không đạt; nó không in API key hoặc mã mời. Nó dùng một truy vấn Gemini mẫu để kiểm tra luồng tra cứu thật.
+`supabase:verify` chỉ in trạng thái đạt/không đạt; nó không in API key hoặc câu người dùng đã tra. Nó kiểm tra health, Push, tra cứu thật và xác nhận lượt lặp lại đi qua cache mã hóa. Migration đều idempotent và được áp dụng theo thứ tự tên file trước khi Edge Function mới được deploy; nếu migration thất bại, workflow dừng trước khi thay worker.
 
 Trên GitHub, Secret `GEMINI_API_KEYS` chứa các key phân tách bằng xuống dòng. Workflow thử tạo và phản biện riêng tối đa 3 bài vào 00:23 giờ Việt Nam; chỉ bài đạt mới được nối vào kho. Các Variable công khai `NEXT_PUBLIC_PUSH_API_URL` và `NEXT_PUBLIC_FEEDBACK_FORM_URL` lần lượt chỉ chứa URL Edge Function và URL Form người trả lời, không chứa bí mật. Không đưa link chỉnh sửa Google Form vào repo hoặc bundle.
 
-Workflow giám sát chạy lúc phút 17 mỗi giờ, kiểm tra trang cài PWA, manifest/icon, Service Worker Web Push và trạng thái backend. Nó không gửi nội dung tra cứu hay dữ liệu người dùng. Khi production lỗi, workflow mở đúng một GitHub issue cảnh báo; các lượt lỗi tiếp theo không tạo thêm issue và lượt kiểm tra thành công sẽ tự đóng cảnh báo.
+Workflow giám sát chạy lúc phút 17 mỗi giờ, kiểm tra trang cài PWA, manifest/icon, Service Worker Web Push, scheduler và trạng thái cache backend. Nó không gửi nội dung tra cứu hay dữ liệu người dùng. Khi production lỗi, workflow mở đúng một GitHub issue cảnh báo; các lượt lỗi tiếp theo không tạo thêm issue và lượt kiểm tra thành công sẽ tự đóng cảnh báo.
 
-Mọi thay đổi trong `supabase/functions/tam-ngu-api` được workflow riêng kiểm thử rồi tự triển khai lên đúng project Supabase. GitHub Secret `SUPABASE_ACCESS_TOKEN` là token phạm vi hẹp: chỉ project `caseflow-store`, chỉ quyền đọc/ghi Edge Functions, hết hạn sau 90 ngày; nó không được gửi xuống PWA và không có quyền đọc database, Auth, API keys hoặc Edge Function secrets. Sau deploy, workflow bắt buộc chạy một tra cứu Gemini thật trước khi được coi là thành công.
+Mọi thay đổi trong Edge Function hoặc migration được workflow riêng kiểm thử rồi triển khai lên đúng project Supabase. GitHub Secret `SUPABASE_ACCESS_TOKEN` chỉ dùng ở runner để áp dụng migration và deploy Function; nó không được gửi xuống PWA. Token cần đúng hai quyền vận hành này, phải có hạn sử dụng và được xoay định kỳ. Sau deploy, workflow bắt buộc xác minh health, cache và một tra cứu Gemini thật trước khi được coi là thành công.
+
+Khi có sự cố: xem `/health` trước. `lookupCache.healthy=false` nghĩa là migration/RPC cache cần kiểm tra; tra cứu vẫn fail-open sang Gemini nếu worker đang chạy, nhưng health cố ý trả lỗi để giám sát báo động. Rollback code bằng commit trước; bảng cache có thể giữ nguyên vì dữ liệu mã hóa có TTL. Không xóa bảng Push hay đổi secret `TAM_NGU_RATE_LIMIT_SALT` trong lúc rollback—đổi secret sẽ làm cache cũ không giải mã được và thay đổi danh tính chống spam.
 
 ## Kiểm thử và phát hành
 

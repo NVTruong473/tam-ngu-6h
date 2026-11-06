@@ -91,8 +91,10 @@ test("ships a growing progressive curriculum with balanced seed formats", async 
 });
 
 test("keeps setup inside Tam Ngữ with one explicit iOS permission", async () => {
-  const [page, packageText] = await Promise.all([
+  const [page, styles, userFacingErrorSource, packageText] = await Promise.all([
     readFile(new URL("app/page.tsx", root), "utf8"),
+    readFile(new URL("app/globals.css", root), "utf8"),
+    readFile(new URL("app/user-facing-error.mjs", root), "utf8"),
     readFile(new URL("package.json", root), "utf8"),
   ]);
 
@@ -102,6 +104,22 @@ test("keeps setup inside Tam Ngữ with one explicit iOS permission", async () =
   assert.match(page, /pushManager\.subscribe/);
   assert.match(page, /activationPrompt/);
   assert.match(page, /Không app phụ/);
+  assert.match(page, /beforeinstallprompt/);
+  assert.match(page, /appinstalled/);
+  assert.match(page, /beginOneTapSetup/);
+  assert.match(page, /Cài Tam Ngữ ngay/);
+  assert.match(page, /Bật bài học trên Màn hình khóa/);
+  assert.doesNotMatch(page, /Bật nhịp hằng ngày/);
+  assert.match(page, /role="status" aria-live="polite"/);
+  assert.match(page, /userFacingError/);
+  assert.match(userFacingErrorSource, /Không kết nối được/);
+  assert.match(page, /aria-label="Tìm trong thư viện bài học"/);
+  assert.match(page, /persistSchedule/);
+  assert.match(page, /Thêm & lưu/);
+  assert.match(page, /mọi thay đổi tự lưu/);
+  assert.doesNotMatch(page, /Lưu lịch thông báo/);
+  assert.match(styles, /button \{ min-width: 44px; min-height: 44px;/);
+  assert.match(styles, /:focus-visible/);
   assert.doesNotMatch(page, /Scriptable|scriptable:\/\/\/|showWidgetInstall|navigator\.clipboard/);
   assert.doesNotMatch(packageText, /build-widget-data|generate:widget-data/);
 });
@@ -113,7 +131,7 @@ test("consumes smoke-test responses before their timeout signal expires", async 
 });
 
 test("keeps Gemini credentials server-only while shipping push and quick lookup", async () => {
-  const [page, generator, appendGenerator, pronunciationEnricher, pronunciationRepairer, curriculumVerifier, edgeWorker, pushEndpoints, dispatchReliability, pushPayload, subscriptionAuth, workflow, monitorWorkflow, backendDeployWorkflow, secretConfigurer, deployer, verifier, rateLimitMigration] = await Promise.all([
+  const [page, generator, appendGenerator, pronunciationEnricher, pronunciationRepairer, curriculumVerifier, edgeWorker, lookupCache, pushEndpoints, dispatchReliability, pushPayload, subscriptionAuth, workflow, monitorWorkflow, backendDeployWorkflow, secretConfigurer, deployer, verifier, rateLimitMigration, cacheMigration, migrationRunner] = await Promise.all([
     readFile(new URL("app/page.tsx", root), "utf8"),
     readFile(new URL("scripts/generate-curriculum.mjs", root), "utf8"),
     readFile(new URL("scripts/append-curriculum.mjs", root), "utf8"),
@@ -121,6 +139,7 @@ test("keeps Gemini credentials server-only while shipping push and quick lookup"
     readFile(new URL("scripts/repair-vietnamese-readings.mjs", root), "utf8"),
     readFile(new URL("scripts/verify-curriculum.mjs", root), "utf8"),
     readFile(new URL("supabase/functions/tam-ngu-api/index.ts", root), "utf8"),
+    readFile(new URL("supabase/functions/tam-ngu-api/lookup-cache.mjs", root), "utf8"),
     readFile(new URL("supabase/functions/tam-ngu-api/push-endpoints.mjs", root), "utf8"),
     readFile(new URL("supabase/functions/tam-ngu-api/dispatch-reliability.mjs", root), "utf8"),
     readFile(new URL("supabase/functions/tam-ngu-api/push-payload.mjs", root), "utf8"),
@@ -132,8 +151,10 @@ test("keeps Gemini credentials server-only while shipping push and quick lookup"
     readFile(new URL("scripts/deploy-supabase-function.mjs", root), "utf8"),
     readFile(new URL("scripts/verify-supabase-api.mjs", root), "utf8"),
     readFile(new URL("supabase/migrations/20261102090000_lookup_rate_limit.sql", root), "utf8"),
+    readFile(new URL("supabase/migrations/20261106160000_private_lookup_cache.sql", root), "utf8"),
+    readFile(new URL("scripts/apply-supabase-migration.mjs", root), "utf8"),
   ]);
-  const source = `${page}\n${generator}\n${appendGenerator}\n${pronunciationEnricher}\n${pronunciationRepairer}\n${curriculumVerifier}\n${edgeWorker}\n${pushEndpoints}\n${dispatchReliability}\n${pushPayload}\n${subscriptionAuth}\n${workflow}\n${monitorWorkflow}\n${backendDeployWorkflow}\n${secretConfigurer}\n${deployer}\n${verifier}`;
+  const source = `${page}\n${generator}\n${appendGenerator}\n${pronunciationEnricher}\n${pronunciationRepairer}\n${curriculumVerifier}\n${edgeWorker}\n${lookupCache}\n${pushEndpoints}\n${dispatchReliability}\n${pushPayload}\n${subscriptionAuth}\n${workflow}\n${monitorWorkflow}\n${backendDeployWorkflow}\n${secretConfigurer}\n${deployer}\n${verifier}`;
 
   assert.doesNotMatch(source, /(?:AQ\.|sk-proj-|sk-or-v1-|gsk_|nvapi-)[A-Za-z0-9_-]{8,}/);
   assert.match(generator, /process\.env\.GEMINI_API_KEY/);
@@ -144,6 +165,7 @@ test("keeps Gemini credentials server-only while shipping push and quick lookup"
   assert.match(workflow, /cp "\$backup" app\/curriculum\.json/);
   assert.match(workflow, /npm run append:curriculum && npm run verify:curriculum/);
   assert.match(workflow, /npm run smoke:production/);
+  assert.match(workflow, /npm run quality:gate/);
   assert.match(workflow, /if: always\(\) && needs\.build\.result == 'success'/);
   assert.match(workflow, /if: always\(\) && needs\.deploy\.result == 'success'/);
   assert.match(monitorWorkflow, /cron: "17 \* \* \* \*"/);
@@ -159,6 +181,7 @@ test("keeps Gemini credentials server-only while shipping push and quick lookup"
   assert.match(monitorWorkflow, /Issue này sẽ tự đóng/);
   assert.match(backendDeployWorkflow, /permissions:\s+contents: read/);
   assert.match(backendDeployWorkflow, /secrets\.SUPABASE_ACCESS_TOKEN/);
+  assert.match(backendDeployWorkflow, /npm run supabase:apply/);
   assert.match(backendDeployWorkflow, /npx --yes supabase@3\.0\.0 functions deploy tam-ngu-api/);
   assert.match(backendDeployWorkflow, /--remote="\$SUPABASE_PROJECT_REF"/);
   assert.match(backendDeployWorkflow, /--no-verify-jwt/);
@@ -188,6 +211,8 @@ test("keeps Gemini credentials server-only while shipping push and quick lookup"
   assert.match(edgeWorker, /tam-ngu-internal:\/\/dispatch-cron/);
   assert.match(edgeWorker, /"🧪 Tam Ngữ đã kết nối"/);
   assert.match(edgeWorker, /readBoundedJson/);
+  assert.match(edgeWorker, /http:\/\/localhost:3000/);
+  assert.match(edgeWorker, /http:\/\/127\.0\.0\.1:3000/);
   assert.match(edgeWorker, /pushRequestMaximumBytes = 16_384/);
   assert.match(edgeWorker, /lookupRequestMaximumBytes = 4_096/);
   assert.match(edgeWorker, /keyAuthenticatedMutations: true/);
@@ -243,6 +268,21 @@ test("keeps Gemini credentials server-only while shipping push and quick lookup"
   assert.match(edgeWorker, /subscriptionKeysMatch\(storedSubscription, body!\.subscription!\)/);
   assert.match(edgeWorker, /install_hash/);
   assert.match(edgeWorker, /askGeminiForLookup/);
+  assert.match(edgeWorker, /tam_ngu_get_lookup_cache/);
+  assert.match(edgeWorker, /tam_ngu_put_lookup_cache/);
+  assert.match(edgeWorker, /Lookup cache read unavailable; using Gemini fallback/);
+  assert.match(edgeWorker, /plaintextQueriesStored: false/);
+  assert.match(page, /Đã dùng lại kết quả được bảo vệ/);
+  assert.match(lookupCache, /AES-GCM/);
+  assert.match(lookupCache, /name: "HMAC", hash: "SHA-256"/);
+  assert.match(lookupCache, /crypto\.getRandomValues\(new Uint8Array\(12\)\)/);
+  assert.match(cacheMigration, /interval '7 days'/);
+  assert.match(cacheMigration, /offset 2000/);
+  assert.match(cacheMigration, /enable row level security/);
+  assert.match(cacheMigration, /revoke all on table public\.tam_ngu_lookup_cache from public, anon, authenticated/);
+  assert.doesNotMatch(cacheMigration, /query_(?:text|raw)|plaintext_result/);
+  assert.match(migrationRunner, /readdirSync/);
+  assert.match(migrationRunner, /SUPABASE_ACCESS_TOKEN/);
   assert.match(edgeWorker, /Japanese, Korean/);
   assert.match(edgeWorker, /LOOKUP_QUERY_MAXIMUM = 240/);
   assert.match(edgeWorker, /validScheduleTimes/);

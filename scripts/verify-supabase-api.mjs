@@ -6,8 +6,10 @@ if (!ref) throw new Error("Thiếu SUPABASE_PROJECT_REF.");
 const apiUrl = `https://${ref}.supabase.co/functions/v1/tam-ngu-api`;
 const healthResponse = await fetch(`${apiUrl}/health`);
 const health = await healthResponse.json().catch(() => null);
-if (!healthResponse.ok || !health?.ok || !health.pushConfigured || !health.lookupConfigured || !health.lookupProtectionConfigured) {
-  throw new Error("Health check chưa xác nhận được Push, Gemini và bảo vệ Tra nhanh.");
+if (!healthResponse.ok || !health?.ok || !health.pushConfigured || !health.lookupConfigured || !health.lookupProtectionConfigured
+  || !health.lookupCache?.healthy || !health.lookupCache?.encrypted || health.lookupCache?.plaintextQueriesStored !== false
+  || health.lookupCache?.ttlDays !== 7 || health.lookupCache?.maximumEntries !== 2_000) {
+  throw new Error("Health check chưa xác nhận được Push, Gemini và cache Tra nhanh riêng tư.");
 }
 
 const publicPushProbe = await fetch(`${apiUrl}/subscribe`, {
@@ -94,10 +96,13 @@ async function verifyLookup(query) {
   if (!lookupResponse.ok || !lookup?.ok || !isValidLookupResult(lookup.result)) {
     throw new Error("Kiểm tra tra nhanh Gemini chưa đạt.");
   }
+  return lookup;
 }
 
 await verifyLookup("take it easy");
+const cacheHit = await verifyLookup("  TAKE   IT EASY ");
+if (cacheHit.cache?.hit !== true) throw new Error("Cache riêng tư không dùng lại truy vấn tương đương.");
 await verifyLookup("慢一点");
 await verifyLookup("Kỷ luật");
 await verifyLookup("お疲れ様はどういう意味ですか？");
-process.stdout.write("Health, Push một chạm và bốn lượt tra Gemini đa ngữ đã đạt. Không in API key.\n");
+process.stdout.write("Health, Push một chạm, cache mã hóa và bốn lượt tra đa ngữ đã đạt. Không in API key.\n");

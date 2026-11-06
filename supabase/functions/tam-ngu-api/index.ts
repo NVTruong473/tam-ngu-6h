@@ -13,6 +13,13 @@ import { buildDeclarativePushPayload, declarativeWebPushVersion } from "./push-p
 import { createReceiptProof, verifyReceiptProof } from "./receipt-proof.mjs";
 import { schedulerFreshnessSeconds, schedulerHealth } from "./service-health.mjs";
 import { constantTimeEqual, subscriptionKeysMatch } from "./subscription-auth.mjs";
+import {
+  decryptLookupCacheValue,
+  encryptLookupCacheValue,
+  lookupCacheKey,
+  lookupCacheMaximumEntries,
+  lookupCacheTtlDays,
+} from "./lookup-cache.mjs";
 
 const allowedOrigins = new Set([
   "https://nvtruong473.github.io",
@@ -21,7 +28,9 @@ const allowedOrigins = new Set([
   // working without ever shipping its server key in the binary.
   "capacitor://localhost",
   "https://localhost",
+  "http://localhost:3000",
   "http://localhost:3001",
+  "http://127.0.0.1:3000",
   "http://127.0.0.1:3001",
 ]);
 
@@ -813,7 +822,7 @@ async function acknowledgeReceipt(request: Request, origin: string | null) {
 
 async function health(origin: string | null) {
   const admin = supabaseAdmin();
-  const [{ data, error }, { data: receipt, error: receiptError }] = await Promise.all([
+  const [{ data, error }, { data: receipt, error: receiptError }, { data: cache, error: cacheError }] = await Promise.all([
     admin.from("tam_ngu_push_subscriptions")
       .select("last_sent_at, last_error, last_dispatch_key")
       .eq("endpoint", dispatchHeartbeatEndpoint)
@@ -822,10 +831,11 @@ async function health(origin: string | null) {
       .select("last_sent_at, last_dispatch_key")
       .eq("endpoint", deviceReceiptEndpoint)
       .maybeSingle(),
+    admin.rpc("tam_ngu_lookup_cache_health"),
   ]);
   const scheduler = schedulerHealth(data?.last_sent_at);
   const deliveryHealthy = !data?.last_error;
-  const healthy = !error && !receiptError && scheduler.fresh && deliveryHealthy;
+  const healthy = !error && !receiptError && !cacheError && scheduler.fresh && deliveryHealthy;
   const receiptAge = schedulerHealth(receipt?.last_sent_at).ageSeconds;
   const latestDeliveryAcknowledged = data?.last_dispatch_key
     ? data.last_dispatch_key === receipt?.last_dispatch_key
@@ -864,6 +874,16 @@ async function health(origin: string | null) {
     },
     lookupConfigured: geminiKeys().length > 0,
     lookupProtectionConfigured: Boolean(Deno.env.get("TAM_NGU_RATE_LIMIT_SALT")),
+    lookupCache: {
+      healthy: !cacheError,
+      encrypted: true,
+      plaintextQueriesStored: false,
+      ttlDays: lookupCacheTtlDays,
+      maximumEntries: lookupCacheMaximumEntries,
+      entries: Number(cache?.entries || 0),
+      activeEntries: Number(cache?.active_entries || 0),
+      totalHits: Number(cache?.total_hits || 0),
+    },
   }, healthy ? 200 : 503, origin);
 }
 
@@ -1141,8 +1161,52 @@ async function lookup(request: Request, origin: string | null) {
     }, 429, origin);
   }
   try {
+    const cacheSecret = Deno.env.get("TAM_NGU_RATE_LIMIT_SALT") || "";
+    const cacheKey = await lookupCacheKey(cacheSecret, query);
+    let cacheReadHealthy = true;
+    try {
+      const { data: encryptedResult, error: cacheError } = await admin.rpc("tam_ngu_get_lookup_cache", {
+        p_query_hash: cacheKey,
+      });
+      if (cacheError) throw cacheError;
+      if (typeof encryptedResult === "string" && encryptedResult) {
+        try {
+          const cachedResult = normalizeLookup(await decryptLookupCacheValue(cacheSecret, encryptedResult));
+          if (!cachedResult) throw new Error("Cached lookup result failed validation.");
+          return json({
+            ok: true,
+            result: cachedResult,
+            cache: { hit: true, stored: true },
+            quota: { dailyRemaining: Number(quota?.daily_remaining || 0) },
+          }, 200, origin);
+        } catch {
+          await admin.from("tam_ngu_lookup_cache").delete().eq("query_hash", cacheKey);
+        }
+      }
+    } catch (cacheError) {
+      cacheReadHealthy = false;
+      console.error("Lookup cache read unavailable; using Gemini fallback.", cacheError instanceof Error ? cacheError.message : "unknown");
+    }
+
     const result = await askGeminiForLookup(query);
-    return json({ ok: true, result, quota: { dailyRemaining: Number(quota?.daily_remaining || 0) } }, 200, origin);
+    let cacheStored = false;
+    try {
+      const encryptedResult = await encryptLookupCacheValue(cacheSecret, result);
+      const { error: cacheWriteError } = await admin.rpc("tam_ngu_put_lookup_cache", {
+        p_query_hash: cacheKey,
+        p_encrypted_result: encryptedResult,
+      });
+      if (cacheWriteError) throw cacheWriteError;
+      cacheStored = true;
+    } catch (cacheError) {
+      console.error("Lookup cache write unavailable; returning fresh Gemini result.", cacheError instanceof Error ? cacheError.message : "unknown");
+    }
+    return json({
+      ok: true,
+      result,
+      cache: { hit: false, stored: cacheStored, readHealthy: cacheReadHealthy },
+      quota: { dailyRemaining: Number(quota?.daily_remaining || 0) },
+    }, 200, origin);
   } catch (error) {
     await admin.from("tam_ngu_lookup_usage").delete().eq("request_id", requestId);
     throw error;
