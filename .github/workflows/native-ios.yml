@@ -22,9 +22,9 @@ concurrency:
   cancel-in-progress: true
 
 jobs:
-  unsigned-simulator-build:
+  unsigned-native-builds:
     runs-on: macos-15
-    timeout-minutes: 15
+    timeout-minutes: 20
     steps:
       - uses: actions/checkout@v6
       - uses: actions/setup-node@v6
@@ -44,3 +44,40 @@ jobs:
           -destination 'generic/platform=iOS Simulator'
           CODE_SIGNING_ALLOWED=NO
           build
+      - name: Build an unsigned device IPA for local Personal Team signing
+        run: |
+          set -euo pipefail
+          xcodebuild \
+            -project ios/App/App.xcodeproj \
+            -scheme App \
+            -configuration Release \
+            -sdk iphoneos \
+            -destination 'generic/platform=iOS' \
+            -derivedDataPath build/ios-device \
+            CODE_SIGNING_ALLOWED=NO \
+            CODE_SIGNING_REQUIRED=NO \
+            build
+
+          app_path="build/ios-device/Build/Products/Release-iphoneos/App.app"
+          widget_path="$app_path/PlugIns/TamNguWidgets.appex"
+          test -d "$app_path"
+          test -d "$widget_path"
+          test -f "$app_path/Info.plist"
+          test -f "$widget_path/Info.plist"
+
+          mkdir -p build/ipa/Payload
+          ditto "$app_path" build/ipa/Payload/App.app
+          (
+            cd build/ipa
+            ditto -c -k --sequesterRsrc --keepParent Payload TamNgu6H-unsigned.ipa
+            shasum -a 256 TamNgu6H-unsigned.ipa > TamNgu6H-unsigned.ipa.sha256
+          )
+      - name: Upload the unsigned device package
+        uses: actions/upload-artifact@v4
+        with:
+          name: TamNgu6H-unsigned-ipa
+          path: |
+            build/ipa/TamNgu6H-unsigned.ipa
+            build/ipa/TamNgu6H-unsigned.ipa.sha256
+          if-no-files-found: error
+          retention-days: 7
