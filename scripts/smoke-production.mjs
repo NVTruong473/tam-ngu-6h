@@ -52,17 +52,22 @@ async function verifyLookup() {
     const supplied = (reading.match(/\([1-4]\)/g) || []).length;
     return expected === supplied && !/\([1-4]\)\s+\([1-4]\)/.test(reading);
   };
-  if (!payload?.ok
-    || !result?.meaning
-    || !Array.isArray(result?.examples)
-    || result.examples.length !== 2
-    || !result.examples.every((example) => example?.english
+  const examples = Array.isArray(result?.examples) ? result.examples : [];
+  const structurallyValid = examples.length === 2
+    && examples.every((example) => example?.english
       && example?.chinese
       && example?.pinyin
       && example?.vietnameseReading
       && example?.vietnamese
-      && hasAlignedToneGuides(example))) {
-    throw new Error("Tra cứu thật trả dữ liệu chưa hợp lệ");
+      && hasAlignedToneGuides(example));
+  if (!payload?.ok || !result?.meaning || !structurallyValid) {
+    const diagnostics = {
+      payloadOk: payload?.ok === true,
+      hasMeaning: Boolean(result?.meaning),
+      exampleCount: examples.length,
+      alignedExamples: examples.filter(hasAlignedToneGuides).length,
+    };
+    throw new Error(`Tra cứu thật trả dữ liệu chưa hợp lệ: ${JSON.stringify(diagnostics)}`);
   }
 }
 

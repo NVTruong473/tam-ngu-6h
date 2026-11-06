@@ -675,7 +675,7 @@ async function health(origin: string | null) {
 }
 
 function trimText(value: unknown, maximum: number) {
-  return typeof value === "string" ? value.replace(/\s+/g, " ").trim().slice(0, maximum) : "";
+  return typeof value === "string" ? value.normalize("NFC").replace(/\s+/g, " ").trim().slice(0, maximum) : "";
 }
 
 // Gemini's schema constrains the shape of a response, but it does not prove that
@@ -690,7 +690,7 @@ const PINYIN_TONE_MARKS = new Set("āáǎàēéěèīíǐìōóǒòūúǔùǖǘ�
 
 function lookupText(value: unknown, maximum: number) {
   if (typeof value !== "string") return "";
-  const normalized = value.replace(/\s+/g, " ").trim();
+  const normalized = value.normalize("NFC").replace(/\s+/g, " ").trim();
   return normalized.length <= maximum ? normalized : "";
 }
 
@@ -785,11 +785,10 @@ function isVietnameseFriendlyReading(value: string) {
 function hasToneGuidance(pinyin: string, vietnameseReading: string) {
   const expected = pinyinToneCount(pinyin);
   const supplied = toneGuideCount(vietnameseReading);
-  // Exact one-to-one matching is ideal (and requested in the prompt), but live
-  // model output can spell neutral syllables inconsistently. Requiring at least
-  // one visible guide whenever pinyin has tones avoids discarding an otherwise
-  // useful lookup solely for that non-semantic formatting variance.
-  return expected === 0 ? supplied === 0 : supplied > 0;
+  // applyToneGuides derives every marker from the normalized pinyin. Requiring
+  // exact alignment here prevents a fluent-looking but misleading reading from
+  // reaching the learner; malformed candidates fall through to Gemini failover.
+  return expected === supplied;
 }
 
 function normalizeLookupExample(value: unknown): LookupExample | null {

@@ -218,6 +218,8 @@ test("keeps Gemini credentials server-only while shipping push and quick lookup"
   assert.match(edgeWorker, /normalizeLookupExample/);
   assert.match(edgeWorker, /hasToneGuidance/);
   assert.match(edgeWorker, /applyToneGuides/);
+  assert.match(edgeWorker, /return expected === supplied/);
+  assert.match(edgeWorker, /normalize\("NFC"\)/);
   assert.match(edgeWorker, /pinyinToneForSyllable/);
   assert.match(edgeWorker, /Unequal syllable counts cannot be aligned safely/);
   assert.match(edgeWorker, /Đặt từng marker \(1\)–\(4\) ngay sau đúng âm tiết/);
