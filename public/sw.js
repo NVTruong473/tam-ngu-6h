@@ -1,4 +1,4 @@
-const CACHE_VERSION = "tam-ngu-6h-v15";
+const CACHE_VERSION = "tam-ngu-6h-v16";
 const NOTIFICATION_CACHE = "tam-ngu-notifications-v1";
 const NOTIFICATION_CACHE_MAX_ENTRIES = 96;
 const PUSH_API_URL = "https://fcsuldrerhbynwotcvyn.supabase.co/functions/v1/tam-ngu-api";
@@ -102,30 +102,53 @@ async function pruneNotificationMarkers(cache) {
 
 async function displayPush(payload) {
   const notificationId = String(payload.notificationId || `${payload.title}:${payload.body}`).slice(0, 240);
-  if (seenNotificationIds.has(notificationId)) return;
+  const cache = await caches.open(NOTIFICATION_CACHE);
+  const marker = new Request(new URL(`.notification/${encodeURIComponent(notificationId)}`, self.registration.scope).href);
+  if (seenNotificationIds.has(notificationId) || await cache.match(marker)) {
+    await acknowledgePush(payload.receipt);
+    return;
+  }
   seenNotificationIds.add(notificationId);
   while (seenNotificationIds.size > NOTIFICATION_CACHE_MAX_ENTRIES) {
     seenNotificationIds.delete(seenNotificationIds.values().next().value);
   }
 
-  const cache = await caches.open(NOTIFICATION_CACHE);
-  const marker = new Request(new URL(`.notification/${encodeURIComponent(notificationId)}`, self.registration.scope).href);
-  if (await cache.match(marker)) return;
-  await cache.put(marker, new Response("seen", { headers: { "x-created-at": String(Date.now()) } }));
-  await pruneNotificationMarkers(cache);
+  try {
+    const existing = await self.registration.getNotifications().catch(() => []);
+    existing.forEach((notification) => notification.close());
+    await self.registration.showNotification(payload.title, {
+      body: payload.body,
+      icon: new URL("icons/icon-v2-192.png", self.registration.scope).href,
+      // iOS owns the card layout; one stable tag plus explicit closing above
+      // guarantees that a new lesson replaces the previous lesson card.
+      tag: "tam-ngu-current-lesson",
+      renotify: false,
+      timestamp: payload.timestamp || Date.now(),
+      data: { url: payload.url || self.registration.scope },
+    });
+    // Persist deduplication only after display succeeds. The signed receipt is
+    // observability, not a hidden notification, and never contains lesson text.
+    await cache.put(marker, new Response("seen", { headers: { "x-created-at": String(Date.now()) } }));
+    await pruneNotificationMarkers(cache);
+    await acknowledgePush(payload.receipt);
+  } catch (error) {
+    seenNotificationIds.delete(notificationId);
+    throw error;
+  }
+}
 
-  const existing = await self.registration.getNotifications().catch(() => []);
-  existing.forEach((notification) => notification.close());
-  await self.registration.showNotification(payload.title, {
-    body: payload.body,
-    icon: new URL("icons/icon-v2-192.png", self.registration.scope).href,
-    // iOS owns the card layout; one stable tag plus explicit closing above
-    // guarantees that a new lesson replaces the previous lesson card.
-    tag: "tam-ngu-current-lesson",
-    renotify: false,
-    timestamp: payload.timestamp || Date.now(),
-    data: { url: payload.url || self.registration.scope },
-  });
+async function acknowledgePush(receipt) {
+  if (!receipt?.id || !Number.isSafeInteger(receipt.timestamp) || !receipt.token) return;
+  try {
+    const response = await fetch(`${PUSH_API_URL}/receipt`, {
+      method: "POST",
+      headers: { "content-type": "application/json" },
+      body: JSON.stringify({ receiptId: receipt.id, timestamp: receipt.timestamp, token: receipt.token }),
+    });
+    if (!response.ok) throw new Error("Biên nhận bị từ chối.");
+  } catch {
+    // Notification display must not fail just because optional telemetry is offline.
+  }
 }
 
 self.addEventListener("push", (event) => {

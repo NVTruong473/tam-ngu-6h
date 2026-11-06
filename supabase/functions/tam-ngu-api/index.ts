@@ -7,6 +7,7 @@ import {
   pushRetryDelayMs,
 } from "./dispatch-reliability.mjs";
 import { hasValidPushKeys, isSupportedPushEndpoint } from "./push-endpoints.mjs";
+import { createReceiptProof, verifyReceiptProof } from "./receipt-proof.mjs";
 import { schedulerFreshnessSeconds, schedulerHealth } from "./service-health.mjs";
 
 const allowedOrigins = new Set([
@@ -33,6 +34,7 @@ const dispatchGraceMinutes = 10;
 const dispatchConcurrency = 8;
 const pushAttemptLimit = 2;
 const dispatchHeartbeatEndpoint = "tam-ngu-internal://dispatch-cron";
+const deviceReceiptEndpoint = "tam-ngu-internal://device-receipt";
 
 type Phase = keyof typeof slotByPhase;
 type WebPushSubscription = {
@@ -423,6 +425,12 @@ async function dispatch(request: Request, origin: string | null) {
   const subscriptions = (subscriptionsResult.data || []) as PushSubscriptionRow[];
   const now = new Date();
   const dispatchId = crypto.randomUUID();
+  const receiptId = `dispatch:${dispatchId}`;
+  const receiptTimestamp = Date.now();
+  const receiptSecret = Deno.env.get("TAM_NGU_RATE_LIMIT_SALT") || "";
+  const receiptToken = receiptSecret
+    ? await createReceiptProof(receiptSecret, receiptId, receiptTimestamp)
+    : null;
   const publicKey = Deno.env.get("VAPID_PUBLIC_KEY");
   const privateKey = Deno.env.get("VAPID_PRIVATE_KEY");
   const subject = Deno.env.get("VAPID_SUBJECT") || "mailto:owner@example.com";
@@ -480,6 +488,7 @@ async function dispatch(request: Request, origin: string | null) {
       tag: "tam-ngu-current-lesson",
       url: lessonUrl,
       timestamp: Date.now(),
+      receipt: receiptToken ? { id: receiptId, timestamp: receiptTimestamp, token: receiptToken } : null,
     });
     try {
       await sendWebPushWithRetry(row.subscription, payload);
@@ -525,7 +534,7 @@ async function dispatch(request: Request, origin: string | null) {
     const deliverySucceeded = totals.due > 0 && !deliveryFailed;
     const { data: previousHeartbeat, error: heartbeatReadError } = await admin
       .from("tam_ngu_push_subscriptions")
-      .select("last_error")
+      .select("last_error, last_dispatch_key")
       .eq("endpoint", dispatchHeartbeatEndpoint)
       .maybeSingle();
     let deliveryError = previousHeartbeat?.last_error || null;
@@ -544,6 +553,7 @@ async function dispatch(request: Request, origin: string | null) {
       updated_at: heartbeatAt,
       last_sent_at: heartbeatAt,
       last_error: deliveryError,
+      last_dispatch_key: totals.sent > 0 ? receiptId : previousHeartbeat?.last_dispatch_key || null,
     }, { onConflict: "endpoint" });
     heartbeatError = Boolean(heartbeatReadError || error);
   }
@@ -558,15 +568,83 @@ async function dispatch(request: Request, origin: string | null) {
   }, databaseHealthy ? 200 : 503, origin);
 }
 
-async function health(origin: string | null) {
-  const { data, error } = await supabaseAdmin()
-    .from("tam_ngu_push_subscriptions")
-    .select("last_sent_at, last_error")
-    .eq("endpoint", dispatchHeartbeatEndpoint)
+async function acknowledgeReceipt(request: Request, origin: string | null) {
+  const declaredLength = Number(request.headers.get("content-length") || 0);
+  if (Number.isFinite(declaredLength) && declaredLength > 1_024) {
+    return json({ error: "Biên nhận quá lớn." }, 413, origin);
+  }
+  const rawBody = await request.text();
+  if (rawBody.length > 1_024) return json({ error: "Biên nhận quá lớn." }, 413, origin);
+  const body = (() => {
+    try {
+      return JSON.parse(rawBody) as { receiptId?: string; timestamp?: number; token?: string };
+    } catch {
+      return null;
+    }
+  })();
+  const receiptId = typeof body?.receiptId === "string" ? body.receiptId : "";
+  const timestamp = Number(body?.timestamp);
+  const token = typeof body?.token === "string" ? body.token : "";
+  if (!/^dispatch:[0-9a-f]{8}-[0-9a-f]{4}-4[0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$/.test(receiptId)
+    || !Number.isSafeInteger(timestamp)) {
+    return json({ error: "Biên nhận không hợp lệ." }, 400, origin);
+  }
+  const secret = Deno.env.get("TAM_NGU_RATE_LIMIT_SALT") || "";
+  if (!await verifyReceiptProof(secret, receiptId, timestamp, token)) {
+    return json({ error: "Biên nhận không hợp lệ." }, 401, origin);
+  }
+
+  const admin = supabaseAdmin();
+  const { data: previousReceipt, error: readError } = await admin.from("tam_ngu_push_subscriptions")
+    .select("last_sent_at")
+    .eq("endpoint", deviceReceiptEndpoint)
     .maybeSingle();
+  if (readError) throw readError;
+  // APNs may deliver a stored older push after a newer one. The signed server
+  // timestamp makes this monotonic in normal operation and makes replay cheap:
+  // a duplicate or stale proof performs no database write.
+  const previousTimestamp = Date.parse(previousReceipt?.last_sent_at || "");
+  if (Number.isFinite(previousTimestamp) && previousTimestamp >= timestamp) {
+    return json({ ok: true, duplicate: true }, 200, origin);
+  }
+
+  const receivedAt = new Date().toISOString();
+  const dispatchAt = new Date(timestamp).toISOString();
+  const { error } = await admin.from("tam_ngu_push_subscriptions").upsert({
+    endpoint: deviceReceiptEndpoint,
+    subscription: { kind: "device-receipt" },
+    timezone: "UTC",
+    routine_start_sequence: 0,
+    schedule_times: [],
+    enabled: false,
+    updated_at: receivedAt,
+    last_sent_at: dispatchAt,
+    last_error: null,
+    last_dispatch_key: receiptId,
+  }, { onConflict: "endpoint" });
+  if (error) throw error;
+  return json({ ok: true }, 200, origin);
+}
+
+async function health(origin: string | null) {
+  const admin = supabaseAdmin();
+  const [{ data, error }, { data: receipt, error: receiptError }] = await Promise.all([
+    admin.from("tam_ngu_push_subscriptions")
+      .select("last_sent_at, last_error, last_dispatch_key")
+      .eq("endpoint", dispatchHeartbeatEndpoint)
+      .maybeSingle(),
+    admin.from("tam_ngu_push_subscriptions")
+      .select("last_sent_at, last_dispatch_key")
+      .eq("endpoint", deviceReceiptEndpoint)
+      .maybeSingle(),
+  ]);
   const scheduler = schedulerHealth(data?.last_sent_at);
   const deliveryHealthy = !data?.last_error;
-  const healthy = !error && scheduler.fresh && deliveryHealthy;
+  const healthy = !error && !receiptError && scheduler.fresh && deliveryHealthy;
+  const receiptAge = schedulerHealth(receipt?.last_sent_at).ageSeconds;
+  const latestDeliveryAcknowledged = data?.last_dispatch_key
+    ? data.last_dispatch_key === receipt?.last_dispatch_key
+    : null;
 
   return json({
     ok: healthy,
@@ -584,6 +662,12 @@ async function health(origin: string | null) {
       maximumAgeSeconds: schedulerFreshnessSeconds,
     },
     delivery: { healthy: deliveryHealthy },
+    deviceReceipt: {
+      configured: Boolean(Deno.env.get("TAM_NGU_RATE_LIMIT_SALT")),
+      latestDeliveryAcknowledged,
+      ageSeconds: receiptAge,
+      storageHealthy: !receiptError,
+    },
     lookupConfigured: geminiKeys().length > 0,
     lookupProtectionConfigured: Boolean(Deno.env.get("TAM_NGU_RATE_LIMIT_SALT")),
   }, healthy ? 200 : 503, origin);
@@ -884,6 +968,7 @@ Deno.serve(async (request) => {
     if (request.method === "DELETE" && action === "subscribe") return await unsubscribe(request, origin);
     if (request.method === "POST" && action === "schedule") return await updateSchedule(request, origin);
     if (request.method === "POST" && action === "dispatch") return await dispatch(request, origin);
+    if (request.method === "POST" && action === "receipt") return await acknowledgeReceipt(request, origin);
     if (request.method === "POST" && action === "lookup") return await lookup(request, origin);
     return json({ error: "Không tìm thấy endpoint." }, 404, origin);
   } catch (error) {

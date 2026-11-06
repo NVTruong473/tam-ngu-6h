@@ -21,12 +21,19 @@ test("exports an installable PWA with one replaceable lock-screen card", async (
   assert.ok(manifest.icons.some((icon) => icon.sizes === "1024x1024" && icon.purpose === "maskable"));
   assert.equal(highResolutionIcon.readUInt32BE(16), 1024);
   assert.equal(highResolutionIcon.readUInt32BE(20), 1024);
-  assert.match(serviceWorker, /tam-ngu-6h-v15/);
+  assert.match(serviceWorker, /tam-ngu-6h-v16/);
   assert.match(serviceWorker, /html\.matchAll/);
   assert.match(serviceWorker, /skipWaiting/);
   assert.match(serviceWorker, /clients\.claim/);
   assert.match(serviceWorker, /addEventListener\("push"/);
   assert.match(serviceWorker, /showNotification/);
+  assert.match(serviceWorker, /acknowledgePush/);
+  assert.match(serviceWorker, /\/receipt/);
+  assert.match(serviceWorker, /Persist deduplication only after display succeeds/);
+  assert.ok(
+    serviceWorker.indexOf("await self.registration.showNotification") < serviceWorker.indexOf("await cache.put(marker"),
+    "the service worker must not mark a notification as seen before iOS accepts the display call",
+  );
   assert.match(serviceWorker, /tam-ngu-current-lesson/);
   assert.match(serviceWorker, /renotify: false/);
   assert.match(serviceWorker, /seenNotificationIds/);

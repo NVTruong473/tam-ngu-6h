@@ -107,6 +107,8 @@ if (requireSchedulerHeartbeat && (!health?.scheduler?.fresh
   || health?.scheduler?.maximumAgeSeconds !== 300
   || !Number.isFinite(health?.scheduler?.ageSeconds))) failures.push("bộ lập lịch Push không có nhịp tim mới");
 if (requireSchedulerHeartbeat && !health?.delivery?.healthy) failures.push("bộ lập lịch còn lỗi giao bài chưa phục hồi");
+if (requireSchedulerHeartbeat
+  && (!health?.deviceReceipt?.configured || !health?.deviceReceipt?.storageHealthy)) failures.push("biên nhận thiết bị chưa sẵn sàng");
 
 if (failures.length > 0) throw new Error(`Bản production chưa đạt: ${failures.join(", ")}.`);
 if (deepLookup) await verifyLookupWithRetry();
