@@ -19,6 +19,7 @@ import {
   lookupCacheKey,
   lookupCacheMaximumEntries,
   lookupCacheTtlDays,
+  lookupCacheVersion,
 } from "./lookup-cache.mjs";
 
 const allowedOrigins = new Set([
@@ -52,6 +53,7 @@ const lookupRequestMaximumBytes = 4_096;
 const dispatchHeartbeatEndpoint = "tam-ngu-internal://dispatch-cron";
 const deviceReceiptEndpoint = "tam-ngu-internal://device-receipt";
 const lookupCacheEndpointPrefix = "tam-ngu-cache://";
+const lookupCacheRecordKind = `lookup-cache-${lookupCacheVersion}`;
 
 type Phase = keyof typeof slotByPhase;
 type DeliveryPhase = Phase | "night";
@@ -909,6 +911,12 @@ function lookupText(value: unknown, maximum: number) {
   return normalized.length <= maximum ? normalized : "";
 }
 
+function normalizedVietnameseOutput(value: unknown, maximum: number) {
+  return lookupText(value, maximum)
+    // A language-learning answer must never preserve this common model typo.
+    .replace(/\bkích ơn\b/giu, "cảm kích");
+}
+
 function isPlainLookupText(value: string, minimum = 1) {
   return value.length >= minimum && !CONTROL_OR_MARKUP.test(value);
 }
@@ -1012,7 +1020,7 @@ function normalizeLookupExample(value: unknown): LookupExample | null {
   const chinese = lookupText(source.chinese, 240);
   const pinyin = lookupText(source.pinyin, 300);
   const vietnameseReading = normalizeVietnameseReading(lookupText(source.vietnameseReading, 320), 320, pinyin);
-  const vietnamese = lookupText(source.vietnamese, 260);
+  const vietnamese = normalizedVietnameseOutput(source.vietnamese, 260);
   if (!isLatinLookupText(english)
     || !isChineseLookupText(chinese)
     || !isPinyinText(pinyin)
@@ -1052,8 +1060,8 @@ function normalizeLookup(result: unknown): LookupResult | null {
     pinyin: lookupText(source.pinyin, 220),
     vietnameseReading: normalizeVietnameseReading(lookupText(source.vietnameseReading, 260), 260, lookupText(source.pinyin, 220)),
     partOfSpeech: lookupText(source.partOfSpeech, 120),
-    meaning: lookupText(source.meaning, 400),
-    note: lookupText(source.note, 400),
+    meaning: normalizedVietnameseOutput(source.meaning, 400),
+    note: normalizedVietnameseOutput(source.note, 400),
     examples: examples as LookupExample[],
   };
   if (!isPlainLookupText(normalized.partOfSpeech)
@@ -1078,6 +1086,7 @@ async function askGeminiForLookup(query: string) {
     "Trả lời ngắn, rõ, bằng tiếng Việt theo JSON schema.",
     "sourceLanguage là tên tiếng Anh ngắn của ngôn ngữ chính đã nhận diện, ví dụ English, Chinese, Vietnamese, Japanese, Korean hoặc Mixed. intent phải là đúng một trong Vocabulary, Translation, Grammar, Correction, Conversation, Explanation.",
     "term giữ lại và chuẩn hóa nội dung chính cần phân tích. Với câu sai, giữ câu gốc ở term rồi đặt câu sửa đúng ở đầu meaning. Với yêu cầu dịch, đặt bản dịch trực tiếp ở đầu meaning.",
+    "Nếu người dùng yêu cầu sửa, viết lại, diễn đạt tự nhiên hoặc lịch sự hơn, meaning phải bắt đầu bằng phương án đã viết lại để họ dùng ngay; không được chỉ dịch hoặc lặp lại chính câu lệnh của người dùng.",
     "Chỉ khi sourceLanguage là Chinese: pinyin và vietnameseReading phải có. Pinyin bắt buộc dùng dấu thanh Unicode như nǐ hǎo, không dùng ni3 hao3; tách đúng từng âm tiết bằng một dấu cách. vietnameseReading là cách đọc gần tiếng Việt, dùng (1)-(4) cho thanh Quan thoại; mỗi âm tiết pinyin phải ứng với đúng một cụm đọc gần Việt theo cùng thứ tự, cũng cách nhau bằng một dấu cách. Không phải âm Hán-Việt hoặc pinyin viết lại. Với mọi ngôn ngữ khác, hai trường này để chuỗi rỗng.",
     "meaning phải trả lời trực tiếp ý định bằng tiếng Việt, đồng thời nêu cách diễn đạt tương đương tự nhiên bằng tiếng Anh và tiếng Trung giản thể khi phù hợp. note giải thích ngắn về ngữ pháp, lỗi sai, sắc thái hoặc tình huống sử dụng.",
     "Luôn cho đúng 2 ví dụ ứng dụng tự nhiên: mỗi ví dụ gồm English, Chinese, pinyin, vietnameseReading, Vietnamese. Với các câu Trung, vietnameseReading luôn dùng số thanh.",
@@ -1175,7 +1184,7 @@ async function lookup(request: Request, origin: string | null) {
         .maybeSingle();
       if (cacheError) throw cacheError;
       const cached = cacheRow?.subscription as { kind?: unknown; ciphertext?: unknown; expiresAt?: unknown; hits?: unknown } | undefined;
-      if (cached?.kind === "lookup-cache-v1" && typeof cached.ciphertext === "string" && typeof cached.expiresAt === "string") {
+      if (cached?.kind === lookupCacheRecordKind && typeof cached.ciphertext === "string" && typeof cached.expiresAt === "string") {
         try {
           if (Date.parse(cached.expiresAt) <= Date.now()) throw new Error("Cached lookup result expired.");
           const cachedResult = normalizeLookup(await decryptLookupCacheValue(cacheSecret, cached.ciphertext));
@@ -1210,7 +1219,7 @@ async function lookup(request: Request, origin: string | null) {
       const expiresAt = new Date(now.getTime() + lookupCacheTtlDays * 86_400_000).toISOString();
       const { error: cacheWriteError } = await admin.from("tam_ngu_push_subscriptions").upsert({
         endpoint: cacheEndpoint,
-        subscription: { kind: "lookup-cache-v1", ciphertext: encryptedResult, expiresAt, hits: 0 },
+        subscription: { kind: lookupCacheRecordKind, ciphertext: encryptedResult, expiresAt, hits: 0 },
         timezone: "UTC",
         routine_start_sequence: 0,
         schedule_times: [],

@@ -1,7 +1,7 @@
 const encoder = new TextEncoder();
 const decoder = new TextDecoder();
 
-export const lookupCacheVersion = "v1";
+export const lookupCacheVersion = "v2";
 export const lookupCacheTtlDays = 7;
 export const lookupCacheMaximumEntries = 2_000;
 

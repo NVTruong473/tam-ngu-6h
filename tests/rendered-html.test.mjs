@@ -268,9 +268,11 @@ test("keeps Gemini credentials server-only while shipping push and quick lookup"
   assert.match(edgeWorker, /install_hash/);
   assert.match(edgeWorker, /askGeminiForLookup/);
   assert.match(edgeWorker, /lookupCacheEndpointPrefix = "tam-ngu-cache:\/\/"/);
-  assert.match(edgeWorker, /kind: "lookup-cache-v1"/);
+  assert.match(edgeWorker, /lookupCacheRecordKind = `lookup-cache-\$\{lookupCacheVersion\}`/);
   assert.match(edgeWorker, /\.range\(lookupCacheMaximumEntries, lookupCacheMaximumEntries \+ 499\)/);
   assert.match(edgeWorker, /Lookup cache read unavailable; using Gemini fallback/);
+  assert.match(edgeWorker, /replace\(\/\\bkích ơn\\b\/giu, "cảm kích"\)/);
+  assert.match(edgeWorker, /meaning phải bắt đầu bằng phương án đã viết lại/);
   assert.match(edgeWorker, /plaintextQueriesStored: false/);
   assert.match(page, /Đã dùng lại kết quả được bảo vệ/);
   assert.match(lookupCache, /AES-GCM/);
