@@ -3999,5 +3999,131 @@
     },
     "generatedAt": "2026-11-05T22:49:20.355Z",
     "generator": "gemini-3.5-flash-lite"
+  },
+  {
+    "id": "lesson-0124",
+    "stage": "B1+ · Diễn đạt linh hoạt",
+    "kind": "sentence",
+    "title": "Chia sẻ quan điểm về giá trị của những sai lầm trong công việc",
+    "context": "Nói về việc coi thất bại nhỏ là bài học quý giá thay vì nản lòng.",
+    "lines": [
+      {
+        "speaker": "A",
+        "english": "Every professional setback we encounter along the way serves as an invisible stepping stone toward mastery.",
+        "chinese": "我们在成长路上遇到的每一次职业挫折，都是通往精进路上不可或缺的无形基石。",
+        "pinyin": "wǒ men zài chéng zhǎng lù shàng yù dào de měi yí cì zhí yè cuò zhé, dōu shì tōng wǎng jīng jìn lù shàng bù kě huò quē de wú xíng jī shí.",
+        "vietnameseReading": "uổ(3) mần trai(4) chấng(2) chảng(3) lu(4) sang(4) uy(4) tao(4) tơ mây(3) y(2) cì(4) chí(2) yê(4) cuốc(4) trế(2) tâu(1) sứ(4) thong(1) uảng(3) cing(1) cin(4) lu(4) sang(4) pu(4) khể(3) huó(4) chiết(1) tơ ú(2) xíng(2) chi(1) sứ(2)",
+        "vietnamese": "Mỗi trở ngại nghề nghiệp chúng ta gặp phải trên con đường trưởng thành đều là nền tảng vô hình không thể thiếu trên con đường vươn tới sự tinh thông."
+      }
+    ],
+    "note": "Cấu trúc 都是…不可或缺的… dùng để khẳng định tầm quan trọng của một yếu tố trong quá trình phát triển, tương đương với 'serve as an invisible stepping stone' trong tiếng Anh.",
+    "challenge": "Hãy thử viết một đoạn ngắn bằng tiếng Trung chia sẻ về bài học bạn rút được từ một lần mắc lỗi gần đây.",
+    "grammarFocus": "Cấu trúc 都是…不可或缺的… khẳng định giá trị cốt lõi.",
+    "vocabulary": [
+      "professional setback · 职业挫折 · trở ngại nghề nghiệp",
+      "stepping stone · 无形基石 · nền tảng vô hình",
+      "mastery · 精进 · sự tinh thông"
+    ],
+    "wish": "Chúc bạn một buổi sáng tràn đầy năng lượng, biến mọi thử thách nhỏ hôm nay thành bước đệm vững chắc cho thành công.",
+    "nightWish": "Mong rằng giấc ngủ đêm nay sẽ giúp bạn khép lại mọi lo âu, để ngày mai thức dậy với một góc nhìn hoàn toàn mới mẻ.",
+    "notification": {
+      "english": "Every professional setback is a step.",
+      "chinese": "每一次挫折都是基石。",
+      "vietnamese": "Mỗi trở ngại là một nền tảng."
+    },
+    "generatedAt": "2026-11-06T22:13:14.801Z",
+    "generator": "gemini-3.5-flash-lite"
+  },
+  {
+    "id": "lesson-0125",
+    "stage": "B1+ · Diễn đạt linh hoạt",
+    "kind": "message",
+    "title": "Nhắn tin thông báo sắp xếp thời gian gọi điện trao đổi công việc",
+    "context": "Vào buổi trưa, bạn muốn nhắn tin hẹn thời gian gọi điện với đồng nghiệp để thảo luận công việc mà không làm phiền giờ nghỉ ngơi của họ.",
+    "lines": [
+      {
+        "speaker": "A",
+        "english": "Take your time with lunch; just drop me a quick message whenever you are free for a quick call this afternoon.",
+        "chinese": "你先慢慢吃午饭，今天下午什么时候有空打个电话，提前发个消息就行。",
+        "pinyin": "Nǐ xiān mànman chī wǔfàn, jīntiān xiàwǔ shénme shíhou yǒu kòng dǎ gè diànhuà, tíqián fā gè xiāoxi jiù xíng.",
+        "vietnameseReading": "nỉ(3) xiên(1) mản(4) mản chư(1) uổ(3) phan(4) cin(1) thêm(1) xia(4) uổ(3) sấn(2) mơ sứ(2) hâu iểu(3) khổng(4) tả(3) cợ(4) tiển(4) hua(4) thí(2) chién(2) pha(1) cợ(4) xẻo(1) xư chiêu(4) xíng(2)",
+        "vietnamese": "Cứ thong thả ăn trưa nhé, chiều nay lúc nào rảnh gọi điện cho mình, cứ nhắn trước một tiếng là được."
+      }
+    ],
+    "note": "Cấu trúc 先... 然后/就... (làm cái này trước rồi làm cái kia sau) giúp thể hiện sự quan tâm đến thời gian nghỉ ngơi của người khác. Khác với tiếng Anh dùng mệnh đề độc lập với 'whenever', tiếng Trung sắp xếp điều kiện thời gian lên trước hành động.",
+    "challenge": "Hãy gửi một tin nhắn bằng tiếng Trung cho đồng nghiệp của bạn vào giờ nghỉ trưa để hẹn lịch trao đổi công việc vào buổi chiều mà vẫn giữ sự lịch sự.",
+    "grammarFocus": "Sử dụng cấu trúc 先... 就... để sắp xếp thứ tự ưu tiên hành động và thể hiện sự tôn trọng thời gian.",
+    "vocabulary": [
+      "take your time · 慢慢吃 · thong thả ăn",
+      "free for a call · 有空打电话 · rảnh gọi điện",
+      "drop a message · 发个消息 · gửi tin nhắn"
+    ],
+    "wish": "Buổi trưa an lành nhé! Mong rằng mọi việc chiều nay của bạn sẽ diễn ra thật suôn sẻ và hiệu quả.",
+    "nightWish": "Đêm nay hãy buông bỏ mọi bộn bề của công việc, chìm vào giấc ngủ thật sâu và đón ngày mai với năng lượng mới.",
+    "notification": {
+      "english": "Take your time and message when free.",
+      "chinese": "你先吃午饭，有空发消息。",
+      "vietnamese": "Cứ thong thả ăn trưa rồi nhắn mình nhé."
+    },
+    "generatedAt": "2026-11-06T22:14:23.253Z",
+    "generator": "gemini-3.5-flash-lite"
+  },
+  {
+    "id": "lesson-0126",
+    "stage": "B1+ · Diễn đạt linh hoạt",
+    "kind": "dialogue",
+    "title": "Thảo luận về cách sắp xếp không gian sống tối giản",
+    "context": "Hai đồng nghiệp trò chuyện về việc tinh giản đồ đạc trong nhà để giảm căng thẳng tinh thần.",
+    "lines": [
+      {
+        "speaker": "A",
+        "english": "Have you ever tried clearing out your room by getting rid of half your belongings? / I did that last month, and the feeling of space is truly liberating.",
+        "chinese": "你试过通过清理房间扔掉一半物品来断舍离吗？ / 我上个月刚试过，那种空旷感真的让人觉得特别解脱。",
+        "pinyin": "nǐ shì guò tōng guò qīng lǐ fáng jiān rēng diào yī bàn wù pǐn lái duàn shě lí ma? / wǒ shàng gè yuè gāng shì guò, nà zhǒng kōng kuàng gǎn zhēn de ràng rén jué de tè bié jiě tuō.",
+        "vietnameseReading": "nỉ(3) sứ(4) cuô(4) thong(1) cuô(4) ch'ing(1) lỉ(3) pháng(2) chiên(1) râng(1) điao(4) i(1) ban(4) uô(4) pín(3) lai(2) toan(4) sơ(3) lí(2) ma uổ(3) sang(4) cợ(4) duê(4) cang(1) sứ(4) cuô(4) na(4) chổng(3) khổng(1) cuạng(4) cản(3) chên(1) tơ rang(4) rấn(2) chié(2) tơ thê(4) biế(2) chie(3) thuô(1)",
+        "vietnamese": "Bạn đã thử dọn dẹp phòng và vứt bớt một nửa đồ đạc để tối giản chưa? / Tôi vừa làm tháng trước, cảm giác không gian thoáng đãng thực sự rất nhẹ nhõm."
+      },
+      {
+        "speaker": "B",
+        "english": "That sounds refreshing, but I always struggle to decide what is truly essential and what is not.",
+        "chinese": "听起来确实很清爽，不过我总是很难界定到底什么才是真正不可或缺的。",
+        "pinyin": "tīng qǐ lái què shí hěn qīng shuǎng, bù guò wǒ zǒng shì hěn nán jiè dìng dào dǐ shén me cái shì zhēn zhèng bù kě huò quē de.",
+        "vietnameseReading": "thinh(1) chỉ(3) lai(2) chiết(4) sứ(2) hẩn(3) ch'ing(1) soang(3) pu(4) cuô(4) uổ(3) chung(3) sứ(4) hẩn(3) nan(2) chie(4) tìng(4) tao(4) đỉ(3) sấn(2) mơ thái(2) sứ(4) chên(1) chấng(4) pu(4) khể(3) huó(4) chiết(1) tơ",
+        "vietnamese": "Nghe có vẻ sảng khoái đấy, nhưng tôi lúc nào cũng thấy khó phân định cái gì thực sự thiết yếu."
+      },
+      {
+        "speaker": "A",
+        "english": "A good rule of thumb is to ask yourself whether you have used it within the past year.",
+        "chinese": "一个很实用的判断标准就是问问自己过去一年里有没有用过它。",
+        "pinyin": "yī gè hěn shí yòng de pàn duàn biāo zhǔn jiù shì wèn wèn zì jǐ guò qù yī nián lǐ yǒu méi yǒu yòng guò tā.",
+        "vietnameseReading": "i(1) cợ(4) hẩn(3) sứ(2) yống(4) tơ pan(4) toan(4) piao(1) chủn(3) chiêu(4) sứ(4) uên(4) uên(4) tư(4) chỉ(3) cuô(4) chiệu(4) i(1) niản(2) lỉ(3) iểu(3) mây(2) iểu(3) yống(4) cuô(4) tha(1)",
+        "vietnamese": "Một tiêu chuẩn đánh giá rất thiết thực là tự hỏi bản thân xem trong năm qua mình có dùng đến nó không."
+      },
+      {
+        "speaker": "B",
+        "english": "That makes sense. Putting it that way definitely makes the choice much easier.",
+        "chinese": "有道理，这么一说确实让取舍容易多了。",
+        "pinyin": "yǒu dào lǐ, zhè me yī shuō què shí ràng qǔ shě róng yì duō le.",
+        "vietnameseReading": "iểu(3) tao(4) lỉ(3) chè(4) mơ i(1) suô(1) chiết(4) sứ(2) rang(4) chủ(3) sơ(3) rung(2) i(4) tuô(1) lơ",
+        "vietnamese": "Nói cũng có lý. Đặt vấn đề như vậy quả thực khiến việc lựa chọn trở nên dễ dàng hơn nhiều."
+      }
+    ],
+    "note": "Cấu trúc 问问自己 (tự hỏi bản thân) kết hợp với 过去一年 (trong năm qua) giúp diễn đạt phương pháp ra quyết định một cách lô-gic. Khác với tiếng Anh dùng rule of thumb, tiếng Trung dùng 判断标准 để chỉ tiêu chuẩn đánh giá cụ thể.",
+    "challenge": "Hãy thu âm đoạn hội thoại ngắn bằng tiếng Trung về việc dọn dẹp đồ đạc cá nhân trong một phút.",
+    "grammarFocus": "Sử dụng cụm từ 判断标准 kết hợp với mệnh đề điều kiện để đưa ra tiêu chí đánh giá.",
+    "vocabulary": [
+      "declutter · 断舍离 · tối giản đồ đạc",
+      "essential · 不可或缺 · thiết yếu",
+      "criterion · 判断标准 · tiêu chuẩn đánh giá"
+    ],
+    "wish": "Chúc bạn luôn giữ được sự tĩnh lặng trong tâm hồn và tìm thấy niềm vui từ những điều giản dị nhất mỗi ngày.",
+    "nightWish": "Khép lại một ngày bận rộn với không gian gọn gàng và giấc ngủ thật sâu, bình yên nhé.",
+    "notification": {
+      "english": "Have you tried clearing out your room?",
+      "chinese": "你试过清理房间吗？",
+      "vietnamese": "Bạn đã thử dọn dẹp lại phòng chưa?"
+    },
+    "generatedAt": "2026-11-06T22:14:56.359Z",
+    "generator": "gemini-3.5-flash-lite"
   }
 ]
