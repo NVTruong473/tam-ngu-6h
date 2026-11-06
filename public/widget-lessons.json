@@ -1,0 +1,866 @@
+{
+  "schemaVersion": 1,
+  "lessons": [
+    {
+      "id": "lesson-001",
+      "title": "Thói quen buổi sáng",
+      "english": "I usually grab coffee on my way.",
+      "chinese": "我路上通常买杯咖啡。",
+      "vietnamese": "Tôi thường mua cà phê trên đường đi."
+    },
+    {
+      "id": "lesson-002",
+      "title": "Báo cáo đi muộn",
+      "english": "I'm stuck in traffic, ten mins late.",
+      "chinese": "我堵车了，可能会迟到十分钟。",
+      "vietnamese": "Tôi đang kẹt xe, có thể muộn mười phút."
+    },
+    {
+      "id": "lesson-003",
+      "title": "Đổi lịch họp",
+      "english": "Can we delay our meeting an hour?",
+      "chinese": "把会议推迟一小时行吗？",
+      "vietnamese": "Lùi cuộc họp lại một tiếng được không?"
+    },
+    {
+      "id": "lesson-004",
+      "title": "Thay đổi sở thích",
+      "english": "I haven't watched many movies lately.",
+      "chinese": "最近我没怎么看电影。",
+      "vietnamese": "Dạo này tôi không xem nhiều phim."
+    },
+    {
+      "id": "lesson-005",
+      "title": "Hẹn giờ ăn trưa",
+      "english": "Do you want to grab lunch early today?",
+      "chinese": "今天要不要早点吃午饭？",
+      "vietnamese": "Hôm nay bạn có muốn đi ăn trưa sớm không?"
+    },
+    {
+      "id": "lesson-006",
+      "title": "Kế hoạch cuối tuần",
+      "english": "I planned to hike, but weather is bad.",
+      "chinese": "我本想去徒步，但天气不好。",
+      "vietnamese": "Tôi định đi leo núi nhưng thời tiết xấu."
+    },
+    {
+      "id": "lesson-007",
+      "title": "Trải nghiệm cuối tuần qua",
+      "english": "I spent Sunday reading in a quiet café.",
+      "chinese": "周日我在安静咖啡馆看书。",
+      "vietnamese": "Tôi đọc sách ở quán cà phê yên tĩnh."
+    },
+    {
+      "id": "lesson-008",
+      "title": "Xin lỗi vì đến muộn",
+      "english": "Sorry to keep you waiting.",
+      "chinese": "不好意思久等了。",
+      "vietnamese": "Xin lỗi đã để bạn đợi lâu."
+    },
+    {
+      "id": "lesson-009",
+      "title": "Thay đổi quán ăn",
+      "english": "Our favorite noodle shop is closed.",
+      "chinese": "最喜欢的面馆今天关门了。",
+      "vietnamese": "Quán mì yêu thích đã đóng cửa rồi."
+    },
+    {
+      "id": "lesson-010",
+      "title": "Thói quen tập thể dục",
+      "english": "I take a short walk after dinner.",
+      "chinese": "晚饭后我散一会儿步。",
+      "vietnamese": "Sau bữa tối tôi đi dạo một lát."
+    },
+    {
+      "id": "lesson-011",
+      "title": "Thông báo đổi phòng họp",
+      "english": "Our meeting is now in Room 402.",
+      "chinese": "我们的会议室换到402室。",
+      "vietnamese": "Phòng họp đã đổi sang phòng 402."
+    },
+    {
+      "id": "lesson-012",
+      "title": "Trải nghiệm mua sắm gần đây",
+      "english": "My online order arrived much faster.",
+      "chinese": "网购比预期的快到。",
+      "vietnamese": "Đơn hàng online của tôi đến nhanh hơn."
+    },
+    {
+      "id": "lesson-013",
+      "title": "Kế hoạch buổi tối",
+      "english": "I hope to catch a movie tonight.",
+      "chinese": "我希望今晚去看电影。",
+      "vietnamese": "Tôi hy vọng tối nay đi xem phim."
+    },
+    {
+      "id": "lesson-014",
+      "title": "Hủy hẹn phút chót",
+      "english": "Something urgent came up, reschedule?",
+      "chinese": "有急事，能改期吗？",
+      "vietnamese": "Có việc gấp, dời lịch lại nhé?"
+    },
+    {
+      "id": "lesson-015",
+      "title": "Đánh giá một trải nghiệm",
+      "english": "It was better than I expected.",
+      "chinese": "比我预期的要好。",
+      "vietnamese": "Hay hơn tôi mong đợi."
+    },
+    {
+      "id": "lesson-016",
+      "title": "Xin lỗi vì đến muộn do kẹt xe",
+      "english": "Sorry I am late, traffic was terrible.",
+      "chinese": "抱歉迟到了，路况太糟糕。",
+      "vietnamese": "Xin lỗi tôi đến muộn, đường tắc quá."
+    },
+    {
+      "id": "lesson-017",
+      "title": "Nhắn tin thông báo gửi tài liệu qua email",
+      "english": "I emailed the report, please check.",
+      "chinese": "报告已发邮箱，请查收。",
+      "vietnamese": "Tôi đã gửi báo cáo, hãy kiểm tra."
+    },
+    {
+      "id": "lesson-018",
+      "title": "Hỏi vị trí của đồng nghiệp trong văn phòng",
+      "english": "Do you know where David's desk is?",
+      "chinese": "你知道大卫的座位在哪吗？",
+      "vietnamese": "Bạn có biết bàn David ở đâu không?"
+    },
+    {
+      "id": "lesson-019",
+      "title": "Hỏi món đặc sắc của nhà hàng",
+      "english": "What is the most popular dish here?",
+      "chinese": "请问招牌菜是什么？",
+      "vietnamese": "Xin hỏi món đặc sản ở đây là gì?"
+    },
+    {
+      "id": "lesson-020",
+      "title": "Nhắn tin báo sẽ đến muộn do tắc đường",
+      "english": "Traffic is heavy, go ahead and order.",
+      "chinese": "堵车了，你们先点菜吧。",
+      "vietnamese": "Đường tắc lắm, mọi người cứ gọi món đi."
+    },
+    {
+      "id": "lesson-021",
+      "title": "Yêu cầu không cho hành/tỏi khi gọi món",
+      "english": "Can you make this without onions?",
+      "chinese": "这道菜可以不要葱吗？",
+      "vietnamese": "Món này có thể không cho hành không?"
+    },
+    {
+      "id": "lesson-022",
+      "title": "Hỏi giá và kích cỡ sản phẩm khi mua sắm",
+      "english": "Do you have this in a larger size?",
+      "chinese": "这件衣服有大一码的吗？",
+      "vietnamese": "Chiếc áo này có size lớn hơn không?"
+    },
+    {
+      "id": "lesson-023",
+      "title": "Nhắn tin nhờ mua đồ hộ khi đi siêu thị",
+      "english": "Please buy a carton of milk for me.",
+      "chinese": "顺便帮我买盒牛奶吧。",
+      "vietnamese": "Tiện thể mua hộ tôi một hộp sữa nhé."
+    },
+    {
+      "id": "lesson-024",
+      "title": "Thử đồ và hỏi ý kiến trong cửa hàng",
+      "english": "How does this jacket look on me?",
+      "chinese": "这件外套我穿着怎么样？",
+      "vietnamese": "Tôi mặc chiếc áo khoác này trông thế nào?"
+    },
+    {
+      "id": "lesson-025",
+      "title": "Hỏi đường đến ga tàu điện ngầm gần nhất",
+      "english": "Where is the nearest subway station?",
+      "chinese": "最近的地铁站在哪里？",
+      "vietnamese": "Trạm tàu điện ngầm gần nhất ở đâu?"
+    },
+    {
+      "id": "lesson-026",
+      "title": "Nhắn tin chỉ dẫn điểm hẹn cụ thể",
+      "english": "I am waiting opposite the bookstore.",
+      "chinese": "我在书店对面等你。",
+      "vietnamese": "Tôi đang đợi ở đối diện hiệu sách."
+    },
+    {
+      "id": "lesson-027",
+      "title": "Xác nhận hướng đi với người qua đường",
+      "english": "Is this the way to the museum?",
+      "chinese": "去博物馆走这条路吗？",
+      "vietnamese": "Đi bảo tàng là đi đường này phải không?"
+    },
+    {
+      "id": "lesson-028",
+      "title": "Đề xuất dời lịch hẹn sang thời gian khác",
+      "english": "Can we move our meeting to tomorrow?",
+      "chinese": "我们能把会议改到明天吗？",
+      "vietnamese": "Chúng ta dời cuộc họp sang mai được không?"
+    },
+    {
+      "id": "lesson-029",
+      "title": "Nhắn tin xác nhận lại giờ hẹn cuối cùng",
+      "english": "Are we still meeting at 3 PM today?",
+      "chinese": "今天下午三点见面吗？",
+      "vietnamese": "Hôm nay mình gặp nhau lúc 3 giờ chiều nhé?"
+    },
+    {
+      "id": "lesson-030",
+      "title": "Thương lượng thời gian và địa điểm hẹn",
+      "english": "Are you free for coffee this Saturday?",
+      "chinese": "周六上午有空喝咖啡吗？",
+      "vietnamese": "Thứ bảy này bạn rảnh uống cà phê không?"
+    },
+    {
+      "id": "lesson-031",
+      "title": "Xin làm rõ nghĩa",
+      "english": "Could you clarify what that means?",
+      "chinese": "能解释一下那个词的意思吗？",
+      "vietnamese": "Bạn có thể giải thích rõ từ đó không?"
+    },
+    {
+      "id": "lesson-032",
+      "title": "Đưa lý do ngắn gọn",
+      "english": "I will be five minutes late today.",
+      "chinese": "我今天会迟到五分钟。",
+      "vietnamese": "Tôi sẽ đến muộn năm phút hôm nay."
+    },
+    {
+      "id": "lesson-033",
+      "title": "So sánh hai lựa chọn",
+      "english": "Should we book the small or large room?",
+      "chinese": "我们订小房间还是大房间？",
+      "vietnamese": "Chúng ta nên đặt phòng nhỏ hay phòng lớn?"
+    },
+    {
+      "id": "lesson-034",
+      "title": "Đề xuất phương án thay thế",
+      "english": "Shall we move our meeting to tomorrow?",
+      "chinese": "把会议改到明天怎么样？",
+      "vietnamese": "Hay là dời cuộc họp sang ngày mai nhé?"
+    },
+    {
+      "id": "lesson-035",
+      "title": "Yêu cầu xác nhận lại thông tin",
+      "english": "Please confirm you got the document.",
+      "chinese": "收到文件请告诉我。",
+      "vietnamese": "Vui lòng xác nhận đã nhận tài liệu."
+    },
+    {
+      "id": "lesson-036",
+      "title": "Giải thích lý do từ chối khéo",
+      "english": "Do you want to grab lunch together?",
+      "chinese": "你想一起吃午饭吗？",
+      "vietnamese": "Bạn có muốn đi ăn trưa cùng nhau không?"
+    },
+    {
+      "id": "lesson-037",
+      "title": "Yêu cầu giải thích chi tiết hơn",
+      "english": "Could you explain the third point?",
+      "chinese": "你能讲讲第三点吗？",
+      "vietnamese": "Bạn có thể giải thích điểm thứ ba không?"
+    },
+    {
+      "id": "lesson-038",
+      "title": "Đưa ra phương án thay đổi thời gian",
+      "english": "Can we push the meeting back an hour?",
+      "chinese": "我们可以延后一小时开会吗？",
+      "vietnamese": "Chúng ta hoãn cuộc họp lại một tiếng nhé?"
+    },
+    {
+      "id": "lesson-039",
+      "title": "So sánh hiệu quả công việc",
+      "english": "Online saves travel; in-person works.",
+      "chinese": "线上省路程，线下开会好。",
+      "vietnamese": "Họp online đỡ đi lại, trực tiếp tốt hơn."
+    },
+    {
+      "id": "lesson-040",
+      "title": "Làm rõ mục đích của hành động",
+      "english": "I check details to avoid mistakes.",
+      "chinese": "我核对细节以免出错。",
+      "vietnamese": "Tôi kiểm tra chi tiết để tránh sai sót."
+    },
+    {
+      "id": "lesson-041",
+      "title": "Đề xuất giải pháp nhanh qua tin nhắn",
+      "english": "If the system crashes, let us reboot.",
+      "chinese": "如果系统崩溃，我们就重启。",
+      "vietnamese": "Nếu hệ thống sập, chúng ta khởi động lại."
+    },
+    {
+      "id": "lesson-042",
+      "title": "Yêu cầu làm rõ và đưa phương án",
+      "english": "Does this price include shipping?",
+      "chinese": "这个价格包含运费吗？",
+      "vietnamese": "Giá này đã bao gồm phí vận chuyển chưa?"
+    },
+    {
+      "id": "lesson-043",
+      "title": "Đưa lý do bảo vệ quan điểm",
+      "english": "We should choose the safe option.",
+      "chinese": "我们应选保守方案。",
+      "vietnamese": "Chúng ta nên chọn phương án an toàn."
+    },
+    {
+      "id": "lesson-044",
+      "title": "Nhắn tin đề xuất hẹn gặp",
+      "english": "Meet at the downtown café at 3 PM?",
+      "chinese": "下午三点市中心咖啡馆见面吗？",
+      "vietnamese": "Gặp ở quán cà phê trung tâm lúc 3 giờ nhé?"
+    },
+    {
+      "id": "lesson-045",
+      "title": "Tổng kết và chốt phương án cuối cùng",
+      "english": "What is our next step now?",
+      "chinese": "下一步我们该怎么办？",
+      "vietnamese": "Bước tiếp theo của chúng ta là gì?"
+    },
+    {
+      "id": "lesson-046",
+      "title": "Nhấn mạnh sự biết ơn sâu sắc",
+      "english": "I really appreciate your help.",
+      "chinese": "多亏你帮忙，我非常感激。",
+      "vietnamese": "Tôi thực sự biết ơn bạn giúp đỡ."
+    },
+    {
+      "id": "lesson-047",
+      "title": "Nhắn tin hỏi han lịch sự khi đối phương bận",
+      "english": "Take your time, there is no rush.",
+      "chinese": "你先忙，我们不急。",
+      "vietnamese": "Bạn cứ thong thả, bên này không vội."
+    },
+    {
+      "id": "lesson-048",
+      "title": "Từ chối khéo lời mời ăn tối vì đã có kế hoạch",
+      "english": "I have plans for dinner tonight.",
+      "chinese": "我今晚已经有安排了。",
+      "vietnamese": "Tôi có kế hoạch ăn tối tối nay rồi."
+    },
+    {
+      "id": "lesson-049",
+      "title": "Đồng ý một phần và nêu điểm lưu ý",
+      "english": "I agree, but we must consider costs.",
+      "chinese": "方向我同意，不过成本得考虑。",
+      "vietnamese": "Tôi đồng ý nhưng phải cân nhắc chi phí."
+    },
+    {
+      "id": "lesson-050",
+      "title": "Bày tỏ sự quan tâm đến sức khỏe đồng nghiệp",
+      "english": "Drink warm water and rest well.",
+      "chinese": "多喝热水，好好休息。",
+      "vietnamese": "Nhớ uống nước ấm và nghỉ ngơi nhé."
+    },
+    {
+      "id": "lesson-051",
+      "title": "Từ chối khéo việc nhận thêm việc",
+      "english": "Can you review this report by Friday?",
+      "chinese": "周五前能看这份报告吗？",
+      "vietnamese": "Trước thứ Sáu bạn xem giúp báo cáo nhé?"
+    },
+    {
+      "id": "lesson-052",
+      "title": "Ghi nhận công sức của người khác khi cảm ơn",
+      "english": "We needed your dedication to succeed.",
+      "chinese": "没有你的付出我们做不到。",
+      "vietnamese": "Chúng tôi không thể thành công thiếu bạn."
+    },
+    {
+      "id": "lesson-053",
+      "title": "Nhắn tin phản hồi nhẹ nhàng khi đến muộn do tắc đường",
+      "english": "Traffic is heavy, wait a few minutes.",
+      "chinese": "路上堵车，等我几分钟。",
+      "vietnamese": "Đường tắc, hãy đợi tôi vài phút."
+    },
+    {
+      "id": "lesson-054",
+      "title": "Đồng ý một phần kèm theo đề xuất thay thế",
+      "english": "Meet at 9 AM tomorrow?",
+      "chinese": "明天九点开会怎么样？",
+      "vietnamese": "Mai họp lúc 9 giờ được không?"
+    },
+    {
+      "id": "lesson-055",
+      "title": "Bày tỏ sự quan tâm tinh tế đến tâm trạng người khác",
+      "english": "You seem a bit distracted today, okay?",
+      "chinese": "你今天心不在焉，没事吧？",
+      "vietnamese": "Hôm nay trông bạn hơi lơ đễnh, ổn chứ?"
+    },
+    {
+      "id": "lesson-056",
+      "title": "Nhắn tin từ chối khéo lời mời tham gia sự kiện",
+      "english": "Thanks, but I need a quiet weekend.",
+      "chinese": "谢谢，周末我需要安静。",
+      "vietnamese": "Cảm ơn, tôi cần một cuối tuần yên tĩnh."
+    },
+    {
+      "id": "lesson-057",
+      "title": "Bày tỏ sự cảm kích khi nhận được sự hỗ trợ bất ngờ",
+      "english": "Thanks for helping while I was sick.",
+      "chinese": "谢谢你在我生病时帮我。",
+      "vietnamese": "Cảm ơn bạn đã giúp khi tôi ốm."
+    },
+    {
+      "id": "lesson-058",
+      "title": "Đồng ý một phần kèm theo điều kiện nhỏ",
+      "english": "I can help if you send data by noon.",
+      "chinese": "中午前发数据我来帮做。",
+      "vietnamese": "Tôi giúp nếu bạn gửi dữ liệu trước trưa."
+    },
+    {
+      "id": "lesson-059",
+      "title": "Nhắn tin quan tâm và nhắc nhở sau buổi họp căng thẳng",
+      "english": "You handled the tough questions well.",
+      "chinese": "你应对尖锐问题表现出色。",
+      "vietnamese": "Bạn đã xử lý các câu hỏi hóc búa tốt."
+    },
+    {
+      "id": "lesson-060",
+      "title": "Tổng hợp kỹ năng: Quan tâm, từ chối mềm và đồng ý một phần",
+      "english": "Are you joining the camping trip?",
+      "chinese": "你参加露营活动吗？",
+      "vietnamese": "Bạn có tham gia chuyến cắm trại không?"
+    },
+    {
+      "id": "lesson-061",
+      "title": "Nhấn mạnh sự bất ngờ",
+      "english": "To my surprise, he agreed to help us.",
+      "chinese": "他竟然毫不犹豫答应帮我们。",
+      "vietnamese": "Thật bất ngờ khi anh ấy đồng ý giúp."
+    },
+    {
+      "id": "lesson-062",
+      "title": "Nhắn tin giải thích sự chậm trễ",
+      "english": "Sorry, I am stuck in traffic.",
+      "chinese": "对不起，我塞车了。",
+      "vietnamese": "Xin lỗi, tôi bị kẹt xe rồi."
+    },
+    {
+      "id": "lesson-063",
+      "title": "Giải quyết hiểu lầm về thời gian hẹn",
+      "english": "Wait, wasn't our meeting at three?",
+      "chinese": "等等，我们不是三点开会吗？",
+      "vietnamese": "Khoan, lịch họp của mình lúc ba giờ mà?"
+    },
+    {
+      "id": "lesson-064",
+      "title": "Bày tỏ quan điểm cá nhân một cách khách quan",
+      "english": "Quality matters more than quantity.",
+      "chinese": "质量比数量更重要。",
+      "vietnamese": "Chất lượng quan trọng hơn số lượng."
+    },
+    {
+      "id": "lesson-065",
+      "title": "Nhắn tin chia sẻ cảm xúc sau một ngày mệt mỏi",
+      "english": "Today was exhausting, I need to rest.",
+      "chinese": "今天太累了，只想躺着。",
+      "vietnamese": "Hôm nay mệt quá, tôi chỉ muốn nằm nghỉ."
+    },
+    {
+      "id": "lesson-066",
+      "title": "Làm rõ một hiểu lầm về công việc",
+      "english": "Did you finish the quarterly report?",
+      "chinese": "季度报告你做完了吗？",
+      "vietnamese": "Cậu đã làm xong báo cáo quý chưa?"
+    },
+    {
+      "id": "lesson-067",
+      "title": "Kể chuyện kèm theo phỏng đoán quá khứ",
+      "english": "She must have missed our call.",
+      "chinese": "她肯定没接电话。",
+      "vietnamese": "Chắc chắn cô ấy đã lỡ cuộc gọi."
+    },
+    {
+      "id": "lesson-068",
+      "title": "Nhắn tin bày tỏ cảm xúc biết ơn sâu sắc",
+      "english": "I cannot thank you enough for this.",
+      "chinese": "大恩不言谢，谢谢你。",
+      "vietnamese": "Tôi thực sự không biết cảm ơn ra sao."
+    },
+    {
+      "id": "lesson-069",
+      "title": "Tranh luận nhẹ nhàng về quan điểm sống",
+      "english": "Stability beats chasing risky dreams.",
+      "chinese": "稳定胜过冒险逐梦。",
+      "vietnamese": "Ổn định hơn theo đuổi giấc mơ rủi ro."
+    },
+    {
+      "id": "lesson-070",
+      "title": "Kể chuyện kèm theo sự thay đổi thái độ",
+      "english": "I opposed moving abroad; now I love it.",
+      "chinese": "我曾反对出国，如今却很喜欢。",
+      "vietnamese": "Từng phản đối đi xa, giờ tôi lại thích."
+    },
+    {
+      "id": "lesson-071",
+      "title": "Nhắn tin trấn an người đang lo lắng",
+      "english": "Just show your true capabilities.",
+      "chinese": "展现出你的真实水平就行。",
+      "vietnamese": "Hãy thể hiện năng lực thật của bạn."
+    },
+    {
+      "id": "lesson-072",
+      "title": "Giải quyết hiểu lầm về thông tin địa điểm",
+      "english": "I have waited at the cafe for 20 mins.",
+      "chinese": "我在咖啡馆等二十分钟了。",
+      "vietnamese": "Tớ đợi ở quán cà phê 20 phút rồi."
+    },
+    {
+      "id": "lesson-073",
+      "title": "Chia sẻ quan điểm về giá trị thời gian",
+      "english": "Focus on what we can control now.",
+      "chinese": "专注当下可控之事。",
+      "vietnamese": "Hãy tập trung việc ta kiểm soát lúc này."
+    },
+    {
+      "id": "lesson-074",
+      "title": "Nhắn tin thú nhận lỗi lầm và xin lỗi chân thành",
+      "english": "I'm so sorry. I'll cover all costs.",
+      "chinese": "所有额外费用我来承担。",
+      "vietnamese": "Xin lỗi nhé. Mọi chi phí tớ chịu hết."
+    },
+    {
+      "id": "lesson-075",
+      "title": "Giải quyết hiểu lầm về ý kiến cá nhân",
+      "english": "Were you serious in the meeting?",
+      "chinese": "你会上说的是真的吗？",
+      "vietnamese": "Ý cậu trong cuộc họp là thật à?"
+    },
+    {
+      "id": "lesson-076",
+      "title": "Bày tỏ quan điểm cá nhân một cách lịch sự",
+      "english": "In my view, we should prioritize this.",
+      "chinese": "我认为我们应该优先考虑这个。",
+      "vietnamese": "Theo tôi, chúng ta nên ưu tiên việc này."
+    },
+    {
+      "id": "lesson-077",
+      "title": "Nhắn tin hoãn cuộc hẹn do kẹt việc",
+      "english": "I am stuck in traffic and will be late.",
+      "chinese": "我堵车了，可能会迟到。",
+      "vietnamese": "Tôi bị kẹt xe và có thể sẽ đến muộn."
+    },
+    {
+      "id": "lesson-078",
+      "title": "Thảo luận nhanh về lịch trình công tác",
+      "english": "Should we depart Monday or Tuesday?",
+      "chinese": "周一还是周二出发？",
+      "vietnamese": "Nên xuất phát vào thứ Hai hay thứ Ba?"
+    },
+    {
+      "id": "lesson-079",
+      "title": "Đề xuất giải pháp thay thế",
+      "english": "How about a status report instead?",
+      "chinese": "发个进度报告怎么样？",
+      "vietnamese": "Gửi báo cáo tiến độ thì sao?"
+    },
+    {
+      "id": "lesson-080",
+      "title": "Xác nhận lại công việc qua email hoặc tin nhắn công sở",
+      "english": "Just to confirm, I do the forecast?",
+      "chinese": "确认下，我负责预测吗？",
+      "vietnamese": "Xác nhận lại, tôi phụ trách dự báo chứ?"
+    },
+    {
+      "id": "lesson-081",
+      "title": "Bàn về kế hoạch du lịch cuối tuần",
+      "english": "Do you prefer beach or mountain hiking?",
+      "chinese": "你喜欢去海边还是爬山？",
+      "vietnamese": "Bạn thích đi biển hay leo núi hơn?"
+    },
+    {
+      "id": "lesson-082",
+      "title": "Diễn đạt sự phụ thuộc vào hoàn cảnh",
+      "english": "It depends on our Friday report.",
+      "chinese": "这取决于周五前能不能完成。",
+      "vietnamese": "Việc này phụ thuộc vào báo cáo thứ Sáu."
+    },
+    {
+      "id": "lesson-083",
+      "title": "Nhắn tin nhắc nhở thời hạn công việc nhẹ nhàng",
+      "english": "Client presentation is due tomorrow.",
+      "chinese": "客户演示文件明天截止。",
+      "vietnamese": "Tài liệu thuyết trình đến hạn ngày mai."
+    },
+    {
+      "id": "lesson-084",
+      "title": "Thảo luận về mối quan hệ đồng nghiệp và công việc nhóm",
+      "english": "How is the new teammate doing?",
+      "chinese": "新队友合作得怎么样？",
+      "vietnamese": "Đồng đội mới hợp tác thế nào rồi?"
+    },
+    {
+      "id": "lesson-085",
+      "title": "Đưa ra lời khuyên dựa trên kinh nghiệm bản thân",
+      "english": "If I were you, I would check clauses.",
+      "chinese": "如果我是你，我会核对条款。",
+      "vietnamese": "Nếu là bạn, tôi sẽ kiểm tra điều khoản."
+    },
+    {
+      "id": "lesson-086",
+      "title": "Tin nhắn từ chối khéo lời mời",
+      "english": "Thanks for the invite, I am busy.",
+      "chinese": "谢谢邀请，今晚我有事。",
+      "vietnamese": "Cảm ơn lời mời, nhưng tối nay tôi bận."
+    },
+    {
+      "id": "lesson-087",
+      "title": "Sắp xếp lại kế hoạch cuộc hẹn bị thay đổi",
+      "english": "Can we move dinner to Thursday?",
+      "chinese": "晚饭能改到周四吗？",
+      "vietnamese": "Ta dời bữa tối sang thứ Năm nhé?"
+    },
+    {
+      "id": "lesson-088",
+      "title": "Diễn đạt mục đích của hành động",
+      "english": "I'm staying late to finish the report.",
+      "chinese": "我加班赶报告。",
+      "vietnamese": "Tôi tăng ca để làm cho xong báo cáo."
+    },
+    {
+      "id": "lesson-089",
+      "title": "Cập nhật tiến độ công việc cho sếp hoặc khách hàng",
+      "english": "The first draft is ready for review.",
+      "chinese": "初稿已准备好，请您审阅。",
+      "vietnamese": "Bản thảo đầu tiên đã sẵn sàng xem lại."
+    },
+    {
+      "id": "lesson-090",
+      "title": "Thảo luận về kế hoạch phát triển sự nghiệp cá nhân",
+      "english": "Any certification exams next year?",
+      "chinese": "明年打算考职业证书吗？",
+      "vietnamese": "Năm sau bạn định thi chứng chỉ nghề chứ?"
+    },
+    {
+      "id": "lesson-0091",
+      "title": "Nhận xét khéo léo về sự tiến bộ của người khác",
+      "english": "You have made remarkable progress.",
+      "chinese": "你取得了显著的进步。",
+      "vietnamese": "Bạn đã có sự tiến bộ đáng kể."
+    },
+    {
+      "id": "lesson-0092",
+      "title": "Nhắn tin hỏi thăm tiến độ một cách tinh tế và không gây áp lực",
+      "english": "Take your time, just checking in.",
+      "chinese": "不急，我只是问问进展。",
+      "vietnamese": "Không vội đâu, tôi chỉ hỏi tiến độ."
+    },
+    {
+      "id": "lesson-0093",
+      "title": "Thảo luận chọn địa điểm ăn tối sau giờ làm",
+      "english": "Want to try that new hotpot place?",
+      "chinese": "去试试那家新开的火锅店吗？",
+      "vietnamese": "Bạn muốn thử quán lẩu mới mở đó không?"
+    },
+    {
+      "id": "lesson-0094",
+      "title": "Khen ngợi ý tưởng sáng tạo trong buổi họp",
+      "english": "That is a truly brilliant perspective.",
+      "chinese": "这个精彩视角我们忽略了。",
+      "vietnamese": "Đó là một góc nhìn thực sự tuyệt vời."
+    },
+    {
+      "id": "lesson-0095",
+      "title": "Nhắn tin hỏi thăm người vừa trải qua ca phẫu thuật",
+      "english": "Let me know if you need any groceries.",
+      "chinese": "若需买菜随时告诉我。",
+      "vietnamese": "Cần mua gì thì cứ báo cho mình biết."
+    },
+    {
+      "id": "lesson-0096",
+      "title": "Thương lượng lại thời hạn hoàn thành dự án",
+      "english": "Database issue; we need two more days.",
+      "chinese": "数据库出问题了，还需两天。",
+      "vietnamese": "Cơ sở dữ liệu gặp lỗi, cần thêm hai ngày."
+    },
+    {
+      "id": "lesson-0097",
+      "title": "Bày tỏ thái độ kiên quyết trước quyết định khó khăn",
+      "english": "There is no turning back now.",
+      "chinese": "现在都没有退路了。",
+      "vietnamese": "Bây giờ không còn đường lui nữa."
+    },
+    {
+      "id": "lesson-0098",
+      "title": "Nhắn tin xin dời lịch họp vì sự cố kỹ thuật",
+      "english": "My laptop crashed; can we meet later?",
+      "chinese": "电脑死机，会议能推迟吗？",
+      "vietnamese": "Máy tính bị treo, ta lùi lịch họp nhé?"
+    },
+    {
+      "id": "lesson-0099",
+      "title": "Thảo luận về lựa chọn phong cách sống hiện đại",
+      "english": "Want to move to the suburbs?",
+      "chinese": "想搬到郊区去吗？",
+      "vietnamese": "Cậu muốn chuyển ra ngoại ô sống chứ?"
+    },
+    {
+      "id": "lesson-0100",
+      "title": "Bày tỏ quan điểm về việc cân bằng giữa công việc và cuộc sống",
+      "english": "Balancing work and life is an art.",
+      "chinese": "平衡工作与生活是一门艺术。",
+      "vietnamese": "Cân bằng việc và sống là một nghệ thuật."
+    },
+    {
+      "id": "lesson-0101",
+      "title": "Nhắn tin báo cáo nhanh tình huống khẩn cấp tại văn phòng",
+      "english": "The server crashed, restoring data now.",
+      "chinese": "服务器崩溃，正全力恢复数据。",
+      "vietnamese": "Máy chủ sập, đang khôi phục dữ liệu."
+    },
+    {
+      "id": "lesson-0102",
+      "title": "Thống nhất lại cách chia việc nhà",
+      "english": "Should we redistribute chores?",
+      "chinese": "我们该重新分配家务吗？",
+      "vietnamese": "Chúng ta nên chia lại việc nhà chứ?"
+    },
+    {
+      "id": "lesson-0103",
+      "title": "Bày tỏ cảm giác choáng ngợp trước khối lượng công việc",
+      "english": "This endless task list overwhelms me.",
+      "chinese": "做不完的事让我感到压力。",
+      "vietnamese": "Danh sách việc vô tận làm tôi ngợp."
+    },
+    {
+      "id": "lesson-0104",
+      "title": "Nhắn tin chia sẻ kinh nghiệm chọn thiết bị điện tử",
+      "english": "Prioritize battery over appearance.",
+      "chinese": "续航比外观更重要。",
+      "vietnamese": "Nên ưu tiên pin hơn vẻ ngoài."
+    },
+    {
+      "id": "lesson-0105",
+      "title": "Bàn bạc về việc thay đổi thói quen tập thể dục",
+      "english": "I now jog in the morning instead.",
+      "chinese": "我改在清晨跑步。",
+      "vietnamese": "Tôi đổi sang chạy bộ buổi sáng."
+    },
+    {
+      "id": "lesson-0106",
+      "title": "Chia sẻ trải nghiệm sử dụng dịch vụ thông minh",
+      "english": "Facial recognition ATMs are faster.",
+      "chinese": "刷脸取款机比插卡快得多。",
+      "vietnamese": "Máy rút tiền nhận diện mặt nhanh hơn."
+    },
+    {
+      "id": "lesson-0107",
+      "title": "Nhắn tin thông báo thay đổi phòng họp gấp",
+      "english": "Our meeting is on the second floor.",
+      "chinese": "部门会议改到二楼了。",
+      "vietnamese": "Cuộc họp đã chuyển sang lầu hai."
+    },
+    {
+      "id": "lesson-0108",
+      "title": "Thảo luận về sở thích sưu tầm đồ cổ hoài niệm",
+      "english": "Why do you love these vintage items?",
+      "chinese": "你为什么喜欢这些复古物品？",
+      "vietnamese": "Sao bạn lại thích những món đồ cổ này?"
+    },
+    {
+      "id": "lesson-0109",
+      "title": "Chia sẻ quan điểm về nhịp sống đô thị",
+      "english": "City life feels like a treadmill.",
+      "chinese": "在大城市生活像跑步机。",
+      "vietnamese": "Sống ở thành phố như chạy trên máy."
+    },
+    {
+      "id": "lesson-0110",
+      "title": "Hẹn đồng nghiệp trao đổi sau giờ nghỉ trưa",
+      "english": "Let us catch up at two today.",
+      "chinese": "两点钟我们碰头吧。",
+      "vietnamese": "Hai giờ chiều nay chúng ta gặp nhé."
+    },
+    {
+      "id": "lesson-0111",
+      "title": "Chia sẻ trải nghiệm đọc sách hiệu quả",
+      "english": "Reading a few pages nightly adds up.",
+      "chinese": "日积月累，每晚读书几页大有收获。",
+      "vietnamese": "Đọc vài trang sách mỗi tối tích lũy lớn."
+    },
+    {
+      "id": "lesson-0112",
+      "title": "Nhìn nhận lại một quyết định trong quá khứ",
+      "english": "That risk was my career turning point.",
+      "chinese": "那次冒险是我职业生涯转折点。",
+      "vietnamese": "Mạo hiểm ấy là bước ngoặt sự nghiệp."
+    },
+    {
+      "id": "lesson-0113",
+      "title": "Nhờ đồng nghiệp nhận giúp bưu phẩm",
+      "english": "Could you accept a courier for me?",
+      "chinese": "能帮我签收一下快递吗？",
+      "vietnamese": "Bạn có thể ký nhận bưu phẩm hộ tôi không?"
+    },
+    {
+      "id": "lesson-0114",
+      "title": "Bàn về dự định học thêm ngoại ngữ thứ hai",
+      "english": "Would you learn a new language for fun?",
+      "chinese": "你会为了好玩学新外语吗？",
+      "vietnamese": "Bạn có học ngoại ngữ mới chỉ để vui không?"
+    },
+    {
+      "id": "lesson-0115",
+      "title": "Bàn về thói quen chi tiêu không dùng tiền mặt",
+      "english": "Carrying a wallet feels redundant.",
+      "chinese": "带钱包显得很多余。",
+      "vietnamese": "Mang theo ví tiền dường như rất thừa thãi."
+    },
+    {
+      "id": "lesson-0116",
+      "title": "Nhắn tin nhắc nhở người giao hàng về địa chỉ phụ",
+      "english": "Please deliver it to the side door.",
+      "chinese": "请把包裹送到侧门。",
+      "vietnamese": "Xin hãy giao bưu phẩm đến cửa hông."
+    },
+    {
+      "id": "lesson-0117",
+      "title": "Bàn về việc tập trung làm việc sâu giữa không gian mở",
+      "english": "How do you stay focused in this office?",
+      "chinese": "在这间嘈杂的办公室里你怎么专注？",
+      "vietnamese": "Làm sao bạn giữ tập trung ở văn phòng này?"
+    },
+    {
+      "id": "lesson-0118",
+      "title": "Chia sẻ quan điểm về giá trị của những trải nghiệm bất ngờ",
+      "english": "Unplanned detours create best memories.",
+      "chinese": "意外绕路往往带来难忘回忆。",
+      "vietnamese": "Những đường vòng bất ngờ tạo kỷ niệm đẹp."
+    },
+    {
+      "id": "lesson-0119",
+      "title": "Nhắn tin rủ đồng nghiệp đi cà phê trưa để đổi gió",
+      "english": "Want to grab iced coffee with me?",
+      "chinese": "要不要一起去买冰咖啡？",
+      "vietnamese": "Hay là cùng mình đi mua cà phê đá nhé?"
+    },
+    {
+      "id": "lesson-0120",
+      "title": "Bàn về việc tự học kỹ năng mới ngoài giờ làm",
+      "english": "How do you balance work and editing?",
+      "chinese": "你怎么平衡工作与剪辑？",
+      "vietnamese": "Làm sao để cân bằng việc và dựng phim?"
+    },
+    {
+      "id": "lesson-0121",
+      "title": "Bày tỏ sự thấu hiểu sâu sắc trước một quyết định khó khăn",
+      "english": "It takes courage to start over.",
+      "chinese": "重新开始需要勇气。",
+      "vietnamese": "Bắt đầu lại đòi hỏi sự dũng cảm."
+    },
+    {
+      "id": "lesson-0122",
+      "title": "Nhắn tin xin lỗi vì đến muộn do kẹt xe bất ngờ",
+      "english": "Traffic jam delay update",
+      "chinese": "路上堵车，我会迟到十分钟",
+      "vietnamese": "Kẹt xe trên đường, tôi đến muộn 10 phút"
+    },
+    {
+      "id": "lesson-0123",
+      "title": "Nhìn nhận lại mục tiêu dài hạn sau một khoảng thời gian nỗ lực",
+      "english": "Are we closer to our career goals?",
+      "chinese": "离最初的职业目标更近了吗？",
+      "vietnamese": "Chúng ta đã gần tới mục tiêu chưa?"
+    }
+  ]
+}

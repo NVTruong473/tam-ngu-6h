@@ -57,12 +57,13 @@ jobs:
             fi
             rm -f "$backup"
           done
+          npm run generate:widget-data
           echo "Accepted $accepted/3 new lessons. Existing production content remains valid when Gemini is unavailable."
       - name: Preserve newly generated lessons
         run: |
           git config user.name "tam-ngu-bot"
           git config user.email "actions@users.noreply.github.com"
-          git add app/curriculum.json
+          git add app/curriculum.json public/widget-lessons.json
           if ! git diff --cached --quiet; then
             git commit -m "Grow daily Gemini curriculum [skip ci]"
             git push

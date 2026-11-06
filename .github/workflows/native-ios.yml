@@ -1,0 +1,46 @@
+name: Verify Tam Ngữ iOS Glance Deck
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - "ios/**"
+      - "app/**"
+      - "public/widget-lessons.json"
+      - "scripts/generate-widget-lessons.mjs"
+      - "capacitor.config.ts"
+      - "package.json"
+      - "package-lock.json"
+      - ".github/workflows/native-ios.yml"
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: tam-ngu-native-ios
+  cancel-in-progress: true
+
+jobs:
+  unsigned-simulator-build:
+    runs-on: macos-15
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v6
+      - uses: actions/setup-node@v6
+        with:
+          node-version: 22
+          cache: npm
+      - run: npm ci
+      - name: Build and synchronize the reviewed offline app
+        run: npm run build:native
+      - name: Compile the app and WidgetKit extension without signing secrets
+        run: >-
+          xcodebuild
+          -project ios/App/App.xcodeproj
+          -scheme App
+          -configuration Debug
+          -sdk iphonesimulator
+          -destination 'generic/platform=iOS Simulator'
+          CODE_SIGNING_ALLOWED=NO
+          build

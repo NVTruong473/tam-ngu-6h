@@ -9,6 +9,21 @@ Tam Ngữ 6H có hai bề mặt cùng dùng một kho bài và Edge Function:
   đóng gói trong Capacitor, nhưng thông báo, biểu tượng, widget và extension là
   thành phần native của mỗi hệ điều hành.
 
+## Glance Deck — bề mặt học thụ động chính
+
+- WidgetKit extension `TamNguWidgets` đã thay vai trò “thẻ học chính” của thông
+  báo. Lock Screen dùng thẻ chữ nhật ngắn; Home Screen và StandBy có đủ ba dòng
+  Anh · Trung · Việt. Thông báo chỉ còn là kênh tùy chọn.
+- Timeline tự đổi ở 06:00, 12:00 và 18:00 mà không cần mở app. Feed công khai
+  `widget-lessons.json` chứa nội dung đã kiểm định, không chứa Gemini key hoặc dữ
+  liệu người dùng; widget có ba bài dự phòng khi mất mạng.
+- Trên widget Home Screen đủ lớn, nút lật bài chạy bằng App Intent và không mở
+  app. Khi điện thoại đang khóa, iOS yêu cầu xác thực trước khi thực hiện nút;
+  ứng dụng không được phép vượt qua cơ chế này.
+- Widget không phải một web feature: PWA đang cài từ Safari không tự nhận được
+  extension. Phải ký và cài bản native, sau đó người dùng thêm widget một lần
+  bằng giao diện hệ thống của iOS.
+
 Không dùng `server.url` trong Capacitor. App luôn mang bundle đã kiểm tra trong
 gói cài đặt; việc này tránh trở thành một web wrapper tải nội dung tùy ý.
 
@@ -38,8 +53,8 @@ lần trong giao diện Tùy chỉnh Lock Screen của iOS.
 3. Tạo Firebase Android app cùng application ID, tải `google-services.json`
    trực tiếp vào `android/app/` (đã bị bỏ qua khỏi Git), rồi tạo service account
    chỉ trong Supabase secrets để gửi FCM.
-4. Tạo iOS WidgetKit target và Notification Content Extension trong Xcode,
-   dùng App Group chỉ để chia dữ liệu bài học đã lọc; không chia API key.
+4. Kiểm tra WidgetKit target `TamNguWidgets` trên iPhone thật. Chỉ thêm App Group
+   nếu cần đồng bộ lịch tùy chỉnh từ app; không chia API key hoặc lịch sử tra cứu.
 5. Phát hành iOS dưới dạng **Unlisted App** để người nhận cài bằng link App
    Store riêng. Android dùng Google Play closed test trước, sau đó unlisted/
    production link. Không gửi APK qua Zalo cho người dùng phổ thông.
@@ -68,3 +83,8 @@ Studio/JDK.
   Lock Screen và deep-link về đúng bài.
 - Chạy `npm test`, build signed archive và kiểm tra privacy labels trước khi
   gửi App Review/Play review.
+
+GitHub Actions có build iOS Simulator không ký để bắt lỗi Swift/WidgetKit mà
+không lưu certificate. Build xanh không tạo ra IPA có thể cài: tài khoản Apple
+miễn phí vẫn hết hạn provisioning sau 7 ngày; phát hành lâu dài cần chương trình
+phân phối chính thức của Apple.

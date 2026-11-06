@@ -18,6 +18,7 @@
     "enrich:pronunciation": "node scripts/enrich-vietnamese-readings.mjs",
     "repair:pronunciation": "node scripts/repair-vietnamese-readings.mjs",
     "generate:notification-snippets": "node scripts/generate-notification-snippets.mjs",
+    "generate:widget-data": "node scripts/generate-widget-lessons.mjs",
     "verify:curriculum": "node scripts/verify-curriculum.mjs",
     "supabase:apply": "node scripts/apply-supabase-migration.mjs",
     "supabase:lookup-secrets": "node scripts/configure-supabase-lookup.mjs",

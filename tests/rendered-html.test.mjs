@@ -121,7 +121,8 @@ test("keeps setup inside Tam Ngữ with one explicit iOS permission", async () =
   assert.match(styles, /button \{ min-width: 44px; min-height: 44px;/);
   assert.match(styles, /:focus-visible/);
   assert.doesNotMatch(page, /Scriptable|scriptable:\/\/\/|showWidgetInstall|navigator\.clipboard/);
-  assert.doesNotMatch(packageText, /build-widget-data|generate:widget-data/);
+  assert.doesNotMatch(packageText, /build-widget-data/);
+  assert.match(packageText, /generate:widget-data/);
 });
 
 test("consumes smoke-test responses before their timeout signal expires", async () => {
