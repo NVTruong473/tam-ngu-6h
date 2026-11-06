@@ -1,4 +1,5 @@
 import { randomBytes } from "node:crypto";
+import { evaluateLookupQuality, lookupQualityCases } from "./lookup-quality.mjs";
 
 const ref = process.env.SUPABASE_PROJECT_REF;
 if (!ref) throw new Error("Thiếu SUPABASE_PROJECT_REF.");
@@ -82,7 +83,7 @@ function isValidLookupResult(result) {
   return result.pinyin === "" && result.vietnameseReading === "";
 }
 
-async function verifyLookup(query) {
+async function verifyLookup(testCase) {
   const lookupResponse = await fetch(`${apiUrl}/lookup`, {
     method: "POST",
     headers: {
@@ -90,19 +91,21 @@ async function verifyLookup(query) {
       "x-client-id": testClientId,
       origin: "https://nvtruong473.github.io",
     },
-    body: JSON.stringify({ query }),
+    body: JSON.stringify({ query: testCase.query }),
+    signal: AbortSignal.timeout(90_000),
   });
   const lookup = await lookupResponse.json().catch(() => null);
   if (!lookupResponse.ok || !lookup?.ok || !isValidLookupResult(lookup.result)) {
-    throw new Error("Kiểm tra tra nhanh Gemini chưa đạt.");
+    throw new Error(`Kiểm tra cấu trúc Gemini chưa đạt ở ca ${testCase.id}.`);
+  }
+  const semanticFailures = evaluateLookupQuality(testCase, lookup.result);
+  if (semanticFailures.length > 0) {
+    throw new Error(`Kiểm tra ngữ nghĩa chưa đạt ở ca ${testCase.id}: ${semanticFailures.join("; ")}.`);
   }
   return lookup;
 }
 
-await verifyLookup("take it easy");
-const cacheHit = await verifyLookup("  TAKE   IT EASY ");
+for (const testCase of lookupQualityCases) await verifyLookup(testCase);
+const cacheHit = await verifyLookup({ ...lookupQualityCases[0], query: "  TAKE   IT EASY " });
 if (cacheHit.cache?.hit !== true) throw new Error("Cache riêng tư không dùng lại truy vấn tương đương.");
-await verifyLookup("慢一点");
-await verifyLookup("Kỷ luật");
-await verifyLookup("お疲れ様はどういう意味ですか？");
-process.stdout.write("Health, Push một chạm, cache mã hóa và bốn lượt tra đa ngữ đã đạt. Không in API key.\n");
+process.stdout.write("Health, Push một chạm, cache mã hóa và bốn ca chuẩn ngữ nghĩa đã đạt. Không in API key.\n");

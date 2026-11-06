@@ -1,3 +1,5 @@
+import { evaluateLookupQuality, selectDailyLookupQualityCase } from "./lookup-quality.mjs";
+
 const siteUrl = new URL(process.env.SMOKE_URL || "https://nvtruong473.github.io/tam-ngu-6h/");
 const apiUrl = (process.env.SMOKE_API_URL || "https://fcsuldrerhbynwotcvyn.supabase.co/functions/v1/tam-ngu-api").replace(/\/$/, "");
 const deepLookup = process.env.SMOKE_DEEP_LOOKUP === "1";
@@ -30,6 +32,7 @@ async function fetchWithRetry(url, label, attempts = 6) {
 }
 
 async function verifyLookup() {
+  const qualityCase = selectDailyLookupQualityCase();
   const clientBytes = crypto.getRandomValues(new Uint8Array(18));
   const clientId = `tg6h_${[...clientBytes].map((byte) => byte.toString(16).padStart(2, "0")).join("")}`;
   const response = await fetch(`${apiUrl}/lookup`, {
@@ -41,7 +44,7 @@ async function verifyLookup() {
       "user-agent": "tam-ngu-production-deep-smoke-test",
       "x-client-id": clientId,
     },
-    body: JSON.stringify({ query: "take it easy" }),
+    body: JSON.stringify({ query: qualityCase.query }),
     signal: AbortSignal.timeout(90_000),
   });
   const payload = await response.json().catch(() => null);
@@ -69,6 +72,10 @@ async function verifyLookup() {
       alignedExamples: examples.filter(hasAlignedToneGuides).length,
     };
     throw new Error(`Tra cứu thật trả dữ liệu chưa hợp lệ: ${JSON.stringify(diagnostics)}`);
+  }
+  const semanticFailures = evaluateLookupQuality(qualityCase, result);
+  if (semanticFailures.length > 0) {
+    throw new Error(`Tra cứu thật sai ngữ nghĩa ở ca ${qualityCase.id}: ${semanticFailures.join("; ")}.`);
   }
 }
 

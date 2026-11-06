@@ -131,7 +131,7 @@ test("consumes smoke-test responses before their timeout signal expires", async 
 });
 
 test("keeps Gemini credentials server-only while shipping push and quick lookup", async () => {
-  const [page, generator, appendGenerator, pronunciationEnricher, pronunciationRepairer, curriculumVerifier, edgeWorker, lookupCache, pushEndpoints, dispatchReliability, pushPayload, subscriptionAuth, workflow, monitorWorkflow, backendDeployWorkflow, secretConfigurer, deployer, verifier, rateLimitMigration, migrationRunner] = await Promise.all([
+  const [page, generator, appendGenerator, pronunciationEnricher, pronunciationRepairer, curriculumVerifier, edgeWorker, lookupCache, lookupQuality, pushEndpoints, dispatchReliability, pushPayload, subscriptionAuth, workflow, monitorWorkflow, backendDeployWorkflow, secretConfigurer, deployer, verifier, rateLimitMigration, migrationRunner] = await Promise.all([
     readFile(new URL("app/page.tsx", root), "utf8"),
     readFile(new URL("scripts/generate-curriculum.mjs", root), "utf8"),
     readFile(new URL("scripts/append-curriculum.mjs", root), "utf8"),
@@ -140,6 +140,7 @@ test("keeps Gemini credentials server-only while shipping push and quick lookup"
     readFile(new URL("scripts/verify-curriculum.mjs", root), "utf8"),
     readFile(new URL("supabase/functions/tam-ngu-api/index.ts", root), "utf8"),
     readFile(new URL("supabase/functions/tam-ngu-api/lookup-cache.mjs", root), "utf8"),
+    readFile(new URL("scripts/lookup-quality.mjs", root), "utf8"),
     readFile(new URL("supabase/functions/tam-ngu-api/push-endpoints.mjs", root), "utf8"),
     readFile(new URL("supabase/functions/tam-ngu-api/dispatch-reliability.mjs", root), "utf8"),
     readFile(new URL("supabase/functions/tam-ngu-api/push-payload.mjs", root), "utf8"),
@@ -171,6 +172,9 @@ test("keeps Gemini credentials server-only while shipping push and quick lookup"
   assert.match(monitorWorkflow, /cron: "37 22 \* \* \*"/);
   assert.match(monitorWorkflow, /SMOKE_DEEP_LOOKUP/);
   assert.match(monitorWorkflow, /npm run smoke:production/);
+  assert.match(lookupQuality, /polite-rewrite/);
+  assert.match(lookupQuality, /selectDailyLookupQualityCase/);
+  assert.match(backendDeployWorkflow, /npm run supabase:verify/);
   assert.match(monitorWorkflow, /permissions:\s+contents: read/);
   assert.match(monitorWorkflow, /report-health:/);
   assert.match(monitorWorkflow, /issues: write/);
@@ -360,9 +364,10 @@ test("keeps Gemini credentials server-only while shipping push and quick lookup"
   assert.match(productionSmoke, /verifyLookupWithRetry/);
   assert.match(productionSmoke, /await wait\(6_000\)/);
   assert.match(verifier, /\/lookup/);
-  assert.match(verifier, /慢一点/);
-  assert.match(verifier, /Kỷ luật/);
-  assert.match(verifier, /お疲れ様/);
+  assert.match(lookupQuality, /慢一点/);
+  assert.match(lookupQuality, /Please rewrite politely/);
+  assert.match(lookupQuality, /お疲れ様/);
+  assert.match(verifier, /evaluateLookupQuality/);
   assert.match(rateLimitMigration, /v_device_minute >= 8/);
   assert.match(rateLimitMigration, /v_device_day >= 120/);
   assert.match(rateLimitMigration, /v_network_day >= 600/);

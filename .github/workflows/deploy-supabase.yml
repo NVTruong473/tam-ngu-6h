@@ -8,6 +8,8 @@ on:
       - "supabase/migrations/**"
       - "supabase/config.toml"
       - "scripts/smoke-production.mjs"
+      - "scripts/lookup-quality.mjs"
+      - "scripts/verify-supabase-api.mjs"
       - ".github/workflows/deploy-supabase.yml"
   workflow_dispatch:
 
@@ -55,7 +57,7 @@ jobs:
   verify-production:
     needs: deploy
     runs-on: ubuntu-latest
-    timeout-minutes: 5
+    timeout-minutes: 8
     steps:
       - uses: actions/checkout@v6
       - uses: actions/setup-node@v6
@@ -70,3 +72,7 @@ jobs:
           # verify the new worker after propagation, avoiding a cross-job race.
           SMOKE_REQUIRE_DECLARATIVE_WORKER: "0"
         run: npm run smoke:production
+      - name: Require encrypted cache and semantic golden cases
+        env:
+          SUPABASE_PROJECT_REF: fcsuldrerhbynwotcvyn
+        run: npm run supabase:verify
