@@ -15,7 +15,7 @@ Xem [lộ trình phát hành native](docs/native-release.md) trước khi ký b�
 
 ## Điều có thể và không thể làm trên iPhone
 
-Sau khi người dùng cài PWA vào Màn hình chính, mở icon và đồng ý thông báo, Web Push có thể hiện trên Lock Screen kể cả khi app đã đóng. Đây là khả năng chính thức cho Home Screen web app trên iOS/iPadOS 16.4+ và không cần Apple Developer membership. Xem [WebKit: Web Push for Web Apps on iOS and iPadOS](https://webkit.org/blog/13878/web-push-for-web-apps-on-ios-and-ipados/).
+Sau khi người dùng cài PWA vào Màn hình chính, mở icon và đồng ý thông báo, Web Push có thể hiện trên Lock Screen kể cả khi app đã đóng. Đây là khả năng chính thức cho Home Screen web app trên iOS/iPadOS 16.4+ và không cần Apple Developer membership. Bài mới đồng thời đặt huy hiệu `1` trên icon; mở app hoặc chạm thông báo sẽ tự xóa huy hiệu. iOS vẫn cho người dùng tắt riêng huy hiệu hay thông báo trong Cài đặt. Xem [WebKit: Web Push for Web Apps on iOS and iPadOS](https://webkit.org/blog/13878/web-push-for-web-apps-on-ios-and-ipados/) và [Badging for Home Screen web apps](https://webkit.org/blog/14112/badging-for-home-screen-web-apps/).
 
 - Thẻ mới nhất có cùng `tag`, nên thay thẻ cũ thay vì chất thành nhiều thông báo.
 - Người dùng có thể vuốt/xóa thẻ hệ thống sau khi đọc; việc xóa một thẻ không tắt ba lịch tiếp theo. Muốn dừng hẳn thì vào app → Cài đặt → Tắt.

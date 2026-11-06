@@ -133,6 +133,12 @@ function ensureLookupClientId() {
   return clientId;
 }
 
+function clearUnreadAppBadge() {
+  const badgeNavigator = navigator as Navigator & { clearAppBadge?: () => Promise<void> };
+  if (typeof badgeNavigator.clearAppBadge !== "function") return;
+  void badgeNavigator.clearAppBadge().catch(() => undefined);
+}
+
 async function syncWebPushSubscription(
   subscription: PushSubscription,
   scheduleTimes: string[],
@@ -396,6 +402,12 @@ export default function Home() {
     const storedStart = Number(localStorage.getItem(STORAGE.routineStart));
     const nativeApp = isNativeTamNguApp();
     const standalone = nativeApp || window.matchMedia("(display-mode: standalone)").matches || (navigator as Navigator & { standalone?: boolean }).standalone === true;
+    const clearBadgeWhenVisible = () => {
+      if (document.visibilityState === "visible") clearUnreadAppBadge();
+    };
+    clearBadgeWhenVisible();
+    document.addEventListener("visibilitychange", clearBadgeWhenVisible);
+    window.addEventListener("focus", clearBadgeWhenVisible);
     let storedSchedule = DEFAULT_SCHEDULE;
     try { storedSchedule = normalizeScheduleTimes(JSON.parse(localStorage.getItem(STORAGE.schedule) || "null")); } catch {}
     queueMicrotask(() => {
@@ -492,6 +504,10 @@ export default function Home() {
         })
         .catch(() => setPushState("idle"));
     }
+    return () => {
+      document.removeEventListener("visibilitychange", clearBadgeWhenVisible);
+      window.removeEventListener("focus", clearBadgeWhenVisible);
+    };
   }, []);
 
   useEffect(() => {

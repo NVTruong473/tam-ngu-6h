@@ -105,7 +105,10 @@ if (manifest?.display !== "standalone") failures.push("manifest không chạy st
 if (!Array.isArray(manifest?.icons) || !manifest.icons.some((icon) => icon.sizes === "512x512")) failures.push("manifest thiếu icon 512");
 if (!worker.includes('addEventListener("push"') || !worker.includes("showNotification")) failures.push("service worker thiếu Web Push");
 if (requireDeclarativeWorker
-  && (!worker.includes("payload?.web_push === 8030") || !worker.includes("normalizePushPayload"))) failures.push("service worker thiếu Declarative Web Push fallback");
+  && (!worker.includes("payload?.web_push === 8030")
+    || !worker.includes("normalizePushPayload")
+    || !worker.includes("setUnreadAppBadge")
+    || !worker.includes("clearUnreadAppBadge"))) failures.push("service worker thiếu Declarative Web Push hoặc huy hiệu bài chưa đọc");
 if (!health?.ok || !health?.pushConfigured || !health?.lookupConfigured || !health?.lookupProtectionConfigured) failures.push("backend chưa cấu hình đủ");
 if (!["apple", "fcm", "mozilla", "wns"].every((provider) => health?.pushProviders?.includes(provider))) failures.push("backend chưa công bố đủ dịch vụ Push");
 if (health?.dispatchReliability?.graceMinutes !== 10
@@ -119,7 +122,8 @@ if (requireSchedulerHeartbeat
   && (!health?.deviceReceipt?.configured || !health?.deviceReceipt?.storageHealthy)) failures.push("biên nhận thiết bị chưa sẵn sàng");
 if (requireSchedulerHeartbeat
   && (health?.declarativeWebPush?.version !== 8030
-    || health?.declarativeWebPush?.serviceWorkerFallback !== true)) failures.push("backend chưa bật Declarative Web Push");
+    || health?.declarativeWebPush?.serviceWorkerFallback !== true
+    || health?.declarativeWebPush?.unreadBadge !== true)) failures.push("backend chưa bật Declarative Web Push và huy hiệu bài chưa đọc");
 if (requireSchedulerHeartbeat
   && (health?.subscriptionLifecycle?.keyAuthenticatedMutations !== true
     || health?.subscriptionLifecycle?.appOpenReconciliation !== true)) failures.push("backend chưa bật tự sửa và xác thực đăng ký Push");

@@ -18,6 +18,8 @@ test("builds a backwards-compatible declarative Web Push payload", () => {
   });
   const payload = JSON.parse(serialized);
   assert.equal(payload.web_push, declarativeWebPushVersion);
+  assert.equal(payload.app_badge, "1");
+  assert.equal(payload.notification.app_badge, undefined);
   assert.equal(payload.mutable, true);
   assert.equal(payload.notification.navigate, "https://nvtruong473.github.io/tam-ngu-6h/?lesson=calm");
   assert.equal(payload.notification.silent, false);

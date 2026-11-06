@@ -6,6 +6,7 @@ import {
   mapWithConcurrency,
   pushRetryDelayMs,
 } from "./dispatch-reliability.mjs";
+import { deliveryPhaseAtHour, symbolForDeliveryPhase } from "./delivery-phase.mjs";
 import { hasValidPushKeys, isSupportedPushEndpoint } from "./push-endpoints.mjs";
 import { buildDeclarativePushPayload, declarativeWebPushVersion } from "./push-payload.mjs";
 import { createReceiptProof, verifyReceiptProof } from "./receipt-proof.mjs";
@@ -42,6 +43,7 @@ const dispatchHeartbeatEndpoint = "tam-ngu-internal://dispatch-cron";
 const deviceReceiptEndpoint = "tam-ngu-internal://device-receipt";
 
 type Phase = keyof typeof slotByPhase;
+type DeliveryPhase = Phase | "night";
 type WebPushSubscription = {
   endpoint: string;
   expirationTime?: number | null;
@@ -92,7 +94,7 @@ type LookupResult = {
   examples: LookupExample[];
 };
 
-const phaseWishes: Record<Phase, string[]> = {
+const phaseWishes: Record<DeliveryPhase, string[]> = {
   morning: [
     "Chào buổi sáng. Mong hôm nay đối xử với cậu thật dịu dàng.",
     "Một ngày mới vừa mở cửa — nhớ mang theo nụ cười nhé.",
@@ -116,6 +118,14 @@ const phaseWishes: Record<Phase, string[]> = {
     "Buổi tối đến rồi — mong cậu được ở nơi khiến mình thấy bình yên.",
     "Câu cuối hôm nay đã tới. Còn cậu, nhớ nghỉ ngơi thật tử tế nhé.",
     "Có một chút bình yên gửi cậu vào cuối ngày. Nhận lấy nhé.",
+  ],
+  night: [
+    "Ngủ ngon nhé. Những điều chưa xong có thể để ngày mai lo tiếp.",
+    "Chúc cậu một giấc ngủ sâu và một giấc mơ thật hiền.",
+    "Đêm nay đừng nghĩ nhiều nữa. Cậu xứng đáng được nghỉ ngơi.",
+    "Khép ngày lại thôi. Mong chiếc gối giữ hộ cậu mọi muộn phiền.",
+    "Cảm ơn cậu đã đi hết ngày hôm nay. Ngủ thật ngon nhé.",
+    "Đêm bình yên nhé. Có người vẫn âm thầm mong cậu ngủ ngon.",
   ],
 };
 
@@ -186,7 +196,7 @@ function sequenceAt(date: Date, phase: Phase) {
   return day * 3 + slotByPhase[phase];
 }
 
-function fallbackWish(phase: Phase, sequence: number) {
+function fallbackWish(phase: DeliveryPhase, sequence: number) {
   const choices = phaseWishes[phase];
   return choices[Math.abs(sequence) % choices.length];
 }
@@ -428,10 +438,6 @@ function localClock(date: Date, timezone: string) {
   };
 }
 
-function phaseAtHour(hour: number): Phase {
-  return hour < 12 ? "morning" : hour < 18 ? "noon" : "evening";
-}
-
 async function sendWebPushWithRetry(
   subscription: WebPushSubscription,
   payload: string,
@@ -635,8 +641,9 @@ async function dispatch(request: Request, origin: string | null) {
       if (claimError) return { ...idle, claimErrors: 1 };
       if (!claimed) return idle;
     }
-    const phase = isDueRun ? phaseAtHour(scheduled.hour) : body!.phase!;
-    const currentSequence = sequenceAt(now, phase);
+    const phase: DeliveryPhase = isDueRun ? deliveryPhaseAtHour(scheduled.hour) : body!.phase!;
+    const sequencePhase: Phase = phase === "night" ? "evening" : phase;
+    const currentSequence = sequenceAt(now, sequencePhase);
     const fallbackCursor = Math.max(0, currentSequence - Number(row.routine_start_sequence));
     const rawCursor = Math.max(0, Number.isInteger(row.lesson_cursor) ? Number(row.lesson_cursor) : fallbackCursor);
     // Keep a dense custom schedule useful even if free AI generation is delayed:
@@ -645,12 +652,14 @@ async function dispatch(request: Request, origin: string | null) {
     const lesson = curriculum[lessonIndex];
     const firstLine = lesson?.lines?.[0];
     const notification = lesson?.notification || firstLine;
-    const symbol = phase === "morning" ? "☀️" : phase === "noon" ? "🌤️" : "🌙";
+    const symbol = symbolForDeliveryPhase(phase);
     const notificationBody = [
       notification?.english ? `EN  ${notification.english}` : "",
       notification?.chinese ? `中  ${notification.chinese}` : "",
       notification?.vietnamese ? `VI  ${notification.vietnamese}` : "",
-    ].filter(Boolean).join("\n") || lesson?.wish || fallbackWish(phase, currentSequence);
+    ].filter(Boolean).join("\n")
+      || (phase === "night" ? lesson?.nightWish : lesson?.wish)
+      || fallbackWish(phase, currentSequence);
     const lessonUrl = lesson?.id
       ? new URL(`?lesson=${encodeURIComponent(lesson.id)}`, publicAppUrl).href
       : publicAppUrl;
@@ -834,6 +843,7 @@ async function health(origin: string | null) {
     declarativeWebPush: {
       version: declarativeWebPushVersion,
       serviceWorkerFallback: true,
+      unreadBadge: true,
     },
     subscriptionLifecycle: {
       keyAuthenticatedMutations: true,

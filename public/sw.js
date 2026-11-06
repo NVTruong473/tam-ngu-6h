@@ -1,4 +1,4 @@
-const CACHE_VERSION = "tam-ngu-6h-v17";
+const CACHE_VERSION = "tam-ngu-6h-v18";
 const NOTIFICATION_CACHE = "tam-ngu-notifications-v1";
 const NOTIFICATION_CACHE_MAX_ENTRIES = 96;
 const PUSH_API_URL = "https://fcsuldrerhbynwotcvyn.supabase.co/functions/v1/tam-ngu-api";
@@ -167,11 +167,34 @@ async function acknowledgePush(receipt) {
   }
 }
 
+async function setUnreadAppBadge() {
+  if (typeof self.navigator.setAppBadge !== "function") return;
+  try {
+    const windowClients = await self.clients.matchAll({ type: "window", includeUncontrolled: true });
+    if (windowClients.some((client) => client.visibilityState === "visible")) {
+      await clearUnreadAppBadge();
+      return;
+    }
+    await self.navigator.setAppBadge(1);
+  } catch {
+    // Badges are optional and user-controlled; never fail lesson delivery.
+  }
+}
+
+async function clearUnreadAppBadge() {
+  if (typeof self.navigator.clearAppBadge !== "function") return;
+  try {
+    await self.navigator.clearAppBadge();
+  } catch {
+    // Opening the lesson still succeeds if the OS has disabled badges.
+  }
+}
+
 self.addEventListener("push", (event) => {
   const fallback = { title: "Tam Ngữ 6H", body: "Một bài học nhỏ đang chờ cậu." };
   let payload = fallback;
   try { payload = { ...fallback, ...event.data.json() }; } catch {}
-  event.waitUntil(displayPush(payload));
+  event.waitUntil(Promise.all([displayPush(payload), setUnreadAppBadge()]));
 });
 
 self.addEventListener("pushsubscriptionchange", (event) => {
@@ -222,5 +245,8 @@ async function openNotificationTarget(rawUrl) {
 
 self.addEventListener("notificationclick", (event) => {
   event.notification.close();
-  event.waitUntil(openNotificationTarget(event.notification.data?.url));
+  event.waitUntil(Promise.all([
+    clearUnreadAppBadge(),
+    openNotificationTarget(event.notification.data?.url),
+  ]));
 });

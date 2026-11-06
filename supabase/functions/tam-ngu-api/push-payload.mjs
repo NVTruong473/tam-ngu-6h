@@ -33,6 +33,9 @@ export function buildDeclarativePushPayload({
 
   const payload = {
     web_push: declarativeWebPushVersion,
+    // Current WebKit reads app_badge at the declarative payload root. The
+    // service-worker path mirrors this for older engines that still wake JS.
+    app_badge: "1",
     // Modern WebKit can display the proposed notification even if this worker
     // is evicted. When the worker runs, it replaces the proposal and sends the
     // privacy-preserving delivery receipt. Older browsers ignore these members

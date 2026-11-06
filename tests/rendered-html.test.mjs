@@ -21,7 +21,7 @@ test("exports an installable PWA with one replaceable lock-screen card", async (
   assert.ok(manifest.icons.some((icon) => icon.sizes === "1024x1024" && icon.purpose === "maskable"));
   assert.equal(highResolutionIcon.readUInt32BE(16), 1024);
   assert.equal(highResolutionIcon.readUInt32BE(20), 1024);
-  assert.match(serviceWorker, /tam-ngu-6h-v17/);
+  assert.match(serviceWorker, /tam-ngu-6h-v18/);
   assert.match(serviceWorker, /html\.matchAll/);
   assert.match(serviceWorker, /skipWaiting/);
   assert.match(serviceWorker, /clients\.claim/);
@@ -43,6 +43,11 @@ test("exports an installable PWA with one replaceable lock-screen card", async (
   assert.match(serviceWorker, /notification\.close/);
   assert.match(serviceWorker, /icon-v2-192\.png/);
   assert.doesNotMatch(serviceWorker, /badge:/);
+  assert.match(serviceWorker, /setUnreadAppBadge/);
+  assert.match(serviceWorker, /setAppBadge\(1\)/);
+  assert.match(serviceWorker, /client\.visibilityState === "visible"/);
+  assert.match(serviceWorker, /clearUnreadAppBadge/);
+  assert.match(serviceWorker, /clearAppBadge\(\)/);
   assert.match(serviceWorker, /notificationclick/);
   assert.match(serviceWorker, /pushsubscriptionchange/);
   assert.match(serviceWorker, /refresh-subscription/);
@@ -166,6 +171,8 @@ test("keeps Gemini credentials server-only while shipping push and quick lookup"
   assert.doesNotMatch(page, /Gemini tạo thêm theo lộ trình/);
   assert.match(page, /Đọc gần Việt/);
   assert.match(page, /Notification\.requestPermission/);
+  assert.match(page, /clearUnreadAppBadge/);
+  assert.match(page, /clearAppBadge/);
   assert.doesNotMatch(page, /registration\.showNotification/);
   assert.match(page, /\/test-push/);
   assert.match(page, /Bài kiểm tra thật đang được gửi qua máy chủ/);
@@ -174,6 +181,8 @@ test("keeps Gemini credentials server-only while shipping push and quick lookup"
   assert.match(edgeWorker, /EN  \$\{notification\.english/);
   assert.match(edgeWorker, /encodeURIComponent\(lesson\.id\)/);
   assert.match(edgeWorker, /Only a later due delivery can clear that alarm/);
+  assert.match(edgeWorker, /deliveryPhaseAtHour/);
+  assert.match(edgeWorker, /phase === "night" \? lesson\?\.nightWish/);
   assert.match(edgeWorker, /tam-ngu-internal:\/\/dispatch-cron/);
   assert.match(edgeWorker, /"🧪 Tam Ngữ đã kết nối"/);
   assert.match(edgeWorker, /readBoundedJson/);
@@ -183,6 +192,7 @@ test("keeps Gemini credentials server-only while shipping push and quick lookup"
   assert.match(edgeWorker, /appOpenReconciliation: true/);
   assert.match(edgeWorker, /last_sent_at: stored\.last_sent_at \|\| null/);
   assert.match(pushPayload, /declarativeWebPushVersion = 8030/);
+  assert.match(pushPayload, /app_badge: "1"/);
   assert.match(pushPayload, /mutable: true/);
   assert.match(pushPayload, /maximumWebPushPayloadBytes = 3_993/);
   assert.match(page, /cho phép hiện toàn bộ bản xem trước/);
