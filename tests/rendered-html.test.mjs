@@ -115,6 +115,9 @@ test("keeps setup inside Tam Ngữ with one explicit iOS permission", async () =
   assert.match(page, /showWidgetSetup && nativeApp/);
   assert.match(page, /showActivation && !nativeApp/);
   assert.match(page, /showInstall && !nativeApp/);
+  assert.match(page, /altstore:\/\/source\?url=/);
+  assert.match(page, /releases\/latest\/download\/altstore-source\.json/);
+  assert.match(page, /Mở bản native trong AltStore/);
   assert.doesNotMatch(page, /Bật nhịp hằng ngày/);
   assert.match(page, /role="status" aria-live="polite"/);
   assert.match(page, /userFacingError/);

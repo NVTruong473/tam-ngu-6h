@@ -56,6 +56,8 @@ const curriculum = curriculumData as StudyModule[];
 const DEFAULT_API_URL = "https://fcsuldrerhbynwotcvyn.supabase.co/functions/v1/tam-ngu-api";
 const PUSH_API_URL = (process.env.NEXT_PUBLIC_PUSH_API_URL || DEFAULT_API_URL).replace(/\/$/, "");
 const FEEDBACK_FORM_URL = (process.env.NEXT_PUBLIC_FEEDBACK_FORM_URL || "").trim();
+const NATIVE_SOURCE_URL = "https://github.com/NVTruong473/tam-ngu-6h/releases/latest/download/altstore-source.json";
+const ALTSTORE_SOURCE_LINK = `altstore://source?url=${encodeURIComponent(NATIVE_SOURCE_URL)}`;
 const LOOKUP_CACHE_KEY = "tamngu6h.lookup-cache.v3";
 const LOOKUP_QUERY_MAXIMUM = 240;
 const LOOKUP_INTENTS: LookupIntent[] = ["Vocabulary", "Translation", "Grammar", "Correction", "Conversation", "Explanation"];
@@ -588,6 +590,10 @@ export default function Home() {
     setPushMessage("WidgetKit đã sẵn sàng. Sau khi thêm thẻ, iOS sẽ tự đổi bài mà không cần mở app; thông báo vẫn đang tắt.");
   }
 
+  function openNativeInstaller() {
+    window.location.href = ALTSTORE_SOURCE_LINK;
+  }
+
   async function enableLockScreen() {
     const nativeApp = isNativeTamNguApp();
     if (nativeApp) {
@@ -1045,6 +1051,7 @@ export default function Home() {
             ) : (
               <div className="setting-row"><span className="setting-icon">⌂</span><div><strong>Cài lên Màn hình chính</strong><small>Mở toàn màn hình với icon như một app.</small></div><button onClick={() => setShowInstall(true)}>Xem</button></div>
             )}
+            {!nativeApp && devicePlatform === "ios" && <div className="setting-row"><span className="setting-icon">语</span><div><strong>Bản native cho iPhone</strong><small>Mở nguồn cài riêng trong AltStore Classic.</small></div><button onClick={openNativeInstaller}>Mở</button></div>}
             <div className="setting-row"><span className="setting-icon">✓</span><div><strong>Tự động lưu</strong><small>Tiến độ và nhịp hằng ngày được lưu trên máy.</small></div><span className="status-pill">Đang bật</span></div>
             <div className="setting-row"><span className="setting-icon">◷</span><div><strong>{scheduleTimes.length} mốc mỗi ngày</strong><small>{scheduleTimes.join(" · ")}</small></div><span className="status-pill">Tùy chỉnh</span></div>
             {nativeApp && <div className="setting-row"><span className="setting-icon">▣</span><div><strong>Thẻ học native</strong><small>Hiện bằng WidgetKit, không phát âm thanh và không phải thông báo.</small></div><button onClick={() => setShowWidgetSetup(true)}>Cách thêm</button></div>}
@@ -1112,12 +1119,16 @@ export default function Home() {
                 <li><span>4</span><p>Mở icon vừa tạo và chạm <strong>Cho phép &amp; hoàn tất</strong>.</p></li>
               </ol>
             ) : (
-              <ol>
-                <li><span>1</span><p>Mở đường link bằng <strong>Safari</strong>.</p></li>
-                <li><span>2</span><p>Chạm nút <strong>Chia sẻ</strong> ở thanh công cụ.</p></li>
-                <li><span>3</span><p>Chọn <strong>Thêm vào Màn hình chính</strong>. Nếu iPhone hiện “Mở dưới dạng ứng dụng”, hãy để tùy chọn đó bật.</p></li>
-                <li><span>4</span><p>Mở icon vừa tạo và chạm <strong>Cho phép &amp; hoàn tất</strong>. Không cần cài thêm ứng dụng nào.</p></li>
-              </ol>
+              <>
+                <button className="primary-button wide" onClick={openNativeInstaller}>Mở bản native trong AltStore</button>
+                <p className="activation-copy">Nếu chưa có AltStore Classic, bản web bên dưới vẫn dùng được nhưng không có WidgetKit.</p>
+                <ol>
+                  <li><span>1</span><p>Mở đường link bằng <strong>Safari</strong>.</p></li>
+                  <li><span>2</span><p>Chạm nút <strong>Chia sẻ</strong> ở thanh công cụ.</p></li>
+                  <li><span>3</span><p>Chọn <strong>Thêm vào Màn hình chính</strong>. Nếu iPhone hiện “Mở dưới dạng ứng dụng”, hãy để tùy chọn đó bật.</p></li>
+                  <li><span>4</span><p>Mở icon vừa tạo và chạm <strong>Cho phép &amp; hoàn tất</strong>.</p></li>
+                </ol>
+              </>
             )}
             {installPrompt ? (
               <button className="primary-button wide" onClick={() => void beginOneTapSetup()}>Cài ngay</button>
