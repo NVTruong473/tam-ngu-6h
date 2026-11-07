@@ -882,6 +882,27 @@
       "english": "Have you tried clearing out your room?",
       "chinese": "你试过清理房间吗？",
       "vietnamese": "Bạn đã thử dọn dẹp lại phòng chưa?"
+    },
+    {
+      "id": "lesson-0127",
+      "title": "Bày tỏ sự trân trọng đối với những đóng góp thầm lặng",
+      "english": "Quiet dedication drives every success.",
+      "chinese": "默默耕耘成就每个成功。",
+      "vietnamese": "Sự cống hiến thầm lặng tạo nên thành công."
+    },
+    {
+      "id": "lesson-0128",
+      "title": "Nhắn tin xác nhận lại giờ giấc cuộc họp trưa nay với đối tác",
+      "english": "Confirming our noon sync at 12:30.",
+      "chinese": "确认我们中午十二点半的会议。",
+      "vietnamese": "Xác nhận cuộc họp lúc 12:30 trưa nay."
+    },
+    {
+      "id": "lesson-0129",
+      "title": "Trò chuyện bên tách trà ấm trong đêm muộn",
+      "english": "Fancy a warm cup of herbal tea?",
+      "chinese": "来一杯温热的花草茶怎么样？",
+      "vietnamese": "Uống một chén trà thảo mộc ấm nhé?"
     }
   ]
 }

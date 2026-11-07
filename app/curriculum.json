@@ -4125,5 +4125,133 @@
     },
     "generatedAt": "2026-11-06T22:14:56.359Z",
     "generator": "gemini-3.5-flash-lite"
+  },
+  {
+    "id": "lesson-0127",
+    "stage": "B1+ · Diễn đạt linh hoạt",
+    "kind": "sentence",
+    "title": "Bày tỏ sự trân trọng đối với những đóng góp thầm lặng",
+    "context": "Trong môi trường làm việc chuyên nghiệp, đôi khi có những cá nhân luôn hoàn thành xuất sắc nhiệm vụ ở hậu trường mà ít khi phô trương.",
+    "lines": [
+      {
+        "speaker": "A",
+        "english": "Behind every smooth operation lies the quiet dedication of someone working tirelessly away from the spotlight.",
+        "chinese": "在每一次顺畅运作的背后，都离不开某个远离聚光灯默默耕耘者的辛勤付出。",
+        "pinyin": "zài měi yí cì shùn chàng yùn zuò de bèi hòu, dōu lí bù kāi mǒu gè yuǎn lí jù guāng dēng mò mò gēng yún zhě de xīn qín fù chū.",
+        "vietnameseReading": "trai(4) mây(3) y(2) cì(4) suấn(4) chang(4) yến(4) chuô(4) tơ pây(4) hâu(4) tâu(1) lí(2) pu(4) khai(1) mâu(3) cợ(4) iuển(3) lí(2) chu(4) cuang(1) đẩy(1) mốt(4) mốt(4) câng(1) yến(2) chè(3) tơ xin(1) chín(2) phu(4) chu(1)",
+        "vietnamese": "Đằng sau mỗi vận hành trơn tru đều là sự cống hiến thầm lặng của một ai đó miệt mài làm việc ngoài ánh hào quang."
+      }
+    ],
+    "note": "Cấu trúc '在...背后，都离不开...' (Đằng sau... đều không thể tách rời...) là mẫu câu trang trọng dùng để nhấn mạnh tầm quan trọng của các yếu tố hoặc cá nhân nền tảng. Khác với tiếng Anh thường dùng mệnh đề quan hệ 'Behind X lies Y', tiếng Trung đặt cụm chỉ vị trí '在...背后' lên đầu câu làm bối cảnh, sau đó dùng '都离不开' để chỉ sự phụ thuộc tất yếu.",
+    "challenge": "Hãy viết hoặc nói một câu bằng cả tiếng Anh và tiếng Trung để cảm ơn một người đồng nghiệp luôn hỗ trợ bạn thầm lặng trong công việc.",
+    "grammarFocus": "Cấu trúc nhấn mạnh vai trò nền tảng '在...背后，都离不开...'.",
+    "vocabulary": [
+      "smooth operation · 顺畅运作 · vận hành trơn tru",
+      "quiet dedication · 默默耕耘 · cống hiến thầm lặng",
+      "spotlight · 聚光灯 · ánh hào quang"
+    ],
+    "wish": "Chúc bạn một buổi sáng tràn đầy cảm hứng, nhận ra và trân trọng những giá trị tốt đẹp đang âm thầm nuôi dưỡng thành công mỗi ngày.",
+    "nightWish": "Khép lại một ngày dài với lòng biết ơn những điều giản dị, chúc bạn chìm vào giấc ngủ thật sâu và bình yên.",
+    "notification": {
+      "english": "Quiet dedication drives every success.",
+      "chinese": "默默耕耘成就每个成功。",
+      "vietnamese": "Sự cống hiến thầm lặng tạo nên thành công."
+    },
+    "generatedAt": "2026-11-07T20:59:36.997Z",
+    "generator": "gemini-3.5-flash-lite"
+  },
+  {
+    "id": "lesson-0128",
+    "stage": "B1+ · Diễn đạt linh hoạt",
+    "kind": "message",
+    "title": "Nhắn tin xác nhận lại giờ giấc cuộc họp trưa nay với đối tác",
+    "context": "Bạn đang nhắn tin nhanh cho đối tác để chốt lại thời gian cuộc họp lúc giữa trưa.",
+    "lines": [
+      {
+        "speaker": "A",
+        "english": "Just touching base to confirm our noon sync; please let me know if twelve-thirty works for you.",
+        "chinese": "向您确认一下我们中午的同步会议，如果您十二点半方便的话请告诉我。",
+        "pinyin": "xiàng nín què rèn yí xià wǒ men zhōng wǔ de tóng bù huì yì, rú guǒ nín shí èr diǎn bàn fāng biàn de huà qǐng gào sù wǒ.",
+        "vietnameseReading": "xiang(4) nín(2) chiết(4) rần(4) y(2) xia(4) uổ(3) mần trung(1) uổ(3) tơ thúng(2) pu(4) huây(4) i(4) rú(2) cuổ(3) nín(2) sứ(2) ơ(4) điển(3) ban(4) phang(1) piên(4) tơ hua(4) chỉnh(3) cao(4) su(4) uổ(3)",
+        "vietnamese": "Tôi muốn liên hệ lại để xác nhận cuộc họp trưa nay của chúng ta, xin cho biết nếu mười hai giờ rưỡi thuận tiện cho bạn."
+      }
+    ],
+    "note": "Cấu trúc 向...确认一下... dùng để mở lời xác nhận trang trọng nhưng thân thiện, kết hợp với mệnh đề điều kiện 如果...的话 giúp đối phương có không gian linh hoạt điều chỉnh thời gian.",
+    "challenge": "Nhắn tin bằng tiếng Trung cho đồng nghiệp hoặc đối tác để xác nhận lại thời gian một cuộc hẹn vào giữa tuần tới.",
+    "grammarFocus": "Sử dụng cấu trúc 向...确认一下... kết hợp với mệnh đề điều kiện 如果...的话 để đề xuất giờ giấc linh hoạt.",
+    "vocabulary": [
+      "touch base · 确认 · liên hệ xác nhận",
+      "sync · 同步会议 · cuộc họp đồng bộ",
+      "noon · 中午 · buổi trưa"
+    ],
+    "wish": "Buổi trưa an lành và hiệu quả, chúc bạn xử lý gọn gàng mọi công việc để đón chiều năng lượng.",
+    "nightWish": "Khép lại một ngày bận rộn với những bước tiến nhỏ, chúc bạn chìm vào giấc ngủ sâu và bình yên.",
+    "notification": {
+      "english": "Confirming our noon sync at 12:30.",
+      "chinese": "确认我们中午十二点半的会议。",
+      "vietnamese": "Xác nhận cuộc họp lúc 12:30 trưa nay."
+    },
+    "generatedAt": "2026-11-07T21:00:16.468Z",
+    "generator": "gemini-3.5-flash-lite"
+  },
+  {
+    "id": "lesson-0129",
+    "stage": "B1+ · Diễn đạt linh hoạt",
+    "kind": "dialogue",
+    "title": "Trò chuyện bên tách trà ấm trong đêm muộn",
+    "context": "Hai người bạn thân ngồi quây quần bên bàn trà trong phòng khách khi thành phố đã chìm vào giấc ngủ yên bình.",
+    "lines": [
+      {
+        "speaker": "A",
+        "english": "Fancy a warm cup of herbal tea while listening to the midnight rain outside?",
+        "chinese": "趁着外面下着夜雨，来一杯温热的花草茶怎么样？",
+        "pinyin": "chèn zhe wài miàn xià zhe yè yǔ, lái yì bēi wēn rè de huā cǎo chá zěn me yàng?",
+        "vietnameseReading": "chân(4) chơ uải(4) mien(4) xia(4) chơ yê(4) ỷ(3) lai(2) i(4) bê(1) uên(1) rệ(4) tơ hua(1) thảo(3) chá(2) chẩn(3) mơ iang(4)",
+        "vietnamese": "Uống một chén trà thảo mộc ấm nóng trong lúc ngoài trời đang mưa đêm thì sao nhỉ?"
+      },
+      {
+        "speaker": "B",
+        "english": "That sounds wonderfully cozy, especially given how hectic this week has been.",
+        "chinese": "听起来格外温馨，尤其是考虑到这周的工作有多忙碌。",
+        "pinyin": "tīng qǐ lái gé wài wēn xīn, yóu qí shì kǎo lǜ dào zhè zhōu de gōng zuò yǒu duō máng lù.",
+        "vietnameseReading": "thinh(1) chỉ(3) lai(2) cớ(2) uải(4) uên(1) xin(1) iêu(2) chí(2) sứ(4) khảo(3) lu(4) tao(4) chè(4) trâu(1) tơ công(1) chuô(4) iểu(3) tuô(1) máng(2) lu(4)",
+        "vietnamese": "Nghe có vẻ vô cùng ấm cúng, nhất là khi nghĩ đến tuần này đã bận rộn thế nào."
+      },
+      {
+        "speaker": "A",
+        "english": "Exactly, slowing down for a brief moment is the best reward after a long day.",
+        "chinese": "没错，放慢节奏稍微歇息一下就是漫长一天后最好的奖赏。",
+        "pinyin": "mò cuò, fàng màn jié zòu shāo wēi xiē xī yí xià jiù shì màn cháng yì tiān hòu zuì hǎo de jiǎng shǎng.",
+        "vietnameseReading": "mốt(4) cuốc(4) phang(4) mản(4) ciế(2) dẩu(4) sáo(1) uây(1) xiế(1) xế(1) y(2) xia(4) chiêu(4) sứ(4) mản(4) chang(2) i(4) thêm(1) hâu(4) chuây(4) hảo(3) tơ trảng(3) sang(3)",
+        "vietnamese": "Chính xác, sống chậm lại một chút chính là phần thưởng tuyệt vời nhất sau một ngày dài."
+      },
+      {
+        "speaker": "B",
+        "english": "Let us just sit here quietly and let the peace of the night wash away all the stress.",
+        "chinese": "我们就这样静静坐着，让夜晚的宁静冲走所有的压力。",
+        "pinyin": "wǒ men jiù zhè yàng jìng jìng zuò zhe, ràng yè wǎn de níng jìng chōng zǒu suǒ yǒu de yā lì.",
+        "vietnameseReading": "uổ(3) mần chiêu(4) chè(4) iang(4) chỉng(4) chỉng(4) chuô(4) chơ rang(4) yê(4) uản(3) tơ ninh(2) chỉng(4) chông(1) dẩu(3) suổ(3) iểu(3) tơ ia(1) li(4)",
+        "vietnamese": "Chúng ta cứ ngồi lặng lẽ thế này để sự yên bình của đêm thâu gột rửa mọi áp lực."
+      }
+    ],
+    "note": "Cấu trúc 趁着... (tranh thủ lúc...) dùng để diễn tả hành động thực hiện trong một điều kiện thời gian hoặc hoàn cảnh rất thuận lợi. Tiếng Anh dùng 'Fancy a...' để mời gọi một cách lịch sự, thân mật.",
+    "challenge": "Hãy tự ghi âm lại đoạn hội thoại trên và tập trung nhấn mạnh vào sắc thái thư thái ở lượt nói cuối cùng.",
+    "grammarFocus": "Sử dụng cấu trúc 趁着... để diễn tả việc tận dụng thời điểm hoặc hoàn cảnh thuận lợi để làm gì đó.",
+    "vocabulary": [
+      "herbal tea · 花草茶 · trà thảo mộc",
+      "hectic · 忙碌 · bận rộn",
+      "reward · 奖赏 · phần thưởng",
+      "peace · 宁静 · sự yên bình",
+      "stress · 压力 · áp lực"
+    ],
+    "wish": "Mong bạn khép lại ngày dài bằng sự bình yên trọn vẹn và một giấc ngủ thật sâu.",
+    "nightWish": "Chúc bạn chìm vào giấc ngủ êm đềm với những giấc mơ đẹp và bình an.",
+    "notification": {
+      "english": "Fancy a warm cup of herbal tea?",
+      "chinese": "来一杯温热的花草茶怎么样？",
+      "vietnamese": "Uống một chén trà thảo mộc ấm nhé?"
+    },
+    "generatedAt": "2026-11-07T21:00:49.911Z",
+    "generator": "gemini-3.5-flash-lite"
   }
 ]
