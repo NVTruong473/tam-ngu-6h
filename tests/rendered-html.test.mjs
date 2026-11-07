@@ -360,7 +360,9 @@ test("keeps Gemini credentials server-only while shipping push and quick lookup"
   assert.match(subscribeSource, /subscriptionKeysMatch/);
   assert.match(unsubscribeSource, /subscriptionKeysMatch/);
   assert.match(page, /Đưa Tam Ngữ lên \{devicePlatform === "android" \? "Android" : "iPhone"\}/);
-  assert.match(page, /Mở đường link bằng <strong>Chrome<\/strong>/);
+  assert.match(page, /Tải app Android native/);
+  assert.match(page, /cài ứng dụng không xác định/);
+  assert.match(page, /releases\/download\/android-stable\/TamNgu6H\.apk/);
   assert.match(page, /syncWebPushSubscription/);
   assert.match(page, /pushsubscriptionchange is not available in every browser/);
   assert.doesNotMatch(edgeWorker, /mode: "silent"/);

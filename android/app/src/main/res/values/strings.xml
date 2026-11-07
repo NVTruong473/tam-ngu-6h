@@ -4,4 +4,5 @@
     <string name="title_activity_main">Tam Ngữ 6H</string>
     <string name="package_name">com.nvtruong.tamngu6h</string>
     <string name="custom_url_scheme">com.nvtruong.tamngu6h</string>
+    <string name="widget_description">Bài học Anh · Trung · Việt thay đổi theo giờ đã chọn</string>
 </resources>

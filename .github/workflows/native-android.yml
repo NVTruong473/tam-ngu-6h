@@ -1,0 +1,123 @@
+name: Build and publish Tam Ngữ Android
+
+on:
+  push:
+    branches: [main]
+    tags: ["android-v*"]
+    paths:
+      - "android/**"
+      - "app/**"
+      - "public/widget-lessons.json"
+      - "capacitor.config.ts"
+      - "package.json"
+      - "package-lock.json"
+      - ".github/workflows/native-android.yml"
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: tam-ngu-native-android-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  build-android:
+    runs-on: ubuntu-latest
+    timeout-minutes: 25
+    steps:
+      - uses: actions/checkout@v6
+      - uses: actions/setup-node@v6
+        with:
+          node-version: 22
+          cache: npm
+      - uses: actions/setup-java@v5
+        with:
+          distribution: temurin
+          java-version: "21"
+          cache: gradle
+      - run: npm ci
+      - name: Verify web app and synchronize offline native assets
+        run: |
+          npm run quality:gate
+          npm run build:native
+      - name: Restore private Android signing key
+        env:
+          ANDROID_KEYSTORE_BASE64: ${{ secrets.ANDROID_KEYSTORE_BASE64 }}
+        run: |
+          set -euo pipefail
+          test -n "$ANDROID_KEYSTORE_BASE64"
+          printf '%s' "$ANDROID_KEYSTORE_BASE64" | base64 --decode > "$RUNNER_TEMP/tam-ngu-release.p12"
+          test -s "$RUNNER_TEMP/tam-ngu-release.p12"
+      - name: Compile signed release APK
+        env:
+          ANDROID_KEYSTORE_PATH: ${{ runner.temp }}/tam-ngu-release.p12
+          ANDROID_KEYSTORE_PASSWORD: ${{ secrets.ANDROID_KEYSTORE_PASSWORD }}
+          ANDROID_KEY_ALIAS: ${{ secrets.ANDROID_KEY_ALIAS }}
+          ANDROID_KEY_PASSWORD: ${{ secrets.ANDROID_KEY_PASSWORD }}
+          ANDROID_VERSION_CODE: ${{ github.run_number }}
+        working-directory: android
+        run: |
+          if [[ "$GITHUB_REF_NAME" == android-v* ]]; then
+            export ANDROID_VERSION_NAME="${GITHUB_REF_NAME#android-v}"
+          else
+            export ANDROID_VERSION_NAME="1.0.0-ci"
+          fi
+          ./gradlew --no-daemon clean assembleRelease
+      - name: Verify signed package
+        run: |
+          set -euo pipefail
+          apk="android/app/build/outputs/apk/release/app-release.apk"
+          test -s "$apk"
+          "$ANDROID_HOME/build-tools/$(ls "$ANDROID_HOME/build-tools" | sort -V | tail -1)/apksigner" verify --verbose --print-certs "$apk"
+          mkdir -p release
+          cp "$apk" release/TamNgu6H.apk
+          sha256sum release/TamNgu6H.apk > release/TamNgu6H.apk.sha256
+      - uses: actions/upload-artifact@v7
+        with:
+          name: TamNgu6H-Android
+          path: |
+            release/TamNgu6H.apk
+            release/TamNgu6H.apk.sha256
+          if-no-files-found: error
+          retention-days: 14
+
+  publish-android:
+    if: github.ref_type == 'tag' && startsWith(github.ref_name, 'android-v')
+    needs: build-android
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+    steps:
+      - uses: actions/download-artifact@v8
+        with:
+          name: TamNgu6H-Android
+          path: release
+      - name: Publish immutable version and stable one-click download
+        env:
+          GH_TOKEN: ${{ github.token }}
+          RELEASE_NOTES: |
+            ## Tam Ngữ 6H native cho Android
+
+            - App native chạy độc lập, chứa sẵn kho bài học offline.
+            - Widget Tam Ngữ thay bài theo lịch, không cần thông báo.
+            - Nút trong app mở xác nhận thêm widget bằng một chạm trên launcher hỗ trợ.
+            - Tra nhanh đi qua backend; APK không chứa Gemini API key.
+
+            Android sẽ yêu cầu cho phép cài từ trình duyệt ở lần đầu. Các bản sau cài đè để cập nhật, không cần xóa app và không mất dữ liệu.
+        run: |
+          set -euo pipefail
+          gh release create "$GITHUB_REF_NAME" release/TamNgu6H.apk release/TamNgu6H.apk.sha256 \
+            --repo "$GITHUB_REPOSITORY" \
+            --title "Tam Ngữ 6H Android ${GITHUB_REF_NAME#android-v}" \
+            --notes "$RELEASE_NOTES"
+
+          if gh release view android-stable --repo "$GITHUB_REPOSITORY" >/dev/null 2>&1; then
+            gh release upload android-stable release/TamNgu6H.apk release/TamNgu6H.apk.sha256 --clobber --repo "$GITHUB_REPOSITORY"
+            gh release edit android-stable --title "Tam Ngữ 6H Android · bản ổn định" --notes "$RELEASE_NOTES" --repo "$GITHUB_REPOSITORY"
+          else
+            gh release create android-stable release/TamNgu6H.apk release/TamNgu6H.apk.sha256 \
+              --repo "$GITHUB_REPOSITORY" \
+              --title "Tam Ngữ 6H Android · bản ổn định" \
+              --notes "$RELEASE_NOTES"
+          fi

@@ -9,6 +9,11 @@ import {
   isNativeTamNguApp,
   scheduleNativeLessonWindow,
 } from "./native-notifications";
+import {
+  isNativeAndroid,
+  requestAndroidWidgetPin,
+  syncAndroidWidget,
+} from "./android-widget";
 
 type Tab = "today" | "library" | "settings";
 type PushState = "idle" | "enabling" | "enabled" | "unsupported" | "error";
@@ -58,6 +63,7 @@ const PUSH_API_URL = (process.env.NEXT_PUBLIC_PUSH_API_URL || DEFAULT_API_URL).r
 const FEEDBACK_FORM_URL = (process.env.NEXT_PUBLIC_FEEDBACK_FORM_URL || "").trim();
 const NATIVE_SOURCE_URL = "https://github.com/NVTruong473/tam-ngu-6h/releases/latest/download/altstore-source.json";
 const ALTSTORE_SOURCE_LINK = `altstore://source?url=${encodeURIComponent(NATIVE_SOURCE_URL)}`;
+const ANDROID_APK_URL = "https://github.com/NVTruong473/tam-ngu-6h/releases/download/android-stable/TamNgu6H.apk";
 const LOOKUP_CACHE_KEY = "tamngu6h.lookup-cache.v3";
 const LOOKUP_QUERY_MAXIMUM = 240;
 const LOOKUP_INTENTS: LookupIntent[] = ["Vocabulary", "Translation", "Grammar", "Correction", "Conversation", "Explanation"];
@@ -544,6 +550,11 @@ export default function Home() {
   }, [ready, routineEnabled, routineStartSequence]);
 
   useEffect(() => {
+    if (!ready || !nativeApp || !isNativeAndroid()) return;
+    void syncAndroidWidget(scheduleTimes).catch(() => undefined);
+  }, [ready, nativeApp, scheduleTimes]);
+
+  useEffect(() => {
     const timer = window.setInterval(() => {
       const currentTime = Date.now();
       setNow(currentTime);
@@ -581,11 +592,24 @@ export default function Home() {
     void disableLockScreen();
   }
 
-  function completeWidgetSetup() {
+  async function completeWidgetSetup() {
     const startSequence = routineStartSequence ?? scheduleAt(Date.now(), scheduleTimes).sequence;
     setRoutineEnabled(true);
     setRoutineStartSequence(startSequence);
     localStorage.setItem(STORAGE.widgetPrompt, "completed");
+    if (isNativeAndroid()) {
+      try {
+        await syncAndroidWidget(scheduleTimes);
+        const result = await requestAndroidWidgetPin();
+        setShowWidgetSetup(false);
+        setPushMessage(result.requested
+          ? "Android đã mở xác nhận thêm thẻ. Chạm Thêm để hoàn tất; bài sẽ tự đổi mà không cần thông báo."
+          : "Launcher này chưa hỗ trợ thêm thẻ một chạm. Nhấn giữ Màn hình chính → Tiện ích → Tam Ngữ 6H.");
+      } catch (error) {
+        setPushMessage(userFacingError(error, "Chưa mở được bảng thêm thẻ Android."));
+      }
+      return;
+    }
     setShowWidgetSetup(false);
     setPushMessage("WidgetKit đã sẵn sàng. Sau khi thêm thẻ, iOS sẽ tự đổi bài mà không cần mở app; thông báo vẫn đang tắt.");
   }
@@ -741,6 +765,7 @@ export default function Home() {
         if (!response.ok) throw new Error(body.error || "Chưa lưu được lịch trên máy chủ.");
       }
       localStorage.setItem(STORAGE.schedule, JSON.stringify(normalized));
+      if (isNativeAndroid()) await syncAndroidWidget(normalized);
       localStorage.setItem(STORAGE.routineStart, String(nextStart));
       setScheduleTimes(normalized);
       setRoutineStartSequence(nextStart);
@@ -1047,14 +1072,14 @@ export default function Home() {
           <div className="page-title"><h2>Cài đặt</h2></div>
           <article className="settings-card">
             {nativeApp ? (
-              <div className="setting-row"><span className="setting-icon">✓</span><div><strong>Ứng dụng native</strong><small>WidgetKit và App Intents đã nằm trong bản cài.</small></div><span className="status-pill">Đã cài</span></div>
+              <div className="setting-row"><span className="setting-icon">✓</span><div><strong>Ứng dụng native</strong><small>{devicePlatform === "android" ? "App và thẻ học Android đã nằm trong cùng bản cài." : "WidgetKit và App Intents đã nằm trong bản cài."}</small></div><span className="status-pill">Đã cài</span></div>
             ) : (
               <div className="setting-row"><span className="setting-icon">⌂</span><div><strong>Cài lên Màn hình chính</strong><small>Mở toàn màn hình với icon như một app.</small></div><button onClick={() => setShowInstall(true)}>Xem</button></div>
             )}
             {!nativeApp && devicePlatform === "ios" && <div className="setting-row"><span className="setting-icon">语</span><div><strong>Bản native cho iPhone</strong><small>Mở nguồn cài riêng trong AltStore Classic.</small></div><button onClick={openNativeInstaller}>Mở</button></div>}
             <div className="setting-row"><span className="setting-icon">✓</span><div><strong>Tự động lưu</strong><small>Tiến độ và nhịp hằng ngày được lưu trên máy.</small></div><span className="status-pill">Đang bật</span></div>
             <div className="setting-row"><span className="setting-icon">◷</span><div><strong>{scheduleTimes.length} mốc mỗi ngày</strong><small>{scheduleTimes.join(" · ")}</small></div><span className="status-pill">Tùy chỉnh</span></div>
-            {nativeApp && <div className="setting-row"><span className="setting-icon">▣</span><div><strong>Thẻ học native</strong><small>Hiện bằng WidgetKit, không phát âm thanh và không phải thông báo.</small></div><button onClick={() => setShowWidgetSetup(true)}>Cách thêm</button></div>}
+            {nativeApp && <div className="setting-row"><span className="setting-icon">▣</span><div><strong>Thẻ học native</strong><small>{devicePlatform === "android" ? "Tiện ích trên Màn hình chính; máy hỗ trợ có thể cho phép cả Màn hình khóa." : "Hiện bằng WidgetKit, không phát âm thanh và không phải thông báo."}</small></div><button onClick={() => setShowWidgetSetup(true)}>{devicePlatform === "android" ? "Thêm" : "Cách thêm"}</button></div>}
             <div className="setting-row"><span className="setting-icon">◌</span><div><strong>{nativeApp ? "Thông báo bài học" : "Bài học trên Màn hình khóa"}</strong><small>{nativeApp ? "Tùy chọn phụ; có thể để tắt hoàn toàn." : "Hoạt động khi app đã đóng; bài mới thay bài cũ để màn hình luôn gọn."}</small></div>{pushState === "unsupported" ? <span className="status-pill">{devicePlatform === "ios" ? "Cần iOS 16.4+" : "Trình duyệt chưa hỗ trợ"}</span> : pushState === "enabled" ? <button onClick={disableLockScreen}>Tắt</button> : <button onClick={enableLockScreen}>Bật</button>}</div>
           </article>
           <article className="schedule-card" aria-labelledby="schedule-title">
@@ -1089,7 +1114,7 @@ export default function Home() {
               <h3>Cách học</h3>
               <p>Mặc định có bài mới lúc 06:00, 12:00 và 18:00. Có thể chọn từ 1 đến 24 mốc riêng mỗi ngày. Kho bài được bổ sung tự động và tăng dần từ B1 đến C1.</p>
               <h3>Màn hình khóa</h3>
-              <p>Bản native dùng WidgetKit làm thẻ học chính: không âm thanh, không chen ngang và vẫn hiện khi app đã đóng. Thông báo chỉ là tùy chọn phụ; có thể để tắt hoàn toàn trong Cài đặt.</p>
+              <p>{devicePlatform === "android" ? "Bản Android dùng tiện ích Màn hình chính làm thẻ học chính. Một số máy cũng hỗ trợ tiện ích Màn hình khóa. Thông báo chỉ là tùy chọn phụ." : "Bản native dùng WidgetKit làm thẻ học chính: không âm thanh, không chen ngang và vẫn hiện khi app đã đóng. Thông báo chỉ là tùy chọn phụ; có thể để tắt hoàn toàn trong Cài đặt."}</p>
               <h3>Dữ liệu và Tra nhanh</h3>
               <p>Tiến độ được lưu trên thiết bị. Tra nhanh dùng ngay, không cần nhập mã; API key chỉ nằm trên máy chủ và có giới hạn rộng để ngăn spam.</p>
             </div>
@@ -1112,12 +1137,16 @@ export default function Home() {
             <p className="eyebrow">CHỈ MẤT KHOẢNG 20 GIÂY</p>
             <h2 id="install-title">Đưa Tam Ngữ lên {devicePlatform === "android" ? "Android" : "iPhone"}</h2>
             {devicePlatform === "android" ? (
-              <ol>
-                <li><span>1</span><p>Mở đường link bằng <strong>Chrome</strong>.</p></li>
-                <li><span>2</span><p>Chạm menu <strong>⋮</strong> ở góc trình duyệt.</p></li>
-                <li><span>3</span><p>Chọn <strong>Cài đặt ứng dụng</strong> hoặc <strong>Thêm vào Màn hình chính</strong>.</p></li>
-                <li><span>4</span><p>Mở icon vừa tạo và chạm <strong>Cho phép &amp; hoàn tất</strong>.</p></li>
-              </ol>
+              <>
+                <a className="primary-button wide" href={ANDROID_APK_URL}>Tải app Android native</a>
+                <p className="activation-copy">Android sẽ hỏi cho phép cài từ trình duyệt này một lần. App và thẻ học đã nằm chung trong gói cài.</p>
+                <ol>
+                  <li><span>1</span><p>Chạm <strong>Tải app Android native</strong> rồi mở file vừa tải.</p></li>
+                  <li><span>2</span><p>Nếu được hỏi, cho phép Chrome <strong>cài ứng dụng không xác định</strong>.</p></li>
+                  <li><span>3</span><p>Chạm <strong>Cài đặt</strong>, sau đó mở Tam Ngữ 6H.</p></li>
+                  <li><span>4</span><p>Chạm <strong>Thêm thẻ bằng một chạm</strong> để đặt bài học lên Màn hình chính.</p></li>
+                </ol>
+              </>
             ) : (
               <>
                 <button className="primary-button wide" onClick={openNativeInstaller}>Mở bản native trong AltStore</button>
@@ -1145,16 +1174,25 @@ export default function Home() {
             <div className="sheet-handle" />
             <div className="activation-preview" aria-hidden="true">
               <span>语</span>
-              <div><small>WIDGETKIT · YÊN LẶNG</small><strong>Mỗi lần nhìn máy, học thêm một chút.</strong></div>
+              <div><small>{devicePlatform === "android" ? "WIDGET ANDROID · YÊN LẶNG" : "WIDGETKIT · YÊN LẶNG"}</small><strong>Mỗi lần nhìn máy, học thêm một chút.</strong></div>
             </div>
             <p className="eyebrow">KHÔNG PHẢI THÔNG BÁO</p>
-            <h2 id="widget-setup-title">Đặt thẻ Tam Ngữ lên Màn hình khóa</h2>
-            <ol>
-              <li><span>1</span><p>Nhấn giữ <strong>Màn hình khóa</strong>, chọn <strong>Tùy chỉnh</strong>.</p></li>
-              <li><span>2</span><p>Chạm vùng tiện ích bên dưới đồng hồ rồi chọn <strong>Tam Ngữ 6H</strong>.</p></li>
-              <li><span>3</span><p>Chọn thẻ chữ nhật và chạm <strong>Xong</strong>. Bài sẽ tự đổi trên máy.</p></li>
-            </ol>
-            <button className="primary-button wide" onClick={completeWidgetSetup}>Đã thêm / tiếp tục</button>
+            <h2 id="widget-setup-title">{devicePlatform === "android" ? "Đặt thẻ Tam Ngữ lên Màn hình chính" : "Đặt thẻ Tam Ngữ lên Màn hình khóa"}</h2>
+            {devicePlatform === "android" ? (
+              <>
+                <p className="activation-copy">Chạm nút bên dưới. Android sẽ hiện bản xem trước; xác nhận <strong>Thêm</strong> là xong.</p>
+                <div className="activation-points" aria-label="Thiết lập tự động">
+                  <span>✓ Không app phụ</span><span>✓ Không nhập mã</span><span>✓ Không thông báo</span>
+                </div>
+              </>
+            ) : (
+              <ol>
+                <li><span>1</span><p>Nhấn giữ <strong>Màn hình khóa</strong>, chọn <strong>Tùy chỉnh</strong>.</p></li>
+                <li><span>2</span><p>Chạm vùng tiện ích bên dưới đồng hồ rồi chọn <strong>Tam Ngữ 6H</strong>.</p></li>
+                <li><span>3</span><p>Chọn thẻ chữ nhật và chạm <strong>Xong</strong>. Bài sẽ tự đổi trên máy.</p></li>
+              </ol>
+            )}
+            <button className="primary-button wide" onClick={() => void completeWidgetSetup()}>{devicePlatform === "android" ? "Thêm thẻ bằng một chạm" : "Đã thêm / tiếp tục"}</button>
             <button className="text-button activation-close" onClick={() => setShowWidgetSetup(false)}>Để sau</button>
           </section>
         </div>
