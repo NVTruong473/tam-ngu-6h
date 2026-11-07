@@ -109,6 +109,12 @@ test("keeps setup inside Tam Ngữ with one explicit iOS permission", async () =
   assert.match(page, /beginOneTapSetup/);
   assert.match(page, /Cài Tam Ngữ ngay/);
   assert.match(page, /Bật bài học trên Màn hình khóa/);
+  assert.match(page, /WidgetKit và App Intents đã nằm trong bản cài/);
+  assert.match(page, /Thẻ học native · Cách thêm/);
+  assert.match(page, /Không phát âm thanh và không phải thông báo/i);
+  assert.match(page, /showWidgetSetup && nativeApp/);
+  assert.match(page, /showActivation && !nativeApp/);
+  assert.match(page, /showInstall && !nativeApp/);
   assert.doesNotMatch(page, /Bật nhịp hằng ngày/);
   assert.match(page, /role="status" aria-live="polite"/);
   assert.match(page, /userFacingError/);
@@ -226,7 +232,8 @@ test("keeps Gemini credentials server-only while shipping push and quick lookup"
   assert.match(pushPayload, /app_badge: "1"/);
   assert.match(pushPayload, /mutable: true/);
   assert.match(pushPayload, /maximumWebPushPayloadBytes = 3_993/);
-  assert.match(page, /cho phép hiện toàn bộ bản xem trước/);
+  assert.match(page, /WidgetKit làm thẻ học chính/);
+  assert.match(page, /Thông báo chỉ là tùy chọn phụ/);
   assert.match(edgeWorker, /icon-v2-192\.png/);
   assert.match(page, /NEXT_PUBLIC_PUSH_API_URL/);
   assert.match(page, /NEXT_PUBLIC_FEEDBACK_FORM_URL/);

@@ -88,3 +88,26 @@ GitHub Actions có build iOS Simulator không ký để bắt lỗi Swift/Widget
 không lưu certificate. Build xanh không tạo ra IPA có thể cài: tài khoản Apple
 miễn phí vẫn hết hạn provisioning sau 7 ngày; phát hành lâu dài cần chương trình
 phân phối chính thức của Apple.
+
+## Phát hành native miễn phí qua GitHub và AltStore
+
+Workflow `native-ios.yml` kiểm thử cả app lẫn WidgetKit trên runner macOS. Khi
+đẩy tag `native-v*`, workflow còn tạo GitHub Release ổn định gồm IPA, SHA-256 và
+nguồn AltStore. URL nguồn không đổi qua các lần cập nhật:
+
+```text
+https://github.com/NVTruong473/tam-ngu-6h/releases/latest/download/altstore-source.json
+```
+
+Quy trình phát hành:
+
+```bash
+git tag native-v1.0.0
+git push origin native-v1.0.0
+```
+
+IPA này cố ý không chứa chứng chỉ hoặc provisioning profile. AltStore/SideStore
+ký lại bằng Apple ID của chính người cài; đây là cách thử native 0 đồng nhưng
+không loại bỏ giới hạn ký lại của Apple. Khi có Apple Developer Program, giữ
+nguyên pipeline build và thêm certificate/profile vào GitHub Secrets để tạo bản
+Ad Hoc, TestFlight hoặc App Store — tuyệt đối không commit chúng vào repository.

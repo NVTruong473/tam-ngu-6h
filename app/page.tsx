@@ -66,6 +66,7 @@ const STORAGE = {
   lookupClient: "tamngu6h.lookup-client.v1",
   schedule: "tamngu6h.schedule.v1",
   activationPrompt: "tamngu6h.activation-prompt.v1",
+  widgetPrompt: "tamngu6h.widget-prompt.v1",
 };
 
 const WISHES = {
@@ -382,6 +383,8 @@ export default function Home() {
   const [testingPush, setTestingPush] = useState(false);
   const [devicePlatform, setDevicePlatform] = useState<DevicePlatform>("ios");
   const [installPrompt, setInstallPrompt] = useState<DeferredInstallPrompt | null>(null);
+  const [nativeApp, setNativeApp] = useState(false);
+  const [showWidgetSetup, setShowWidgetSetup] = useState(false);
 
   const schedule = scheduleAt(now, scheduleTimes);
   const unlockedIndex = routineStartSequence === null ? 0 : Math.max(0, schedule.sequence - routineStartSequence);
@@ -432,6 +435,7 @@ export default function Home() {
     queueMicrotask(() => {
       const currentTime = Date.now();
       setDevicePlatform(detectDevicePlatform());
+      setNativeApp(nativeApp);
       setScheduleTimes(storedSchedule);
       setRoutineEnabled(storedRoutine);
       if (Number.isFinite(storedStart) && storedStart > 0) setRoutineStartSequence(storedStart);
@@ -487,7 +491,7 @@ export default function Home() {
     if (nativeApp) {
       queueMicrotask(() => {
         setPushState("idle");
-        if (standalone && localStorage.getItem(STORAGE.activationPrompt) !== "dismissed") setShowActivation(true);
+        if (localStorage.getItem(STORAGE.widgetPrompt) !== "completed") setShowWidgetSetup(true);
       });
     } else if (!("serviceWorker" in navigator) || !("PushManager" in window) || !("Notification" in window)) {
       queueMicrotask(() => setPushState("unsupported"));
@@ -546,6 +550,10 @@ export default function Home() {
   }, []);
 
   async function beginOneTapSetup() {
+    if (nativeApp) {
+      setShowWidgetSetup(true);
+      return;
+    }
     const standalone = isNativeTamNguApp()
       || window.matchMedia("(display-mode: standalone)").matches
       || (navigator as Navigator & { standalone?: boolean }).standalone === true;
@@ -569,6 +577,15 @@ export default function Home() {
   function stopRoutine() {
     setRoutineEnabled(false);
     void disableLockScreen();
+  }
+
+  function completeWidgetSetup() {
+    const startSequence = routineStartSequence ?? scheduleAt(Date.now(), scheduleTimes).sequence;
+    setRoutineEnabled(true);
+    setRoutineStartSequence(startSequence);
+    localStorage.setItem(STORAGE.widgetPrompt, "completed");
+    setShowWidgetSetup(false);
+    setPushMessage("WidgetKit đã sẵn sàng. Sau khi thêm thẻ, iOS sẽ tự đổi bài mà không cần mở app; thông báo vẫn đang tắt.");
   }
 
   async function enableLockScreen() {
@@ -864,7 +881,7 @@ export default function Home() {
           <p className="eyebrow">ANH · TRUNG · VIỆT</p>
           <h1>Tam Ngữ <span>6H</span></h1>
         </div>
-        <button className="icon-button" onClick={() => setShowInstall(true)} aria-label="Hướng dẫn cài ứng dụng">↗</button>
+        <button className="icon-button" onClick={() => nativeApp ? setTab("settings") : setShowInstall(true)} aria-label={nativeApp ? "Mở cài đặt" : "Hướng dẫn cài ứng dụng"}>↗</button>
       </header>
 
       {tab === "today" && (
@@ -883,8 +900,8 @@ export default function Home() {
                   <span className="current">Tiếp theo {schedule.nextTime}</span>
                 </div>
                 <div className="session-actions">
-                  <button className="primary-button" disabled={pushState === "enabling" || pushState === "enabled"} onClick={enableLockScreen}>
-                    {pushState === "enabled" ? "Màn hình khóa đã bật ✓" : pushState === "enabling" ? "Đang bật…" : "Hiện bài trên Màn hình khóa"}
+                  <button className="primary-button" disabled={!nativeApp && (pushState === "enabling" || pushState === "enabled")} onClick={() => nativeApp ? setShowWidgetSetup(true) : void enableLockScreen()}>
+                    {nativeApp ? "Thẻ học native · Cách thêm" : pushState === "enabled" ? "Màn hình khóa đã bật ✓" : pushState === "enabling" ? "Đang bật…" : "Hiện bài trên Màn hình khóa"}
                   </button>
                   <button className="text-button danger" onClick={stopRoutine}>Tắt nhịp</button>
                 </div>
@@ -892,8 +909,10 @@ export default function Home() {
               </>
             ) : (
               <button className="primary-button wide" onClick={() => void beginOneTapSetup()}>
-                {isNativeTamNguApp() || (ready && (window.matchMedia("(display-mode: standalone)").matches || (navigator as Navigator & { standalone?: boolean }).standalone === true))
-                  ? "Bật bài học trên Màn hình khóa"
+                {nativeApp
+                  ? "Thêm thẻ học native"
+                  : ready && (window.matchMedia("(display-mode: standalone)").matches || (navigator as Navigator & { standalone?: boolean }).standalone === true)
+                    ? "Bật bài học trên Màn hình khóa"
                   : installPrompt ? "Cài Tam Ngữ ngay" : `Cài Tam Ngữ lên ${devicePlatform === "android" ? "Android" : "iPhone"}`}
               </button>
             )}
@@ -1021,10 +1040,15 @@ export default function Home() {
         <section className="screen settings-screen">
           <div className="page-title"><h2>Cài đặt</h2></div>
           <article className="settings-card">
-            <div className="setting-row"><span className="setting-icon">⌂</span><div><strong>Cài lên Màn hình chính</strong><small>Mở toàn màn hình với icon như một app.</small></div><button onClick={() => setShowInstall(true)}>Xem</button></div>
+            {nativeApp ? (
+              <div className="setting-row"><span className="setting-icon">✓</span><div><strong>Ứng dụng native</strong><small>WidgetKit và App Intents đã nằm trong bản cài.</small></div><span className="status-pill">Đã cài</span></div>
+            ) : (
+              <div className="setting-row"><span className="setting-icon">⌂</span><div><strong>Cài lên Màn hình chính</strong><small>Mở toàn màn hình với icon như một app.</small></div><button onClick={() => setShowInstall(true)}>Xem</button></div>
+            )}
             <div className="setting-row"><span className="setting-icon">✓</span><div><strong>Tự động lưu</strong><small>Tiến độ và nhịp hằng ngày được lưu trên máy.</small></div><span className="status-pill">Đang bật</span></div>
             <div className="setting-row"><span className="setting-icon">◷</span><div><strong>{scheduleTimes.length} mốc mỗi ngày</strong><small>{scheduleTimes.join(" · ")}</small></div><span className="status-pill">Tùy chỉnh</span></div>
-            <div className="setting-row"><span className="setting-icon">▣</span><div><strong>Bài học trên Màn hình khóa</strong><small>Hoạt động khi app đã đóng; bài mới thay bài cũ để màn hình luôn gọn.</small></div>{pushState === "unsupported" ? <span className="status-pill">{devicePlatform === "ios" ? "Cần iOS 16.4+" : "Trình duyệt chưa hỗ trợ"}</span> : pushState === "enabled" ? <button onClick={disableLockScreen}>Tắt</button> : <button onClick={enableLockScreen}>Bật</button>}</div>
+            {nativeApp && <div className="setting-row"><span className="setting-icon">▣</span><div><strong>Thẻ học native</strong><small>Hiện bằng WidgetKit, không phát âm thanh và không phải thông báo.</small></div><button onClick={() => setShowWidgetSetup(true)}>Cách thêm</button></div>}
+            <div className="setting-row"><span className="setting-icon">◌</span><div><strong>{nativeApp ? "Thông báo bài học" : "Bài học trên Màn hình khóa"}</strong><small>{nativeApp ? "Tùy chọn phụ; có thể để tắt hoàn toàn." : "Hoạt động khi app đã đóng; bài mới thay bài cũ để màn hình luôn gọn."}</small></div>{pushState === "unsupported" ? <span className="status-pill">{devicePlatform === "ios" ? "Cần iOS 16.4+" : "Trình duyệt chưa hỗ trợ"}</span> : pushState === "enabled" ? <button onClick={disableLockScreen}>Tắt</button> : <button onClick={enableLockScreen}>Bật</button>}</div>
           </article>
           <article className="schedule-card" aria-labelledby="schedule-title">
             <div className="schedule-card-heading">
@@ -1058,7 +1082,7 @@ export default function Home() {
               <h3>Cách học</h3>
               <p>Mặc định có bài mới lúc 06:00, 12:00 và 18:00. Có thể chọn từ 1 đến 24 mốc riêng mỗi ngày. Kho bài được bổ sung tự động và tăng dần từ B1 đến C1.</p>
               <h3>Màn hình khóa</h3>
-              <p>Thông báo vẫn đến khi app đã đóng. Mỗi thẻ có đủ câu Anh, Trung và Việt; chạm thẻ mới mở đúng bài để xem phát âm, ngữ pháp và ví dụ. Muốn đọc nội dung trước khi mở khóa, hãy cho phép hiện toàn bộ bản xem trước trong cài đặt thông báo của điện thoại. Vuốt để xóa sau khi đọc; âm lượng và cách hiển thị do điện thoại quyết định.</p>
+              <p>Bản native dùng WidgetKit làm thẻ học chính: không âm thanh, không chen ngang và vẫn hiện khi app đã đóng. Thông báo chỉ là tùy chọn phụ; có thể để tắt hoàn toàn trong Cài đặt.</p>
               <h3>Dữ liệu và Tra nhanh</h3>
               <p>Tiến độ được lưu trên thiết bị. Tra nhanh dùng ngay, không cần nhập mã; API key chỉ nằm trên máy chủ và có giới hạn rộng để ngăn spam.</p>
             </div>
@@ -1073,7 +1097,7 @@ export default function Home() {
         <button className={tab === "settings" ? "active" : ""} onClick={() => setTab("settings")}><span>⚙</span>Cài đặt</button>
       </nav>
 
-      {showInstall && (
+      {showInstall && !nativeApp && (
         <div className="modal-backdrop" role="presentation" onClick={() => setShowInstall(false)}>
           <section className="install-sheet" role="dialog" aria-modal="true" aria-labelledby="install-title" onClick={(event) => event.stopPropagation()}>
             <div className="sheet-handle" />
@@ -1104,7 +1128,28 @@ export default function Home() {
         </div>
       )}
 
-      {showActivation && (
+      {showWidgetSetup && nativeApp && (
+        <div className="modal-backdrop" role="presentation" onClick={() => setShowWidgetSetup(false)}>
+          <section className="install-sheet activation-sheet" role="dialog" aria-modal="true" aria-labelledby="widget-setup-title" onClick={(event) => event.stopPropagation()}>
+            <div className="sheet-handle" />
+            <div className="activation-preview" aria-hidden="true">
+              <span>语</span>
+              <div><small>WIDGETKIT · YÊN LẶNG</small><strong>Mỗi lần nhìn máy, học thêm một chút.</strong></div>
+            </div>
+            <p className="eyebrow">KHÔNG PHẢI THÔNG BÁO</p>
+            <h2 id="widget-setup-title">Đặt thẻ Tam Ngữ lên Màn hình khóa</h2>
+            <ol>
+              <li><span>1</span><p>Nhấn giữ <strong>Màn hình khóa</strong>, chọn <strong>Tùy chỉnh</strong>.</p></li>
+              <li><span>2</span><p>Chạm vùng tiện ích bên dưới đồng hồ rồi chọn <strong>Tam Ngữ 6H</strong>.</p></li>
+              <li><span>3</span><p>Chọn thẻ chữ nhật và chạm <strong>Xong</strong>. Bài sẽ tự đổi trên máy.</p></li>
+            </ol>
+            <button className="primary-button wide" onClick={completeWidgetSetup}>Đã thêm / tiếp tục</button>
+            <button className="text-button activation-close" onClick={() => setShowWidgetSetup(false)}>Để sau</button>
+          </section>
+        </div>
+      )}
+
+      {showActivation && !nativeApp && (
         <div className="modal-backdrop" role="presentation">
           <section className="install-sheet activation-sheet" role="dialog" aria-modal="true" aria-labelledby="activation-title">
             <div className="sheet-handle" />

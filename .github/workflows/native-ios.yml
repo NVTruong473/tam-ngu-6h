@@ -3,6 +3,7 @@ name: Verify Tam Ngữ iOS Glance Deck
 on:
   push:
     branches: [main]
+    tags: ["native-v*"]
     paths:
       - "ios/**"
       - "app/**"
@@ -47,6 +48,7 @@ jobs:
       - name: Build an unsigned device IPA for local Personal Team signing
         run: |
           set -euo pipefail
+          build_number="${GITHUB_RUN_NUMBER}"
           xcodebuild \
             -project ios/App/App.xcodeproj \
             -scheme App \
@@ -54,6 +56,7 @@ jobs:
             -sdk iphoneos \
             -destination 'generic/platform=iOS' \
             -derivedDataPath build/ios-device \
+            CURRENT_PROJECT_VERSION="$build_number" \
             CODE_SIGNING_ALLOWED=NO \
             CODE_SIGNING_REQUIRED=NO \
             build
@@ -65,19 +68,81 @@ jobs:
           test -f "$app_path/Info.plist"
           test -f "$widget_path/Info.plist"
 
+          app_version="$(/usr/libexec/PlistBuddy -c 'Print :CFBundleShortVersionString' "$app_path/Info.plist")"
+          packaged_build="$(/usr/libexec/PlistBuddy -c 'Print :CFBundleVersion' "$app_path/Info.plist")"
+          widget_version="$(/usr/libexec/PlistBuddy -c 'Print :CFBundleShortVersionString' "$widget_path/Info.plist")"
+          widget_build="$(/usr/libexec/PlistBuddy -c 'Print :CFBundleVersion' "$widget_path/Info.plist")"
+          test "$packaged_build" = "$build_number"
+          test "$widget_version" = "$app_version"
+          test "$widget_build" = "$packaged_build"
+
           mkdir -p build/ipa/Payload
           ditto "$app_path" build/ipa/Payload/App.app
           (
             cd build/ipa
-            ditto -c -k --sequesterRsrc --keepParent Payload TamNgu6H-unsigned.ipa
-            shasum -a 256 TamNgu6H-unsigned.ipa > TamNgu6H-unsigned.ipa.sha256
+            ditto -c -k --sequesterRsrc --keepParent Payload TamNgu6H.ipa
+            shasum -a 256 TamNgu6H.ipa > TamNgu6H.ipa.sha256
           )
+
+          if [[ "$GITHUB_REF_TYPE" == "tag" ]]; then
+            ipa_hash="$(shasum -a 256 build/ipa/TamNgu6H.ipa | awk '{print $1}')"
+            IPA_PATH=build/ipa/TamNgu6H.ipa \
+            SOURCE_OUTPUT=build/ipa/altstore-source.json \
+            APP_VERSION="$app_version" \
+            BUILD_VERSION="$packaged_build" \
+            RELEASE_DATE="$(date -u +%F)" \
+            DOWNLOAD_URL="https://github.com/${GITHUB_REPOSITORY}/releases/download/${GITHUB_REF_NAME}/TamNgu6H.ipa" \
+            SHA256="$ipa_hash" \
+            node scripts/generate-altstore-source.mjs
+          fi
       - name: Upload the unsigned device package
         uses: actions/upload-artifact@v7
         with:
           name: TamNgu6H-unsigned-ipa
           path: |
-            build/ipa/TamNgu6H-unsigned.ipa
-            build/ipa/TamNgu6H-unsigned.ipa.sha256
+            build/ipa/TamNgu6H.ipa
+            build/ipa/TamNgu6H.ipa.sha256
+            build/ipa/altstore-source.json
           if-no-files-found: error
           retention-days: 7
+
+  publish-native-release:
+    if: github.ref_type == 'tag' && startsWith(github.ref_name, 'native-v')
+    needs: unsigned-native-builds
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+    steps:
+      - uses: actions/download-artifact@v8
+        with:
+          name: TamNgu6H-unsigned-ipa
+          path: release
+      - name: Verify immutable release assets
+        run: |
+          set -euo pipefail
+          cd release
+          test -s TamNgu6H.ipa
+          test -s TamNgu6H.ipa.sha256
+          test -s altstore-source.json
+          sha256sum -c TamNgu6H.ipa.sha256
+          node -e 'const fs=require("fs"); const source=JSON.parse(fs.readFileSync("altstore-source.json", "utf8")); if(source.apps?.[0]?.bundleIdentifier!=="com.nvtruong.tamngu6h" || source.apps?.[0]?.versions?.length!==1) process.exit(1)'
+      - name: Publish the stable native package and AltStore source
+        env:
+          GH_TOKEN: ${{ github.token }}
+          RELEASE_NOTES: |
+            ## Tam Ngữ 6H native cho iPhone
+
+            Bản này chứa ứng dụng iOS thật cùng WidgetKit extension và App Intent.
+
+            - `TamNgu6H.ipa`: gói native để AltStore/SideStore hoặc Apple Personal Team ký trên thiết bị.
+            - `altstore-source.json`: nguồn cập nhật dành cho AltStore Classic.
+            - `TamNgu6H.ipa.sha256`: mã kiểm tra tính toàn vẹn.
+
+            IPA không chứa chứng chỉ phát hành hay khóa Gemini. iOS vẫn bắt buộc ký bằng Apple ID của người cài; tài khoản miễn phí phải làm mới định kỳ theo giới hạn của Apple.
+        run: |
+          set -euo pipefail
+          if gh release view "$GITHUB_REF_NAME" --repo "$GITHUB_REPOSITORY" >/dev/null 2>&1; then
+            gh release upload "$GITHUB_REF_NAME" release/TamNgu6H.ipa release/TamNgu6H.ipa.sha256 release/altstore-source.json --clobber --repo "$GITHUB_REPOSITORY"
+          else
+            gh release create "$GITHUB_REF_NAME" release/TamNgu6H.ipa release/TamNgu6H.ipa.sha256 release/altstore-source.json --title "Tam Ngữ 6H native ${GITHUB_REF_NAME#native-v}" --notes "$RELEASE_NOTES" --latest --repo "$GITHUB_REPOSITORY"
+          fi
