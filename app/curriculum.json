@@ -4253,5 +4253,131 @@
     },
     "generatedAt": "2026-11-07T21:00:49.911Z",
     "generator": "gemini-3.5-flash-lite"
+  },
+  {
+    "id": "lesson-0130",
+    "stage": "B1+ · Diễn đạt linh hoạt",
+    "kind": "sentence",
+    "title": "Bày tỏ quyết tâm buông bỏ gánh nặng tinh thần",
+    "context": "Trong buổi sáng yên tĩnh, bạn tự nhủ về việc giải phóng bản thân khỏi những kỳ vọng không cần thiết để bắt đầu ngày mới nhẹ nhàng hơn.",
+    "lines": [
+      {
+        "speaker": "A",
+        "english": "Instead of carrying the weight of unfulfilled expectations, I choose to travel light today.",
+        "chinese": "与其背负着未竟期待的沉重包袱，我选择今天轻装上阵。",
+        "pinyin": "Yǔqí bèifùzhe wèijìng qídài de chénzhòng bāofú, wǒ xuǎnzé jīntiān qīngzhuāng shàngzhèn.",
+        "vietnameseReading": "ỷ(3) chí(2) pây(4) phu(4) chơ uây(4) chỉng(4) chí(2) đai(4) tơ chân(2) trung(4) pao(1) phơ(2) uổ(3) suản(3) chớ(2) cin(1) thêm(1) ch'ing(1) troang(1) sang(4) chên(4)",
+        "vietnamese": "Thay vì mang nặng những kỳ vọng chưa thành, hôm nay tôi chọn bước đi nhẹ nhàng."
+      }
+    ],
+    "note": "Cấu trúc 与其 A 不如/选择 B dùng để thể hiện việc từ bỏ điều không cần thiết để chọn phương án tối ưu hơn. Trong tiếng Anh, cấu trúc 'Instead of doing A, I choose B' giúp diễn đạt sự chủ động chuyển hóa tư duy một cách mạnh mẽ.",
+    "challenge": "Hãy viết hoặc nói một câu bằng cả tiếng Anh và tiếng Trung về một gánh nặng tâm lý mà bạn quyết định buông bỏ trong ngày hôm nay.",
+    "grammarFocus": "Sử dụng cấu trúc '与其 A，我选择 B' để thể hiện sự thay đổi góc nhìn và quyết định buông bỏ.",
+    "vocabulary": [
+      "expectation · 期待 · kỳ vọng",
+      "weight · 包袱 · gánh nặng",
+      "travel light · 轻装上阵 · nhẹ nhàng bước đi"
+    ],
+    "wish": "Chúc bạn một buổi sáng tràn đầy năng lượng tỉnh thức, buông bỏ những ưu phiền cũ để đón nhận những khởi đầu trong trẻo và tự do nhất.",
+    "nightWish": "Khép lại một ngày dài với tâm hồn an nhiên, mong rằng giấc ngủ sẽ mang đi mọi bộn bề và trả lại cho bạn sự bình yên trọn vẹn.",
+    "notification": {
+      "english": "I choose to travel light today.",
+      "chinese": "我选择今天轻装上阵。",
+      "vietnamese": "Hôm nay tôi chọn bước đi nhẹ nhàng."
+    },
+    "generatedAt": "2026-11-08T21:15:19.212Z",
+    "generator": "gemini-3.5-flash-lite"
+  },
+  {
+    "id": "lesson-0131",
+    "stage": "B1+ · Diễn đạt linh hoạt",
+    "kind": "message",
+    "title": "Nhắn tin chọn món ăn nhẹ và nước uống cho buổi chiều bận rộn",
+    "context": "Bạn đang nhắn tin cho đồng nghiệp vào buổi trưa để thống nhất gọi đồ uống giải nhiệt cho buổi chiều làm việc.",
+    "lines": [
+      {
+        "speaker": "A",
+        "english": "Since the afternoon meeting is going to run quite late, shall we order some iced lemon tea to keep us awake?",
+        "chinese": "既然下午的会议要开到很晚，我们要不要点一些冰柠檬茶来提提神？",
+        "pinyin": "jì rán xià wǔ de huì yì yào kāi dào hěn wǎn, wǒ men yào bú yào diǎn yì xiē bīng níng méng chá lái tí tí shén?",
+        "vietnameseReading": "chi(4) ran(2) xia(4) uổ(3) tơ huây(4) i(4) yao(4) khai(1) tao(4) hẩn(3) uản(3) uổ(3) mần yao(4) pu(2) yao(4) điển(3) i(4) xiế(1) bỉng(1) ninh(2) măng(2) chá(2) lai(2) thí(2) thí(2) sấn(2)",
+        "vietnamese": "Vì buổi chiều họp khá muộn, hay là chúng ta gọi ít trà chanh đá để tỉnh táo nhé?"
+      }
+    ],
+    "note": "Cấu trúc 既然... (since/vì đã...) dùng để nêu một tiền đề hiển nhiên, kết hợp với 我们要不要... (shall we.../chúng ta có nên...?) để đưa ra đề xuất rất tự nhiên trong giao tiếp công việc và đời sống hàng ngày.",
+    "challenge": "Hãy viết một tin nhắn bằng tiếng Trung đề xuất đồng nghiệp gọi đồ uống giải nhiệt cho buổi chiều bằng cấu trúc 既然...，我们要不要... trong vòng 2 phút.",
+    "grammarFocus": "Cấu trúc 既然...，我们要不要... dùng để nêu tiền đề và đưa ra đề xuất hợp lý.",
+    "vocabulary": [
+      "run late · 开到很晚 · họp muộn",
+      "iced lemon tea · 冰柠檬茶 · trà chanh đá",
+      "keep awake · 提提神 · tỉnh táo"
+    ],
+    "wish": "Chúc bạn buổi trưa nạp đầy năng lượng, hoàn thành mọi kế hoạch buổi chiều một cách trơn tru và hiệu quả nhất.",
+    "nightWish": "Khép lại một ngày bận rộn bằng những phút giây tĩnh lặng tuyệt đối. Chúc bạn có một giấc ngủ sâu và thật bình yên.",
+    "notification": {
+      "english": "Shall we order some iced lemon tea?",
+      "chinese": "我们要不要点一些冰柠檬茶？",
+      "vietnamese": "Chúng ta gọi ít trà chanh đá nhé?"
+    },
+    "generatedAt": "2026-11-08T21:16:26.676Z",
+    "generator": "gemini-3.5-flash-lite"
+  },
+  {
+    "id": "lesson-0132",
+    "stage": "B1+ · Diễn đạt linh hoạt",
+    "kind": "dialogue",
+    "title": "Bàn về thói quen đọc sách dưới ánh đèn khuya",
+    "context": "Hai người bạn trò chuyện vào lúc đêm muộn về thói quen duy trì việc đọc sách tĩnh lặng trước khi đi ngủ.",
+    "lines": [
+      {
+        "speaker": "A",
+        "english": "Reading a few pages under the warm desk lamp feels like stepping into a private sanctuary after a noisy day.",
+        "chinese": "在温暖的台灯下读几页书，感觉就像在喧嚣的一天之后走进了一处私人庇护所。",
+        "pinyin": "zài wēnnuǎn de táidēng xià dú jǐ yè shū, gǎnjué jiù xiàng zài xuānxiāo de yī tiān zhīhòu zǒu jìn le yī chù sīrén bìhùsuǒ.",
+        "vietnameseReading": "trai(4) uên(1) noan(3) tơ thai(2) đẩy(1) xia(4) tu(2) chỉ(3) yê(4) su(1) cản(3) chié(2) chiêu(4) xiang(4) trai(4) suản(1) xẻo(1) tơ i(1) thêm(1) trư(1) hâu(4) dẩu(3) cin(4) lơ i(1) chù(4) sư(1) rấn(2) pỉ(4) hù(4) suổ(3)",
+        "vietnamese": "Đọc vài trang sách dưới chiếc đèn bàn ấm áp mang lại cảm giác như bước vào một chốn ẩn náu riêng tư sau một ngày ồn ào."
+      },
+      {
+        "speaker": "B",
+        "english": "That ritual is precisely what helps me unwind and detach from the digital noise outside.",
+        "chinese": "正是这种仪式感帮助我放松下来，并把外界的数字喧嚣隔绝在外。",
+        "pinyin": "zhèngshì zhèzhǒng yíshì gǎn bāngzhù wǒ fàngsōng xiàlái, bìng bǎ wàijiè de shùzì xuānxiāo géjué zài wài.",
+        "vietnameseReading": "chấng(4) sứ(4) chè(4) chổng(3) y(2) sứ(4) cản(3) pang(1) chu(4) uổ(3) phang(4) súng(1) xia(4) lai(2) bỉng(4) bả(3) uải(4) chie(4) tơ su(4) tư(4) suản(1) xẻo(1) cớ(2) chié(2) trai(4) uải(4)",
+        "vietnamese": "Chính nghi thức đó giúp tôi thư giãn và tách mình khỏi sự ồn ào kỹ thuật số bên ngoài."
+      },
+      {
+        "speaker": "A",
+        "english": "Indeed, compared to scrolling through endless feeds, holding physical pages offers a much deeper sense of calm.",
+        "chinese": "确实如此，与刷那些无穷无尽的信息流相比，手捧纸质书能带来深得多的平静感。",
+        "pinyin": "quèshí rúcǐ, yǔ shuā nàxiē wúqióng wújìn de xìnxī liú xiāngbǐ, shǒupěng zhǐzhì shū néng dài lái shēn dé duō de píngjìng gǎn.",
+        "vietnameseReading": "chiết(4) sứ(2) rú(2) cứ(3) ỷ(3) soa(1) na(4) xiế(1) ú(2) xiung(2) ú(2) cin(4) tơ xin(4) xế(1) liu(2) xiang(1) pỉ(3) sẩu(3) pâng(3) chỉ(3) trư(4) su(1) nẻng(2) đai(4) lai(2) sên(1) tơ(2) tuô(1) tơ pính(2) chỉng(4) cản(3)",
+        "vietnamese": "Quả thật vậy, so với việc lướt các dòng tin vô tận, việc cầm trên tay những trang sách giấy mang lại sự bình yên sâu sắc hơn nhiều."
+      },
+      {
+        "speaker": "B",
+        "english": "Let us keep this quiet habit alive no matter how unpredictable our schedules become.",
+        "chinese": "不管我们的日程变得多么不可预测，我们都要把这个安静的习惯坚持下去。",
+        "pinyin": "bùguǎn wǒmen de rìchéng biàn de duōme bù kě yùcè, wǒmen dōu yào bǎ zhè gè ānjìng de xíguàn jiānchí xiàqù.",
+        "vietnameseReading": "pu(4) cuản(3) uổ(3) mần tơ rư(4) chấng(2) piên(4) tơ tuô(1) mơ pu(4) khể(3) uy(4) trơ(4) uổ(3) mần tâu(1) yao(4) bả(3) chè(4) cợ(4) an(1) chỉng(4) tơ si(2) cuản(4) chiên(1) chí(2) xia(4) chiệu(4)",
+        "vietnamese": "Dù lịch trình của chúng ta có trở nên khó lường đến đâu đi nữa, chúng ta cũng phải duy trì thói quen yên tĩnh này."
+      }
+    ],
+    "note": "Cấu trúc so sánh 与...相比 (so với...) kết hợp với cụm từ 仪式感 (cảm giác có nghi thức) giúp diễn tả trải nghiệm tinh thần một cách tinh tế và tự nhiên trong tiếng Trung.",
+    "challenge": "Hãy tự ghi âm một đoạn ngắn chia sẻ về thói quen đọc sách buổi tối của bạn bằng ít nhất ba câu.",
+    "grammarFocus": "Sử dụng cấu trúc so sánh 与...相比 để đối chiếu hai trải nghiệm khác nhau.",
+    "vocabulary": [
+      "sanctuary · 私人庇护所 · chốn ẩn náu riêng tư",
+      "digital noise · 数字喧嚣 · sự ồn ào kỹ thuật số",
+      "sense of calm · 平静感 · cảm giác bình yên"
+    ],
+    "wish": "Chúc bạn khép lại ngày dài với sự bình yên trọn vẹn và những trang sách thật nhiều cảm xúc.",
+    "nightWish": "Mong ánh đèn dịu nhẹ ôm ấp giấc ngủ sâu và những giấc mơ êm đềm của bạn đêm nay.",
+    "notification": {
+      "english": "Reading under a warm desk lamp helps.",
+      "chinese": "在温暖的台灯下读几页书。",
+      "vietnamese": "Đọc vài trang sách dưới đèn bàn ấm."
+    },
+    "generatedAt": "2026-11-08T21:16:38.415Z",
+    "generator": "gemini-3.5-flash-lite"
   }
 ]
