@@ -4505,5 +4505,73 @@
     },
     "generatedAt": "2026-11-10T00:50:38.548Z",
     "generator": "gemini-3.5-flash-lite"
+  },
+  {
+    "id": "lesson-0136",
+    "stage": "B1+ · Diễn đạt linh hoạt",
+    "kind": "sentence",
+    "title": "Nhìn nhận lại áp lực và giá trị bản thân trong công việc",
+    "context": "Một người tự nhủ với bản thân khi đang tổng kết lại hiệu suất công việc trong tháng qua.",
+    "lines": [
+      {
+        "speaker": "A",
+        "english": "Instead of measuring my self-worth entirely by productivity, I am learning to honor my pace.",
+        "chinese": "与其完全用生产力来衡量自我价值，我正在学会尊重自己的节奏。",
+        "pinyin": "yǔ qí wán quán yòng shēng chǎn lì lái héng liáng zì wǒ jià zhí, wǒ zhèng zài xué huì zūn zhòng zì jǐ de jié zòu.",
+        "vietnameseReading": "ỷ(3) chí(2) oản(2) chuán(2) yống(4) sâng(1) chan(3) li(4) lai(2) hẻng(2) liáng(2) tư(4) uổ(3) chia(4) chí(2) uổ(3) chấng(4) trai(4) xue(2) huây(4) chuân(1) trung(4) tư(4) chỉ(3) tơ ciế(2) dẩu(4)",
+        "vietnamese": "Thay vì đo lường giá trị bản thân hoàn toàn bằng năng suất, tôi đang học cách tôn trọng nhịp độ của chính mình."
+      }
+    ],
+    "note": "Cấu trúc 与其...，我正在... (Thay vì... , tôi đang...) giúp diễn đạt sự dịch chuyển tư duy từ việc tự áp lực sang việc trân trọng quá trình phát triển cá nhân. Tiếng Anh dùng 'Instead of... , I am learning to...' để thể hiện cùng một sắc thái chuyển biến nhận thức sâu sắc.",
+    "challenge": "Hãy tự ghi âm lại câu này bằng tiếng Trung, chú ý nhấn giọng ở cụm từ '衡量自我价值' (đo lường giá trị bản thân) để thể hiện sự tự chiêm nghiệm.",
+    "grammarFocus": "Sử dụng cấu trúc '与其 A，我正在 B' để diễn đạt sự thay đổi góc nhìn và hành động thực tế.",
+    "vocabulary": [
+      "Instead of · 与其 · Thay vì",
+      "Self-worth · 自我价值 · Giá trị bản thân",
+      "Pace · 节奏 · Nhịp độ"
+    ],
+    "wish": "Chúc bạn hôm nay tìm thấy nhịp làm việc vừa vặn, không vội vã nhưng đầy kiên định và bình an trong từng bước đi.",
+    "nightWish": "Khép lại một ngày dài bận rộn, mong bạn buông xuống mọi kỳ vọng hoàn hảo để chìm vào giấc ngủ thật sâu và êm đềm.",
+    "notification": {
+      "english": "Learning to honor my own pace today.",
+      "chinese": "学会尊重自己的节奏。",
+      "vietnamese": "Học cách tôn trọng nhịp độ của chính mình."
+    },
+    "generatedAt": "2026-11-10T22:30:17.975Z",
+    "generator": "gemini-3.5-flash-lite"
+  },
+  {
+    "id": "lesson-0137",
+    "stage": "B1+ · Diễn đạt linh hoạt",
+    "kind": "message",
+    "title": "Nhắn tin thông báo thay đổi thời gian nhận tài liệu báo cáo",
+    "context": "Bạn nhắn tin cho đồng nghiệp để báo cáo về việc lùi thời hạn gửi tài liệu do cần kiểm tra lại các số liệu kinh doanh.",
+    "lines": [
+      {
+        "speaker": "A",
+        "english": "In order to ensure maximum accuracy, I am pushing back the report submission deadline by a few hours.",
+        "chinese": "为了确保数据的绝对准确，我把报告提交的时间推迟了几个小时。",
+        "pinyin": "wèi le què bǎo shù jù de jué duì zhǔn què, wǒ bǎ bào gào tí jiāo de shí jiān tuī chí le jǐ gè xiǎo shí.",
+        "vietnameseReading": "uây(4) lơ chiết(4) bả(3) su(4) chu(4) tơ chié(2) tuy(4) chủn(3) chiết(4) uổ(3) bả(3) pao(4) cao(4) thí(2) chia(1) tơ sứ(2) chiên(1) thuy(1) chí(2) lơ chỉ(3) cợ(4) xẻo(3) sứ(2)",
+        "vietnamese": "Để đảm bảo tính chính xác tuyệt đối, tôi đã lùi thời gian nộp báo cáo lại vài tiếng."
+      }
+    ],
+    "note": "Cấu trúc '为了...，我把...' kết hợp với cụm từ chỉ mục đích '确保数据的绝对准确' giúp câu thông báo trở nên chuyên nghiệp, rõ ràng lý do và hành động cụ thể trong môi trường công sở.",
+    "challenge": "Hãy viết một tin nhắn ngắn bằng tiếng Trung sử dụng cấu trúc '为了..., 我把...' để thông báo việc lùi thời gian gửi email.",
+    "grammarFocus": "Sử dụng cấu trúc '为了...，我把...' để làm rõ lý do và hành động điều chỉnh kế hoạch.",
+    "vocabulary": [
+      "ensure accuracy · 确保准确 · đảm bảo chính xác",
+      "submission deadline · 提交时间 · thời gian nộp",
+      "push back · 推迟 · lùi lại"
+    ],
+    "wish": "Chúc bạn buổi trưa tràn đầy năng lượng, hoàn thành xuất sắc các mục tiêu công việc và luôn giữ được sự chủ động trong mọi tình huống.",
+    "nightWish": "Mong rằng đêm nay sẽ mang đến cho bạn những giấc ngủ thật sâu và sự bình yên trọn vẹn sau một ngày bận rộn.",
+    "notification": {
+      "english": "Submitting the report a bit later.",
+      "chinese": "报告提交时间稍作推迟。",
+      "vietnamese": "Lùi thời gian nộp báo cáo."
+    },
+    "generatedAt": "2026-11-10T22:31:38.630Z",
+    "generator": "gemini-3.5-flash-lite"
   }
 ]
