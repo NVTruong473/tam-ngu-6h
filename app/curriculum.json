@@ -4379,5 +4379,131 @@
     },
     "generatedAt": "2026-11-08T21:16:38.415Z",
     "generator": "gemini-3.5-flash-lite"
+  },
+  {
+    "id": "lesson-0133",
+    "stage": "B1+ · Diễn đạt linh hoạt",
+    "kind": "sentence",
+    "title": "Bày tỏ sự trân trọng những khoảnh khắc tĩnh lặng buổi sớm",
+    "context": "Nhìn ra khung cửa sổ vào một buổi sáng trong lành, suy ngẫm về giá trị của sự yên bình trước khi ngày mới bắt đầu.",
+    "lines": [
+      {
+        "speaker": "A",
+        "english": "Savoring this quiet cup of coffee before the rest of the world wakes up is my favorite daily ritual.",
+        "chinese": "在世界醒来之前品味这杯安静的咖啡，是我最喜欢的日常仪式。",
+        "pinyin": "zài shì jiè xǐng lái zhī qián pǐn wèi zhè bēi ān jìng de kā fēi, shì wǒ zuì xǐ huān de rì cháng yí shì.",
+        "vietnameseReading": "trai(4) sứ(4) chie(4) xỉnh(3) lai(2) trư(1) chién(2) pín(3) uây(4) chè(4) bê(1) an(1) chỉng(4) tơ kha(1) phây(1) sứ(4) uổ(3) chuây(4) xỉ(3) huan(1) tơ rư(4) chang(2) y(2) sứ(4)",
+        "vietnamese": "Thưởng thức ly cà phê yên tĩnh này trước khi thế giới thức giấc là nghi thức hằng ngày yêu thích của tôi."
+      }
+    ],
+    "note": "Cấu trúc '在...之前' kết hợp với danh từ chỉ thời gian giúp định vị mốc trước khi một sự việc khác diễn ra. '日常仪式' thể hiện thói quen mang tính tinh thần, khác với các từ chỉ thói quen thông thường.",
+    "challenge": "Hãy viết hoặc nói một câu bằng tiếng Anh và tiếng Trung mô tả một thói quen nhỏ mang lại sự bình yên cho bạn vào buổi sáng.",
+    "grammarFocus": "Sử dụng cấu trúc 在...之前 để chỉ mốc thời gian diễn ra hành động.",
+    "vocabulary": [
+      "Savor · 品味 · Thưởng thức",
+      "Daily ritual · 日常仪式 · Nghi thức hằng ngày",
+      "Quiet cup of coffee · 安静的咖啡 · Ly cà phê yên tĩnh"
+    ],
+    "wish": "Chúc bạn một buổi sáng tràn đầy năng lượng tích cực, giữ được sự tĩnh lặng trong tâm hồn để đón nhận những điều tuyệt vời.",
+    "nightWish": "Mong rằng khi màn buông xuống, giấc ngủ sẽ mang lại cho bạn sự bình yên trọn vẹn sau một ngày dài.",
+    "notification": {
+      "english": "Savoring this quiet morning coffee.",
+      "chinese": "品味这杯安静的早晨咖啡。",
+      "vietnamese": "Thưởng thức ly cà phê sáng yên bình."
+    },
+    "generatedAt": "2026-11-10T00:46:32.184Z",
+    "generator": "gemini-3.5-flash-lite"
+  },
+  {
+    "id": "lesson-0134",
+    "stage": "B1+ · Diễn đạt linh hoạt",
+    "kind": "message",
+    "title": "Nhắn tin hỏi ý kiến đồng nghiệp về quyết định chiến lược mới",
+    "context": "Nhắn tin qua ứng dụng công sở vào buổi trưa để tham khảo góc nhìn của đồng nghiệp về một hướng đi mới của dự án.",
+    "lines": [
+      {
+        "speaker": "A",
+        "english": "Regarding our upcoming strategic pivot, I wonder if you think it is wise to lean heavily into international markets right now.",
+        "chinese": "针对我们即将到来的战略转型，你觉得现在全力进军国际市场是否明智？",
+        "pinyin": "zhēnduì wǒmen jíjiāng dàolái de zhànlüè zhuǎnxíng, nǐ juéde xiànzài quánlì jìnjūn guójì shìchǎng shìfǒu míngzhì?",
+        "vietnameseReading": "chên(1) tuy(4) uổ(3) mần chí(2) ciang(1) tao(4) lai(2) tơ chan(4) luy(4) chuản(3) xíng(2) nỉ(3) chié(2) tơ xiên(4) trai(4) chuán(2) li(4) cin(4) chuân(1) kuố(2) chi(4) sứ(4) chàng(3) sứ(4) phấu(3) mính(2) trư(4)",
+        "vietnamese": "Đối với bước chuyển chiến lược sắp tới của chúng ta, bạn có nghĩ việc toàn lực tiến vào thị trường quốc tế lúc này là khôn ngoan không?"
+      }
+    ],
+    "note": "Cấu trúc 针对... (đối với/nhằm vào...) dùng để xác định rõ đối tượng hoặc vấn đề cần bàn luận, giúp câu văn mang tính chuyên nghiệp và định hướng rõ ràng trong giao tiếp công sở ở cấp độ B1+.",
+    "challenge": "Hãy viết một tin nhắn ngắn bằng tiếng Trung sử dụng cấu trúc 针对... để thảo luận về một thay đổi trong kế hoạch tuần tới với đồng nghiệp.",
+    "grammarFocus": "Sử dụng cấu trúc 针对... để nêu bật đối tượng cần thảo luận.",
+    "vocabulary": [
+      "strategic pivot · 战略转型 · chuyển đổi chiến lược",
+      "international markets · 国际市场 · thị trường quốc tế",
+      "wise · 明智 · sáng suốt / khôn ngoan"
+    ],
+    "wish": "Chúc bạn có một buổi trưa thật sảng khoái, nạp đầy năng lượng để tiếp tục chinh phục những mục tiêu mới đầy thử thách.",
+    "nightWish": "Mong rằng đêm nay giấc ngủ sẽ đến thật êm đềm, xua tan mọi bộn bề để đón chào bình minh tươi sáng.",
+    "notification": {
+      "english": "Thoughts on our strategic pivot?",
+      "chinese": "你觉得战略转型明智吗？",
+      "vietnamese": "Bạn nghĩ gì về chiến lược sắp tới?"
+    },
+    "generatedAt": "2026-11-10T00:46:55.093Z",
+    "generator": "gemini-3.5-flash-lite"
+  },
+  {
+    "id": "lesson-0135",
+    "stage": "B1+ · Diễn đạt linh hoạt",
+    "kind": "dialogue",
+    "title": "Chia sẻ khoảnh khắc suy ngẫm trong đêm",
+    "context": "Hai người bạn tâm giao trò chuyện nhẹ nhàng về những chiêm nghiệm sâu sắc khi màn đêm buông xuống.",
+    "lines": [
+      {
+        "speaker": "A",
+        "english": "Looking out at the quiet city lights, I find myself pondering where time actually goes. / Yè sè zhī zhōng kàn zhe ān jìng de chéng shì, wǒ bù yóu de xiǎng qǐ shí guāng de liú shì.",
+        "chinese": "夜色之中看着安静的城市, 我不由地想起时光的流逝。",
+        "pinyin": "Yè sè zhī zhōng kàn zhe ān jìng de chéng shì, wǒ bù yóu de xiǎng qǐ shí guāng de liú shì.",
+        "vietnameseReading": "yê(4) sơ(4) trư(1) trung(1) khan(4) chơ an(1) chỉng(4) tơ chấng(2) sứ(4) uổ(3) pu(4) iêu(2) tơ xiảng(3) chỉ(3) sứ(2) cuang(1) tơ liu(2) sứ(4)",
+        "vietnamese": "Ngắm nhìn thành phố yên bình trong màn đêm, tôi bất chợt suy ngẫm về sự trôi qua của thời gian."
+      },
+      {
+        "speaker": "B",
+        "english": "That is the magic of late nights; they grant us the rare space to look inward without distractions. / Zhè jiù shì bàn yè de mèi lì, tā(1) gěi le wǒ(3) men bǎo guì de kōng jiān lái jìng xiǎng. / Zhè jiù shì bàn yè de mèi lì, tā(1) gěi le wǒ(3) men bǎo guì de kōng jiān lái jìng xiǎng.",
+        "chinese": "这就是半夜的魅力, 它给了我们宝贵的空间来静想。",
+        "pinyin": "Zhè jiù shì bàn yè de mèi lì, tā(1) gěi le wǒ(3) men bǎo guì de kōng jiān lái jìng xiǎng.",
+        "vietnameseReading": "chè(4) chiêu(4) sứ(4) ban(4) yê(4) tơ mây(4) li(4) tha(1) cẩy(3) lơ uổ(3) mần bả(3) kuy(4) tơ khổng(1) chiên(1) lai(2) chỉng(4) xiảng(3)",
+        "vietnamese": "Đó chính là sức hút của đêm khuya, nó trao cho chúng ta không gian quý giá để tĩnh tâm suy ngẫm."
+      },
+      {
+        "speaker": "A",
+        "english": "Indeed, compared to the noisy daytime rush, this tranquility allows our true thoughts to surface naturally. / Shì a, yǔ bái tiān de xuān nào xiāng bǐ, zhè zhǒng níng jìng ràng zhēn shí de xiǎng fǎ zì rán fú xiàn.",
+        "chinese": "是啊, 与白天的喧闹相比, 这种宁静让真实的想法自然浮现。",
+        "pinyin": "Shì a, yǔ bái tiān de xuān nào xiāng bǐ, zhè zhǒng níng jìng ràng zhēn shí de xiǎng fǎ zì rán fú xiàn.",
+        "vietnameseReading": "sứ(4) a ỷ(3) bài(2) thêm(1) tơ suản(1) nào(4) xiang(1) pỉ(3) chè(4) chổng(3) ninh(2) chỉng(4) rang(4) chên(1) sứ(2) tơ xiảng(3) phả(3) tư(4) ran(2) phơ(2) xiên(4)",
+        "vietnamese": "Quả vậy, so với sự ồn ã ban ngày, sự tĩnh lặng này giúp những suy nghĩ chân thật tự nhiên trỗi dậy."
+      },
+      {
+        "speaker": "B",
+        "english": "Let us hold onto this hard-earned peace and let go of whatever remains unresolved today. / Ràng wǒ(3) men bǎo chí zhè lái zhī bù yì de ān níng, bǎ jīntiān wèi jué de shì qíng fàng xià ba.",
+        "chinese": "让我们保持这来之不易的安宁, 把今天未决的事情放下吧。",
+        "pinyin": "Ràng wǒ(3) men bǎo chí zhè lái zhī bù yì de ān níng, bǎ jīntiān wèi jué de shì qíng fàng xià ba.",
+        "vietnameseReading": "rang(4) uổ(3) mần bả(3) chí(2) chè(4) lai(2) trư(1) pu(4) i(4) tơ an(1) ninh(2) bả(3) cin(1) thêm(1) uây(4) chié(2) tơ sứ(4) chìng(2) phang(4) xia(4) pa",
+        "vietnamese": "Chúng ta hãy giữ lấy sự bình yên khó có được này và gác lại mọi chuyện còn dang dở trong ngày hôm nay."
+      }
+    ],
+    "note": "Cấu trúc “与……相比” (so với...) kết hợp với cụm từ “来之不易” (khó có được) giúp diễn đạt sự so sánh và trạng thái cảm xúc tinh tế. Tiếng Anh thường dùng mệnh đề so sánh trực tiếp, trong khi tiếng Trung ưa chuộng cấu trúc đối ứng chặt chẽ.",
+    "challenge": "Hãy ghi âm lại đoạn độc thoại 1 phút chia sẻ cảm nhận của bạn về sự khác biệt giữa nhịp sống ban ngày và sự tĩnh lặng ban đêm bằng cả tiếng Anh và tiếng Trung.",
+    "grammarFocus": "Sử dụng cấu trúc “与……相比” kết hợp với các từ chỉ trạng thái phản tư.",
+    "vocabulary": [
+      "nighttime · 夜色 · màn đêm",
+      "tranquility · 宁静 · sự tĩnh lặng",
+      "hard-earned · 来之不易 · khó có được"
+    ],
+    "wish": "Chúc bạn có một đêm trọn vẹn sự bình yên và những giấc mơ thật đẹp.",
+    "nightWish": "Khép lại muộn phiền ngoài hiên vắng, chúc bạn chìm vào giấc ngủ sâu với tâm hồn thật nhẹ nhàng.",
+    "notification": {
+      "english": "Pondering time in the quiet night",
+      "chinese": "夜色之中静静思考时光",
+      "vietnamese": "Suy ngẫm về thời gian trong đêm vắng"
+    },
+    "generatedAt": "2026-11-10T00:50:38.548Z",
+    "generator": "gemini-3.5-flash-lite"
   }
 ]
