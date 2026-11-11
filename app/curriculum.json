@@ -4573,5 +4573,99 @@
     },
     "generatedAt": "2026-11-10T22:31:38.630Z",
     "generator": "gemini-3.5-flash-lite"
+  },
+  {
+    "id": "lesson-0138",
+    "stage": "B1+ · Diễn đạt linh hoạt",
+    "kind": "dialogue",
+    "title": "Bàn về việc thiết lập ranh giới công việc sau giờ hành chính",
+    "context": "Hai đồng nghiệp thảo luận về việc có nên tắt thông báo công việc vào buổi tối hay không.",
+    "lines": [
+      {
+        "speaker": "A",
+        "english": "Do you usually keep your work notifications on even after stepping out of the office?",
+        "chinese": "你离开办公室以后，通常还会开着工作通知吗？",
+        "pinyin": "nǐ lí kāi bàn gōng shì yǐ hòu, tōng cháng hái huì kāi zhe gōng zuò tōng zhī ma?",
+        "vietnameseReading": "nỉ(3) lí(2) khai(1) ban(4) công(1) sứ(4) ỉ(3) hâu(4) thong(1) chang(2) hải(2) huây(4) khai(1) chơ công(1) chuô(4) thong(1) trư(1) ma",
+        "vietnamese": "Bạn có thường bật thông báo công việc ngay cả khi đã rời khỏi văn phòng không?"
+      },
+      {
+        "speaker": "B",
+        "english": "Not anymore; instead of letting work invade my entire evening, I choose to disconnect completely.",
+        "chinese": "不再这样了；与其让工作侵占我的整个夜晚，我选择彻底断开连接。",
+        "pinyin": "bú zài zhè yàng le; yǔ qí ràng gōng zuò qīn zhàn wǒ de zhěng gè yè wǎn, wǒ xuǎn zé chè dǐ duàn kāi lián jiē.",
+        "vietnameseReading": "pu(2) trai(4) chè(4) iang(4) lơ ỷ(3) chí(2) rang(4) công(1) chuô(4) chín(1) chan(4) uổ(3) tơ chẩng(3) cợ(4) yê(4) uản(3) uổ(3) suản(3) chớ(2) chơ(4) đỉ(3) toan(4) khai(1) liến(2) chie(1)",
+        "vietnamese": "Không còn nữa; thay vì để công việc xâm chiếm toàn bộ buổi tối của mình, tôi chọn ngắt kết nối hoàn toàn."
+      },
+      {
+        "speaker": "A",
+        "english": "That sounds liberating, though some urgent client issues might occasionally require prompt attention.",
+        "chinese": "听起来很解放，不过某些紧急的客户问题有时可能需要及时处理。",
+        "pinyin": "tīng qǐ lái hěn jiě fàng, bú guò mǒu xiē jǐn jí de kè hù wèn tí yǒu shí kě néng xū yào jí shí chǔ lǐ.",
+        "vietnameseReading": "thinh(1) chỉ(3) lai(2) hẩn(3) chie(3) phang(4) pu(2) cuô(4) mâu(3) xiế(1) chín(3) chí(2) tơ khè(4) hù(4) uên(4) thí(2) iểu(3) sứ(2) khể(3) nẻng(2) sy(1) yao(4) chí(2) sứ(2) chu(3) lỉ(3)",
+        "vietnamese": "Nghe có vẻ tự do, dù đôi khi một số vấn đề khẩn cấp từ khách hàng có thể cần xử lý kịp thời."
+      },
+      {
+        "speaker": "B",
+        "english": "True, but setting clear boundaries is precisely what prevents burnout in the long run.",
+        "chinese": "确实如此，不过划定清晰的界限恰恰是长期防止职业倦怠的关键。",
+        "pinyin": "què shí rú cǐ, bú guò huà dìng qīng xī de jiè xiàn qià qià shì cháng qī fáng zhǐ zhí yè juàn dài de guān jiàn.",
+        "vietnameseReading": "chiết(4) sứ(2) rú(2) cứ(3) pu(2) cuô(4) hua(4) tìng(4) ch'ing(1) xế(1) tơ chie(4) xiên(4) xia(4) xia(4) sứ(4) chang(2) chi(1) pháng(2) chỉ(3) chí(2) yê(4) choan(4) đai(4) tơ cuan(1) chiên(4)",
+        "vietnamese": "Đúng vậy, nhưng việc vạch ra ranh giới rõ ràng chính là chìa khóa ngăn ngừa tình trạng kiệt sức về lâu dài."
+      }
+    ],
+    "note": "Cấu trúc 与其 A，我选择 B giúp thể hiện sự thay đổi góc nhìn và quyết định từ bỏ điều bất hợp lý để chọn phương án tối ưu. Trong tiếng Trung, việc dùng cụm 彻底断开连接 mang sắc thái hiện đại khi nói về việc ngắt kết nối số.",
+    "challenge": "Hãy viết một câu bằng tiếng Trung dùng cấu trúc 与其...，我选择... để nói về việc từ bỏ thói quen lướt điện thoại muộn để đi ngủ sớm.",
+    "grammarFocus": "Sử dụng cấu trúc “与其 A，我选择 B” để thể hiện sự đánh đổi và lựa chọn phương án tối ưu.",
+    "vocabulary": [
+      "work notifications · 工作通知 · thông báo công việc",
+      "invade · 侵占 · xâm chiếm",
+      "disconnect · 断开连接 · ngắt kết nối",
+      "boundaries · 界限 · ranh giới",
+      "burnout · 职业倦怠 · kiệt sức nghề nghiệp"
+    ],
+    "wish": "Mong buổi tối nay mang lại cho bạn sự bình yên tuyệt đối, gác lại mọi lo toan để tâm hồn được nghỉ ngơi trọn vẹn.",
+    "nightWish": "Khép lại một ngày dài bận rộn, hãy để màn đêm dịu êm ôm lấy những suy nghĩ của bạn vào giấc ngủ sâu bình yên.",
+    "notification": {
+      "english": "Do you keep your work notifications on?",
+      "chinese": "你还会开着工作通知吗？",
+      "vietnamese": "Bạn còn bật thông báo công việc không?"
+    },
+    "generatedAt": "2026-11-11T23:31:53.107Z",
+    "generator": "gemini-3.5-flash-lite"
+  },
+  {
+    "id": "lesson-0139",
+    "stage": "B1+ · Diễn đạt linh hoạt",
+    "kind": "sentence",
+    "title": "Bàn về tầm quan trọng của việc duy trì thời gian nghỉ ngơi",
+    "context": "Một người chia sẻ góc nhìn thực tế về việc cân bằng giữa hiệu suất công việc và sức khỏe cá nhân.",
+    "lines": [
+      {
+        "speaker": "A",
+        "english": "Instead of treating rest as an idle luxury, we should view it as a non-negotiable prerequisite for sustainable success.",
+        "chinese": "与其把休息看作一种无所事事的奢侈，我们更应该把它视作可持续成功的必要前提。",
+        "pinyin": "Yǔqí bǎ xiūxí kàn zuò yī zhǒng wúsuǒshìshì de shēchǐ, wǒmen gèng yīnggāi bǎ tā shì zuò kě chíxù chénggōng de bìyào qiántí.",
+        "vietnameseReading": "ỷ(3) chí(2) bả(3) xưu(1) si(2) khan(4) chuô(4) i(1) chổng(3) ú(2) suổ(3) sứ(4) sứ(4) tơ sơ(1) chí(3) uổ(3) mần cêng(4) inh(1) cai(1) bả(3) tha(1) sứ(4) chuô(4) khể(3) chí(2) sy(4) chấng(2) công(1) tơ pỉ(4) yao(4) chién(2) thí(2)",
+        "vietnamese": "Thay vì xem việc nghỉ ngơi là một sự xa xỉ vô bổ, chúng ta nên coi nó là tiền đề không thể thiếu để thành công bền vững."
+      }
+    ],
+    "note": "Cấu trúc 与其 A，更应该 B (thay vì A, càng nên B) giúp thể hiện sự thay đổi quan điểm sang một hướng nhìn nhận tích cực và thực tế hơn.",
+    "challenge": "Hãy viết hoặc nói một câu bằng tiếng Trung sử dụng cấu trúc 与其... 更应该... để nêu quan điểm của bạn về một thói quen sinh hoạt lành mạnh.",
+    "grammarFocus": "Cấu trúc 与其 A，更应该 B",
+    "vocabulary": [
+      "Instead of · 与其 · thay vì",
+      "Luxury · 奢侈 · sự xa xỉ",
+      "Prerequisite · 前提 · tiền đề"
+    ],
+    "wish": "Chúc bạn có một buổi sáng tràn đầy năng lượng, biết trân trọng thời gian nghỉ ngơi để đạt hiệu quả cao nhất trong mọi việc.",
+    "nightWish": "Khép lại một ngày bận rộn bằng sự bình yên trong tâm hồn, chúc bạn chìm vào giấc ngủ sâu và ngon giấc.",
+    "notification": {
+      "english": "Rest is a prerequisite for success.",
+      "chinese": "把休息视作成功的必要前提。",
+      "vietnamese": "Nghỉ ngơi là tiền đề cho thành công."
+    },
+    "generatedAt": "2026-11-11T23:32:55.157Z",
+    "generator": "gemini-3.5-flash-lite"
   }
 ]

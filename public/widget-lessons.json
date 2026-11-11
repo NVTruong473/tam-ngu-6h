@@ -959,6 +959,20 @@
       "english": "Submitting the report a bit later.",
       "chinese": "报告提交时间稍作推迟。",
       "vietnamese": "Lùi thời gian nộp báo cáo."
+    },
+    {
+      "id": "lesson-0138",
+      "title": "Bàn về việc thiết lập ranh giới công việc sau giờ hành chính",
+      "english": "Do you keep your work notifications on?",
+      "chinese": "你还会开着工作通知吗？",
+      "vietnamese": "Bạn còn bật thông báo công việc không?"
+    },
+    {
+      "id": "lesson-0139",
+      "title": "Bàn về tầm quan trọng của việc duy trì thời gian nghỉ ngơi",
+      "english": "Rest is a prerequisite for success.",
+      "chinese": "把休息视作成功的必要前提。",
+      "vietnamese": "Nghỉ ngơi là tiền đề cho thành công."
     }
   ]
 }
