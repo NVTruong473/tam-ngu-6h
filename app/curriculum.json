@@ -4667,5 +4667,39 @@
     },
     "generatedAt": "2026-11-11T23:32:55.157Z",
     "generator": "gemini-3.5-flash-lite"
+  },
+  {
+    "id": "lesson-0140",
+    "stage": "B1+ · Diễn đạt linh hoạt",
+    "kind": "message",
+    "title": "Chia sẻ quan điểm về cách cân bằng công việc và sự tĩnh lặng trong ngày",
+    "context": "Nhắn tin chia sẻ với đồng nghiệp về tầm quan trọng của việc tự tạo không gian tĩnh lặng vào giờ nghỉ trưa giữa lịch làm việc bận rộn.",
+    "lines": [
+      {
+        "speaker": "A",
+        "english": "Instead of treating midday breaks merely as a gap to rush through, I now view them as a deliberate anchor for my inner balance.",
+        "chinese": "与其把午休当作匆忙赶路的间隙，我如今更倾向于把它视作锚定内心平静的刻意安排。",
+        "pinyin": "Yǔqí bǎ wǔxiū dàngzuò cōngmáng gǎnlù de jiànxī, wǒ rújīn gèng qīngxiàng yú bǎ tā shìzuò máodìng nèixīn píngjìng de kèyì ānpái.",
+        "vietnameseReading": "ỷ(3) chí(2) bả(3) uổ(3) xưu(1) tang(4) chuô(4) châu(1) máng(2) cản(3) lu(4) tơ chiên(4) xế(1) uổ(3) rú(2) cin(1) cêng(4) ch'ing(1) xiang(4) ý(2) bả(3) tha(1) sứ(4) chuô(4) mao(2) tìng(4) nhây(4) xin(1) pính(2) chỉng(4) tơ khè(4) i(4) an(1) phái(2)",
+        "vietnamese": "Thay vì xem giờ nghỉ trưa chỉ là khoảng trống để vội vã vượt qua, tôi nay coi đó là điểm tựa cố ý để giữ bình yên trong lòng."
+      }
+    ],
+    "note": "Cấu trúc 与其 A，更倾向于把...视作... dùng để thể hiện sự thay đổi tư duy mạnh mẽ từ việc xem nhẹ sang việc trân trọng và chủ động kiến tạo giá trị cho một khoảng thời gian cụ thể.",
+    "challenge": "Hãy viết hoặc nói một câu bằng tiếng Trung nêu rõ bạn chọn cách sử dụng giờ nghỉ trưa như thế nào để tái tạo năng lượng.",
+    "grammarFocus": "Cấu trúc 与其 A，更倾向于把...视作... dùng để biểu thị sự chuyển biến nhận thức sâu sắc.",
+    "vocabulary": [
+      "midday breaks · 午休 · giờ nghỉ trưa",
+      "deliberate anchor · 刻意安排 · sự sắp xếp có chủ ý",
+      "inner balance · 内心平静 · sự bình yên nội tâm"
+    ],
+    "wish": "Mong bạn luôn giữ được những khoảng lặng quý giá giữa bộn bề công việc để tái tạo năng lượng cho chính mình.",
+    "nightWish": "Khép lại một ngày dài nhiều chuyển động, mong bạn tìm thấy sự tĩnh lặng trọn vẹn trong giấc ngủ sâu.",
+    "notification": {
+      "english": "Midday breaks anchor our inner balance.",
+      "chinese": "把午休视作锚定内心平静的安排。",
+      "vietnamese": "Giữ giờ nghỉ trưa làm điểm tựa bình yên."
+    },
+    "generatedAt": "2026-11-12T22:49:41.520Z",
+    "generator": "gemini-3.5-flash-lite"
   }
 ]
