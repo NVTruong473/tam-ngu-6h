@@ -4701,5 +4701,63 @@
     },
     "generatedAt": "2026-11-12T22:49:41.520Z",
     "generator": "gemini-3.5-flash-lite"
+  },
+  {
+    "id": "lesson-0141",
+    "stage": "B1+ · Diễn đạt linh hoạt",
+    "kind": "dialogue",
+    "title": "Bàn về thói quen ngắt kết nối công nghệ buổi tối",
+    "context": "Hai đồng nghiệp trò chuyện vào buổi tối về việc thiết lập ranh giới công nghệ để bảo vệ giấc ngủ.",
+    "lines": [
+      {
+        "speaker": "A",
+        "english": "Do you still leave your phone right by your pillow after turning off the desk lamp?",
+        "chinese": "关掉台灯后，你还是习惯把手机直接放在枕头旁边吗？",
+        "pinyin": "guān diào tái dēng hòu, nǐ hái shì xí guàn bǎ shǒu jī zhí jiē fàng zài zhěn tou páng biān ma?",
+        "vietnameseReading": "cuan(1) điao(4) thai(2) đẩy(1) hâu(4) nỉ(3) hải(2) sứ(4) si(2) cuản(4) bả(3) sẩu(3) chi(1) chí(2) chie(1) phang(4) trai(4) chên(3) thâu páng(2) pien(1) ma",
+        "vietnamese": "Sau khi tắt đèn bàn, bạn vẫn có thói quen để điện thoại ngay cạnh gối sao?"
+      },
+      {
+        "speaker": "B",
+        "english": "Not anymore; by placing it in the living room overnight, I completely eliminate the temptation to check late-night messages.",
+        "chinese": "再也不这样了；通过把手机放在客厅过夜，我彻底根除了深夜查看信息的念头。",
+        "pinyin": "zài yě bù zhè yàng le; tōng guò bǎ shǒu jī fàng zài kè tīng guò yè, wǒ chè dǐ gēn chú le shēn yè chá kàn xìn xī de niàn tou.",
+        "vietnameseReading": "trai(4) iê(3) pu(4) chè(4) iang(4) lơ thong(1) cuô(4) bả(3) sẩu(3) chi(1) phang(4) trai(4) khè(4) thinh(1) cuô(4) yê(4) uổ(3) chơ(4) đỉ(3) cên(1) chú(2) lơ sên(1) yê(4) chá(2) khan(4) xin(4) xế(1) tơ niản(4) thâu",
+        "vietnamese": "Không còn như vậy nữa; bằng cách để điện thoại ở phòng khách qua đêm, tôi đã triệt để loại bỏ ý định kiểm tra tin nhắn đêm khuya."
+      },
+      {
+        "speaker": "A",
+        "english": "That sounds remarkably disciplined, whereas I often find myself falling down digital rabbit holes.",
+        "chinese": "听起来纪律性极强，而我却常常发现自己陷入数字信息的无底洞中。",
+        "pinyin": "tīng qǐ lái jì lǜ xìng jí qiáng, ér wǒ què cháng cháng fā xiàn zì jǐ xiàn rù shù zì xìn xī de wú dǐ dòng zhōng.",
+        "vietnameseReading": "thinh(1) chỉ(3) lai(2) chi(4) lu(4) xíng(4) chí(2) xiang(2) ơ(2) uổ(3) chiết(4) chang(2) chang(2) pha(1) xiên(4) tư(4) chỉ(3) xiên(4) rú(4) su(4) tư(4) xin(4) xế(1) tơ ú(2) đỉ(3) tòng(4) trung(1)",
+        "vietnamese": "Nghe có vẻ cực kỳ kỷ luật, trong khi tôi thường xuyên thấy mình rơi vào hố sâu thông tin kỹ thuật số."
+      },
+      {
+        "speaker": "B",
+        "english": "It is simply a matter of protecting our precious mental bandwidth from endless nocturnal noise.",
+        "chinese": "这不过是为了保护我们宝贵的精神带宽，免受无休止夜间杂音的干扰。",
+        "pinyin": "zhè bú guò shì wéi le bǎo hù wǒ men bǎo guì de jīng shén dài kuān, miǎn shòu wú xiū zhǐ yè jiān zá yīn de gān rǎo.",
+        "vietnameseReading": "chè(4) pu(2) cuô(4) sứ(4) uấy(2) lơ bả(3) hù(4) uổ(3) mần bả(3) kuy(4) tơ cing(1) sấn(2) đai(4) khuân(1) mản(3) sẩu(4) ú(2) xưu(1) chỉ(3) yê(4) chiên(1) trá(2) y(1) tơ can(1) rao(3)",
+        "vietnamese": "Đó chẳng qua là việc bảo vệ băng thông tinh thần quý giá của chúng ta khỏi tạp âm ban đêm không hồi kết."
+      }
+    ],
+    "note": "Cấu trúc 通过...来/把... (thông qua việc...) diễn đạt phương thức thực hiện hành động một cách rõ ràng, kết hợp với liên từ 而 để tạo thế đối lập mượt mà giữa hai người.",
+    "challenge": "Hãy tự thuyết phục bản thân đặt điện thoại ra xa giường ngủ vào tối nay và nói một câu tiếng Trung về quyết định đó.",
+    "grammarFocus": "Cấu trúc通过...把... diễn đạt phương thức và 而 thể hiện sự đối lập.",
+    "vocabulary": [
+      "pillow · 枕头 · cái gối",
+      "temptation · 念头 · ý định/suy nghĩ",
+      "mental bandwidth · 精神带宽 · băng thông tinh thần"
+    ],
+    "wish": "Mong bạn có một buổi tối tĩnh lặng, gác lại mọi kết nối để tâm hồn được trọn vẹn nghỉ ngơi.",
+    "nightWish": "Khép lại màn hình điện thoại, để nhịp thở chậm lại cùng sự bình yên dịu ngọt của đêm dài.",
+    "notification": {
+      "english": "Leave your phone in the living room.",
+      "chinese": "把手机放在客厅过夜。",
+      "vietnamese": "Để điện thoại ở phòng khách qua đêm."
+    },
+    "generatedAt": "2026-11-13T22:46:00.436Z",
+    "generator": "gemini-3.5-flash-lite"
   }
 ]
