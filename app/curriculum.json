@@ -4759,5 +4759,73 @@
     },
     "generatedAt": "2026-11-13T22:46:00.436Z",
     "generator": "gemini-3.5-flash-lite"
+  },
+  {
+    "id": "lesson-0142",
+    "stage": "B1+ · Diễn đạt linh hoạt",
+    "kind": "sentence",
+    "title": "Bàn về việc duy trì thói quen viết nhật ký cảm xúc",
+    "context": "Một người chia sẻ về lợi ích của việc viết nhật ký mỗi tối để giải tỏa tâm lý.",
+    "lines": [
+      {
+        "speaker": "A",
+        "english": "By translating vague emotional fluctuations into concrete words, daily journaling grants us a profound sense of inner clarity.",
+        "chinese": "通过将模糊的情绪波动转化为具体的文字，每天写日记赋予了我们深度的内心清明感。",
+        "pinyin": "Tōngguò jiāng móhū de qíngxù bōdòng zhuǎnhuà wèi jùtǐ de wénzì, měitiān xiě rìjì fùyǔ le wǒmen shēndù de nèixīn qīngmíng gǎn.",
+        "vietnameseReading": "thong(1) cuô(4) ciang(1) mố(2) hú(1) tơ chìng(2) sy(4) pơ(1) tòng(4) chuản(3) hua(4) uây(4) chu(4) thí(3) tơ uấn(2) tư(4) mây(3) thêm(1) xỉa(3) rư(4) chi(4) phu(4) ỷ(3) lơ uổ(3) mần sên(1) tu(4) tơ nhây(4) xin(1) ch'ing(1) mính(2) cản(3)",
+        "vietnamese": "Thông qua việc chuyển hóa những biến động cảm xúc mơ hồ thành câu chữ cụ thể, việc viết nhật ký mỗi ngày ban tặng cho chúng ta một cảm giác minh mẫn sâu sắc từ nội tâm."
+      }
+    ],
+    "note": "Cấu trúc 通过...把/将... dùng để chỉ phương thức thực hiện một hành động nhằm đạt được kết quả cụ thể. Trong tiếng Anh, cấu trúc 'By translating... into...' mang ý nghĩa tương đương khi mô tả cách thức chuyển đổi trạng thái.",
+    "challenge": "Hãy viết hoặc nói một câu bằng cả tiếng Anh và tiếng Trung chia sẻ về một thói quen giúp bạn giải tỏa áp lực tinh thần mỗi ngày.",
+    "grammarFocus": "Cấu trúc phương thức 通过...将... trong tiếng Trung",
+    "vocabulary": [
+      "fluctuation · 情绪波动 · biến động cảm xúc",
+      "concrete words · 具体的文字 · câu chữ cụ thể",
+      "inner clarity · 内心清明感 · sự minh mẫn nội tâm"
+    ],
+    "wish": "Mong bạn luôn giữ được sự bình yên trong tâm hồn và tìm thấy niềm vui giản dị qua từng trang viết mỗi ngày.",
+    "nightWish": "Khép lại một ngày dài với những bộn bề, hãy để giấc ngủ êm ềm ôm ấp tâm hồn bạn thật trọn vẹn và bình yên.",
+    "notification": {
+      "english": "Daily journaling brings inner clarity.",
+      "chinese": "每天写日记赋予我们内心清明感。",
+      "vietnamese": "Viết nhật ký mang lại sự minh mẫn nội tâm."
+    },
+    "generatedAt": "2026-11-14T21:36:25.514Z",
+    "generator": "gemini-3.5-flash-lite"
+  },
+  {
+    "id": "lesson-0143",
+    "stage": "B1+ · Diễn đạt linh hoạt",
+    "kind": "message",
+    "title": "Nhắn tin nhắc nhở thời gian giao việc trước buổi trưa",
+    "context": "Nhắn tin cho đồng nghiệp để xác nhận tiến độ công việc trước giờ nghỉ trưa",
+    "lines": [
+      {
+        "speaker": "A",
+        "english": "Just a gentle reminder to wrap up the draft report before noon so we can review it together.",
+        "chinese": "提醒你中午前把报告初稿收尾，这样我们就能一起审阅了。",
+        "pinyin": "Tí xǐng nǐ zhōngwǔ qián bǎ bàogào chūgǎo shōuwěi, zhèyàng wǒmen jiù néng yìqǐ shěnyuè le.",
+        "vietnameseReading": "thí(2) xỉnh(3) nỉ(3) trung(1) uổ(3) chién(2) bả(3) pao(4) cao(4) chu(1) cảo(3) sấu(1) uây(3) chè(4) iang(4) uổ(3) mần chiêu(4) nẻng(2) i(4) chỉ(3) sẩn(3) duê(4) lơ",
+        "vietnamese": "Nhắc bạn hoàn thành bản thảo báo cáo trước buổi trưa để chúng ta có thể cùng nhau xem xét."
+      }
+    ],
+    "note": "Cấu trúc 把... (đưa đối tượng lên trước động từ để nhấn mạnh kết quả tác động) kết hợp với 这样 (như vậy) giúp diễn đạt yêu cầu công việc rõ ràng và lịch sự trong tin nhắn giữa trưa.",
+    "challenge": "Viết một tin nhắn ngắn nhắc nhở đồng nghiệp hoàn thành công việc trước giờ nghỉ trưa bằng cấu trúc 把...",
+    "grammarFocus": "Sử dụng cấu trúc 把... kết hợp với 这样 để chỉ dẫn công việc.",
+    "vocabulary": [
+      "reminder · 提醒 · nhắc nhở",
+      "draft report · 报告初稿 · bản thảo báo cáo",
+      "review · 审阅 · xem xét"
+    ],
+    "wish": "Chúc bạn buổi trưa tràn đầy năng lượng, hoàn thành suôn sẻ các mục tiêu và có những phút giây nghỉ ngơi trọn vẹn.",
+    "nightWish": "Khép lại một ngày dài với sự bình yên, chúc bạn giấc ngủ sâu và đón chào ngày mai với nhiều cảm hứng mới.",
+    "notification": {
+      "english": "Please wrap up the report before noon.",
+      "chinese": "请在中午前把报告收尾。",
+      "vietnamese": "Vui lòng hoàn thành báo cáo trước trưa."
+    },
+    "generatedAt": "2026-11-14T21:37:46.814Z",
+    "generator": "gemini-3.5-flash-lite"
   }
 ]
