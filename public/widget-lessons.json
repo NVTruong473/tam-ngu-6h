@@ -1001,6 +1001,27 @@
       "english": "Please wrap up the report before noon.",
       "chinese": "请在中午前把报告收尾。",
       "vietnamese": "Vui lòng hoàn thành báo cáo trước trưa."
+    },
+    {
+      "id": "lesson-0144",
+      "title": "Bàn về thói quen ngắm nhìn bầu trời đêm",
+      "english": "Stargazing washes away the daily chaos.",
+      "chinese": "仰望星空能洗去白天的纷扰。",
+      "vietnamese": "Ngắm sao trời giúp xua tan sự hỗn loạn."
+    },
+    {
+      "id": "lesson-0145",
+      "title": "Chia sẻ trải nghiệm tìm lại sự cân bằng trong công việc",
+      "english": "Stepping back brings inner clarity.",
+      "chinese": "从忙碌中抽身带来内心清明。",
+      "vietnamese": "Lùi lại giúp tâm trí trở nên minh mẫn."
+    },
+    {
+      "id": "lesson-0146",
+      "title": "Nhắn tin trao đổi về phương án tối ưu khi tối giản hóa quy trình",
+      "english": "We should replace outdated workflows.",
+      "chinese": "我们应果断用敏捷方案取而代之。",
+      "vietnamese": "Chúng ta nên thay thế quy trình cũ."
     }
   ]
 }

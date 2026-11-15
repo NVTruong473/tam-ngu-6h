@@ -4827,5 +4827,123 @@
     },
     "generatedAt": "2026-11-14T21:37:46.814Z",
     "generator": "gemini-3.5-flash-lite"
+  },
+  {
+    "id": "lesson-0144",
+    "stage": "B1+ · Diễn đạt linh hoạt",
+    "kind": "dialogue",
+    "title": "Bàn về thói quen ngắm nhìn bầu trời đêm",
+    "context": "Hai người bạn đang đứng bên ban công ngắm sao trời và trò chuyện vào một đêm muộn.",
+    "lines": [
+      {
+        "speaker": "A",
+        "english": "Whenever I look up at the starry sky, the chaos of the day instantly fades away.",
+        "chinese": "每当我抬头凝望星空时，白天的纷扰瞬间就烟消云散了。",
+        "pinyin": "měi dāng wǒ tái tóu níng wàng xīng kōng shí, bái tiān de fēn rǎo shùn jiān jiù yān xiāo yún sàn le.",
+        "vietnameseReading": "mây(3) tang(1) uổ(3) thai(2) thâu(2) ninh(2) oảng(4) xinh(1) khổng(1) sứ(2) bài(2) thêm(1) tơ phân(1) rao(3) suấn(4) chiên(1) chiêu(4) an(1) xẻo(1) yến(2) san(4) lơ",
+        "vietnamese": "Mỗi khi tôi ngắm nhìn bầu trời đầy sao, sự hỗn loạn ban ngày lập tức tan biến."
+      },
+      {
+        "speaker": "B",
+        "english": "That is so true; the vastness of the universe always puts our trivial worries into perspective.",
+        "chinese": "确实如此，宇宙的浩瀚总是让我们意识到那些琐碎的烦恼其实微不足道。",
+        "pinyin": "què shí rú cǐ, yǔ zhòu de hào hàn zǒng shì ràng wǒ men yì shí dào nà xiē suǒ suì de fán nǎo qí shí wēi bù zú dào.",
+        "vietnameseReading": "chiết(4) sứ(2) rú(2) cứ(3) ỷ(3) trâu(4) tơ hảo(4) hán(4) chung(3) sứ(4) rang(4) uổ(3) mần i(4) sứ(2) tao(4) na(4) xiế(1) suổ(3) suý(4) tơ phan(2) nào(3) chí(2) sứ(2) uây(1) pu(4) chu(2) tao(4)",
+        "vietnamese": "Quả thực vậy, sự bao la của vũ trụ luôn đặt những nỗi lo vụn vặt của chúng ta vào đúng tầm nhìn."
+      },
+      {
+        "speaker": "A",
+        "english": "Indeed, compared to the eternal stars, our transient struggles hardly matter at all.",
+        "chinese": "没错，与永恒的星辰相比，我们短暂的挣扎其实根本算不了什么。",
+        "pinyin": "méi cuò, yǔ yǒng héng de xīng chén xiāng bǐ, wǒ men duǎn zàn de zhēng zhá qí shí gěn běn suàn bù liǎo shén me.",
+        "vietnameseReading": "mây(2) cuốc(4) ỷ(3) yỏng(3) hẻng(2) tơ xinh(1) chân(2) xiang(1) pỉ(3) uổ(3) mần tuản(3) chan(4) tơ chấng(1) cha(2) chí(2) sứ(2) cên(3) pẩn(3) suản(4) pu(4) lẹo(3) sấn(2) mơ",
+        "vietnamese": "Đúng vậy, so với những vì sao vĩnh cửu, những chật vật thoáng qua của chúng ta chẳng thấm vào đâu."
+      }
+    ],
+    "note": "Cấu trúc 每当...时 (Mỗi khi... lúc) dùng để diễn tả sự việc lặp lại đều đặn, kết hợp với cụm 与...相比 (So với...) giúp tăng tính đối chiếu triết lý trong giao tiếp tinh tế.",
+    "challenge": "Hãy viết một đoạn ngắn bằng tiếng Trung hoặc tiếng Anh mô tả cảm xúc của bạn khi ngắm sao trời vào ban đêm.",
+    "grammarFocus": "Sử dụng cấu trúc 每当...时 để chỉ sự việc lặp lại kết hợp với 与...相比.",
+    "vocabulary": [
+      "starry sky · 星空 · bầu trời đầy sao",
+      "vastness · 浩瀚 · sự bao la",
+      "trivial worries · 琐碎的烦恼 · nỗi lo vụn vặt"
+    ],
+    "wish": "Chúc bạn có một đêm ngon giấc, gác lại mọi bộn bề và tìm thấy sự bình yên trong từng nhịp thở.",
+    "nightWish": "Mong ánh sao đêm nay dịu dàng ôm lấy những suy nghĩ thầm kín, mang lại cho bạn giấc mộng bình an.",
+    "notification": {
+      "english": "Stargazing washes away the daily chaos.",
+      "chinese": "仰望星空能洗去白天的纷扰。",
+      "vietnamese": "Ngắm sao trời giúp xua tan sự hỗn loạn."
+    },
+    "generatedAt": "2026-11-15T21:56:31.354Z",
+    "generator": "gemini-3.5-flash-lite"
+  },
+  {
+    "id": "lesson-0145",
+    "stage": "B1+ · Diễn đạt linh hoạt",
+    "kind": "sentence",
+    "title": "Chia sẻ trải nghiệm tìm lại sự cân bằng trong công việc",
+    "context": "Một người chia sẻ về khoảnh khắc nhận ra việc giảm bớt nhịp độ công việc giúp tinh thần minh mẫn hơn.",
+    "lines": [
+      {
+        "speaker": "A",
+        "english": "Stepping back from the constant rush allowed me to finally hear my own thoughts clearly again.",
+        "chinese": "从无休止的忙碌中抽身出来，终于让我重新清晰地听见了内心的声音。",
+        "pinyin": "cóng wú xiū zhǐ de máng lù zhōng chōu shēn chū lái, zhōng yú ràng wǒ chóng xīn qīng xī de tīng jiàn le nèi xīn de shēng yīn.",
+        "vietnameseReading": "chỏng(2) ú(2) xưu(1) chỉ(3) tơ máng(2) lu(4) trung(1) châu(1) sên(1) chu(1) lai(2) trung(1) ý(2) rang(4) uổ(3) chóng(2) xin(1) ch'ing(1) xế(1) tơ thinh(1) chiên(4) lơ nhây(4) xin(1) tơ sâng(1) y(1)",
+        "vietnamese": "Việc lùi lại khỏi sự bận rộn không dứt cuối cùng đã giúp tôi nghe rõ lại những suy nghĩ trong lòng mình."
+      }
+    ],
+    "note": "Bài học sử dụng cấu trúc 从...中... kết hợp với bổ ngữ trạng thái để diễn tả quá trình thoát ra khỏi một trạng thái tiêu cực và đạt được sự tĩnh tại. Sự khác biệt so với tiếng Anh nằm ở chỗ tiếng Trung ưu tiên dùng các động từ hành động cụ thể như 抽身出来 (rút thân ra) để thể hiện sự chủ động.",
+    "challenge": "Hãy viết một đoạn văn ngắn bằng tiếng Trung kể về một thời điểm bạn chọn buông bỏ công việc bận rộn để tìm lại sự bình yên.",
+    "grammarFocus": "Cấu trúc 从...中... kết hợp bổ ngữ trạng thái để diễn tả sự chuyển biến tâm lý.",
+    "vocabulary": [
+      "constant rush · 无休止的忙碌 · sự bận rộn không dứt",
+      "step back · 抽身出来 · rút lui",
+      "inner voice · 内心的声音 · tiếng nói nội tâm"
+    ],
+    "wish": "Chào buổi sáng! Mong rằng ngày hôm nay của bạn sẽ tràn ngập những khoảnh khắc tĩnh lặng và những quyết định sáng suốt.",
+    "nightWish": "Khép lại một ngày dài với tâm thế nhẹ nhõm, chúc bạn có những giấc mơ thật đẹp và bình yên.",
+    "notification": {
+      "english": "Stepping back brings inner clarity.",
+      "chinese": "从忙碌中抽身带来内心清明。",
+      "vietnamese": "Lùi lại giúp tâm trí trở nên minh mẫn."
+    },
+    "generatedAt": "2026-11-15T21:57:24.411Z",
+    "generator": "gemini-3.5-flash-lite"
+  },
+  {
+    "id": "lesson-0146",
+    "stage": "B1+ · Diễn đạt linh hoạt",
+    "kind": "message",
+    "title": "Nhắn tin trao đổi về phương án tối ưu khi tối giản hóa quy trình",
+    "context": "Một trưởng nhóm nhắn tin cho đồng nghiệp vào buổi trưa để bàn về cách tinh gọn các bước làm việc.",
+    "lines": [
+      {
+        "speaker": "A",
+        "english": "Rather than clinging to outdated legacy workflows, we should boldly replace them with agile alternatives.",
+        "chinese": "与其固守陈旧的过时流程，我们更应该果断用敏捷的替代方案取而代之。",
+        "pinyin": "yǔ qí gù shǒu chén jiù de guò shí liú chéng, wǒ men gèng yīng gāi guǒ duàn yòng mǐn jié de tì dài fāng àn qǔ ér dài zhī.",
+        "vietnameseReading": "ỷ(3) chí(2) cu(4) sẩu(3) chân(2) chiêu(4) tơ cuô(4) sứ(2) liu(2) chấng(2) uổ(3) mần cêng(4) inh(1) cai(1) cuổ(3) toan(4) yống(4) mỉng(3) ciế(2) tơ thí(4) đai(4) phang(1) an(4) chủ(3) ơ(2) đai(4) trư(1)",
+        "vietnamese": "Thay vì bám lấy quy trình lỗi thời đã cũ, chúng ta nên kiên quyết thay thế chúng bằng các phương án thay thế linh hoạt."
+      }
+    ],
+    "note": "Cấu trúc 与其 A，更应该 B (thay vì A, chúng ta càng nên B) giúp đưa ra sự so sánh và nhấn mạnh giải pháp tối ưu hơn trong tư duy công việc. Khác với tiếng Anh thường dùng Rather than..., tiếng Trung đặt cấu trúc 与其 ở đầu vế đối lập để tạo nhịp điệu mạnh mẽ, sắc bén.",
+    "challenge": "Hãy viết hoặc nói một câu bằng tiếng Trung áp dụng cấu trúc 与其 A，更应该 B để nêu quan điểm cá nhân về việc thay đổi một thói quen làm việc cũ.",
+    "grammarFocus": "Sử dụng cấu trúc so sánh chuyển hướng 与其 A，更应该 B để nhấn mạnh hành động nên làm.",
+    "vocabulary": [
+      "legacy workflow · 过时流程 · quy trình lỗi thời",
+      "agile alternative · 敏捷方案 · phương án linh hoạt",
+      "replace · 取而代之 · thay thế hoàn toàn"
+    ],
+    "wish": "Buổi trưa tràn đầy năng lượng và những góc nhìn mới mẻ giúp bạn bứt phá mọi giới hạn công việc.",
+    "nightWish": "Khép lại một ngày với tâm thế nhẹ nhàng, để những giấc mơ êm đềm xoa dịu mọi bận rộn.",
+    "notification": {
+      "english": "We should replace outdated workflows.",
+      "chinese": "我们应果断用敏捷方案取而代之。",
+      "vietnamese": "Chúng ta nên thay thế quy trình cũ."
+    },
+    "generatedAt": "2026-11-15T21:57:37.639Z",
+    "generator": "gemini-3.5-flash-lite"
   }
 ]
