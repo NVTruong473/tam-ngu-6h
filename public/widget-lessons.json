@@ -1022,6 +1022,27 @@
       "english": "We should replace outdated workflows.",
       "chinese": "我们应果断用敏捷方案取而代之。",
       "vietnamese": "Chúng ta nên thay thế quy trình cũ."
+    },
+    {
+      "id": "lesson-0147",
+      "title": "Bàn về việc duy trì đam mê nghệ thuật sau giờ làm",
+      "english": "Painting recharges my soul.",
+      "chinese": "画画给心灵重新充电。",
+      "vietnamese": "Vẽ tranh nạp lại năng lượng cho tâm hồn."
+    },
+    {
+      "id": "lesson-0148",
+      "title": "Bàn về thói quen ghi chép cảm hứng bất chợt",
+      "english": "Capture fleeting inspiration instantly.",
+      "chinese": "立刻捕捉转瞬即逝的灵感。",
+      "vietnamese": "Ghi lại ngay cảm hứng chợt đến."
+    },
+    {
+      "id": "lesson-0149",
+      "title": "Bàn về việc thiết lập thói quen tĩnh tâm giữa giờ làm",
+      "english": "Take ten minutes to reset your mind.",
+      "chinese": "抽出十分钟重置精神状态。",
+      "vietnamese": "Dành mười phút để tái tạo năng lượng."
     }
   ]
 }

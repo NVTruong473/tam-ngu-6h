@@ -4945,5 +4945,131 @@
     },
     "generatedAt": "2026-11-15T21:57:37.639Z",
     "generator": "gemini-3.5-flash-lite"
+  },
+  {
+    "id": "lesson-0147",
+    "stage": "B1+ · Diễn đạt linh hoạt",
+    "kind": "dialogue",
+    "title": "Bàn về việc duy trì đam mê nghệ thuật sau giờ làm",
+    "context": "Hai đồng nghiệp trò chuyện trong giờ nghỉ giải lao về việc theo đuổi hội họa vào mỗi tối.",
+    "lines": [
+      {
+        "speaker": "A",
+        "english": "How do you manage to pick up your paintbrush every single night after a draining day at the office?",
+        "chinese": "在办公室度过精疲力竭的一天后，你究竟是怎么做到每晚都拿起画笔的？",
+        "pinyin": "zài bàn gōng shì dù guò jīng pí lì jié de yī tiān hòu, nǐ jiū jìng shì zěn me zuò dào měi wǎn dōu ná qǐ huà bǐ de?",
+        "vietnameseReading": "trai(4) ban(4) công(1) sứ(4) tu(4) cuô(4) cing(1) pi(2) li(4) ciế(2) tơ i(1) thêm(1) hâu(4) nỉ(3) chiêu(1) chỉng(4) sứ(4) chẩn(3) mơ chuô(4) tao(4) mây(3) uản(3) tâu(1) ná(2) chỉ(3) hua(4) pỉ(3) tơ",
+        "vietnamese": "Làm thế nào mà bạn có thể cầm cọ vẽ lên mỗi tối sau một ngày kiệt sức ở văn phòng vậy?"
+      },
+      {
+        "speaker": "B",
+        "english": "Painting has become my ultimate escape; far from draining my energy, it actually recharges my soul.",
+        "chinese": "画画已经成了我终极的避风港，它不仅没有消耗我的精力，反而给我的心灵重新充电。",
+        "pinyin": "huà hua yǐ jīng chéng le wǒ zhōng jí de bì fēng gǎng, tā bù jǐn méi yǒu xiāo hào wǒ de jīng lì, fǎn ér gěi wǒ de xīn líng chóng xīn chōng diàn.",
+        "vietnameseReading": "hua(4) hua ỉ(3) cing(1) chấng(2) lơ uổ(3) trung(1) chí(2) tơ pỉ(4) phêng(1) cang(3) tha(1) pu(4) chín(3) mây(2) iểu(3) xẻo(1) hảo(4) uổ(3) tơ cing(1) li(4) phản(3) ơ(2) cẩy(3) uổ(3) tơ xin(1) lứng(2) chóng(2) xin(1) chông(1) tiển(4)",
+        "vietnamese": "Vẽ tranh đã trở thành chốn ẩn náu tuyệt đối của tôi; nó chẳng những không rút cạn năng lượng mà còn nạp lại năng lượng cho tâm hồn tôi."
+      },
+      {
+        "speaker": "A",
+        "english": "That is truly inspiring, as most of us simply collapse on the couch the moment we get home.",
+        "chinese": "这真的太鼓舞人了，因为我们大多数人一回到家就直接瘫倒在沙发上了。",
+        "pinyin": "zhè zhēn de tài gǔ wǔ rén le, yīn wèi wǒ men dà duō shù rén yī huí dào jiā jiù zhí jiē tān dǎo zài shā fā shàng le.",
+        "vietnameseReading": "chè(4) chên(1) tơ thai(4) cu(3) uổ(3) rấn(2) lơ y(1) uây(4) uổ(3) mần ta(4) tuô(1) su(4) rấn(2) i(1) huây(2) tao(4) chia(1) chiêu(4) chí(2) chie(1) than(1) tao(3) trai(4) xa(1) pha(1) sang(4) lơ",
+        "vietnamese": "Điều đó thật truyền cảm hứng, vì phần lớn chúng tôi cứ về đến nhà là đổ sập xuống sofa."
+      },
+      {
+        "speaker": "B",
+        "english": "It is all about shifting your mindset and viewing creation as a reward rather than another chore.",
+        "chinese": "关键在于转变心态，把创作视作一种奖赏，而不是又一项杂务。",
+        "pinyin": "guān jiàn zài yú zhuǎn biàn xīn tài, bǎ chuàng zuò shì zuò yī zhǒng jiǎng shǎng, ér bú shì yòu yī xiàng zá wù.",
+        "vietnameseReading": "cuan(1) chiên(4) trai(4) ý(2) chuản(3) piên(4) xin(1) thai(4) bả(3) choang(4) chuô(4) sứ(4) chuô(4) i(1) chổng(3) trảng(3) sang(3) ơ(2) pu(2) sứ(4) iêu(4) i(1) xiang(4) trá(2) uô(4)",
+        "vietnamese": "Bí quyết là thay đổi tư duy và xem việc sáng tạo là phần thưởng chứ không phải một việc vặt khác."
+      }
+    ],
+    "note": "Cấu trúc 不仅... 反而... (chẳng những không... mà trái lại...) được dùng để diễn tả sự đảo ngược kết quả, giúp câu văn B1 thêm phần sắc sảo và tự nhiên.",
+    "challenge": "Hãy thu âm một đoạn ngắn 1-2 phút chia sẻ về sở thích cá nhân giúp bạn nạp lại năng lượng sau giờ làm.",
+    "grammarFocus": "Sử dụng cấu trúc 不仅... 反而... để nhấn mạnh sự chuyển biến ý nghĩa tích cực đối lập.",
+    "vocabulary": [
+      "draining · 精疲力竭 · kiệt sức",
+      "ultimate escape · 避风港 · chốn ẩn náu",
+      "mindset · 心态 · tâm lý tư duy"
+    ],
+    "wish": "Mong bạn luôn giữ được những góc nhỏ bình yên để nuôi dưỡng ngọn lửa đam mê trong tâm hồn mỗi ngày.",
+    "nightWish": "Chúc bạn chìm vào giấc ngủ thật sâu với những giấc mơ rực rỡ sắc màu và thức dậy đầy hứng khởi.",
+    "notification": {
+      "english": "Painting recharges my soul.",
+      "chinese": "画画给心灵重新充电。",
+      "vietnamese": "Vẽ tranh nạp lại năng lượng cho tâm hồn."
+    },
+    "generatedAt": "2026-11-17T00:56:09.260Z",
+    "generator": "gemini-3.5-flash-lite"
+  },
+  {
+    "id": "lesson-0148",
+    "stage": "B1+ · Diễn đạt linh hoạt",
+    "kind": "sentence",
+    "title": "Bàn về thói quen ghi chép cảm hứng bất chợt",
+    "context": "Trong một buổi chiều làm việc sáng tạo, khi bất chợt nảy ra những ý tưởng hay.",
+    "lines": [
+      {
+        "speaker": "A",
+        "english": "Capturing fleeting sparks of inspiration right when they strike prevents them from dissolving into thin air.",
+        "chinese": "趁着转瞬即逝的灵感突现时立刻捕捉下来，能防止它们凭空消失。",
+        "pinyin": "chèn zhe zhuǎn shùn jí shì de líng gǎn tū xiàn shí lì kè bǔ zhuō xià lái, néng fáng zhǐ tā men píng kōng xiāo shī.",
+        "vietnameseReading": "chân(4) chơ chuản(3) suấn(4) chí(2) sứ(4) tơ lứng(2) cản(3) thu(1) xiên(4) sứ(2) li(4) khè(4) bủ(3) truô(1) xia(4) lai(2) nẻng(2) pháng(2) chỉ(3) tha(1) mần pính(2) khổng(1) xẻo(1) sứ(1)",
+        "vietnamese": "Ghi lại ngay những tia cảm hứng chợt lóe lên ngay khi chúng xuất hiện giúp ngăn chúng tan biến vào không trung."
+      }
+    ],
+    "note": "Cấu trúc 趁着...时 kết hợp với bổ ngữ xu hướng 下来 giúp nhấn mạnh hành động nắm bắt khoảnh khắc ngay khi sự việc diễn ra.",
+    "challenge": "Hãy viết một đoạn ngắn kể về một lần bạn kịp ghi lại một ý tưởng tuyệt vời ngay trước khi quên mất.",
+    "grammarFocus": "Sử dụng cấu trúc 趁着...时 để nhấn mạnh việc tận dụng thời điểm chớp nhoáng kết hợp bổ ngữ hướng.",
+    "vocabulary": [
+      "fleeting · 转瞬即逝 · thoáng qua",
+      "inspiration · 灵感 · cảm hứng",
+      "dissolve · 消失 · tan biến"
+    ],
+    "wish": "Chúc bạn luôn giữ được sự nhạy bén và nắm bắt trọn vẹn từng khoảnh khắc sáng-tạo rực rỡ nhất trong ngày.",
+    "nightWish": "Khép lại một ngày nhiều ý tưởng, chúc bạn có giấc ngủ sâu và đón chào những giấc mơ đầy màu sắc.",
+    "notification": {
+      "english": "Capture fleeting inspiration instantly.",
+      "chinese": "立刻捕捉转瞬即逝的灵感。",
+      "vietnamese": "Ghi lại ngay cảm hứng chợt đến."
+    },
+    "generatedAt": "2026-11-17T00:56:56.170Z",
+    "generator": "gemini-3.5-flash-lite"
+  },
+  {
+    "id": "lesson-0149",
+    "stage": "B1+ · Diễn đạt linh hoạt",
+    "kind": "message",
+    "title": "Bàn về việc thiết lập thói quen tĩnh tâm giữa giờ làm",
+    "context": "Nhắn tin chia sẻ với đồng nghiệp về cách duy trì sự tập trung và tĩnh lặng trong khoảng thời gian giữa ngày bận rộn.",
+    "lines": [
+      {
+        "speaker": "A",
+        "english": "Instead of letting mid-day stress drain all our energy, carving out ten minutes of silent reflection completely resets our mental state.",
+        "chinese": "与其让午间的压力耗尽我们所有的精力，不如抽出十分钟进行静心反思，这能彻底重置我们的精神状态。",
+        "pinyin": "yǔ qí ràng wǔ jiān de yā lì hào jìn wǒ men suǒ yǒu de jīng lì, bù rú chōu chū shí fēn zhōng jìn xíng jìng xīn fǎn sī, zhè néng chè dǐ chóng zhì wǒ men de jīng shén zhuàng tài.",
+        "vietnameseReading": "ỷ(3) chí(2) rang(4) uổ(3) chiên(1) tơ ia(1) li(4) hảo(4) cin(4) uổ(3) mần suổ(3) iểu(3) tơ cing(1) li(4) pu(4) rú(2) châu(1) chu(1) sứ(2) phân(1) trung(1) cin(4) xíng(2) chỉng(4) xin(1) phản(3) sư(1) chè(4) nẻng(2) chơ(4) đỉ(3) chóng(2) trư(4) uổ(3) mần tơ cing(1) sấn(2) troang(4) thai(4)",
+        "vietnamese": "Thay vì để áp lực giữa trưa vắt kiệt mọi năng lượng, hãy dành ra mười phút tĩnh tâm suy ngẫm, điều này có thể thiết lập lại hoàn toàn trạng thái tinh thần của chúng ta."
+      }
+    ],
+    "note": "Bài học sử dụng cấu trúc 与其 A，不如 B (Thay vì A, chi bằng B) để đưa ra lời khuyên chuyển đổi phương pháp hành động một cách tinh tế. Khác với tiếng Anh thường dùng cấu trúc phủ định trực tiếp 'Instead of...', tiếng Trung dùng cặp liên từ tương phản để làm nổi bật giải pháp thay thế tối ưu hơn trong công việc và cuộc sống.",
+    "challenge": "Hãy viết hoặc thu âm một đoạn ngắn chia sẻ về cách bạn thường dùng để lấy lại bình tĩnh khi gặp áp lực giữa ngày làm việc.",
+    "grammarFocus": "Cấu trúc 与其 A，不如 B dùng để so sánh hai phương án và đưa ra lựa chọn tối ưu hơn.",
+    "vocabulary": [
+      "mid-day stress · 午间压力 · áp lực giữa trưa",
+      "silent reflection · 静心反思 · tĩnh tâm suy ngẫm",
+      "mental state · 精神状态 · trạng thái tinh thần"
+    ],
+    "wish": "Chúc bạn buổi trưa tràn đầy năng lượng bình yên, giữ vững nhịp điệu tĩnh tại để hoàn thành trọn vẹn mọi mục tiêu trong ngày.",
+    "nightWish": "Khép lại một ngày dài với những bộn bề, mong rằng màn đêm dịu dàng sẽ mang lại cho bạn giấc ngủ thật sâu và bình an.",
+    "notification": {
+      "english": "Take ten minutes to reset your mind.",
+      "chinese": "抽出十分钟重置精神状态。",
+      "vietnamese": "Dành mười phút để tái tạo năng lượng."
+    },
+    "generatedAt": "2026-11-17T00:57:34.771Z",
+    "generator": "gemini-3.5-flash-lite"
   }
 ]
