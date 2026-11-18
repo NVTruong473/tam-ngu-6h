@@ -1043,6 +1043,20 @@
       "english": "Take ten minutes to reset your mind.",
       "chinese": "抽出十分钟重置精神状态。",
       "vietnamese": "Dành mười phút để tái tạo năng lượng."
+    },
+    {
+      "id": "lesson-0150",
+      "title": "Bàn về việc xử lý thông tin quá tải trong thời đại số",
+      "english": "Turn off alerts to reclaim your focus.",
+      "chinese": "关闭通知以找回专注。",
+      "vietnamese": "Tắt thông báo để lấy lại sự tập trung."
+    },
+    {
+      "id": "lesson-0151",
+      "title": "Bàn về việc duy trì thói quen viết lách buổi sáng",
+      "english": "Writing early brings absolute clarity.",
+      "chinese": "写下想法带来绝对的清明。",
+      "vietnamese": "Viết lách buổi sớm mang lại sự minh mẫn."
     }
   ]
 }

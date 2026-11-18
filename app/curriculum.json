@@ -5071,5 +5071,98 @@
     },
     "generatedAt": "2026-11-17T00:57:34.771Z",
     "generator": "gemini-3.5-flash-lite"
+  },
+  {
+    "id": "lesson-0150",
+    "stage": "B1+ · Diễn đạt linh hoạt",
+    "kind": "dialogue",
+    "title": "Bàn về việc xử lý thông tin quá tải trong thời đại số",
+    "context": "Hai đồng nghiệp thảo luận về thói quen lọc bớt tin tức và thông báo không cần thiết để bảo vệ sự tập trung.",
+    "lines": [
+      {
+        "speaker": "A",
+        "english": "Have you noticed how constant notifications fragment our attention throughout the day? / Tôi đã nhận thấy điều này.",
+        "chinese": "你有没有发现源源不断的消息通知把我们一整天的注意力切割得支离破碎？",
+        "pinyin": "nǐ yǒu méi yǒu fā xiàn yuán yuán bú duàn de xiāo xī tōng zhī bǎ wǒ men yì zhěng tiān de zhù yì lì qiē gē dé zhī lí pò suì?",
+        "vietnameseReading": "nỉ(3) iểu(3) mây(2) iểu(3) pha(1) xiên(4) uản(2) uản(2) pu(2) toan(4) tơ xẻo(1) xế(1) thong(1) trư(1) bả(3) uổ(3) mần i(4) chẩng(3) thêm(1) tơ chu(4) i(4) li(4) chỉê(1) cợ(1) tơ(2) trư(1) lí(2) pô(4) suý(4)",
+        "vietnamese": "Bạn có nhận thấy những thông báo dồn dập đang làm vỡ nát sự chú ý của chúng ta suốt cả ngày không?"
+      },
+      {
+        "speaker": "B",
+        "english": "Absolutely; that is why I finally decided to turn off all non-essential alerts on my phone. / Đúng vậy.",
+        "chinese": "确实如此；正因如此，我最近终于下定决心关闭了手机上所有非必要的提醒。",
+        "pinyin": "què shí rú cǐ; zhèng yīn rú cǐ, wǒ zuì jìn zhōng yú xià dìng jué xīn guān bì le shǒu jī shàng suǒ yǒu fēi bì yào de tí xǐng.",
+        "vietnameseReading": "chiết(4) sứ(2) rú(2) cứ(3) chấng(4) y(1) rú(2) cứ(3) uổ(3) chuây(4) cin(4) trung(1) ý(2) xia(4) tìng(4) chié(2) xin(1) cuan(1) pỉ(4) lơ sẩu(3) chi(1) sang(4) suổ(3) iểu(3) phây(1) pỉ(4) yao(4) tơ thí(2) xỉnh(3)",
+        "vietnamese": "Quả thực là vậy; chính vì thế tôi cuối cùng đã quyết định tắt mọi thông báo không cần thiết trên điện thoại."
+      },
+      {
+        "speaker": "A",
+        "english": "Does that actually help you regain control over your daily schedule? / Việc đó có thực sự giúp ích không?",
+        "chinese": "这样做真的能帮你重新夺回对日常日程的掌控权吗？",
+        "pinyin": "zhè yàng zuò zhēn de néng bāng nǐ chóng xīn duó huí duì rì cháng rì chéng de zhǎng kòng quán ma?",
+        "vietnameseReading": "chè(4) iang(4) chuô(4) chên(1) tơ nẻng(2) pang(1) nỉ(3) chóng(2) xin(1) tuô(2) huây(2) tuy(4) rư(4) chang(2) rư(4) chấng(2) tơ chảng(3) khổng(4) chuán(2) ma",
+        "vietnamese": "Làm như vậy có thực sự giúp bạn giành lại quyền kiểm soát lịch trình hàng ngày không?"
+      },
+      {
+        "speaker": "B",
+        "english": "It makes a huge difference; by filtering out digital noise, I finally reclaimed my mental clarity. / Sự khác biệt rất lớn.",
+        "chinese": "效果非常明显；通过过滤掉数字噪音，我终于找回了内心的清明。",
+        "pinyin": "xiào guǒ fēi cháng míng xiǎn; tōng guò guò lǜ diào shù zì zào yīn, wǒ zhōng yú zhǎo huí le nèi xīn de qīng míng.",
+        "vietnameseReading": "xiaô(4) cuổ(3) phây(1) chang(2) mính(2) xiển(3) thong(1) cuô(4) cuô(4) lu(4) điao(4) su(4) tư(4) tảo(4) y(1) uổ(3) trung(1) ý(2) chảo(3) huây(2) lơ nhây(4) xin(1) tơ ch'ing(1) mính(2)",
+        "vietnamese": "Hiệu quả vô cùng rõ rệt; thông qua việc lọc bỏ tiếng ồn kỹ thuật số, tôi cuối cùng đã tìm lại sự trong trẻo trong tâm hồn."
+      }
+    ],
+    "note": "Bài học sử dụng cấu trúc '把 A 变得 B' (làm cho A trở thành trạng thái B) kết hợp với cụm từ '源源不断' (nguồn ngùn ngụt, liên tục) để diễn tả việc thông báo dồn dập ảnh hưởng đến sự tập trung. Khác với tiếng Anh thường dùng cấu trúc bị động hoặc mệnh đề quan hệ dài, tiếng Trung ưa chuộng các cụm thành ngữ bốn chữ súc tích như '支离破碎' (chia lì phá toái) để miêu tả mức độ vụn vỡ của sự chú ý.",
+    "challenge": "Hãy thu âm lại đoạn hội thoại trên và thử chia sẻ bằng tiếng Trung về một ứng dụng mà bạn đã tắt thông báo gần đây.",
+    "grammarFocus": "Cấu trúc 把... 变得... kết hợp với cụm từ chỉ trạng thái '支离破碎'.",
+    "vocabulary": [
+      "notification · 消息通知 · thông báo tin nhắn",
+      "fragment · 切割得支离破碎 · cắt xé vỡ nát",
+      "digital noise · 数字噪音 · tiếng ồn kỹ thuật số",
+      "mental clarity · 内心清明 · tâm trí trong sáng"
+    ],
+    "wish": "Chúc bạn buổi tối tràn ngập sự tĩnh tại và tìm lại được không gian trọn vẹn cho riêng mình sau một ngày dài.",
+    "nightWish": "Khép lại mọi ồn ời ngoài kia, chúc bạn chìm vào giấc ngủ sâu với một tâm hồn thật nhẹ nhõm và bình yên.",
+    "notification": {
+      "english": "Turn off alerts to reclaim your focus.",
+      "chinese": "关闭通知以找回专注。",
+      "vietnamese": "Tắt thông báo để lấy lại sự tập trung."
+    },
+    "generatedAt": "2026-11-17T23:54:13.979Z",
+    "generator": "gemini-3.5-flash-lite"
+  },
+  {
+    "id": "lesson-0151",
+    "stage": "B1+ · Diễn đạt linh hoạt",
+    "kind": "sentence",
+    "title": "Bàn về việc duy trì thói quen viết lách buổi sáng",
+    "context": "Chia sẻ về cách khởi đầu ngày mới bằng việc viết lách để làm sạch tâm trí.",
+    "lines": [
+      {
+        "speaker": "A",
+        "english": "Penning down my raw thoughts before checking any messages allows me to start the day with absolute clarity.",
+        "chinese": "在查看任何消息之前把原始的想法写下来，能让我以绝对的清明开启新的一天。",
+        "pinyin": "zài chá kàn rèn hé xiāo xī zhī qián bǎ yuán shǐ de xiǎng fǎ xiě xià lái, néng ràng wǒ yǐ jué duì de qīng míng kāi qǐ xīn de yī tiān.",
+        "vietnameseReading": "trai(4) chá(2) khan(4) rần(4) hứa(2) xẻo(1) xế(1) trư(1) chién(2) bả(3) uản(2) chỉ(3) tơ xiảng(3) phả(3) xỉa(3) xia(4) lai(2) nẻng(2) rang(4) uổ(3) ỉ(3) chié(2) tuy(4) tơ ch'ing(1) mính(2) khai(1) chỉ(3) xin(1) tơ i(1) thêm(1)",
+        "vietnamese": "Viết ra những suy nghĩ nguyên bản trước khi xem bất kỳ tin nhắn nào giúp tôi bắt đầu ngày mới với sự minh mẫn tuyệt đối."
+      }
+    ],
+    "note": "Cấu trúc 在...之前 (trước khi...) kết hợp với từ bả 把 làm nổi bật hành động chuyển hóa tâm trí, thể hiện phong cách diễn đạt chuyên nghiệp và tinh tế.",
+    "challenge": "Hãy viết một đoạn ngắn từ 1 đến 2 phút chia sẻ về thói quen buổi sáng giúp bạn giữ được sự tập trung.",
+    "grammarFocus": "Sử dụng cấu trúc 在...之前 để xác định mốc thời gian kết hợp với câu chữ 把 để làm rõ hành động tác động.",
+    "vocabulary": [
+      "raw thoughts · 原始的想法 · suy nghĩ nguyên bản",
+      "absolute clarity · 绝对的清明 · sự minh mẫn tuyệt đối",
+      "start the day · 开启新的一天 · khởi đầu ngày mới"
+    ],
+    "wish": "Chúc bạn buổi sáng tràn đầy năng lượng, giữ vững sự tĩnh tại và hoàn thành mọi mục tiêu đã định.",
+    "nightWish": "Mong rằng khi màn đêm buông xuống, bạn sẽ gác lại mọi bộn bề để chìm vào giấc ngủ thật sâu và bình yên.",
+    "notification": {
+      "english": "Writing early brings absolute clarity.",
+      "chinese": "写下想法带来绝对的清明。",
+      "vietnamese": "Viết lách buổi sớm mang lại sự minh mẫn."
+    },
+    "generatedAt": "2026-11-17T23:57:09.511Z",
+    "generator": "gemini-3.5-flash-lite"
   }
 ]
