@@ -5164,5 +5164,131 @@
     },
     "generatedAt": "2026-11-17T23:57:09.511Z",
     "generator": "gemini-3.5-flash-lite"
+  },
+  {
+    "id": "lesson-0152",
+    "stage": "B1+ · Diễn đạt linh hoạt",
+    "kind": "message",
+    "title": "Nhắn tin điều phối công việc gấp trong giờ nghỉ trưa",
+    "context": "Bạn cần nhắn tin cho đồng nghiệp về một yêu cầu chỉnh sửa phát sinh vào giờ nghỉ trưa nhưng muốn khéo léo thể hiện sự tôn trọng thời gian riêng tư của họ.",
+    "lines": [
+      {
+        "speaker": "A",
+        "english": "Sorry to interrupt your lunch break, but could you take a quick look at this revised brief whenever you get a free moment?",
+        "chinese": "打扰您的午休时间了，不过如果您得空的话，能不能顺便看一下这份修改后的简报？",
+        "pinyin": "dǎ rǎo nín de wǔ xiū shí jiān le, bù guò rú guǒ nín děi kòng de huà, néng bù néng shùn biàn kàn yī xià zhè fèn xiū gǎi hòu de jiǎn bào?",
+        "vietnameseReading": "tả(3) rao(3) nín(2) tơ uổ(3) xưu(1) sứ(2) chiên(1) lơ pu(4) cuô(4) rú(2) cuổ(3) nín(2) đẻ(3) khổng(4) tơ hua(4) nẻng(2) pu(4) nẻng(2) suấn(4) piên(4) khan(4) i(1) xia(4) chè(4) phên(4) xưu(1) cải(3) hâu(4) tơ chien(3) pao(4)",
+        "vietnamese": "Xin lỗi vì làm phiền giờ nghỉ trưa của bạn, nhưng nếu bạn rảnh, có thể xem qua bản tóm tắt đã chỉnh sửa này giúp tôi không?"
+      }
+    ],
+    "note": "Cấu trúc '...的话' dùng để đưa ra điều kiện linh hoạt, kết hợp với '顺便' (tiện thể) giúp lời nhờ vả trong giờ nghỉ trở nên lịch sự, không gây áp lực lớn cho người nghe so với tiếng Anh.",
+    "challenge": "Gửi một tin nhắn bằng tiếng Trung cho đồng nghiệp nhờ hỗ trợ công việc vào giờ nghỉ trưa nhưng vẫn thể hiện sự tôn trọng thời gian của họ.",
+    "grammarFocus": "Sử dụng cấu trúc điều kiện '...的话' kết hợp với '顺便' để đưa ra lời nhờ vả lịch sự.",
+    "vocabulary": [
+      "lunch break · 午休时间 · giờ nghỉ trưa",
+      "revised brief · 修改后的简报 · bản tóm tắt đã chỉnh sửa",
+      "get a free moment · 得空 · lúc rảnh rỗi"
+    ],
+    "wish": "Chúc bạn buổi trưa tràn đầy năng lượng, hoàn thành tốt các nhiệm vụ và luôn giữ được tinh thần làm việc linh hoạt, hiệu quả.",
+    "nightWish": "Mong rằng đêm nay giấc ngủ sẽ xua tan mọi mỏi mệt, đem lại cho bạn sự bình yên trọn vẹn để đón chào ngày mới.",
+    "notification": {
+      "english": "Can you check this brief when free?",
+      "chinese": "得空时能看一下这份简报吗？",
+      "vietnamese": "Bạn xem giúp tôi bản tóm tắt này nhé."
+    },
+    "generatedAt": "2026-11-20T23:11:49.957Z",
+    "generator": "gemini-3.5-flash-lite"
+  },
+  {
+    "id": "lesson-0153",
+    "stage": "B1+ · Diễn đạt linh hoạt",
+    "kind": "dialogue",
+    "title": "Bàn về việc tự thưởng cho bản thân một ngày nghỉ ngơi hoàn toàn",
+    "context": "Hai đồng nghiệp thảo luận về việc thỉnh thoảng xin nghỉ một ngày để tái tạo năng lượng thay vì cố gắng làm việc liên tục.",
+    "lines": [
+      {
+        "speaker": "A",
+        "english": "Have you ever just called in for a mental health day when the burnout starts to creep in?",
+        "chinese": "当职业倦怠开始悄然侵袭时，你曾有过直接请一天心理假期来调剂的经历吗？",
+        "pinyin": "dāng zhí yè juàn dài kāi shǐ qiǎo rán qīn xí shí, nǐ céng yǒu guò zhí jiē qǐng yī tiān xīn lǐ jià qī lái tiáo jì de jīng lì ma?",
+        "vietnameseReading": "tang(1) chí(2) yê(4) choan(4) đai(4) khai(1) chỉ(3) xiao(3) ran(2) chín(1) si(2) sứ(2) nỉ(3) xâng(2) iểu(3) cuô(4) chí(2) chie(1) chỉnh(3) i(1) thêm(1) xin(1) lỉ(3) chia(4) chi(1) lai(2) thiáo(2) chi(4) tơ cing(1) li(4) ma",
+        "vietnamese": "Bạn đã bao giờ xin nghỉ một ngày 'sức khỏe tinh thần' để điều hòa lại khi sự kiệt sức bắt đầu kéo đến chưa?"
+      },
+      {
+        "speaker": "B",
+        "english": "I used to feel guilty doing that, but now I view stepping back as a vital investment in my long-term productivity.",
+        "chinese": "我以前这样做时会感到内疚，但现在我把抽身暂退视作对长期生产力至关重要的投资。",
+        "pinyin": "wǒ yǐ qián zhè yàng zuò shí huì gǎn dào nèi jiù, dàn xiàn zài wǒ bǎ chōu shēn zàn tuì shì zuò duì zháng qī shēng chǎn lì zhì guān zhòng yào de tóu zī.",
+        "vietnameseReading": "uổ(3) ỉ(3) chién(2) chè(4) iang(4) chuô(4) sứ(2) huây(4) cản(3) tao(4) nhây(4) chiêu(4) tan(4) xiên(4) trai(4) uổ(3) bả(3) châu(1) sên(1) chan(4) thuy(4) sứ(4) chuô(4) tuy(4) chảng(2) chi(1) sâng(1) chan(3) li(4) trư(4) cuan(1) trung(4) yao(4) tơ thâu(2) trư(1)",
+        "vietnamese": "Trước đây tôi cảm thấy tội lỗi khi làm vậy, nhưng giờ tôi coi việc lùi lại là khoản đầu tư tối quan trọng cho năng suất lâu dài."
+      },
+      {
+        "speaker": "A",
+        "english": "That is such a liberating shift in perspective; we really need to unlearn the habit of glorifying exhaustion.",
+        "chinese": "这真是一种解放性的视角转变；我们确实需要戒掉美化过度疲劳的习惯。",
+        "pinyin": "zhè zhēn shì yī zhǒng jiě fàng xìng de shì jiǎo zhuǎn biàn; wǒ men què shí xū yào jiè diào měi huà guò dù pí láo de xí guàn.",
+        "vietnameseReading": "chè(4) chên(1) sứ(4) i(1) chổng(3) chie(3) phang(4) xíng(4) tơ sứ(4) chảo(3) chuản(3) piên(4) uổ(3) mần chiết(4) sứ(2) sy(1) yao(4) chie(4) điao(4) mây(3) hua(4) cuô(4) tu(4) pi(2) láo(2) tơ si(2) cuản(4)",
+        "vietnamese": "Đó thực sự là một sự thay đổi góc nhìn giải phóng; chúng ta thực sự cần từ bỏ thói quen ca ngợi sự kiệt sức."
+      },
+      {
+        "speaker": "B",
+        "english": "Precisely; honoring our need for quiet recovery is the ultimate form of self-respect.",
+        "chinese": "确切地说；成全我们对安静康复的需求，才是自尊的终极表现。",
+        "pinyin": "què qiè de shuō; chéng quán wǒ men duì ān jìng kāng fù de xū qiú, cái shì zì zūn de zhōng jí biǎo xiàn.",
+        "vietnameseReading": "chiết(4) chỉê(4) tơ suô(1) chấng(2) chuán(2) uổ(3) mần tuy(4) an(1) chỉng(4) khang(1) phu(4) tơ sy(1) chiếu(2) thái(2) sứ(4) tư(4) chuân(1) tơ trung(1) chí(2) piao(3) xiên(4)",
+        "vietnamese": "Chính xác; việc tôn trọng nhu cầu phục hồi trong yên bình chính là hình thức tự trọng tối thượng."
+      }
+    ],
+    "note": "Cấu trúc 把...视作... (coi... là...) giúp thể hiện rõ sự chuyển dịch nhận thức từ trạng thái bị động sang chủ động kiểm soát. Khác với tiếng Anh dùng động từ trực tiếp 'view as', tiếng Trung kết hợp từ chỉ hành động 把 với cụm tân ngữ trước khi gán định lượng thái độ.",
+    "challenge": "Hãy thu âm đoạn bạn tự nói về lý do tại sao một ngày nghỉ ngơi không làm bạnụt giảm năng lực mà thực chất giúp bạn sắc bén hơn.",
+    "grammarFocus": "Sử dụng cấu trúc 把...视作... để diễn đạt sự chuyển hóa góc nhìn và giá trị quan.",
+    "vocabulary": [
+      "burnout · 职业倦怠 · kiệt sức nghề nghiệp",
+      "productivity · 生产力 · năng suất",
+      "perspective · 视角 · góc nhìn"
+    ],
+    "wish": "Mong tối nay mang lại cho bạn những phút giây thả lỏng tuyệt đối, để ngày mai bước đi với tâm hồn nhẹ nhõm và nguồn năng lượng nguyên vẹn.",
+    "nightWish": "Khép lại những bộn bề của ánh đèn thành phố, chúc bạn chìm vào giấc ngủ sâu trong cõi lòng phẳng lặng và an yên.",
+    "notification": {
+      "english": "Stepping back is a vital investment.",
+      "chinese": "抽身暂退是对生产力的重要投资。",
+      "vietnamese": "Lùi lại là khoản đầu tư quan trọng."
+    },
+    "generatedAt": "2026-11-20T23:13:12.402Z",
+    "generator": "gemini-3.5-flash-lite"
+  },
+  {
+    "id": "lesson-0154",
+    "stage": "B1+ · Diễn đạt linh hoạt",
+    "kind": "sentence",
+    "title": "Bàn về việc thiết lập ranh giới năng lượng cá nhân vào buổi sáng",
+    "context": "Một góc suy ngẫm cá nhân vào buổi sáng về việc bảo vệ năng lượng trước khi đối mặt với thế giới.",
+    "lines": [
+      {
+        "speaker": "A",
+        "english": "Instead of letting external demands dictate my morning, I choose to protect this sacred window of quiet.",
+        "chinese": "与其让外界的需求左右我的早晨，我选择守护这片神圣的安静时光。",
+        "pinyin": "yǔ qí ràng wài jiè de xū qiú zuǒ yòu wǒ de zǎo chén, wǒ xuǎn zé shǒu hù zhè piàn shén shèng de ān jìng shí guāng.",
+        "vietnameseReading": "ỷ(3) chí(2) rang(4) uải(4) chie(4) tơ sy(1) chiếu(2) cuốc(3) iêu(4) uổ(3) tơ tảo(3) chân(2) uổ(3) suản(3) chớ(2) sẩu(3) hù(4) chè(4) pien(4) sấn(2) sâng(4) tơ an(1) chỉng(4) sứ(2) cuang(1)",
+        "vietnamese": "Thay vì để những nhu cầu bên ngoài chi phối buổi sáng của mình, tôi chọn bảo vệ khoảng thời gian yên tĩnh thiêng liêng này."
+      }
+    ],
+    "note": "Cấu trúc 与其 A，我选择 B dùng để biểu thị sự từ bỏ một thói quen bị động để chuyển sang chủ động lựa chọn phương án tối ưu hơn cho bản thân.",
+    "challenge": "Hãy viết một đoạn ngắn bằng tiếng Trung chia sẻ về cách bạn giữ vững tâm trạng bình yên trong mười phút đầu tiên khi thức dậy.",
+    "grammarFocus": "Sử dụng cấu trúc 与其 A，我选择 B để thể hiện sự dịch chuyển góc nhìn và quyền tự chủ trong lối sống.",
+    "vocabulary": [
+      "external demands · 外界需求 · nhu cầu bên ngoài",
+      "sacred window · 神圣时光 · khoảng thời gian thiêng liêng",
+      "protect · 守护 · bảo vệ"
+    ],
+    "wish": "Chào buổi sáng! Mong rằng ngày mới mang đến cho bạn sự tĩnh tại và năng lượng vẹn tròn để làm những điều mình yêu.",
+    "nightWish": "Khép lại một ngày với tâm thế nhẹ nhõm, chúc bạn chìm vào giấc ngủ sâu và đón nhận những giấc mơ thật đẹp.",
+    "notification": {
+      "english": "Protect your quiet morning energy.",
+      "chinese": "守护清晨的安静能量。",
+      "vietnamese": "Bảo vệ năng lượng yên tĩnh buổi sáng."
+    },
+    "generatedAt": "2026-11-20T23:14:32.073Z",
+    "generator": "gemini-3.5-flash-lite"
   }
 ]
