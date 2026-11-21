@@ -5290,5 +5290,131 @@
     },
     "generatedAt": "2026-11-20T23:14:32.073Z",
     "generator": "gemini-3.5-flash-lite"
+  },
+  {
+    "id": "lesson-0155",
+    "stage": "B1+ · Diễn đạt linh hoạt",
+    "kind": "message",
+    "title": "Nhắn tin rủ đồng nghiệp cùng nhau thưởng thức bữa trưa nhẹ nhàng",
+    "context": "Một tin nhắn gửi cho đồng nghiệp vào buổi trưa để đề xuất việc dùng bữa trưa nhẹ nhàng nhằm thư giãn đầu óc.",
+    "lines": [
+      {
+        "speaker": "A",
+        "english": "Rather than rushing through a heavy meal, let us grab a light salad and enjoy some quiet sunshine.",
+        "chinese": "与其匆忙吃一顿油腻的正餐，不如我们去买点轻食沙拉，顺便享受一下安静的阳光。",
+        "pinyin": "yǔ qí cōng máng chī yí dùn yóu nì de zhèng cān, bù rú wǒ men qù mǎi diǎn qīng shí shā lā, shùn biàn xiǎng shòu yí xià ān jìng de yáng guāng.",
+        "vietnameseReading": "ỷ(3) chí(2) châu(1) máng(2) chư(1) y(2) đuân(4) iêu(2) nỉ(4) tơ chấng(4) can(1) pu(4) rú(2) uổ(3) mần chiệu(4) mải(3) điển(3) ch'ing(1) sứ(2) xa(1) la(1) suấn(4) piên(4) xiảng(3) sẩu(4) y(2) xia(4) an(1) chỉng(4) tơ iang(2) cuang(1)",
+        "vietnamese": "Thay vì vội vàng ăn một bữa trưa nặng nề, chúng ta hãy mua chút salad nhẹ nhàng và tranh thủ tận hưởng chút ánh nắng yên bình."
+      }
+    ],
+    "note": "Cấu trúc 与其 A，不如 B được dùng để so sánh hai phương án và đưa ra lựa chọn tối ưu hơn, giúp diễn đạt sự thay đổi góc nhìn từ vội vã sang thư thái.",
+    "challenge": "Hãy viết một câu nhắn tin rủ đồng nghiệp đổi món ăn trưa nhẹ nhàng hơn bằng cách dùng cấu trúc 与其 A，不如 B.",
+    "grammarFocus": "Sử dụng cấu trúc 与其 A，不如 B để so sánh phương án thay thế tối ưu hơn trong giao tiếp.",
+    "vocabulary": [
+      "Rather than · 与其 · Thay vì",
+      "Light meal · 轻食 · Bữa ăn nhẹ",
+      "Sunshine · 阳光 · Ánh nắng"
+    ],
+    "wish": "Chúc bạn có một buổi trưa thật tĩnh lặng, thưởng thức bữa ăn nhẹ nhàng và nạp đầy năng lượng cho phần còn lại của ngày.",
+    "nightWish": "Khép lại những bộn bề của ngày hôm nay, chúc bạn chìm vào giấc ngủ thật sâu với tâm hồn thảnh thơi và an yên.",
+    "notification": {
+      "english": "Let us grab a light salad in the sun.",
+      "chinese": "我们去吃轻食沙拉吧。",
+      "vietnamese": "Cùng ăn salad nhẹ nhàng dưới nắng nhé."
+    },
+    "generatedAt": "2026-11-21T22:18:40.950Z",
+    "generator": "gemini-3.5-flash-lite"
+  },
+  {
+    "id": "lesson-0156",
+    "stage": "B1+ · Diễn đạt linh hoạt",
+    "kind": "dialogue",
+    "title": "Bàn về việc duy trì thói quen đi bộ ngắm phố đêm",
+    "context": "Hai người đồng nghiệp trò chuyện vào buổi tối muộn về thói quen đi bộ tản mạo để giải tỏa áp lực công việc.",
+    "lines": [
+      {
+        "speaker": "A",
+        "english": "Do you often take a long walk through the quiet streets after wrapping up late-night projects?",
+        "chinese": "在处理完深夜项目后，你经常沿着安静的街道散步很久吗？",
+        "pinyin": "zài chù lǐ wán shēn yè xiàng mù hòu, nǐ jīng cháng yán zhe ān jìng de jiē dào sàn bù hěn jiǔ ma?",
+        "vietnameseReading": "trai(4) chù(4) lỉ(3) oản(2) sên(1) yê(4) xiang(4) mu(4) hâu(4) nỉ(3) cing(1) chang(2) yan(2) chơ an(1) chỉng(4) tơ chie(1) tao(4) san(4) pu(4) hẩn(3) chiểu(3) ma",
+        "vietnamese": "Bạn có thường đi dạo dài qua những con phố yên tĩnh sau khi giải quyết xong các dự án đêm muộn không?"
+      },
+      {
+        "speaker": "B",
+        "english": "Almost every evening; instead of rushing straight back to my screen, I rely on this quiet stroll to help my mind settle down.",
+        "chinese": "几乎每天晚上都去；与其急着直接回到屏幕前，我更依赖这场安静的漫步来让思绪沉淀下来。",
+        "pinyin": "jī hū měi tiān wǎn shàng dōu qù; yǔ qí jí zhe zhí jiē huí dào píng mù qián, wǒ gèng yī lài zhè chǎng ān jìng de màn bù lái ràng sī xù chén diàn xià lái.",
+        "vietnameseReading": "chi(1) hú(1) mây(3) thêm(1) uản(3) sang(4) tâu(1) chiệu(4) ỷ(3) chí(2) chí(2) chơ chí(2) chie(1) huây(2) tao(4) pính(2) mu(4) chién(2) uổ(3) cêng(4) i(1) lai(4) chè(4) chàng(3) an(1) chỉng(4) tơ mản(4) pu(4) lai(2) rang(4) sư(1) sy(4) chân(2) tiển(4) xia(4) lai(2)",
+        "vietnamese": "Hầu như tối nào cũng đi; thay vì vội vã quay ngay lại trước màn hình, tôi dựa vào buổi tản bộ yên tĩnh này để giúp tâm trí lắng đọng xuống."
+      },
+      {
+        "speaker": "A",
+        "english": "That sounds wonderfully therapeutic, whereas my usual habit is just collapsing on the couch without moving an inch.",
+        "chinese": "听起来有极佳的疗愈效果，而我过去的习惯却是直接瘫在沙发上一动不动。",
+        "pinyin": "tīng qǐ lái yǒu jí jiā de liáo yù xiào guǒ, ér wǒ guò qù de xí guàn què shì zhí jiē tān zài shā fā shàng yí dòng bú dòng.",
+        "vietnameseReading": "thinh(1) chỉ(3) lai(2) iểu(3) chí(2) chia(1) tơ lẹo(2) uy(4) xiaô(4) cuổ(3) ơ(2) uổ(3) cuô(4) chiệu(4) tơ si(2) cuản(4) chiết(4) sứ(4) chí(2) chie(1) than(1) trai(4) xa(1) pha(1) sang(4) y(2) tòng(4) pu(2) tòng(4)",
+        "vietnamese": "Nghe có vẻ chữa lành tuyệt vời, trong khi thói quen thường ngày của tôi chỉ là đổ gục xuống ghế sofa mà không nhúc nhích."
+      },
+      {
+        "speaker": "B",
+        "english": "It is simply a matter of choosing a gentle rhythm that protects our sanity from modern exhaustion.",
+        "chinese": "这纯粹是选择一种温和节奏的问题，以此来保护我们的理智免受现代疲惫的侵蚀。",
+        "pinyin": "zhè chún cuì shì xuǎn zé yì zhǒng wēn hé jié zòu de wèn tí, yǐ cǐ lái bǎo hù wǒ men de lǐ zhì miǎn shòu xiàn dài pí bèi de qīn shí.",
+        "vietnameseReading": "chè(4) chuân(2) chuy(4) sứ(4) suản(3) chớ(2) i(4) chổng(3) uên(1) hứa(2) ciế(2) dẩu(4) tơ uên(4) thí(2) ỉ(3) cứ(3) lai(2) bả(3) hù(4) uổ(3) mần tơ lỉ(3) trư(4) mản(3) sẩu(4) xiên(4) đai(4) pi(2) pây(4) tơ chín(1) sứ(2)",
+        "vietnamese": "Đó đơn giản là việc chọn một nhịp điệu nhẹ nhàng giúp bảo vệ sự tỉnh táo của chúng ta khỏi sự kiệt quệ hiện đại."
+      }
+    ],
+    "note": "Cấu trúc '与其 A，我更依赖 B' hoặc '与... 相比' giúp diễn tả sự lựa chọn phương án tối ưu để duy trì sự cân bằng tinh thần, tương đương với cách dùng 'rather than... I rely on...' trong tiếng Anh.",
+    "challenge": "Hãy thu âm đoạn ngắn chia sẻ về một thói quen đi dạo hoặc thư giãn ban đêm của bạn bằng tiếng Anh hoặc tiếng Trung trong 1 đến 2 phút.",
+    "grammarFocus": "Sử dụng cấu trúc 与其...，...更依赖... để biểu thị sự so sánh lựa chọn phương án thay thế hữu ích hơn.",
+    "vocabulary": [
+      "late-night projects · 深夜项目 · dự án đêm muộn",
+      "quiet stroll · 安静的漫步 · buổi tản bộ yên tĩnh",
+      "modern exhaustion · 现代疲惫 · sự kiệt quệ hiện đại"
+    ],
+    "wish": "Mong bạn khép lại ngày dài bằng những bước chân nhẹ nhàng và sự bình yên trọn vẹn trong tâm hồn.",
+    "nightWish": "Chúc bạn chìm vào giấc ngủ thật sâu dưới bầu trời đêm tĩnh mịch, gác lại mọi bận rộn.",
+    "notification": {
+      "english": "Take a quiet evening stroll to unwind.",
+      "chinese": "在安静的街道散步放松。",
+      "vietnamese": "Đi dạo phố yên tĩnh để thư giãn tâm trí."
+    },
+    "generatedAt": "2026-11-21T22:18:48.174Z",
+    "generator": "gemini-3.5-flash-lite"
+  },
+  {
+    "id": "lesson-0157",
+    "stage": "B1+ · Diễn đạt linh hoạt",
+    "kind": "sentence",
+    "title": "Bàn về việc duy trì sự tập trung sâu trong môi trường cồng kềnh",
+    "context": "Một người chia sẻ cách họ giữ vững tâm thế làm việc tập trung giữa những xao nhãng của văn phòng hiện đại.",
+    "lines": [
+      {
+        "speaker": "A",
+        "english": "Instead of reacting to every single ping, I protect my focus by locking into a distraction-free zone.",
+        "chinese": "与其对每一次提示音做出反应，我通过锁定在一个无干扰的地带来保护我的专注力。",
+        "pinyin": "Yǔqí duì měiyīcì tìshìyīn zuòchū fǎnyīng, wǒ tōngguò suǒdìng zài yīgè wú gānrǎo de dìdài lái bǎohù wǒ de zhuānzhùlì.",
+        "vietnameseReading": "ỷ(3) chí(2) tuy(4) mây(3) i(1) cì(4) thí(4) sứ(4) y(1) chuô(4) chu(1) phản(3) inh(1) uổ(3) thong(1) cuô(4) suổ(3) tìng(4) trai(4) i(1) cợ(4) ú(2) can(1) rao(3) tơ tì(4) đai(4) lai(2) bả(3) hù(4) uổ(3) tơ chuai(1) chu(4) li(4)",
+        "vietnamese": "Thay vì phản ứng với từng tiếng thông báo, tôi bảo vệ sự tập trung của mình bằng cách khóa mình trong một không gian không bị làm phiền."
+      }
+    ],
+    "note": "Cấu trúc '与其 A，我通过 B' kết hợp giữa việc từ bỏ một thói quen bị động và xác lập phương thức chủ động bảo vệ năng lượng cá nhân. Tiếng Anh dùng 'Instead of... by...', tương đương về sắc thái quyết đoán.",
+    "challenge": "Hãy viết hoặc nói một đoạn ngắn kể về cách bạn tự tạo một khoảng thời gian không có thông báo trong ngày làm việc.",
+    "grammarFocus": "Sử dụng cấu trúc '与其 A，我通过 B' để thể hiện sự thay đổi từ phản ứng bị động sang thiết lập phương thức bảo vệ chủ động.",
+    "vocabulary": [
+      "distraction-free zone · 无干扰地带 · không gian không xao nhãng",
+      "focus · 专注力 · sự tập trung",
+      "ping · 提示音 · tiếng thông báo"
+    ],
+    "wish": "Chúc bạn có một buổi sáng trọn vẹn, nơi từng nhịp làm việc đều xuất phát từ sự tĩnh tại và chủ động sâu sắc bên trong.",
+    "nightWish": "Mong rằng đêm nay khép lại mọi bận rộn ngoài kia, để tâm trí bạn được thả trôi vào giấc ngủ êm đềm và tĩnh lặng.",
+    "notification": {
+      "english": "Protect your focus from endless pings.",
+      "chinese": "用无干扰地带保护专注力。",
+      "vietnamese": "Bảo vệ sự tập trung khỏi mọi xao nhãng."
+    },
+    "generatedAt": "2026-11-21T22:19:19.385Z",
+    "generator": "gemini-3.5-flash-lite"
   }
 ]
