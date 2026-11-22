@@ -1099,6 +1099,13 @@
       "english": "Protect your focus from endless pings.",
       "chinese": "用无干扰地带保护专注力。",
       "vietnamese": "Bảo vệ sự tập trung khỏi mọi xao nhãng."
+    },
+    {
+      "id": "lesson-0158",
+      "title": "Nhắn tin cập nhật tiến độ hoàn thiện tài liệu giữa buổi",
+      "english": "Design audit completed on schedule.",
+      "chinese": "设计审核已按计划顺利收尾。",
+      "vietnamese": "Đã hoàn tất rà soát thiết kế đúng hạn."
     }
   ]
 }

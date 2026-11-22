@@ -5416,5 +5416,39 @@
     },
     "generatedAt": "2026-11-21T22:19:19.385Z",
     "generator": "gemini-3.5-flash-lite"
+  },
+  {
+    "id": "lesson-0158",
+    "stage": "B1+ · Diễn đạt linh hoạt",
+    "kind": "message",
+    "title": "Nhắn tin cập nhật tiến độ hoàn thiện tài liệu giữa buổi",
+    "context": "Nhắn tin cho trưởng nhóm vào giữa buổi trưa để cập nhật tiến độ rà soát tài liệu thiết kế mới trước khi gửi cho khách hàng.",
+    "lines": [
+      {
+        "speaker": "A",
+        "english": "Just finishing up the final design audit, so we will be ready for the client review right on schedule.",
+        "chinese": "刚把最终的设计审核收尾，我们完全能按计划准时进行客户评审。",
+        "pinyin": "gāng bǎ zuìzhōng de shèjì shěnhè shōuwěi, wǒmen wánquán néng àn jìhuà zhǔnshí jìnxíng kèhù píngshēn.",
+        "vietnameseReading": "cang(1) bả(3) chuây(4) trung(1) tơ sơ(4) chi(4) sẩn(3) hứa(4) sấu(1) uây(3) uổ(3) mần oản(2) chuán(2) nẻng(2) an(4) chi(4) hua(4) chủn(3) sứ(2) cin(4) xíng(2) khè(4) hù(4) pính(2) sên(1)",
+        "vietnamese": "Vừa hoàn tất việc rà soát thiết kế cuối cùng, chúng ta hoàn toàn có thể tiến hành buổi đánh giá của khách hàng đúng tiến độ."
+      }
+    ],
+    "note": "Bài học sử dụng cấu trúc '刚把 A 收尾' (vừa hoàn tất A) để nhấn mạnh trạng thái hoàn thành công việc trước thời hạn, kết hợp với từ vựng chuyên ngành '设计审核' (rà soát thiết kế) và '客户评审' (đánh giá của khách hàng).",
+    "challenge": "Hãy tự ghi âm một đoạn ngắn thông báo tiến độ công việc tương tự bằng tiếng Trung trong vòng 1 phút.",
+    "grammarFocus": "Sử dụng cấu trúc câu chữ 把 '刚把...收尾' để nhấn mạnh hành động hoàn tất việc xử lý một đối tượng cụ thể.",
+    "vocabulary": [
+      "design audit · 设计审核 · rà soát thiết kế",
+      "client review · 客户评审 · đánh giá của khách hàng",
+      "on schedule · 按计划 · đúng tiến độ"
+    ],
+    "wish": "Chúc bạn buổi trưa hoàn thành xuất sắc các mục tiêu đề ra và giữ vững năng lượng tích cực cho nửa sau ngày làm việc.",
+    "nightWish": "Mong rằng màn đêm mang lại cho bạn những giấc mơ êm đềm và sự tĩnh lặng trọn vẹn sau một ngày bận rộn.",
+    "notification": {
+      "english": "Design audit completed on schedule.",
+      "chinese": "设计审核已按计划顺利收尾。",
+      "vietnamese": "Đã hoàn tất rà soát thiết kế đúng hạn."
+    },
+    "generatedAt": "2026-11-22T22:36:01.873Z",
+    "generator": "gemini-3.5-flash-lite"
   }
 ]
