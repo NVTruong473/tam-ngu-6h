@@ -5450,5 +5450,97 @@
     },
     "generatedAt": "2026-11-22T22:36:01.873Z",
     "generator": "gemini-3.5-flash-lite"
+  },
+  {
+    "id": "lesson-0159",
+    "stage": "B1+ · Diễn đạt linh hoạt",
+    "kind": "dialogue",
+    "title": "Chia sẻ trải nghiệm tự học kỹ năng mới ngoài giờ làm việc",
+    "context": "Hai đồng nghiệp trò chuyện vào buổi tối về việc kiên trì theo đuổi một sở thích và kỹ năng mới sau giờ hành chính.",
+    "lines": [
+      {
+        "speaker": "A",
+        "english": "How do you manage to stay consistent with your coding practice after dealing with client requests all day?",
+        "chinese": "在处理了一整天客户需求之后，你是怎么做到坚持练习编程的？",
+        "pinyin": "zài chǔ lǐ le yī zhěng tiān kè hù xū qiú zhī hòu, nǐ shì zěn me zuò dào jiān chí liàn xí biān chéng de?",
+        "vietnameseReading": "trai(4) chu(3) lỉ(3) lơ i(1) chẩng(3) thêm(1) khè(4) hù(4) sy(1) chiếu(2) trư(1) hâu(4) nỉ(3) sứ(4) chẩn(3) mơ chuô(4) tao(4) chiên(1) chí(2) liến(4) si(2) pien(1) chấng(2) tơ",
+        "vietnamese": "Sau khi xử lý yêu cầu của khách hàng cả ngày, làm thế nào mà bạn vẫn duy trì việc luyện tập lập trình được vậy?"
+      },
+      {
+        "speaker": "B",
+        "english": "Instead of treating it as an extra chore, I view those quiet evening hours as my dedicated canvas for building creative projects.",
+        "chinese": "与其把它当作一项额外的杂务，我更倾向于把那些安静的晚间时光视作构建创意项目的专属画布。",
+        "pinyin": "yǔ qí bǎ tā dāng zuò yī xiàng é wài de zá wù, wǒ gèng qīng xiàng yú bǎ nà xiē ān jìng de wǎn jiān shí guāng shì zuò gòu jiàn chuàng yì xiàng mù de zhuān shǔ huà bù.",
+        "vietnameseReading": "ỷ(3) chí(2) bả(3) tha(1) tang(1) chuô(4) i(1) xiang(4) ế(2) uải(4) tơ trá(2) uô(4) uổ(3) cêng(4) ch'ing(1) xiang(4) ý(2) bả(3) na(4) xiế(1) an(1) chỉng(4) tơ uản(3) chiên(1) sứ(2) cuang(1) sứ(4) chuô(4) câu(4) chiên(4) choang(4) i(4) xiang(4) mu(4) tơ chuai(1) su(3) hua(4) pu(4)",
+        "vietnamese": "Thay vì coi đó là một công việc vặt bổ sung, tôi lại có xu hướng xem những buổi tối yên tĩnh ấy là tấm canvas chuyên dụng để xây dựng các dự án sáng tạo."
+      },
+      {
+        "speaker": "A",
+        "english": "That mindset shift is brilliant; it turns fatigue into fuel.",
+        "chinese": "这种心态的转变太妙了，它把疲惫变成了燃料。",
+        "pinyin": "zhè zhǒng xīn tài de zhuǎn biàn tài miào le, tā bǎ pí bèi biàn chéng le rán liào.",
+        "vietnameseReading": "chè(4) chổng(3) xin(1) thai(4) tơ chuản(3) piên(4) thai(4) miao(4) lơ tha(1) bả(3) pi(2) pây(4) piên(4) chấng(2) lơ ran(2) lẹo(4)",
+        "vietnamese": "Sự chuyển dịch tư duy đó thật tuyệt vời; nó biến sự mệt mỏi thành nhiên liệu."
+      },
+      {
+        "speaker": "B",
+        "english": "Indeed, protecting that small pocket of time ultimately gives me back a sense of control over my own growth.",
+        "chinese": "确实如此，守护好那一小块时间最终让我重新找回了对自身成长的掌控感。",
+        "pinyin": "què shí rú cǐ, shǒu hù hǎo nà yī xiǎo kuài shí jiān zuì zhōng ràng wǒ chóng xīn zhǎo huí le duì zì shēn chéng zhǎng de zhǎng kòng gǎn.",
+        "vietnameseReading": "chiết(4) sứ(2) rú(2) cứ(3) sẩu(3) hù(4) hảo(3) na(4) i(1) xẻo(3) khuải(4) sứ(2) chiên(1) chuây(4) trung(1) rang(4) uổ(3) chóng(2) xin(1) chảo(3) huây(2) lơ tuy(4) tư(4) sên(1) chấng(2) chảng(3) tơ chảng(3) khổng(4) cản(3)",
+        "vietnamese": "Quả thực vậy, việc bảo vệ khoảng thời gian nhỏ bé ấy cuối cùng đã giúp tôi lấy lại quyền kiểm soát sự phát triển của chính mình."
+      }
+    ],
+    "note": "Cấu trúc 与其 A，我更倾向于把 B 视作 C dùng để thể hiện sự thay đổi góc nhìn sắc bén, từ chối việc coi một việc là gánh nặng và định nghĩa lại nó bằng một giá trị tích cực.",
+    "challenge": "Hãy ghi âm lại đoạn bạn chia sẻ về một kỹ năng bạn đang tự học vào buổi tối và dùng cấu trúc 与其...，我... để giải thích lý do.",
+    "grammarFocus": "Sử dụng cấu trúc 与其 A，我更倾向于把 B 视作 C để biểu thị sự chuyển biến nhận thức sâu sắc.",
+    "vocabulary": [
+      "consistent · 坚持 · kiên trì",
+      "extra chore · 额外的杂务 · việc vặt bổ sung",
+      "mindset shift · 心态转变 · sự chuyển dịch tư duy"
+    ],
+    "wish": "Mong buổi tối mang lại cho bạn sự tĩnh lặng cần thiết để nuôi dưỡng những hoài bão thầm lặng.",
+    "nightWish": "Khép lại một ngày bận rộn bằng sự bình yên trong tâm hồn; chúc bạn có những giấc mơ thật đẹp.",
+    "notification": {
+      "english": "How do you stay consistent every night?",
+      "chinese": "你是怎么做到每晚坚持的？",
+      "vietnamese": "Làm sao để bạn duy trì mỗi tối?"
+    },
+    "generatedAt": "2026-11-24T03:23:25.463Z",
+    "generator": "gemini-3.5-flash-lite"
+  },
+  {
+    "id": "lesson-0160",
+    "stage": "B1+ · Diễn đạt linh hoạt",
+    "kind": "sentence",
+    "title": "Chia sẻ góc nhìn về việc tháo gỡ vướng mắc trong dự án",
+    "context": "Một trưởng nhóm đang hướng dẫn đồng nghiệp cách phân rã các vấn đề phức tạp thành từng bước xử lý nhỏ gọn trong cuộc họp tiến độ buổi sáng.",
+    "lines": [
+      {
+        "speaker": "A",
+        "english": "Instead of viewing complex hurdles as insurmountable road-blocks, we should treat them as neatly stacked puzzles waiting to be solved one by one.",
+        "chinese": "与其把复杂的阻碍视作不可逾越的鸿沟，我们更应该把它当成等待逐一破解的错综拼图。",
+        "pinyin": "yúqǐ bǎ fùzá de zǔ'ài shìzuò bùkě yúyuè de hónggōu, wǒmen gèng yīnggāi bǎ tā dàngchéng děngdài zhúyī pòjiě de cuòzōng pīntú.",
+        "vietnameseReading": "ý(2) chỉ(3) bả(3) phu(4) trá(2) tơ chu(3) ai(4) sứ(4) chuô(4) pu(4) khể(3) ý(2) duê(4) tơ hung(2) câu(1) uổ(3) mần cêng(4) inh(1) cai(1) bả(3) tha(1) tang(4) chấng(2) đẩy(3) đai(4) chu(2) i(1) pô(4) chie(3) tơ cuốc(4) chung(1) pín(1) thu(2)",
+        "vietnamese": "Thay vì coi những trở ngại phức tạp là khoảng cách không thể vượt qua, chúng ta nên coi chúng như bức tranh ghép hình phức tạp đang chờ được giải từng cái một."
+      }
+    ],
+    "note": "Cấu trúc '与其 A，更应该 B' kết hợp với cụm từ '视作' giúp chuyển dịch góc nhìn từ bị động sang chủ động phân tích vấn đề. Tiếng Anh dùng 'Instead of viewing... as...' kết hợp 'treat them as...' để tạo sự tương phản mạnh mẽ về tư duy giải quyết.",
+    "challenge": "Hãy ghi âm lại câu trên bằng tiếng Anh và tiếng Trung, sau đó tự viết thêm một câu ngắn áp dụng cấu trúc '与其 A，更应该 B' để nói về cách bạn đối mặt với một khó khăn trong ngày.",
+    "grammarFocus": "Sử dụng cấu trúc '与其 A，更应该 B' để chuyển hóa góc nhìn và định hướng hành động tích cực.",
+    "vocabulary": [
+      "insurmountable road-block · 不可逾越的鸿沟 · trở ngại không thể vượt qua",
+      "stacked puzzles · 错综拼图 · bức tranh ghép hình phức tạp",
+      "treat them as · 把它当成 · coi chúng như là"
+    ],
+    "wish": "Chúc bạn buổi sáng tràn đầy năng lượng, nhìn thấu bản chất vấn đề và giải quyết mọi thử thách một cách nhẹ nhàng nhất.",
+    "nightWish": "Mong rằng màn đêm sẽ mang đi mọi mệt mỏi, để bạn chìm vào giấc ngủ sâu và thức dậy với tâm hồn trong trẻo.",
+    "notification": {
+      "english": "Treat hurdles as puzzles to solve.",
+      "chinese": "把阻碍当成等待破解的拼图。",
+      "vietnamese": "Xem trở ngại là câu đố cần giải."
+    },
+    "generatedAt": "2026-11-24T03:26:34.187Z",
+    "generator": "gemini-3.5-flash-lite"
   }
 ]

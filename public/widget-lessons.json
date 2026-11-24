@@ -1106,6 +1106,20 @@
       "english": "Design audit completed on schedule.",
       "chinese": "设计审核已按计划顺利收尾。",
       "vietnamese": "Đã hoàn tất rà soát thiết kế đúng hạn."
+    },
+    {
+      "id": "lesson-0159",
+      "title": "Chia sẻ trải nghiệm tự học kỹ năng mới ngoài giờ làm việc",
+      "english": "How do you stay consistent every night?",
+      "chinese": "你是怎么做到每晚坚持的？",
+      "vietnamese": "Làm sao để bạn duy trì mỗi tối?"
+    },
+    {
+      "id": "lesson-0160",
+      "title": "Chia sẻ góc nhìn về việc tháo gỡ vướng mắc trong dự án",
+      "english": "Treat hurdles as puzzles to solve.",
+      "chinese": "把阻碍当成等待破解的拼图。",
+      "vietnamese": "Xem trở ngại là câu đố cần giải."
     }
   ]
 }
