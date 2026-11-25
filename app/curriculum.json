@@ -5542,5 +5542,131 @@
     },
     "generatedAt": "2026-11-24T03:26:34.187Z",
     "generator": "gemini-3.5-flash-lite"
+  },
+  {
+    "id": "lesson-0161",
+    "stage": "B1+ · Diễn đạt linh hoạt",
+    "kind": "message",
+    "title": "Nhắn tin chọn thời gian trao đổi ngắn trong giờ nghỉ trưa",
+    "context": "Bạn đang nhắn tin cho đồng nghiệp vào buổi trưa để thống nhất lịch hẹn ngắn mà không làm phiền thời gian nghỉ ngơi của họ.",
+    "lines": [
+      {
+        "speaker": "A",
+        "english": "Feel free to pick any slot that suits your lunch break today.",
+        "chinese": "今天午休时间你随便挑个方便的时段就行。",
+        "pinyin": "jīn tiān wǔ xiū shí jiān nǐ suí biàn tiāo gè fāng biàn de shí duàn jiù xíng",
+        "vietnameseReading": "cin(1) thêm(1) uổ(3) xưu(1) sứ(2) chiên(1) nỉ(3) suý(2) piên(4) thiáo(1) cợ(4) phang(1) piên(4) tơ sứ(2) toan(4) chiêu(4) xíng(2)",
+        "vietnamese": "Cứ thoải mái chọn bất kỳ khung giờ nào tiện cho buổi trưa của bạn hôm nay nhé."
+      }
+    ],
+    "note": "Cấu trúc '随便...就行' diễn tả sự linh hoạt, cho phép đối phương tùy chọn điều kiện thuận lợi nhất mà không cảm thấy gò bó. Khác với tiếng Anh thường dùng cụm từ 'feel free to', tiếng Trung dùng '随便' kết hợp 'hành động + 就行' để thể hiện sự thoải mái và tôn trọng thời gian của người nghe.",
+    "challenge": "Hãy soạn một tin nhắn ngắn bằng tiếng Trung để hẹn đồng nghiệp thời gian trao đổi công việc vào chiều nay.",
+    "grammarFocus": "Sử dụng cấu trúc 随便...就行 để đưa ra lựa chọn linh hoạt và tôn trọng thời gian của người khác.",
+    "vocabulary": [
+      "lunch break · 午休时间 · giờ nghỉ trưa",
+      "slot · 时段 · khoảng thời gian",
+      "suit · 方便 · thuận tiện"
+    ],
+    "wish": "Chúc bạn có một buổi trưa thật thư thái, nạp đầy năng lượng và xử lý mọi việc suôn sẻ.",
+    "nightWish": "Mong đêm nay mang đến cho bạn những giấc ngủ thật sâu và những giấc mơ bình yên.",
+    "notification": {
+      "english": "Pick any slot that suits your lunch.",
+      "chinese": "午休挑个方便时段就行。",
+      "vietnamese": "Chọn khung giờ tiện cho bạn nhé."
+    },
+    "generatedAt": "2026-11-25T01:29:15.070Z",
+    "generator": "gemini-3.5-flash-lite"
+  },
+  {
+    "id": "lesson-0162",
+    "stage": "B1+ · Diễn đạt linh hoạt",
+    "kind": "dialogue",
+    "title": "Chia sẻ trải nghiệm khám phá các góc phố cổ",
+    "context": "Hai người bạn trò chuyện về việc tình cờ khám phá ra những con hẻm cổ kính và tĩnh mịch ở ngoại ô.",
+    "lines": [
+      {
+        "speaker": "A",
+        "english": "Did you manage to uncover any hidden gems while wandering through the historic district this morning?",
+        "chinese": "你今天早上在历史街区闲逛时，有幸淘到什么好去处吗？",
+        "pinyin": "Nǐ jīntiān zǎoshang zài lìshǐ jiēqū xiánguàng shí, yǒuxìng táodào shénme hǎoqùchù ma?",
+        "vietnameseReading": "nỉ(3) cin(1) thêm(1) tảo(3) xang trai(4) li(4) chỉ(3) chie(1) khu(1) xiên(2) cuang(4) sứ(2) iểu(3) xíng(4) thao(2) tao(4) sấn(2) mơ hảo(3) chiệu(4) chù(4) ma",
+        "vietnamese": "Bạn có tình cờ khám phá ra điểm thú vị nào khi đi dạo quanh khu phố lịch sử sáng nay không?"
+      },
+      {
+        "speaker": "B",
+        "english": "Instead of following the usual tourist map, I intentionally let intuition guide me down a narrow winding alley.",
+        "chinese": "与其按图索骥跟着常规导览走，我索性顺着直觉拐进了一条幽深的小巷。",
+        "pinyin": "Yǔqí àntúsuǒjì gēnzhe chángguī dǎolǎn zǒu, wǒ suǒxìng shùnzhe zhíjué guǎijìn le yī tiáo yōushēn de xiǎoxiàng.",
+        "vietnameseReading": "ỷ(3) chí(2) an(4) thu(2) suổ(3) chi(4) cên(1) chơ chang(2) cuy(1) tao(3) lản(3) dẩu(3) uổ(3) suổ(3) xíng(4) suấn(4) chơ chí(2) chié(2) cuải(3) cin(4) lơ i(1) thiáo(2) iêu(1) sên(1) tơ xẻo(3) xiang(4)",
+        "vietnamese": "Thay vì đi theo bản đồ du lịch thông thường, tôi đã cố tình để trực giác dẫn dắt mình rẽ vào một con hẻm nhỏ u tịch."
+      },
+      {
+        "speaker": "A",
+        "english": "That sounds like a wonderful escape from the predictable city noise.",
+        "chinese": "听起来这倒是一个逃离寻常喧嚣的绝佳去处。",
+        "pinyin": "Tīng qǐlái zhè dào shì yīgè táolí xúncháng xuānxiāo de juéjiā qùchù.",
+        "vietnameseReading": "thinh(1) chỉ(3) lai(2) chè(4) tao(4) sứ(4) i(1) cợ(4) thao(2) lí(2) xuân(2) chang(2) suản(1) xẻo(1) tơ chié(2) chia(1) chiệu(4) chù(4)",
+        "vietnamese": "Nghe có vẻ là một nơi tuyệt vời để trốn khỏi sự ồn ào quen thuộc."
+      },
+      {
+        "speaker": "B",
+        "english": "Indeed, stumbling upon those forgotten courtyards instantly washed away the whole week's weariness.",
+        "chinese": "确实如此，意外撞见那些被遗忘的庭院瞬间就冲刷掉了一周的疲惫。",
+        "pinyin": "Quèshí rúcǐ, yìwài zhuàngjiàn nàxiē bèi yíwàng de tíngyuàn shùnjiān jiù chōngshuā diào le yī zhōu de píbèi.",
+        "vietnameseReading": "chiết(4) sứ(2) rú(2) cứ(3) i(4) uải(4) troang(4) chiên(4) na(4) xiế(1) pây(4) y(2) oảng(4) tơ thính(2) uản(4) suấn(4) chiên(1) chiêu(4) chông(1) soa(1) điao(4) lơ i(1) trâu(1) tơ pi(2) pây(4)",
+        "vietnamese": "Quả thực vậy, việc vô tình bắt gặp những khoảng sân bị lãng quên ấy đã cuốn trôi đi sự mệt mỏi của cả tuần ngay lập tức."
+      }
+    ],
+    "note": "Cấu trúc 与其 A，我索性 B thể hiện sự buông bỏ lựa chọn mặc định để dứt khoát chuyển sang phương án mang tính bản năng hoặc tự do hơn. Khác với tiếng Anh thường dùng 'Instead of doing X, I purposely did Y', tiếng Trung dùng 过渡 từ 与其 sang 索性 để tạo nhịp điệu dứt khoát và sắc thái phóng khoáng.",
+    "challenge": "Hãy ghi âm lại câu trả lời của bạn khi được hỏi về một lần đi lạc hoặc rẽ vào con đường mới lạ và cảm xúc lúc đó bằng tiếng Anh.",
+    "grammarFocus": "Sử dụng cấu trúc 与其...，我索性... để diễn đạt việc từ bỏ lối mòn và chủ động chọn hành động tự phát.",
+    "vocabulary": [
+      "historic district · 历史街区 · khu phố lịch sử",
+      "intuition · 直觉 · trực giác",
+      "weariness · 疲惫 · sự mệt mỏi"
+    ],
+    "wish": "Mong bạn luôn giữ được sự tò mò dịu dàng để mỗi ngã rẽ trong đời đều mang lại những bất ngờ bình yên.",
+    "nightWish": "Khép lại một ngày nhiều chuyển động, chúc bạn chìm vào giấc ngủ sâu với những giấc mơ ngập tràn hương hoa cỏ.",
+    "notification": {
+      "english": "Did you uncover any hidden gems today?",
+      "chinese": "你今天淘到什么好去处吗？",
+      "vietnamese": "Bạn có khám phá ra điểm thú vị nào không?"
+    },
+    "generatedAt": "2026-11-25T01:29:40.915Z",
+    "generator": "gemini-3.5-flash-lite"
+  },
+  {
+    "id": "lesson-0163",
+    "stage": "B1+ · Diễn đạt linh hoạt",
+    "kind": "sentence",
+    "title": "Chia sẻ khoảnh khắc suy ngẫm bên ly trà sáng",
+    "context": "Người học chia sẻ trải nghiệm tận hưởng sự tĩnh lặng của buổi sáng sớm trước khi bắt đầu ngày mới.",
+    "lines": [
+      {
+        "speaker": "A",
+        "english": "Sipping this warm brew while watching the early mist lift gives me a rare sense of groundedness.",
+        "chinese": "一边品着温热的茶汤，一边看着清晨的薄雾散去，给了我一种难得的踏实感。",
+        "pinyin": "yībiān pǐn zhe wēn rè de chá tāng, yībiān kàn zhe qīng chén de báo wù sàn qù, gěi le wǒ yī zhǒng nán de de tà shí gǎn.",
+        "vietnameseReading": "i(1) pien(1) pín(3) chơ uên(1) rệ(4) tơ chá(2) tháng(1) i(1) pien(1) khan(4) chơ ch'ing(1) chân(2) tơ pao(2) uô(4) san(4) chiệu(4) cẩy(3) lơ uổ(3) i(1) chổng(3) nan(2) tơ tơ tha(4) sứ(2) cản(3)",
+        "vietnamese": "Vừa nhắp ngụm trà ấm vừa nhìn làn sương sớm tan dần mang lại cho tôi cảm giác bình yên đến lạ."
+      }
+    ],
+    "note": "Bài học sử dụng cấu trúc song hành '一边 A，一边 B' để diễn tả hai hành động diễn ra đồng thời, giúp câu văn trôi chảy và tạo nhịp điệu thư thái.",
+    "challenge": "Hãy viết một câu tiếng Trung sử dụng cấu trúc '一边 A，一边 B' để miêu tả thói quen buổi sáng của bạn.",
+    "grammarFocus": "Cấu trúc song hành '一边 A，一边 B' diễn tả hai hành động diễn ra cùng lúc.",
+    "vocabulary": [
+      "warm brew · 温热的茶汤 · trà ấm",
+      "early mist · 清晨的薄雾 · sương sớm",
+      "groundedness · 踏实感 · cảm giác vững chãi"
+    ],
+    "wish": "Chúc bạn có một buổi sáng tràn đầy năng lượng bình yên và giữ vững nhịp điệu tĩnh tại trong mọi việc.",
+    "nightWish": "Khép lại ngày dài bằng sự dịu dàng của tâm hồn và đón nhận giấc ngủ sâu đầy phục hồi.",
+    "notification": {
+      "english": "Sipping warm tea in the morning mist.",
+      "chinese": "品着温茶看晨雾散去。",
+      "vietnamese": "Nhắp ngụm trà ấm giữa sương sớm."
+    },
+    "generatedAt": "2026-11-25T01:29:51.615Z",
+    "generator": "gemini-3.5-flash-lite"
   }
 ]

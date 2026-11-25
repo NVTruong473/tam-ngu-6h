@@ -1120,6 +1120,27 @@
       "english": "Treat hurdles as puzzles to solve.",
       "chinese": "把阻碍当成等待破解的拼图。",
       "vietnamese": "Xem trở ngại là câu đố cần giải."
+    },
+    {
+      "id": "lesson-0161",
+      "title": "Nhắn tin chọn thời gian trao đổi ngắn trong giờ nghỉ trưa",
+      "english": "Pick any slot that suits your lunch.",
+      "chinese": "午休挑个方便时段就行。",
+      "vietnamese": "Chọn khung giờ tiện cho bạn nhé."
+    },
+    {
+      "id": "lesson-0162",
+      "title": "Chia sẻ trải nghiệm khám phá các góc phố cổ",
+      "english": "Did you uncover any hidden gems today?",
+      "chinese": "你今天淘到什么好去处吗？",
+      "vietnamese": "Bạn có khám phá ra điểm thú vị nào không?"
+    },
+    {
+      "id": "lesson-0163",
+      "title": "Chia sẻ khoảnh khắc suy ngẫm bên ly trà sáng",
+      "english": "Sipping warm tea in the morning mist.",
+      "chinese": "品着温茶看晨雾散去。",
+      "vietnamese": "Nhắp ngụm trà ấm giữa sương sớm."
     }
   ]
 }
