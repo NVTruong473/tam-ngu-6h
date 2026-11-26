@@ -5668,5 +5668,133 @@
     },
     "generatedAt": "2026-11-25T01:29:51.615Z",
     "generator": "gemini-3.5-flash-lite"
+  },
+  {
+    "id": "lesson-0164",
+    "stage": "B1+ · Diễn đạt linh hoạt",
+    "kind": "message",
+    "title": "Nhắn tin nhắc nhở nhẹ nhàng về buổi dã ngoại cuối tuần",
+    "context": "Nhắn tin cho bạn bè để xác nhận lại kế hoạch dã ngoại và nhắc nhở chuẩn bị đồ dùng cần thiết.",
+    "lines": [
+      {
+        "speaker": "A",
+        "english": "Just a friendly heads-up to double-check our weekend picnic gear, so we can avoid any last-minute hassle.",
+        "chinese": "提前提醒大家核对一下周末的野餐装备，这样就能避免最后一刻的手忙脚乱。",
+        "pinyin": "tíqián tíxǐng dàjiā héduì yīxià zhōumò de yěcān zhuāngbèi, zhèyàng jiù néng bìmiǎn zuìhòuyīkè de shǒumángjiǎoluàn.",
+        "vietnameseReading": "thí(2) chién(2) thí(2) xỉnh(3) ta(4) chia(1) hứa(2) tuy(4) i(1) xia(4) trâu(1) mốt(4) tơ iê(3) can(1) troang(1) pây(4) chè(4) iang(4) chiêu(4) nẻng(2) pỉ(4) mản(3) chuây(4) hâu(4) i(1) khè(4) tơ sẩu(3) máng(2) chảo(3) loan(4)",
+        "vietnamese": "Nhắc nhở mọi người kiểm tra lại đồ dã ngoại cuối tuần trước, như vậy có thể tránh được sự luống cuống vào phút chót."
+      }
+    ],
+    "note": "Bài học sử dụng cấu trúc 这样就能... (như vậy liền có thể...) để diễn tả kết quả tất yếu của hành động phía trước. Tiếng Anh dùng cấu trúc so-that clause để đạt hiệu quả tương đương.",
+    "challenge": "Hãy viết một tin nhắn ngắn nhắc nhở đồng nghiệp kiểm tra lại tài liệu trước cuộc họp chiều nay bằng tiếng Trung.",
+    "grammarFocus": "Sử dụng cấu trúc 这样就能... để nối kết hành động và kết quả thuận lợi.",
+    "vocabulary": [
+      "heads-up · 提前提醒 · nhắc nhở trước",
+      "picnic gear · 野餐装备 · đồ dã ngoại",
+      "last-minute · 最后一刻 · phút chót"
+    ],
+    "wish": "Mong rằng cuối tuần này của bạn sẽ ngập tràn ánh nắng ấm áp và những phút giây thư giãn trọn vẹn bên bạn bè.",
+    "nightWish": "Khép lại một ngày dài bận rộn, chúc bạn chìm vào giấc ngủ êm đềm với những giấc mộng ngọt ngào nhất.",
+    "notification": {
+      "english": "Double-check our weekend picnic gear.",
+      "chinese": "提前核对周末野餐装备。",
+      "vietnamese": "Kiểm tra lại đồ dã ngoại cuối tuần."
+    },
+    "generatedAt": "2026-11-26T01:03:54.675Z",
+    "generator": "gemini-3.5-flash-lite"
+  },
+  {
+    "id": "lesson-0165",
+    "stage": "B1+ · Diễn đạt linh hoạt",
+    "kind": "dialogue",
+    "title": "Bàn về việc duy trì thói quen tự phản tư sau mỗi tuần làm việc",
+    "context": "Hai người bạn trò chuyện vào tối thứ Sáu về thói quen tổng kết lại một tuần bận rộn.",
+    "lines": [
+      {
+        "speaker": "A",
+        "english": "Do you still reserve time for a Friday review after dealing with back-to-back deadlines all week?",
+        "chinese": "在应付了一整周连轴转的截止日期后，你每周五还是会留出时间做复盘吗？",
+        "pinyin": "zài yìng fu le yì zhěng zhōu lián zhóu zhuàn de jié zhǐ rì qī hòu, nǐ měi zhōu wǔ hái shì huì liú chū shí jiān zuò fù pán ma?",
+        "vietnameseReading": "trai(4) ying(4) phu lơ i(4) chẩng(3) trâu(1) liến(2) trâu(2) chuản(4) tơ ciế(2) chỉ(3) rư(4) chi(1) hâu(4) nỉ(3) mây(3) trâu(1) uổ(3) hải(2) sứ(4) huây(4) liu(2) chu(1) sứ(2) chiên(1) chuô(4) phu(4) pan(2) ma",
+        "vietnamese": "Sau khi đối mặt với các hạn chót liên tiếp suốt cả tuần, bạn vẫn dành thời gian vào thứ Sáu để tổng kết chứ?"
+      },
+      {
+        "speaker": "B",
+        "english": "Not anymore; instead of letting the weekly chaos blur together, I rely on this quiet reflection to anchor my thoughts.",
+        "chinese": "不再这样了；与其让每周的混乱糊里糊涂地混过去，我更依赖这种安静的反思来锚定思绪。",
+        "pinyin": "bú zài zhè yàng le; yǔ qí ràng měi zhōu de hùn luàn hú lǐ hú tú de hùn guò qù, wǒ gèng yī lài zhè zhǒng ān jìng de fǎn sī lái máo dìng sī xù.",
+        "vietnameseReading": "pu(2) trai(4) chè(4) iang(4) lơ ỷ(3) chí(2) rang(4) mây(3) trâu(1) tơ hún(4) loan(4) hù(2) lỉ(3) hù(2) thu(2) tơ hún(4) cuô(4) chiệu(4) uổ(3) cêng(4) i(1) lai(4) chè(4) chổng(3) an(1) chỉng(4) tơ phản(3) sư(1) lai(2) mao(2) tìng(4) sư(1) sy(4)",
+        "vietnamese": "Không còn thế nữa; thay vì để sự hỗn loạn hằng tuần trôi qua mơ hồ, tôi dựa vào sự suy ngẫm tĩnh lặng này để định hình suy nghĩ."
+      },
+      {
+        "speaker": "A",
+        "english": "That sounds incredibly grounding, whereas my tendency is usually to escape straight into weekend distractions.",
+        "chinese": "听起来极其脚踏实地，而我过去的习惯通常是直接逃进周末的消遣里。",
+        "pinyin": "tīng qǐ lái jí qí jiǎo tà shí dì, ér wǒ guò qù de xí guàn tōng cháng shì zhí jiē táo jìn zhōu mò de xiāo qiǎn lǐ.",
+        "vietnameseReading": "thinh(1) chỉ(3) lai(2) chí(2) chí(2) chảo(3) tha(4) sứ(2) tì(4) ơ(2) uổ(3) cuô(4) chiệu(4) tơ si(2) cuản(4) thong(1) chang(2) sứ(4) chí(2) chie(1) thao(2) cin(4) trâu(1) mốt(4) tơ xẻo(1) chia(3) lỉ(3)",
+        "vietnamese": "Nghe có vẻ cực kỳ vững chãi, trong khi xu hướng của tôi thường là trốn thẳng vào những cuộc vui cuối tuần."
+      },
+      {
+        "speaker": "B",
+        "english": "It is simply a matter of transforming fatigue into clarity before resting.",
+        "chinese": "这纯粹是在休息前把疲惫转化为清明的一个过程。",
+        "pinyin": "zhè chún cuì shì zài xiū xi qián bǎ pí bèi zhuǎn huà wéi qīng míng de yí gè guò chéng.",
+        "vietnameseReading": "chè(4) chuân(2) chuy(4) sứ(4) trai(4) xưu(1) xư chién(2) bả(3) pi(2) pây(4) chuản(3) hua(4) uấy(2) ch'ing(1) mính(2) tơ y(2) cợ(4) cuô(4) chấng(2)",
+        "vietnamese": "Đó đơn thuần là quá trình biến sự mệt mỏi thành sự minh mẫn trước khi nghỉ ngơi."
+      }
+    ],
+    "note": "Cấu trúc 与其 A，我更依赖 B dùng để đối chiếu hai phương án, trong đó phương án B được chọn vì mang tính chủ động và bền vững hơn so với A.",
+    "challenge": "Hãy viết hoặc nói một đoạn ngắn nêu rõ một thói quen bạn áp dụng vào cuối tuần để lấy lại sự cân bằng.",
+    "grammarFocus": "Sử dụng cấu trúc 与其 A，我更依赖 B để biểu thị sự so sánh lựa chọn phương án thay thế hữu ích hơn.",
+    "vocabulary": [
+      "review · 复盘 · tổng kết",
+      "reflection · 反思 · suy ngẫm",
+      "clarity · 清明 · sự minh mẫn",
+      "fatigue · 疲惫 · sự mệt mỏi",
+      "anchor · 锚定 · định hình"
+    ],
+    "wish": "Chúc bạn khép lại một tuần làm việc với tâm thế vững vàng và tận hưởng trọn vẹn sự bình yên.",
+    "nightWish": "Mong đêm nay mang đến cho bạn những giấc mơ êm đềm và nguồn năng lượng tươi mới cho ngày mai.",
+    "notification": {
+      "english": "Reflecting on the week brings clarity.",
+      "chinese": "复盘一周带来内心的清明。",
+      "vietnamese": "Tổng kết tuần mang lại sự minh mẫn."
+    },
+    "generatedAt": "2026-11-26T01:04:11.874Z",
+    "generator": "gemini-3.5-flash-lite"
+  },
+  {
+    "id": "lesson-0166",
+    "stage": "B1+ · Diễn đạt linh hoạt",
+    "kind": "sentence",
+    "title": "Bàn về việc thiết lập ranh giới năng lượng cá nhân buổi chiều",
+    "context": "Khi bạn muốn giữ lại không gian riêng tư thay vì nhận thêm việc vào buổi chiều muộn.",
+    "lines": [
+      {
+        "speaker": "A",
+        "english": "Rather than absorbing everyone else's chaotic afternoon emergencies, I choose to build a quiet fortress of focus.",
+        "chinese": "与其承接所有人焦头烂额的下午紧急事件，我选择构筑一座专注的安静堡垒。",
+        "pinyin": "yǔ qí chéng jiē suǒ yǒu rén jiāo tóu làn é de xià wǔ jǐn jí shì jiàn, wǒ xuǎn zé gòu zhù yī zuò zhuān zhù de ān jìng bǎo lěi.",
+        "vietnameseReading": "ỷ(3) chí(2) chấng(2) chie(1) suổ(3) iểu(3) rấn(2) chia(1) thâu(2) lản(4) ế(2) tơ xia(4) uổ(3) chín(3) chí(2) sứ(4) chiên(4) uổ(3) suản(3) chớ(2) câu(4) chu(4) i(1) chuô(4) chuai(1) chu(4) tơ an(1) chỉng(4) bả(3) lây(3)",
+        "vietnamese": "Thay vì gánh vác những sự cố khẩn cấp hỗn độn buổi chiều của tất cả mọi người, tôi chọn xây dựng một pháo đài tập trung yên tĩnh."
+      }
+    ],
+    "note": "Cấu trúc '与其 A，我选择 B' giúp nhấn mạnh sự từ bỏ phản ứng bị động (A) để kiên quyết chọn hành động mang tính tự chủ cao hơn (B). Trong tiếng Trung, cụm từ '焦头烂额' thể hiện trạng thái bận rộn đến mức sứt đầu mẻ trán, tạo sắc thái hình ảnh mạnh mẽ hơn tiếng Anh.",
+    "challenge": "Hãy thu âm câu này với tốc độ vừa phải, nhấn mạnh vào vế sau để thể hiện sự quyết đoán trong việc giữ gìn năng lượng cá nhân.",
+    "grammarFocus": "Sử dụng cấu trúc '与其 A，我选择 B' để thể hiện sự thay đổi góc nhìn và quyết định thiết lập ranh giới.",
+    "vocabulary": [
+      "Rather than · 与其 · Thay vì",
+      "Emergency · 紧急事件 · Sự kiện khẩn cấp",
+      "Fortress · 堡垒 · Pháo đài"
+    ],
+    "wish": "Chúc bạn buổi chiều tràn đầy năng lượng tỉnh thức, vững vàng bảo vệ không gian làm việc và tận hưởng sự bình an từ bên trong.",
+    "nightWish": "Khép lại một ngày dài nhiều biến động, mong bạn trút bỏ mọi gánh nặng, chìm vào giấc ngủ sâu với tâm hồn nhẹ nhõm và an yên.",
+    "notification": {
+      "english": "Choosing focus over afternoon chaos.",
+      "chinese": "选择专注而非下午的混乱。",
+      "vietnamese": "Lựa chọn sự tập trung thay vì hỗn độn."
+    },
+    "generatedAt": "2026-11-26T01:05:40.420Z",
+    "generator": "gemini-3.5-flash-lite"
   }
 ]
