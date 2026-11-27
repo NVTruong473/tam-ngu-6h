@@ -5796,5 +5796,131 @@
     },
     "generatedAt": "2026-11-26T01:05:40.420Z",
     "generator": "gemini-3.5-flash-lite"
+  },
+  {
+    "id": "lesson-0167",
+    "stage": "B1+ · Diễn đạt linh hoạt",
+    "kind": "message",
+    "title": "Nhắn tin chọn góc làm việc yên tĩnh trong quán cà phê buổi trưa",
+    "context": "Nhắn tin cho bạn bè để thống nhất địa điểm làm việc buổi trưa nhằm tránh xa tiếng ồn.",
+    "lines": [
+      {
+        "speaker": "A",
+        "english": "Instead of sitting near the noisy street front, let us grab that cozy corner table away from the crowd.",
+        "chinese": "与其坐在吵闹的临街前台，不如我们去抢占那个远离人群的舒适角落桌。",
+        "pinyin": "Yǔ qí zuò zài chǎo nào de lín jiē qián tái, bù rú wǒ men qù qiǎng zhàn nà gè yuǎn lí rén qún de shū shì jiǎo luò zhuō.",
+        "vietnameseReading": "ỷ(3) chí(2) chuô(4) trai(4) chao(3) nào(4) tơ lin(2) chie(1) chién(2) thai(2) pu(4) rú(2) uổ(3) mần chiệu(4) xiang(3) chan(4) na(4) cợ(4) iuển(3) lí(2) rấn(2) xuân(2) tơ su(1) sứ(4) chảo(3) luô(4) truô(1)",
+        "vietnamese": "Thay vì ngồi ở mặt tiền giáp phố ồn ào, chi bằng chúng ta chiếm lấy chiếc bàn góc thoải mái cách xa đám đông đó."
+      }
+    ],
+    "note": "Cấu trúc 与其 A，不如 B dùng để so sánh hai phương án và đưa ra lựa chọn tối ưu hơn, giúp diễn đạt ý muốn thay đổi không gian làm việc một cách tinh tế.",
+    "challenge": "Hãy viết hoặc nói một câu dùng cấu trúc 与其 A，不如 B để đề xuất đổi địa điểm làm việc nhóm tránh ồn ào.",
+    "grammarFocus": "Cấu trúc so sánh lựa chọn 与其 A，不如 B",
+    "vocabulary": [
+      "Instead of · 与其 · Thay vì",
+      "Cozy corner · 舒适角落 · Góc thoải mái",
+      "Crowd · 人群 · Đám đông"
+    ],
+    "wish": "Chúc bạn buổi trưa tràn đầy năng lượng, tìm được góc làm việc thật tĩnh lặng và hoàn thành mọi mục tiêu đề ra.",
+    "nightWish": "Mong đêm nay mang đến cho bạn những giấc mơ êm đềm và một không gian nghỉ ngơi trọn vẹn bình yên.",
+    "notification": {
+      "english": "Let us grab that cozy corner table.",
+      "chinese": "不如去角落的桌子。",
+      "vietnamese": "Hãy chọn chiếc bàn ở góc thoải mái."
+    },
+    "generatedAt": "2026-11-27T01:04:29.051Z",
+    "generator": "gemini-3.5-flash-lite"
+  },
+  {
+    "id": "lesson-0168",
+    "stage": "B1+ · Diễn đạt linh hoạt",
+    "kind": "dialogue",
+    "title": "Bàn về việc rũ bỏ áp lực công việc khi trở về nhà",
+    "context": "Hai đồng nghiệp trò chuyện vào buổi tối về cách họ tách biệt hoàn toàn không gian công việc và cuộc sống cá nhân.",
+    "lines": [
+      {
+        "speaker": "A",
+        "english": "Do you still find yourself mentally drafting emails long after locking your office door?",
+        "chinese": "锁上办公室门很久之后，你是不是发现自己脑子里还在起草邮件？",
+        "pinyin": "suǒ shàng bàn gōng shì mén hěn jiǔ zhī hòu, nǐ shì bú shì fā xiàn zì jǐ nǎo zi li hái zài qǐ cǎo yóu jiàn?",
+        "vietnameseReading": "suổ(3) sang(4) ban(4) công(1) sứ(4) mớn(2) hẩn(3) chiểu(3) trư(1) hâu(4) nỉ(3) sứ(4) pu(2) sứ(4) pha(1) xiên(4) tư(4) chỉ(3) nào(3) tư lỉ hải(2) trai(4) chỉ(3) thảo(3) iêu(2) chiên(4)",
+        "vietnamese": "Bạn có thấy mình vẫn đang soạn thảo email trong đầu lâu sau khi đã khóa cửa văn phòng không?"
+      },
+      {
+        "speaker": "B",
+        "english": "Not anymore; rather than bringing unfinished chaos home, I use the evening commute to let everything go.",
+        "chinese": "不再这样了；与其把未竟的混乱带回家，我利用晚通勤把一切都放下。",
+        "pinyin": "bú zài zhè yàng le; yǔ qí bǎ wèi jìng de hùn luàn dài huí jiā, wǒ lì yòng wǎn tōng qín bǎ yí qiè dōu fàng xià.",
+        "vietnameseReading": "pu(2) trai(4) chè(4) iang(4) lơ ỷ(3) chí(2) bả(3) uây(4) chỉng(4) tơ hún(4) loan(4) đai(4) huây(2) chia(1) uổ(3) li(4) yống(4) uản(3) thong(1) chín(2) bả(3) y(2) chỉê(4) tâu(1) phang(4) xia(4)",
+        "vietnamese": "Không còn thế nữa; thay vì mang sự hỗn độn dở dang về nhà, tôi tận dụng chuyến đi làm buổi tối để buông bỏ mọi thứ."
+      },
+      {
+        "speaker": "A",
+        "english": "That sounds wonderfully restorative, whereas I often struggle to shut off my professional mode.",
+        "chinese": "听起来有极佳的恢复效果，而我却常常难以关掉职业模式。",
+        "pinyin": "tīng qǐ lái yǒu jí jiā de huī fù xiào guǒ, ér wǒ què cháng cháng nán yǐ guān diào zhí yè mó shì.",
+        "vietnameseReading": "thinh(1) chỉ(3) lai(2) iểu(3) chí(2) chia(1) tơ huy(1) phu(4) xiaô(4) cuổ(3) ơ(2) uổ(3) chiết(4) chang(2) chang(2) nan(2) ỉ(3) cuan(1) điao(4) chí(2) yê(4) mố(2) sứ(4)",
+        "vietnamese": "Nghe có vẻ phục hồi tuyệt vời, trong khi tôi thường chật vật không thể tắt chế độ chuyên nghiệp của mình."
+      },
+      {
+        "speaker": "B",
+        "english": "It is simply a matter of drawing a firm line so our personal sanctuary stays untouched.",
+        "chinese": "这纯粹是画一条坚定界限的问题，好让我们的私人庇护所不受侵扰。",
+        "pinyin": "zhè chún cuì shì huà yì tiáo jiān dìng jiè xiàn de wèn tí, hǎo ràng wǒ men de sī rén bì hù suǒ bú shòu qīn rǎo.",
+        "vietnameseReading": "chè(4) chuân(2) chuy(4) sứ(4) hua(4) i(4) thiáo(2) chiên(1) tìng(4) chie(4) xiên(4) tơ uên(4) thí(2) hảo(3) rang(4) uổ(3) mần tơ sư(1) rấn(2) pỉ(4) hù(4) suổ(3) pu(2) sẩu(4) chín(1) rao(3)",
+        "vietnamese": "Đó đơn giản là vấn đề vạch ra một ranh giới vững chắc để nơi trú ẩn cá nhân của chúng ta không bị xâm phạm."
+      }
+    ],
+    "note": "Cấu trúc “与其 A，B” được sử dụng để nêu bật sự từ bỏ một thói quen tiêu cực để chọn phương án tích cực hơn. Khác với tiếng Anh thường dùng 'rather than', tiếng Trung đặt cụm 与其 ở vế đầu để tạo sự đối lập trực diện với hành động thực tế ở vế sau.",
+    "challenge": "Hãy tự ghi âm một đoạn ngắn 1 phút bằng cả tiếng Anh và tiếng Trung chia sẻ về cách bạn rũ bỏ áp lực công việc mỗi tối.",
+    "grammarFocus": "Sử dụng cấu trúc so sánh 与其 A，B để chỉ rõ hành động bị loại bỏ và phương án thay thế tối ưu.",
+    "vocabulary": [
+      "chaos · 混乱 · sự hỗn độn",
+      "commute · 通勤 · việc đi lại",
+      "sanctuary · 庇护所 · nơi trú ẩn"
+    ],
+    "wish": "Mong rằng màn đêm buông xuống sẽ mang theo mọi gánh nặng, để lại cho bạn một khoảng trời bình yên và trọn vẹn.",
+    "nightWish": "Khép lại một ngày dài nhiều suy ngẫm, chúc bạn chìm vào giấc ngủ sâu trong không gian tĩnh lặng và ấm áp.",
+    "notification": {
+      "english": "Instead of bringing chaos home, let go.",
+      "chinese": "与其把混乱带回家，不如放下一切。",
+      "vietnamese": "Thay vì mang hỗn độn về nhà, hãy buông bỏ."
+    },
+    "generatedAt": "2026-11-27T01:04:49.468Z",
+    "generator": "gemini-3.5-flash-lite"
+  },
+  {
+    "id": "lesson-0169",
+    "stage": "B1+ · Diễn đạt linh hoạt",
+    "kind": "sentence",
+    "title": "Bàn về việc duy trì tinh thần cởi mở khi tiếp nhận thông tin mới",
+    "context": "Một góc suy ngẫm buổi sáng về việc dung nạp các quan điểm trái chiều.",
+    "lines": [
+      {
+        "speaker": "A",
+        "english": "Instead of dismissing unfamiliar ideas outright, I choose to examine them with genuine curiosity.",
+        "chinese": "与其直接排斥陌生的观点，我选择带着纯粹的好奇心去审视它们。",
+        "pinyin": "Yǔqí zhíjiē páichì mòshēng de guāndiǎn, wǒ xuǎnzé dàizhe chúncuì de hàoqíxīn qù shěnshì tāmen.",
+        "vietnameseReading": "ỷ(3) chí(2) chí(2) chie(1) phái(2) chí(4) mốt(4) sâng(1) tơ cuan(1) điển(3) uổ(3) suản(3) chớ(2) đai(4) chơ chuân(2) chuy(4) tơ hảo(4) chí(2) xin(1) chiệu(4) sẩn(3) sứ(4) tha(1) mần",
+        "vietnamese": "Thay vì gạt phăng những ý tưởng xa lạ ngay lập tức, tôi chọn cách xem xét chúng với sự tò mò chân thành."
+      }
+    ],
+    "note": "Cấu trúc 与其 A，我选择 B được dùng để thể hiện sự từ bỏ một phản ứng tự vệ quen thuộc nhằm chọn thái độ tiếp nhận tích cực hơn. Điểm thú vị trong tiếng Trung là việc kết hợp từ 与其 (thay vì) với các động từ chỉ hành vi dứt khoát như 排斥 (gạt bỏ, bài xích) giúp câu văn mang màu sắc tự chủ rõ nét.",
+    "challenge": "Hãy viết một đoạn ngắn ghi lại một lần bạn thay đổi định kiến sau khi lắng nghe một góc nhìn hoàn toàn trái ngược.",
+    "grammarFocus": "Sử dụng cấu trúc 与其 A，我选择 B để diễn tả sự chuyển dịch từ phản ứng phòng thủ sang thái độ chủ động khám phá.",
+    "vocabulary": [
+      "Instead of · 与其 · Thay vì",
+      "Dismiss · 排斥 · Bài xích / gạt bỏ",
+      "Curiosity · 好奇心 · Sự tò mò"
+    ],
+    "wish": "Chúc bạn có một buổi sáng tràn đầy cảm hứng, luôn giữ cho tâm trí rộng mở trước mọi góc nhìn mới mẻ và thú vị.",
+    "nightWish": "Mong rằng khi khép lại ngày dài, bạn sẽ chìm vào giấc ngủ trong sự bình yên và những suy ngẫm nhẹ nhàng.",
+    "notification": {
+      "english": "Choose curiosity over dismissal.",
+      "chinese": "用好奇心代替排斥。",
+      "vietnamese": "Chọn tò mò thay vì gạt bỏ."
+    },
+    "generatedAt": "2026-11-27T01:04:57.183Z",
+    "generator": "gemini-3.5-flash-lite"
   }
 ]
