@@ -5922,5 +5922,131 @@
     },
     "generatedAt": "2026-11-27T01:04:57.183Z",
     "generator": "gemini-3.5-flash-lite"
+  },
+  {
+    "id": "lesson-0170",
+    "stage": "B1+ · Diễn đạt linh hoạt",
+    "kind": "message",
+    "title": "Chia sẻ khoảnh khắc tĩnh lặng trong quán trưa",
+    "context": "Nhắn tin chia sẻ với bạn bè về việc tìm thấy một góc nhỏ yên bình giữa giờ nghỉ trưa bận rộn.",
+    "lines": [
+      {
+        "speaker": "A",
+        "english": "Instead of letting the bustling midday noise drain my energy, I decided to seek refuge in this quiet hidden alcove.",
+        "chinese": "与其让喧嚣的午间噪音耗尽我的精力，我决定在这个安静的隐秘角落寻求一方清净。",
+        "pinyin": "Yǔ qí ràng xuān xiāo de wǔ jiān zào yīn hào jìn wǒ de jīng lì, wǒ jué dìng zài zhè ge ān jìng de yǐn mì jiǎo luò xún qiú yī fāng qīng jìng.",
+        "vietnameseReading": "ỷ(3) chí(2) rang(4) suản(1) xẻo(1) tơ uổ(3) chiên(1) tảo(4) y(1) hảo(4) cin(4) uổ(3) tơ cing(1) li(4) uổ(3) chié(2) tìng(4) trai(4) chè(4) cợ an(1) chỉng(4) tơ y(3) mi(4) chảo(3) luô(4) xuân(2) chiếu(2) i(1) phang(1) ch'ing(1) chỉng(4)",
+        "vietnamese": "Thay vì để tiếng ồn náo nhiệt giữa trưa vắt kiệt năng lượng, tôi quyết định tìm một chốn bình yên ở góc khuất tĩnh lặng này."
+      }
+    ],
+    "note": "Cấu trúc 与其 A，我决定 B (Thay vì A, tôi quyết định B) giúp thể hiện sự chủ động lựa chọn phương án tích cực hơn để bảo vệ năng lượng cá nhân. So với tiếng Anh dùng 'Instead of letting...', tiếng Trung dùng 与其 ở vế đầu để nêu rõ hành động bị gác lại trước khi đưa ra quyết định ở vế sau.",
+    "challenge": "Hãy viết hoặc nói một câu bằng tiếng Trung hoặc tiếng Anh kể về cách bạn tìm lại sự bình yên trong một buổi trưa bận rộn.",
+    "grammarFocus": "Sử dụng cấu trúc 与其 A，我决定 B để diễn tả sự chủ động thay đổi lựa chọn trước áp lực.",
+    "vocabulary": [
+      "Instead of · 与其 · thay vì",
+      "Midday noise · 午间噪音 · tiếng ồn buổi trưa",
+      "Hidden alcove · 隐秘角落 · góc khuất ẩn mật"
+    ],
+    "wish": "Chúc bạn có một buổi trưa thật tĩnh tại, nạp đầy năng lượng tươi mới để tiếp tục hành trình phía trước.",
+    "nightWish": "Mong rằng màn đêm buông xuống sẽ nhẹ nhàng ôm ấp những mệt mỏi, mang lại cho bạn giấc ngủ thật sâu và bình yên.",
+    "notification": {
+      "english": "Seeking refuge in a quiet alcove today.",
+      "chinese": "在隐秘角落寻求一方清净。",
+      "vietnamese": "Tìm chút bình yên ở góc khuất tĩnh lặng."
+    },
+    "generatedAt": "2026-11-28T00:36:06.224Z",
+    "generator": "gemini-3.5-flash-lite"
+  },
+  {
+    "id": "lesson-0171",
+    "stage": "B1+ · Diễn đạt linh hoạt",
+    "kind": "dialogue",
+    "title": "Bàn về việc duy trì sự tập trung sáng tạo trong không gian làm việc mở",
+    "context": "Hai đồng nghiệp trò chuyện vào buổi tối muộn tại văn phòng về cách họ bảo vệ mạch suy nghĩ trước những xao lãng xung quanh.",
+    "lines": [
+      {
+        "speaker": "A",
+        "english": "How do you manage to write deep code when the office is still buzzing with after-hours chatter?",
+        "chinese": "在办公室还充斥着加班的闲聊时，你是怎么做到潜心编写代码的？",
+        "pinyin": "zài bàn gōng shì hái chōng chì zhe jiā bān de xián liáo shí, nǐ shì zěn me zuò dào qián xīn biān xiě dài mǎ de?",
+        "vietnameseReading": "trai(4) ban(4) công(1) sứ(4) hải(2) chông(1) chí(4) chơ chia(1) ban(1) tơ xiên(2) lẹo(2) sứ(2) nỉ(3) sứ(4) chẩn(3) mơ chuô(4) tao(4) chién(2) xin(1) pien(1) xỉa(3) đai(4) mả(3) tơ",
+        "vietnamese": "Làm thế nào bạn có thể tập trung viết mã khi văn phòng vẫn tràn ngập tiếng trò chuyện ngoài giờ làm việc?"
+      },
+      {
+        "speaker": "B",
+        "english": "Instead of letting the ambient noise distract my mind, I use instrumental soundscapes to build an impenetrable auditory cocoon.",
+        "chinese": "与其让周围的杂音分散我的注意力，我通过播放纯音乐来构筑一个密不透风的听觉蚕茧。",
+        "pinyin": "yǔ qí ràng zhōu wéi de zá yīn fēn sàn wǒ de zhù yì lì, wǒ tōng guò bò fàng chún yīn yuè lái gòu zhù yí gè mì bù tòu fēng de tīng jué cán jiǎn.",
+        "vietnameseReading": "ỷ(3) chí(2) rang(4) trâu(1) uấy(2) tơ trá(2) y(1) phân(1) san(4) uổ(3) tơ chu(4) i(4) li(4) uổ(3) thong(1) cuô(4) pơ(4) phang(4) chuân(2) y(1) duê(4) lai(2) câu(4) chu(4) y(2) cợ(4) mi(4) pu(4) thâu(4) phêng(1) tơ thinh(1) chié(2) can(2) chien(3)",
+        "vietnamese": "Thay vì để tạp chí xung quanh làm phân tâm sự chú ý, tôi dùng âm nhạc không lời để xây dựng một cái kén thính giác kín mít."
+      },
+      {
+        "speaker": "A",
+        "english": "That sounds remarkably effective, whereas I often find myself falling into the trap of endless multitasking.",
+        "chinese": "听起来成效显著，而我却常常发现自己陷入了无休止多任务处理的陷阱中。",
+        "pinyin": "tīng qǐ lái chéng xiào xiǎn zhù, ér wǒ què cháng cháng fā xiàn zì jǐ xiàn rù le wú xiū zhǐ duō rèn wù chù lǐ de xiàn jǐng zhōng.",
+        "vietnameseReading": "thinh(1) chỉ(3) lai(2) chấng(2) xiaô(4) xiển(3) chu(4) ơ(2) uổ(3) chiết(4) chang(2) chang(2) pha(1) xiên(4) tư(4) chỉ(3) xiên(4) rú(4) lơ ú(2) xưu(1) chỉ(3) tuô(1) rần(4) uô(4) chù(4) lỉ(3) tơ xiên(4) ỉng(3) trung(1)",
+        "vietnamese": "Nghe có vẻ rất hiệu quả, trong khi tôi thường thấy mình rơi vào cái bẫy xử lý đa nhiệm không hồi kết."
+      },
+      {
+        "speaker": "B",
+        "english": "It is simply a matter of reclaiming absolute control over your cognitive bandwidth.",
+        "chinese": "这纯粹是重新夺回对自己认知带宽掌控权的问题。",
+        "pinyin": "zhè chún cuì shì chóng xīn duó huí duì zì jǐ rèn zhī dài kuān zhǎng kòng quán de wèn tí.",
+        "vietnameseReading": "chè(4) chuân(2) chuy(4) sứ(4) chóng(2) xin(1) tuô(2) huây(2) tuy(4) tư(4) chỉ(3) rần(4) trư(1) đai(4) khuân(1) chảng(3) khổng(4) chuán(2) tơ uên(4) thí(2)",
+        "vietnamese": "Đó đơn giản là vấn đề giành lại quyền kiểm soát tuyệt đối đối với băng thông nhận thức của bạn."
+      }
+    ],
+    "note": "Bài học sử dụng cấu trúc tương phản “与其 A，我通过 B” để diễn tả việc từ bỏ cách phản ứng bị động và thiết lập phương pháp bảo vệ chủ động. Khác với tiếng Anh thường dùng mệnh đề quan hệ dài, tiếng Trung sắp xếp các cụm bổ nghĩa rất gọn trước danh từ chính.",
+    "challenge": "Hãy viết hoặc thu âm một đoạn ngắn 2 phút kể về cách bạn tự tạo ra không gian tĩnh lặng để hoàn thành công việc quan trọng.",
+    "grammarFocus": "Sử dụng cấu trúc “与其 A，我通过 B” để chỉ sự dịch chuyển từ hành động bị động sang giải pháp chủ động.",
+    "vocabulary": [
+      "after-hours chatter · 加班的闲聊 · tiếng trò chuyện ngoài giờ",
+      "auditory cocoon · 听觉蚕茧 · kén thính giác",
+      "cognitive bandwidth · 认知带宽 · băng thông nhận thức"
+    ],
+    "wish": "Chúc bạn giữ vững được sự tĩnh lặng nội tâm và hoàn thành trọn vẹn những dự định ý nghĩa trong đêm nay.",
+    "nightWish": "Khép lại màn hình, buông bỏ mọi bộn bề, để tâm hồn được chìm sâu vào giấc ngủ êm đềm và thanh khiết.",
+    "notification": {
+      "english": "Shield your focus with ambient sound",
+      "chinese": "用纯音乐构筑听觉茧",
+      "vietnamese": "Bảo vệ sự tập trung của bạn"
+    },
+    "generatedAt": "2026-11-28T00:36:26.441Z",
+    "generator": "gemini-3.5-flash-lite"
+  },
+  {
+    "id": "lesson-0172",
+    "stage": "B1+ · Diễn đạt linh hoạt",
+    "kind": "sentence",
+    "title": "Bàn về việc thiết lập ranh giới tinh thần trước khi bắt đầu ngày mới",
+    "context": "Chia sẻ về cách bảo vệ năng lượng cá nhân vào buổi sáng trước khi tiếp nhận thông tin từ bên ngoài.",
+    "lines": [
+      {
+        "speaker": "A",
+        "english": "Instead of checking emails the moment I wake up, I consciously allow myself a quiet cup of tea to anchor my morning.",
+        "chinese": "与其醒来就查看邮件，我刻意留给自己一杯清茶的时间来锚定早晨。",
+        "pinyin": "Yǔqí xǐnglái jiù chákàn yóujiàn, wǒ kèyì liú gěi zìjǐ yī bēi qīngchá de shíjiān lái máodìng zǎochén.",
+        "vietnameseReading": "ỷ(3) chí(2) xỉnh(3) lai(2) chiêu(4) chá(2) khan(4) iêu(2) chiên(4) uổ(3) khè(4) i(4) liu(2) cẩy(3) tư(4) chỉ(3) i(1) bê(1) ch'ing(1) chá(2) tơ sứ(2) chiên(1) lai(2) mao(2) tìng(4) tảo(3) chân(2)",
+        "vietnamese": "Thay vì kiểm tra email ngay khi thức dậy, tôi chủ động dành cho mình thời gian một chén trà thanh để định hình buổi sáng."
+      }
+    ],
+    "note": "Cấu trúc 与其 A，我刻意 B dùng để chỉ sự thay đổi từ thói quen phản ứng bị động sang hành động chủ động thiết lập không gian bình yên.",
+    "challenge": "Hãy viết hoặc nói một câu bằng tiếng Trung kể về một việc bạn chủ động làm vào buổi sáng để bảo vệ sự tập trung của bản thân.",
+    "grammarFocus": "Sử dụng cấu trúc 与其 A，我刻意 B để thể hiện việc từ bỏ thói quen phản ứng bị động và chủ động tạo lập không gian riêng.",
+    "vocabulary": [
+      "Instead of · 与其 · thay vì",
+      "wake up · 醒来 · thức dậy",
+      "anchor · 锚定 · định hình, neo giữ"
+    ],
+    "wish": "Chúc bạn một buổi sáng tràn đầy năng lượng, tự tay thiết lập cho mình những khoảng không gian tĩnh lặng để khởi đầu thật trọn vẹn.",
+    "nightWish": "Mong rằng đêm nay giấc ngủ sẽ đến thật êm đềm, gột sạch mọi bận rộn để tâm hồn bạn được nghỉ ngơi trọn vẹn.",
+    "notification": {
+      "english": "Allow yourself a quiet morning routine.",
+      "chinese": "留给自己一杯茶的清晨。",
+      "vietnamese": "Dành cho mình một buổi sáng tĩnh lặng."
+    },
+    "generatedAt": "2026-11-28T00:36:36.687Z",
+    "generator": "gemini-3.5-flash-lite"
   }
 ]
